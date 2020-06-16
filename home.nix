@@ -11,6 +11,7 @@
     pkgs.fzf
     pkgs.kitty
     pkgs.ctags
+    pkgs.neofetch
 
     # The neovim section in `programs` implicit adds this...
     # pkgs.neovim

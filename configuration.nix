@@ -70,7 +70,11 @@
   nixpkgs.overlays = [
     (self: super: {
       dwm = super.dwm.overrideAttrs(_: {
-        src = builtins.fetchGit https://github.com/vereis/dwm;
+        src = builtins.fetchGit {
+	  url = "https://github.com/vereis/dwm";
+          rev = "b06da0cf6a1bda66ca1f7671d3faa3b8062220c5";
+          ref = "master";
+        };
       });
     })
   ];
