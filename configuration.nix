@@ -4,6 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
+      (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
     ];
 
   nixpkgs.config = {
@@ -34,28 +35,25 @@
     htop
     curl
     dmenu
-    neovim
-    konsole
+    vim
     git
     firefox-bin
-    home-manager
   ];
 
   programs.zsh = {
     enable = true;
-    shellAliases = {
-      vim = "nvim";
-    };
     enableCompletion = true;
     autosuggestions.enable = true;
   };
+
+  # NixOS uses X11 SSH Askpass by default; disable this and use CLI
+  programs.ssh.askPassword = "";
 
   fonts = {
     enableFontDir = true;
     fonts = with pkgs; [
       corefonts
-      fira
-      fira-code-symbols
+      fira-code
       font-awesome-ttf
       unifont
     ];
@@ -84,14 +82,19 @@
   services.xserver.displayManager.lightdm.autoLogin.user = "chris";
   services.xserver.windowManager.dwm.enable = true;
 
+  # User config + home manager config
   users.users.chris = {
     isNormalUser = true;
     extraGroups = [ "sound" "wheel" ];
     shell = pkgs.zsh;
   };
 
+  home-manager.users.chris = import ./home.nix { inherit pkgs config; };
+
+  # VMWare guest
   virtualisation.vmware.guest.enable = true;
 
+  # Don't touch
   system.stateVersion = "20.03";
 }
 
