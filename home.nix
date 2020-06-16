@@ -10,6 +10,7 @@
     pkgs.zsh
     pkgs.fzf
     pkgs.kitty
+    pkgs.ctags
 
     # The neovim section in `programs` implicit adds this...
     # pkgs.neovim
