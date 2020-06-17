@@ -57,6 +57,9 @@
       font-awesome-ttf
       unifont
     ];
+
+   # Think this is an updated `infinality` patch
+   fontconfig.penultimate.enable = true; 
   };
 
   sound.enable = true;
