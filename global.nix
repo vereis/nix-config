@@ -3,7 +3,6 @@
 {
   imports =
     [
-      ./hardware-configuration.nix
       (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
     ];
 
@@ -11,16 +10,8 @@
     allowUnfree = true;
   };
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  boot.loader.grub.device = "/dev/sda";
-
-  networking.hostName = "tteokbokki";
-
-  networking.useDHCP = false;
-  networking.interfaces.ens33.useDHCP = true;
-
   i18n.defaultLocale = "en_US.UTF-8";
+
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
