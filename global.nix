@@ -89,9 +89,6 @@
 
   home-manager.users.chris = import ./home.nix { inherit pkgs config; };
 
-  # VMWare guest
-  virtualisation.vmware.guest.enable = true;
-
   # Don't touch
   system.stateVersion = "20.03";
 }
