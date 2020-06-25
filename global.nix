@@ -56,9 +56,8 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  services.xserver.enable = true;
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
+  # Can't imagine why we wouldn't want OpenGL support
+  hardware.opengl.enable = true;
 
   # Override nixos DWM with personal build
   nixpkgs.overlays = [
@@ -73,12 +72,38 @@
     })
   ];
 
-  # Set DWM as the window manager
-  services.xserver.displayManager.defaultSession = "none+dwm";
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.displayManager.lightdm.autoLogin.enable = true;
-  services.xserver.displayManager.lightdm.autoLogin.user = "chris";
-  services.xserver.windowManager.dwm.enable = true;
+  # X Server settings
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    xkbOptions = "eurosign:e";
+
+    displayManager = {
+      defaultSession = "none+dwm";
+      lightdm.enable = true;
+      lightdm.autoLogin.enable = true;
+      lightdm.autoLogin.user = "chris";
+    };
+
+    windowManager.dwm.enable = true;
+
+    exportConfiguration = true;
+    config = ''
+      Section "InputClass"
+        Identifier "My Mouse"
+        MatchIsPointer "on"
+
+        Option "AccelerationNumerator" "1"
+        Option "AccelerationDenominator" "1"
+        Option "AccelerationThreshold" "0"
+
+        Option "ConstantDeceleration" "7"
+        Option "AdaptiveDeceleration" "7"
+      EndSection
+    '';
+
+    enableCtrlAltBackspace = true;
+  };
 
   # User config + home manager config
   users.users.chris = {
