@@ -17,6 +17,16 @@
     # pkgs.neovim
   ];
   
+  # Automatically clone dotfiles into ~/.dotfiles/
+  # for applications to optionally reference below
+  home.file.".dotfiles" = {
+    source = builtins.fetchGit {
+      url = "https://github.com/vereis/dotfiles";
+      ref = "master";
+      rev = "2193eafd61d290a2a24398d1fe005f6ef0f3e48b";
+    };
+  };
+
   programs = {
     git = {
       enable = true;
@@ -98,7 +108,9 @@
        # I don't want to port my vim rc to NixOS so I just
        # expect the config file to be in the usual directory...
        customRC = ''
-         exe 'source' '~/.config/nvim/init.vim'
+         let g:config_dir='~/.dotfiles/nvim'
+         let g:plugin_dir='~/.nvim_plugins'
+         execute "exe 'source' '" . g:config_dir . "/init.vim'"
        '';
      };
    };
