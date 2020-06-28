@@ -65,7 +65,7 @@
       dwm = super.dwm.overrideAttrs(_: {
         src = builtins.fetchGit {
 	  url = "https://github.com/vereis/dwm";
-          rev = "b06da0cf6a1bda66ca1f7671d3faa3b8062220c5";
+          rev = "aa2195ff2c3684195de1a12abc605bcc25d08fb1";
           ref = "master";
         };
       });
