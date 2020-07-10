@@ -28,7 +28,9 @@
     dmenu
     vim
     git
-    firefox-bin
+    glxinfo
+    lshw
+    pciutils
   ];
 
   programs.zsh = {
@@ -37,8 +39,12 @@
     autosuggestions.enable = true;
   };
 
-  # NixOS uses X11 SSH Askpass by default; disable this and use CLI
-  programs.ssh.askPassword = "";
+  programs.ssh = {
+    startAgent = true;
+
+    # NixOS uses X11 SSH Askpass by default; disable this and use CLI
+    askPassword = "";
+  };
 
   fonts = {
     enableFontDir = true;
@@ -56,16 +62,13 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # Can't imagine why we wouldn't want OpenGL support
-  hardware.opengl.enable = true;
-
   # Override nixos DWM with personal build
   nixpkgs.overlays = [
     (self: super: {
       dwm = super.dwm.overrideAttrs(_: {
         src = builtins.fetchGit {
 	  url = "https://github.com/vereis/dwm";
-          rev = "aa2195ff2c3684195de1a12abc605bcc25d08fb1";
+          rev = "101300dc26467cb9c474dde946655ad68528ae35";
           ref = "master";
         };
       });
@@ -105,14 +108,33 @@
     enableCtrlAltBackspace = true;
   };
 
+  # Use AMD GPU from latest kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  hardware.enableRedistributableFirmware = true;
+  hardware.opengl.enable = true;
+  services.xserver.videoDrivers = [ "amdgpu" ];
+
+  # Enable docker
+  virtualisation = {
+    docker.enable = true;
+  };
+
+  # Enable third party packages
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+  };
+
   # User config + home manager config
   users.users.chris = {
     isNormalUser = true;
-    extraGroups = [ "sound" "wheel" ];
+    extraGroups = [ "sound" "wheel" "docker" ];
     shell = pkgs.zsh;
   };
 
   home-manager.users.chris = import ./home.nix { inherit pkgs config; };
+  services.lorri.enable = true;
 
   # Don't touch
   system.stateVersion = "20.03";

@@ -6,12 +6,24 @@
   };
 
   home.packages = with pkgs; [
+    # General
     pkgs.compton
     pkgs.zsh
     pkgs.fzf
     pkgs.kitty
     pkgs.ctags
     pkgs.neofetch
+    pkgs.docker-compose
+    pkgs.direnv
+    pkgs.firefox
+    pkgs.irssi
+
+    # Work
+    pkgs.slack
+
+    # Games/Throwaway
+    pkgs.minecraft
+    pkgs.discord
 
     # The neovim section in `programs` implicit adds this...
     # pkgs.neovim
@@ -23,11 +35,36 @@
     source = builtins.fetchGit {
       url = "https://github.com/vereis/dotfiles";
       ref = "master";
-      rev = "2193eafd61d290a2a24398d1fe005f6ef0f3e48b";
+      rev = "b266189325dc93ba469c556be7434e5ed20eba6e";
     };
   };
 
   programs = {
+    irssi = {
+      enable = true;
+
+      networks = {
+        freenode = {
+          nick = "vereis";
+          server = {
+            address = "chat.freenode.net";
+            port = 6697;
+            autoConnect = true;
+          }; 
+          channels = {
+            nixos.autoJoin = true;
+          };
+        };
+      };
+    };
+
+    firefox = {
+      enable = true;
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        ublock-origin
+      ];
+    };
+
     git = {
       enable = true;
       userName = "Chris Bailey";
@@ -51,6 +88,12 @@
 	plugins = [ "git" "sudo" ];
 	theme = "flazz";
       };
+ 
+      initExtra = ''
+        if type direnv > /dev/null; then
+          eval "$(direnv hook zsh)"
+        fi
+      '';
     };
 
     fzf = {
@@ -60,6 +103,13 @@
 
     kitty = {
       enable = true;
+
+      keybindings =
+      {
+        "ctrl+equal" = "change_font_size current +1.0";
+        "ctrl+minus" = "change_font_size current -1.0";
+      };
+
       settings = {
         font_family = "Fira Code Regular";
         bold_font = "Fira Code Bold";
@@ -67,6 +117,7 @@
 	font_size = 11;
         window_padding_width = 24;
 	copy_on_select = "clipboard";
+        enable_audio_bell = false;
 
 	# monokai soda
         background = "#191919";
@@ -117,9 +168,11 @@
   };
 
   services = {
-    # compton renamed to picom
     picom = {
       enable = true;
+      backend = "xr_glx_hybrid";
+      vSync = true;
+      inactiveDim = "0.133";
     };
   };
 }
