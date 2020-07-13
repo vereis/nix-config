@@ -15,6 +15,10 @@ with lib;
     };
   
     config = mkIf cfg.enable (mkMerge [{
+      fonts.fonts = with pkgs; [
+        cascadia-code
+      ];
+
       home-manager.users.chris.home.packages = with pkgs; [
         pkgs.kitty
       ];
@@ -27,9 +31,7 @@ with lib;
       };
 
       home-manager.users.chris.programs.kitty.settings = {
-        font_family = "Fira Code Regular";
-        bold_font = "Fira Code Bold";
-        italic_font = "Fira Code Italic";
+        font_family = "Cascadia Code PL";
         font_size = 10;
 
         window_padding_width = 24;
