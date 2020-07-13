@@ -14,6 +14,7 @@
       ../modules/zsh.nix
       ../modules/lorri.nix
       ../modules/kitty.nix
+      ../modules/sway.nix
     ];
 
   # Personal Modules
@@ -26,11 +27,12 @@
   modules.zsh.enable = true;
   modules.lorri.enable = true;
   modules.kitty.enable = true;
+  modules.sway.enable = true;
 
   # User config + home manager config
   users.users.chris = {
     isNormalUser = true;
-    extraGroups = [ "sound" "wheel" "docker" ];
+    extraGroups = [ "sound" "wheel" "docker" "sway" ];
     shell = pkgs.zsh;
   };
 
@@ -54,7 +56,7 @@
     displayManager = {
       defaultSession = "none+dwm";
       lightdm.enable = true;
-      lightdm.autoLogin.enable = true;
+      lightdm.autoLogin.enable = false;
       lightdm.autoLogin.user = "chris";
     };
   };
@@ -63,8 +65,8 @@
   networking.networkmanager.enable = true;
 
   networking.useDHCP = false;
-  networking.interfaces.enp42s0.useDHCP = true;
-  networking.interfaces.wlp39s0.useDHCP = true;
+  networking.interfaces.enp42s0.useDHCP = false;
+  networking.interfaces.wlp39s0.useDHCP = false;
 
   system.stateVersion = "20.03";
 }
