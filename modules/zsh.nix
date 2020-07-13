@@ -32,7 +32,7 @@ with lib;
 
       home-manager.users.chris.programs.zsh.oh-my-zsh.enable = true;
       home-manager.users.chris.programs.zsh.oh-my-zsh.plugins = [ "git" "sudo" ];
-      home-manager.users.chris.programs.zsh.oh-my-zsh.theme = "flazz";
+      home-manager.users.chris.programs.zsh.oh-my-zsh.theme = "wedisagree";
 
       home-manager.users.chris.programs.fzf.enable = true;
       home-manager.users.chris.programs.fzf.enableZshIntegration = true;

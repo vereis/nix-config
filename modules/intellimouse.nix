@@ -31,5 +31,17 @@ with lib;
           Option "AdaptiveDeceleration" "7"
         EndSection
       '';
+
+      # The sway module uses Wayland, so try to set similar config via that
+      # mkIf swaycfg.enable (mkMerge [{
+        home-manager.users.chris = {
+          wayland.windowManager.sway.config.input = {
+            "*" = {
+              accel_profile = "flat";
+              pointer_accel = "-0.825";
+            };
+          };
+        };
+      # }]);
     }]);
   }
