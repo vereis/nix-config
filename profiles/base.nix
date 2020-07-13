@@ -20,7 +20,6 @@
   fonts.enableFontDir = true;
   fonts.fonts = with pkgs; [
       corefonts
-      fira-code
       font-awesome-ttf
       unifont
     ];
