@@ -40,7 +40,7 @@ with lib;
         enable_audio_bell = false;
 
         # Colorscheme
-        background = "#111111";
+        background = "#151413";
         foreground = "#c4c4b5";
         cursor = "#f6f6ec";
         selection_background = "#343434";
