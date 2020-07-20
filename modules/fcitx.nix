@@ -4,7 +4,7 @@ with lib;
     cfg = config.modules.fcitx;
   in
   {
-    options.modules.amd_gpu = {
+    options.modules.fcitx = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -21,7 +21,7 @@ with lib;
         kochi-substitute
       ];
 
-      il8n.inputMethod.enabled = "fcitx";
-      il8n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ mozc ];
+      i18n.inputMethod.enabled = "fcitx";
+      i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ mozc ];
     }]);
   }

@@ -4,7 +4,7 @@
   imports =
     [
       ../profiles/desktop.nix
-
+      ../modules/fcitx.nix
       ../modules/nvidia_gpu.nix
       ../modules/plasma5.nix
       ../modules/neovim.nix
@@ -20,7 +20,8 @@
   modules.nur.enable = true;
   modules.zsh.enable = true;
   modules.kitty.enable = true;
-
+  modules.fcitx.enable = true;
+	
   # User config + home manager config
   users.users.chris = {
     isNormalUser = true;
