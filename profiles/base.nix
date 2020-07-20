@@ -38,7 +38,6 @@
     htop
     curl
     vim
-    dmenu
     git
     glxinfo
     lshw

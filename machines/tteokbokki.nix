@@ -14,7 +14,7 @@
       ../modules/zsh.nix
       ../modules/lorri.nix
       ../modules/kitty.nix
-      ../modules/sway.nix
+      ../modules/i3.nix
     ];
 
   # Personal Modules
@@ -27,7 +27,7 @@
   modules.zsh.enable = true;
   modules.lorri.enable = true;
   modules.kitty.enable = true;
-  modules.sway.enable = true;
+  modules.i3.enable = true;
 
   # User config + home manager config
   users.users.chris = {
@@ -56,7 +56,7 @@
     displayManager = {
       defaultSession = "none+dwm";
       lightdm.enable = true;
-      lightdm.autoLogin.enable = false;
+      lightdm.autoLogin.enable = true;
       lightdm.autoLogin.user = "chris";
     };
   };
