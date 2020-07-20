@@ -27,7 +27,7 @@ with lib;
           dwm = super.dwm.overrideAttrs(_: {
             src = builtins.fetchGit {
               url = "https://github.com/vereis/dwm";
-              rev = "b247aeb8e713ac5c644c404fa1384e05e0b8bc6f";
+              rev = "f347547089b6c9fc7602eca04d3d4a557402257f";
               ref = "master";
             };
           });
@@ -39,5 +39,16 @@ with lib;
       services.xserver.displayManager.sessionCommands = ''
         xsetroot --solid "#222222"
       '';
+
+
+      # DWM needs it's own compositor
+      home-manager.users.chris.home.packages = with pkgs; [
+        pkgs.compton
+      ];
+
+      home-manager.users.chris.services.picom.enable = true;
+      home-manager.users.chris.services.picom.backend = "xr_glx_hybrid";
+      home-manager.users.chris.services.picom.vSync = true;
+      home-manager.users.chris.services.picom.inactiveDim = "0.0";
     }]);
   }
