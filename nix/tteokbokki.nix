@@ -2,14 +2,18 @@
 
 {
   home.packages = [
+    pkgs.tree
     pkgs.direnv
     pkgs.zsh
     pkgs.fzf
+    pkgs.ripgrep
     pkgs.xclip
     pkgs.dbeaver
     pkgs.neofetch
+    pkgs.firefox
     # docker must be installed manually on host system
     pkgs.docker-compose
+    pkgs.httpie
   ];
 
   programs.home-manager.enable = true;
@@ -26,7 +30,7 @@
     source = builtins.fetchGit {
       url = "https://github.com/vereis/dotfiles";
       ref = "master";
-      rev = "af61e9de74aa2b7766272a67f1d138d2021faa53";
+      rev = "8e3769a52b4740bc94a670e712ba300e82f8023c";
     };
   };
 
@@ -41,13 +45,13 @@
     withPython = true;
     withPython3 = true;
 
-    configure = {
-      customRC = ''
-        let g:config_dir='~/.dotfiles/nvim'
-        let g:plugin_dir='~/.nvim_plugins'
-        execute "exe 'source' '" . g:config_dir . "/init.vim'"
-      '';
-    };
+    plugins = [ pkgs.fzf pkgs.ripgrep ];
+
+    extraConfig = ''
+      let g:config_dir='~/.dotfiles/nvim'
+      let g:plugin_dir='~/.nvim_plugins'
+      execute "exe 'source' '" . g:config_dir . "/init.vim'"
+    '';
   };
   
   programs.zsh.enable = true;
