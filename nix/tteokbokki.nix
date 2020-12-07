@@ -30,7 +30,7 @@
     source = builtins.fetchGit {
       url = "https://github.com/vereis/dotfiles";
       ref = "master";
-      rev = "8e3769a52b4740bc94a670e712ba300e82f8023c";
+      rev = "779c7a4c1aec7e9099b33a890d7c229f4564c79a";
     };
   };
 
