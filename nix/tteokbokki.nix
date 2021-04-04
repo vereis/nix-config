@@ -2,6 +2,8 @@
 
 {
   home.packages = [
+    pkgs.bash
+    pkgs.openssh
     pkgs.tree
     pkgs.direnv
     pkgs.zsh
@@ -20,7 +22,7 @@
 
   home.username = "chris";
   home.homeDirectory = "/home/chris";
-  home.stateVersion = "20.09";
+  home.stateVersion = "21.05";
 
   pam.sessionVariables = {
     EDITOR = "nvim";
@@ -83,6 +85,9 @@
     export WSL_HOST=$WSL_HOST
     export DISPLAY=$WSL_HOST:0.0
     export LIBGL_ALWAYS_INDIRECT=1
+
+    # This is neccessary because the default `fzf` command fails on busybox distros
+    export FZF_DEFAULT_COMMAND="sort -u <( rg --files ) <( git ls-files )"
   '';
 
   # home-manager's zsh doesn't support the syntax highlighting plugin, so fetch it ourselves...
