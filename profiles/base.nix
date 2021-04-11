@@ -1,52 +1,20 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+with lib;
 {
-  # All my configs rely on home-manager
-  # TODO: move this into ../modules/home-manager.nix
-  imports = [
-    (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
-  ];
+  options.globals = {
+    isWsl      = mkOption { type = types.bool; default = builtins.getEnv "WSL_DISTRO_NAME" != ""; };
+    wslDistro  = mkOption { type = types.str; default = builtins.getEnv "WSL_DISTRO_NAME"; };
 
-  # Locale related settings; override in other modules
-  # if neccessary.
-  nixpkgs.config.allowUnfree = true;
-  i18n.defaultLocale = "en_US.UTF-8";
-  time.timeZone = "Europe/London";
-  
-  # Sane defaults
-  console.font = "Lat2-Terminus16";
-  console.keyMap = "us";
+    isNixos    = mkOption { type = types.bool; default = builtins.pathExists /etc/NIXOS; };
 
-  fonts.enableFontDir = true;
-  fonts.fonts = with pkgs; [
-      corefonts
-      font-awesome-ttf
-      unifont
-    ];
+    username   = mkOption { type = types.str; default = "chris"; };
+    nixProfile = mkOption { type = types.str; default = builtins.getEnv "HOME" + "/.nix-profile"; };
+    localBin   = mkOption { type = types.str; default = builtins.getEnv "HOME" + "/.local/bin"; };
+  };
 
-  fonts.fontconfig.penultimate.enable = true;
-
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
-  services.xserver.enableCtrlAltBackspace = true;
-
-  # Standard environment
-  environment.systemPackages = with pkgs; [
-    wget
-    unzip
-    unrar
-    htop
-    curl
-    vim
-    git
-    glxinfo
-    lshw
-    pciutils
-  ];
-
-  # Disable X11 SSH askpass -- I prefer the CLI
-  programs.ssh.askPassword = "";
-
-  # Quality of Life
-  programs.ssh.startAgent = true;
+  config = {
+    programs.home-manager.enable = true;
+    nixpkgs.config.allowUnfree = true;
+  };
 }
