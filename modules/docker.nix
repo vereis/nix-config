@@ -20,7 +20,7 @@ with lib;
         # service-docker    Docker daemon management for WSL distros. Uses `wsl.exe` for privelege escalation.
         case "$1" in
           start)
-            wsl.exe -u root -d ${config.globals.wslDistro} -e ${config.globals.nixProfile}/bin/daemonize ${config.globals.nixProfile}/bin/dockerd
+            wsl.exe -u root -d ${config.globals.wslDistro} -e nohup ${config.globals.nixProfile}/bin/daemonize ${config.globals.nixProfile}/bin/dockerd &> /dev/null
             ;;
 
           stop)
