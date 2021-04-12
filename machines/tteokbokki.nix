@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../profiles/base.nix
+    ../profiles/wsl.nix
 
     ../modules/base.nix
     ../modules/docker.nix
