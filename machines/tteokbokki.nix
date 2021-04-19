@@ -18,5 +18,6 @@
   modules.docker.enable = true;
   modules.neovim.enable = true;
   modules.lorri.enable = true;
+  modules.keychain.enable = true;
   modules.setShell.enable = true;
 }

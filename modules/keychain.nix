@@ -8,6 +8,6 @@ with lib;
 
   config = mkIf config.modules.keychain.enable {
     programs.keychain.enable = true;
-    programs.keychain.enableZshIntegration = modules.zsh.enable;
+    programs.keychain.enableZshIntegration = config.modules.zsh.enable;
   };
 }
