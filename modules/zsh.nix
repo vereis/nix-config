@@ -20,7 +20,7 @@ with lib;
 
     programs.zsh.oh-my-zsh.enable = true;
     programs.zsh.oh-my-zsh.plugins = [ "git" "sudo" ];
-    programs.zsh.oh-my-zsh.theme = "afowler";
+    programs.zsh.oh-my-zsh.theme = "clean";
 
     # home-manager's zsh doesn't support the syntax highlighting plugin, so fetch it ourselves...
     programs.zsh.plugins = [
