@@ -11,6 +11,7 @@
     ../modules/keychain.nix
     ../modules/lorri.nix
     ../modules/setShell.nix
+    ../modules/hub.nix
   ];
 
   modules.base.enable = true;
@@ -20,4 +21,5 @@
   modules.lorri.enable = true;
   modules.keychain.enable = true;
   modules.setShell.enable = true;
+  modules.hub.enable = true;
 }
