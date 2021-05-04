@@ -7,13 +7,19 @@ with lib;
   };
 
   config = mkIf (config.globals.isWsl && config.modules.wslUtils.enable) {
-    home.file.".local/bin/open" = {
+    home.file.".local/bin/edge" = {
       executable = true;
       text = ''
         #!/bin/sh
-        # open    Start applications in Windows
-        powershell.exe Start $1
+        # edge    Wrapper for launching Microsoft Edge
+        (cmd.exe /c start microsoft-edge:"$@") > /dev/null 2>&1
       '';
     };
+
+    programs.zsh.initExtra = mkIf config.modules.zsh.enable ''
+      # == Start modules/wslUtils.nix ==
+      export BROWSER="edge"
+      # == End modules/wslUtils.nix ==
+    '';
   };
 }
