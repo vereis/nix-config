@@ -12,6 +12,7 @@ with lib;
       pkgs.bash
 
       # Expected for all my workflows
+      pkgs.git
       pkgs.tmux
       pkgs.tree
       pkgs.xclip
