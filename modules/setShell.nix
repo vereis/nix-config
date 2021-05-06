@@ -40,7 +40,7 @@ with lib;
         if [[ -f "${config.globals.nixProfile}/bin/$1" ]]
         then
           grep -v "added by set-shell" $PROFILE_FILE > temp && mv temp $PROFILE_FILE
-          echo "${config.globals.nixProfile}/bin/$1; exit # added by set-shell" >> $PROFILE_FILE
+          echo "SHELL=${config.globals.nixProfile}/bin/$1 ${config.globals.nixProfile}/bin/$1; exit # added by set-shell" >> $PROFILE_FILE
           echo "Shell set to '${config.globals.nixProfile}/bin/$1'"
         else
           echo "'${config.globals.nixProfile}/bin/$1' is not a valid executable, aborting."

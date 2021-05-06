@@ -62,6 +62,8 @@ with lib;
         pull-request = "!f() { pull-hub request $@; \n }; f"
         release = "!f() { hub release $@; \n }; f"
         sync = "!f() { hub sync $@; \n }; f"
+
+        push-origin = "!f() { git push origin -u $(git rev-parse --abbrev-ref HEAD) $@; \n }; f"
       '';
     };
   };
