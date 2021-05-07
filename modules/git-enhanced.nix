@@ -9,7 +9,7 @@ with lib;
   config = mkIf config.modules.git-enhanced.enable {
     home.packages = [
       pkgs.git
-      pkgs.gitAndTools.hub
+      pkgs.gh
 
       pkgs.delta
     ];
@@ -18,11 +18,6 @@ with lib;
     # within NixOS.
     #
     # This essentially does the same thing :-)
-    #
-    # Most aliases just create anonymous bash functions to invoke the corresponding `hub` functions.
-    # This is because `hub`'s bash and zsh completion is broken, which stops me from being able to simply
-    # make a bash/zsh alias: "alias git = hub". Instead, we just allow `hub` functions to be called
-    # via the `git` binary :-)
     home.file.".gitconfig" = {
       executable = false;
       text = ''
@@ -49,23 +44,26 @@ with lib;
         file-decoration-style = none
 
       [alias]
-        api = "!f() { hub api $@; \n }; f"
-        browse = "!f() { hub browse $@; \n }; f"
-        ci-status = "!f() { ci-hub status $@; \n }; f"
-        compare = "!f() { hub compare $@; \n }; f"
-        create = "!f() { hub create $@; \n }; f"
-        delete = "!f() { hub delete $@; \n }; f"
-        fork = "!f() { hub fork $@; \n }; f"
-        gist = "!f() { hub gist $@; \n }; f"
-        issue = "!f() { hub issue $@; \n }; f"
-        pr = "!f() { hub pr $@; \n }; f"
-        pull-request = "!f() { pull-hub request $@; \n }; f"
-        release = "!f() { hub release $@; \n }; f"
-        sync = "!f() { hub sync $@; \n }; f"
+        # GH Core aliases
+        gh          = "!f() { gh $@; \n }; f"
+        gist        = "!f() { gh gist $@; \n }; f"
+        issue       = "!f() { gh issue $@; \n }; f"
+        pr          = "!f() { gh pr $@; \n }; f"
+        release     = "!f() { gh release $@; \n }; f"
+        repo        = "!f() { gh repo $@; \n }; f"
 
+        alias       = "!f() { gh alias $@; \n }; f"
+        api         = "!f() { gh api $@; \n }; f"
+        auth        = "!f() { gh auth $@; \n }; f"
+        completion  = "!f() { gh completion $@; \n }; f"
+        config      = "!f() { gh config $@; \n }; f"
+        secret      = "!f() { gh secret $@; \n }; f"
+        ssh-key     = "!f() { gh ssh-key $@; \n }; f"
+
+        # Custom aliases
         push-origin = "!f() { git push origin -u $(git rev-parse --abbrev-ref HEAD) $@; \n }; f"
-        rewind = "!f() { git checkout HEAD~$1; \n }; f"
-        rewrite = "!f() { git rebase -i HEAD~$1; \n }; f"
+        rewind      = "!f() { git checkout HEAD~$1; \n }; f"
+        rewrite     = "!f() { git rebase -i HEAD~$1; \n }; f"
       '';
     };
   };

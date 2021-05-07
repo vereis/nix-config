@@ -9,6 +9,7 @@ with lib;
 
   options.modules.neovim = {
     enable = mkOption { type = types.bool; default = false; };
+    setDefaultEditor = mkOption { type = types.bool; default = true; };
   };
 
   config = mkIf config.modules.neovim.enable {
@@ -46,6 +47,15 @@ with lib;
     pam.sessionVariables = {
       EDITOR = "nvim";
     };
+
+    programs.zsh.initExtra = mkIf (config.modules.neovim.setDefaultEditor && config.modules.zsh.enable) ''
+      # == Start modules/neovim.nix ==
+
+      export VISUAL=nvim
+      export EDITOR=nvim
+
+      # == End modules/neovim.nix ==
+    '';
   };
 }
 
