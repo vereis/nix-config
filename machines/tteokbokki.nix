@@ -12,7 +12,6 @@
     ../modules/lorri.nix
     ../modules/setShell.nix
     ../modules/git-enhanced.nix
-    ../modules/fuck.nix
   ];
 
   modules.base.enable = true;
@@ -23,6 +22,4 @@
   modules.keychain.enable = true;
   modules.setShell.enable = true;
   modules.git-enhanced.enable = true;
-
-  modules.fuck.enable = true;
 }
