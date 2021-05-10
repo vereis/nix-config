@@ -5,22 +5,30 @@ with lib;
   imports = [
     ./fzf.nix
     ./ripgrep.nix
+    ./shellcheck.nix
+    ./shellformat.nix
   ];
 
   options.modules.neovim = {
     enable = mkOption { type = types.bool; default = false; };
     setDefaultEditor = mkOption { type = types.bool; default = true; };
+    enableCocDeps = mkOption { type = types.bool; default = true; };
   };
 
   config = mkIf config.modules.neovim.enable {
+    # Non-optional deps
     modules.fzf.enable = true;
     modules.ripgrep.enable = true;
+
+    # Used by coc-diagnostics
+    modules.shellcheck.enable = mkIf (config.modules.neovim.enableCocDeps) true;
+    modules.shellformat.enable = mkIf (config.modules.neovim.enableCocDeps) true;
 
     home.file.".dotfiles" = {
       source = builtins.fetchGit {
         url = "https://github.com/vereis/dotfiles";
         ref = "master";
-        rev = "d410341d4ad740eb43d5e1444a2cf3b9dbff86b7";
+        rev = "b30d56f5c97b2189436a797c36c095bf33505dea";
       };
     };
 
