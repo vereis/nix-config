@@ -9,17 +9,11 @@ with lib;
   config = mkIf (config.globals.isWsl && config.modules.wslUtils.enable) {
     home.file.".local/bin/edge" = {
       executable = true;
-      text = ''
-        #!/bin/sh
-        # edge    Wrapper for launching Microsoft Edge
-        (cmd.exe /c start microsoft-edge:"$@") > /dev/null 2>&1
-      '';
+      source = ./wslUtils/edge;
     };
 
-    programs.zsh.initExtra = mkIf config.modules.zsh.enable ''
-      # == Start modules/wslUtils.nix ==
-      export BROWSER="edge"
-      # == End modules/wslUtils.nix ==
-    '';
+    home.sessionVariables = {
+      BROWSER = "edge";
+    };
   };
 }

@@ -52,18 +52,10 @@ with lib;
       '';
     };
 
-    pam.sessionVariables = {
+    home.sessionVariables = mkIf (config.modules.neovim.setDefaultEditor) {
       EDITOR = "nvim";
+      VISUAL = "nvim";
     };
-
-    programs.zsh.initExtra = mkIf (config.modules.neovim.setDefaultEditor && config.modules.zsh.enable) ''
-      # == Start modules/neovim.nix ==
-
-      export VISUAL=nvim
-      export EDITOR=nvim
-
-      # == End modules/neovim.nix ==
-    '';
   };
 }
 

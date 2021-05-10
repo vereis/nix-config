@@ -16,5 +16,14 @@ with lib;
   config = {
     programs.home-manager.enable = true;
     nixpkgs.config.allowUnfree = true;
+
+    home.sessionPath = [
+      "${config.globals.localBin}"
+      "$HOME/bin"
+    ];
+
+    home.sessionVariables = {
+      NIX_PROFILE = config.globals.nixProfile;
+    };
   };
 }

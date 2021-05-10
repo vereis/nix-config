@@ -1,0 +1,28 @@
+#!/bin/sh
+# service-docker    Docker daemon management for WSL distros. Uses `wsl.exe` for privelege escalation.
+SELF=$0
+DAEMONIZE=$NIX_PROFILE/bin/daemonize
+AS_ROOT="wsl.exe -u root -d $WSL_DISTRO_NAME -e"
+
+case "$1" in
+start)
+	pidof dockerd >/dev/null 2>&1 || $AS_ROOT nohup "$DAEMONIZE" "$NIX_PROFILE/bin/dockerd" >/dev/null 2>&1
+	;;
+
+stop)
+	$AS_ROOT killall dockerd >/dev/null 2>&1
+	;;
+
+restart)
+	$SELF stop && $SELF start
+	;;
+
+status)
+	pidof dockerd >/dev/null 2>&1 && echo "docker daemon running" || echo "docker daemon not running"
+	;;
+
+*)
+	echo "Usage:"
+	echo "  $1 (start | stop | restart | status)"
+	;;
+esac
