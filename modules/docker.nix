@@ -15,32 +15,7 @@ with lib;
 
     home.file.".local/bin/service-docker" = mkIf config.globals.isWsl {
       executable = true;
-      text = ''
-        #!/bin/sh
-        # service-docker    Docker daemon management for WSL distros. Uses `wsl.exe` for privelege escalation.
-        case "$1" in
-          start)
-            wsl.exe -u root -d ${config.globals.wslDistro} -e nohup ${config.globals.nixProfile}/bin/daemonize ${config.globals.nixProfile}/bin/dockerd &> /dev/null
-            ;;
-
-          stop)
-            wsl.exe -u root -d ${config.globals.wslDistro} -e killall dockerd &> /dev/null
-            ;;
-
-          restart)
-            ./$0 stop && ./$0 start
-            ;;
-
-          status)
-            pidof dockerd &> /dev/null && echo "docker daemon running" || echo "docker daemon not running"
-            ;;
-
-          *)
-            echo "Usage:"
-            echo "  $1 (start | stop | restart | status)"
-            ;;
-        esac
-      '';
+      source = ./docker/service-docker;
     };
 
     programs.zsh.loginExtra = mkIf (config.globals.isWsl && config.modules.zsh.enable) ''

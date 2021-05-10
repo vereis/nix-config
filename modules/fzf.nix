@@ -14,10 +14,8 @@ with lib;
     programs.fzf.enable = true;
     programs.fzf.enableZshIntegration = config.modules.zsh.enable;
 
-    programs.zsh.initExtra = mkIf config.modules.zsh.enable ''
-      # == Start modules/fzf.nix ==
-      export FZF_DEFAULT_COMMAND="rg --files | sort -u"
-      # == End modules/fzf.nix ==
-    '';
+    home.sessionVariables = {
+      FZF_DEFAULT_COMMAND = "rg --files | sort -u";
+    };
   };
 }

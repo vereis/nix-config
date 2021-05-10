@@ -1,0 +1,27 @@
+#!/bin/sh
+# service-lorri    Lorri daemon management.
+SELF=$0
+DAEMONIZE=$NIX_PROFILE/bin/daemonize
+
+case "$1" in
+start)
+	pidof lorri >/dev/null 2>&1 || $DAEMONIZE "$NIX_PROFILE/bin/lorri" daemon
+	;;
+
+stop)
+	killall lorri >/dev/null 2>&1
+	;;
+
+restart)
+	$SELF stop && $SELF start
+	;;
+
+status)
+	pidof lorri >/dev/null 2>&1 && echo "lorri daemon running" || echo "lorri daemon not running"
+	;;
+
+*)
+	echo "Usage:"
+	echo "  $1 (start | stop | restart | status)"
+	;;
+esac

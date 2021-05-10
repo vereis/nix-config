@@ -38,29 +38,15 @@ with lib;
     programs.zsh.initExtraFirst = ''
       # == Start modules/zsh.nix ==
 
-      if [ -d "$HOME/bin" ] ; then
-          PATH="$HOME/bin:$PATH"
-      fi
-      
-      # set PATH so it includes user's private bin if it exists
-      if [ -d "$HOME/.local/bin" ] ; then
-          PATH="$HOME/.local/bin:$PATH"
-      fi
-      
       if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then . "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi
 
       # == End modules/zsh.nix ==
     '';
 
-    programs.zsh.initExtra = mkIf config.globals.isWsl ''
-      # == Start modules/zsh.nix ==
-
-      WSL_HOST=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
-      export WSL_HOST=$WSL_HOST
-      export DISPLAY=$WSL_HOST:0.0
-      export LIBGL_ALWAYS_INDIRECT=1
-
-      # == End modules/zsh.nix ==
-    '';
+    home.sessionVariables = {
+      WSL_HOST = "$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')";
+      DISPLAY = "$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0";
+      LIBGL_ALWAYS_INDIRECT = "1";
+    };
   };
 }
