@@ -42,11 +42,5 @@ with lib;
 
       # == End modules/zsh.nix ==
     '';
-
-    home.sessionVariables = {
-      WSL_HOST = "$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')";
-      DISPLAY = "$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0";
-      LIBGL_ALWAYS_INDIRECT = "1";
-    };
   };
 }
