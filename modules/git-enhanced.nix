@@ -64,6 +64,7 @@ with lib;
         push-origin = "!f() { git push origin -u $(git rev-parse --abbrev-ref HEAD) $@; \n }; f"
         rewind      = "!f() { git checkout HEAD~$1; \n }; f"
         rewrite     = "!f() { git rebase -i HEAD~$1; \n }; f"
+        gloat       = "!f() { git shortlog -sn; \n }; f"
       '';
     };
   };
