@@ -11,21 +11,22 @@ with lib;
       pkgs.docker
       pkgs.docker-compose
       ( mkIf config.globals.isWsl pkgs.daemonize )
+      ( mkIf config.globals.isWsl ( 
+          pkgs.writeTextFile {
+            name = "docker.wsl-service";
+            destination = "/etc/profile.d/docker.wsl-service";
+            text = ''
+              ${config.globals.localBin}/service-docker start
+            '';
+          }
+        )
+      )
     ];
 
     home.file.".local/bin/service-docker" = mkIf config.globals.isWsl {
       executable = true;
       source = ./docker/service-docker;
     };
-
-    programs.zsh.loginExtra = mkIf (config.globals.isWsl && config.modules.zsh.enable) ''
-      # == Start modules/docker.nix ==
-
-      # Ensure docker is started automatically upon login
-      ${config.globals.localBin}/service-docker start
-
-      # == End modules/docker.nix ==
-    '';
 
     # TODO: fix this when next using NixOS
     # virtualisation.docker = mkIf config.globals.isNixos {
