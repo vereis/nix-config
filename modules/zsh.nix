@@ -4,6 +4,8 @@ with lib;
 {
   options.modules.zsh = {
     enable = mkOption { type = types.bool; default = false; };
+    enablePortals = mkOption { type = types.bool; default = true; };
+    portalPath = mkOption { type = types.str; default = "$HOME/.portals"; };
   };
 
   config = mkIf config.modules.zsh.enable {
@@ -21,6 +23,8 @@ with lib;
     programs.zsh.oh-my-zsh.enable = true;
     programs.zsh.oh-my-zsh.plugins = [ "git" "sudo" ];
     programs.zsh.oh-my-zsh.theme = "clean";
+
+    programs.zsh.cdpath = mkIf config.modules.zsh.enablePortals [ config.modules.zsh.portalPath ];
 
     # home-manager's zsh doesn't support the syntax highlighting plugin, so fetch it ourselves...
     programs.zsh.plugins = [
@@ -43,14 +47,25 @@ with lib;
       # == End modules/zsh.nix ==
     '';
 
-    programs.zsh.initExtra = ''
-      # == Start modules/zsh.nix ==
+    programs.zsh.initExtra = (mkMerge [
+      ''
+        # == Start modules/zsh.nix ==
 
-      # Execute any custom wsl-service scripts
-      for file in /etc/profile.d/**/*.wsl-service(DN); . $file
-      for file in $HOME/.nix-profile/etc/profile.d/**/*.wsl-service(DN); . $file
+        # Execute any custom wsl-service scripts
+        for file in /etc/profile.d/**/*.wsl-service(DN); . $file
+        for file in $HOME/.nix-profile/etc/profile.d/**/*.wsl-service(DN); . $file
+      ''
+      (mkIf config.modules.zsh.enablePortals ''
+        # Make CDPATH work
+        mkdir -p ${ config.modules.zsh.portalPath }
+        zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories path-directories'
 
-      # == End modules/zsh.nix ==
-    '';
+        zstyle ':completion:*' group-name ${"''"}
+        zstyle ':completion:*:descriptions' format %B%U%F{black}%d:%u%b
+      '')
+      ''
+        # == End modules/zsh.nix ==
+      ''
+    ]);
   };
 }
