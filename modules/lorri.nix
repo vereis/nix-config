@@ -7,6 +7,18 @@ with lib;
   };
 
   config = mkIf config.modules.lorri.enable {
+    home.packages = mkIf config.globals.isWsl [
+      ( 
+        pkgs.writeTextFile {
+          name = "lorri.wsl-service";
+          destination = "/etc/profile.d/lorri.wsl-service";
+          text = ''
+            ${config.globals.localBin}/service-lorri start
+          '';
+        }
+      )
+    ];
+
     programs.direnv.enable = true;
     programs.direnv.enableZshIntegration = config.modules.zsh.enable;
 
@@ -21,15 +33,6 @@ with lib;
       executable = true;
       source = ./lorri/lorri-init;
     };
-
-    programs.zsh.loginExtra = mkIf (config.globals.isWsl && config.modules.zsh.enable) ''
-      # == Start modules/docker.nix ==
-
-      # Ensure docker is started automatically upon login
-      ${config.globals.localBin}/service-lorri start
-
-      # == End modules/docker.nix ==
-    '';
   };
 }
 
