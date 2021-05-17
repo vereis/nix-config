@@ -61,7 +61,7 @@ with lib;
         zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories path-directories'
 
         zstyle ':completion:*' group-name ${"''"}
-        zstyle ':completion:*:descriptions' format %B%U%F{black}%d:%u%b
+        zstyle ':completion:*:descriptions' format %B%U%d:%u%b
       '')
       ''
         # == End modules/zsh.nix ==
