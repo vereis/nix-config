@@ -18,6 +18,7 @@ with lib;
       pkgs.xclip
       pkgs.httpie
       pkgs.htop
+      pkgs.sc-im
 
       pkgs.gnugrep # Busybox: misses some options I need
       pkgs.less    # Busybox: no color support
