@@ -5,23 +5,23 @@ DAEMONIZE=$NIX_PROFILE/bin/daemonize
 
 case "$1" in
 start)
-	pidof lorri >/dev/null 2>&1 || $DAEMONIZE "$NIX_PROFILE/bin/lorri" daemon
-	;;
+  pidof lorri >/dev/null 2>&1 || $DAEMONIZE "$NIX_PROFILE/bin/lorri" daemon
+  ;;
 
 stop)
-	killall lorri >/dev/null 2>&1
-	;;
+  killall lorri >/dev/null 2>&1
+  ;;
 
 restart)
-	$SELF stop && $SELF start
-	;;
+  $SELF stop && $SELF start
+  ;;
 
 status)
-	pidof lorri >/dev/null 2>&1 && echo "lorri daemon running" || echo "lorri daemon not running"
-	;;
+  pidof lorri >/dev/null 2>&1 && echo "lorri daemon running" || echo "lorri daemon not running"
+  ;;
 
 *)
-	echo "Usage:"
-	echo "  $1 (start | stop | restart | status)"
-	;;
+  echo "Usage:"
+  echo "  $1 (start | stop | restart | status)"
+  ;;
 esac

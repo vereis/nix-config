@@ -2,11 +2,11 @@
 
 with lib;
 {
-  options.modules.git-enhanced = {
+  options.modules.git = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.git-enhanced.enable {
+  config = mkIf config.modules.git.enable {
     home.packages = [
       pkgs.git
       pkgs.gh
@@ -14,10 +14,7 @@ with lib;
       pkgs.delta
     ];
 
-    # `home-manager` doesn't support the standard `programs.git.*` configuration options
-    # within NixOS.
-    #
-    # This essentially does the same thing :-)
+    # TODO: configurable email/name?
     home.file.".gitconfig" = {
       executable = false;
       text = ''
@@ -62,7 +59,6 @@ with lib;
 
         # Custom aliases
         push-origin = "!f() { git push origin -u $(git rev-parse --abbrev-ref HEAD) $@; \n }; f"
-        rewind      = "!f() { git checkout HEAD~$1; \n }; f"
         rewrite     = "!f() { git rebase -i HEAD~$1; \n }; f"
         gloat       = "!f() { git shortlog -sn; \n }; f"
       '';

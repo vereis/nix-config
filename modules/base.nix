@@ -2,11 +2,18 @@
 
 with lib;
 {
+  imports = [
+    ../modules/set-shell.nix
+  ]; 
+
   options.modules.base = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
+  # TODO: this probably doesn't need to be optional
   config = mkIf config.modules.base.enable {
+    modules.set-shell.enable = config.globals.isWsl;
+
     home.packages = [
       # Scripting
       pkgs.bash

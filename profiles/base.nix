@@ -9,8 +9,8 @@ with lib;
     isNixos    = mkOption { type = types.bool; default = builtins.pathExists /etc/NIXOS; };
 
     username   = mkOption { type = types.str; default = "chris"; };
-    nixProfile = mkOption { type = types.str; default = builtins.getEnv "HOME" + "/.nix-profile"; };
-    localBin   = mkOption { type = types.str; default = builtins.getEnv "HOME" + "/.local/bin"; };
+    nixProfile = mkOption { type = types.str; default = "/home/" +  config.globals.username + "/.nix-profile"; };
+    localBin   = mkOption { type = types.str; default = "/home/" + config.globals.username + "/.local/bin"; };
   };
 
   config = {
