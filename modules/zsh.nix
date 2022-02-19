@@ -51,6 +51,8 @@ with lib;
       ''
         # == Start modules/zsh.nix ==
 
+        # TODO: this isn't neccessarily wsl related anymore -- revise naming
+        # TODO: use PM2 instead of ad-hoc shellscripts
         # Execute any custom wsl-service scripts
         for file in /etc/profile.d/**/*.wsl-service(DN); . $file
         for file in $HOME/.nix-profile/etc/profile.d/**/*.wsl-service(DN); . $file

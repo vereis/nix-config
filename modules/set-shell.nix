@@ -2,14 +2,14 @@
 
 with lib;
 {
-  options.modules.setShell = {
+  options.modules.set-shell = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.modules.setShell.enable {
+  config = mkIf config.modules.set-shell.enable {
     home.file.".local/bin/set-shell" = {
       executable = true;
-      source = ./setShell/set-shell;
+      source = ./set-shell/set-shell;
     };
   };
 }
