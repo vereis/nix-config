@@ -27,11 +27,5 @@ with lib;
       executable = true;
       source = ./docker/service-docker;
     };
-
-    # TODO: fix this when next using NixOS
-    # virtualisation.docker = mkIf config.globals.isNixos {
-    #   enable = true;
-    #   enableOnBoot = true;
-    # };
   };
 }

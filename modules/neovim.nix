@@ -5,8 +5,6 @@ with lib;
   imports = [
     ./fzf.nix
     ./ripgrep.nix
-    ./shellcheck.nix
-    ./shellformat.nix
   ];
 
   options.modules.neovim = {
@@ -21,8 +19,10 @@ with lib;
     modules.ripgrep.enable = true;
 
     # Used by coc-diagnostics
-    modules.shellcheck.enable = mkIf (config.modules.neovim.enableCocDeps) true;
-    modules.shellformat.enable = mkIf (config.modules.neovim.enableCocDeps) true;
+    home.packages = [
+      ( mkIf (config.modules.neovim.enableCocDeps) pkgs.shellcheck)
+      ( mkIf (config.modules.neovim.enableCocDeps) pkgs.shfmt)
+    ];
 
     home.file.".dotfiles" = {
       source = builtins.fetchGit {
@@ -40,7 +40,6 @@ with lib;
       vimdiffAlias = true;
 
       withNodeJs = true;
-      withPython = true;
       withPython3 = true;
 
       plugins = [ pkgs.fzf pkgs.ripgrep ];
