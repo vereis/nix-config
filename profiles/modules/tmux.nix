@@ -1,0 +1,60 @@
+{ config, lib, pkgs, ... }:
+
+with lib;
+{
+  imports = [
+    ./fzf.nix
+    ./ripgrep.nix
+  ];
+
+  options.modules.neovim = {
+    enable = mkOption { type = types.bool; default = false; };
+    setDefaultEditor = mkOption { type = types.bool; default = true; };
+    enableCocDeps = mkOption { type = types.bool; default = true; };
+  };
+
+  config = mkIf config.modules.neovim.enable {
+    # Non-optional deps
+    modules.fzf.enable = true;
+    modules.ripgrep.enable = true;
+
+    # Used by coc-diagnostics
+    home.packages = [
+      ( mkIf (config.modules.neovim.enableCocDeps) pkgs.shellcheck)
+      ( mkIf (config.modules.neovim.enableCocDeps) pkgs.shfmt)
+    ];
+
+    home.file.".dotfiles" = {
+      source = builtins.fetchGit {
+        url = "https://github.com/vereis/dotfiles";
+        ref = "master";
+        rev = "8c51f9dbeb0684d01d7949af2ea48140e65625cc";
+      };
+    };
+
+    programs.neovim = {
+      enable = true;
+          
+      viAlias = true;
+      vimAlias = true;
+      vimdiffAlias = true;
+
+      withNodeJs = true;
+      withPython3 = true;
+
+      plugins = [ pkgs.fzf pkgs.ripgrep ];
+
+      extraConfig = ''
+        let g:config_dir='~/.dotfiles/nvim'
+        let g:plugin_dir='~/.nvim_plugins'
+        execute "exe 'source' '" . g:config_dir . "/init.vim'"
+      '';
+    };
+
+    home.sessionVariables = mkIf (config.modules.neovim.setDefaultEditor) {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
+  };
+}
+

@@ -1,12 +1,14 @@
-# My Nix/NixOS Configuration
+# My Nix/NixOS Config files
+
+This repo houses configuration for all of the machines that I regularly use.
+
+I have not updated anything to be using flakes yet. Currently, all configuration is done via simple NixOS or Home-Manager style modules.
 
 ## Installation
 
-Note that the only requirements for this configuration are [Nix](https://nixos.org/download.html#download-nix) (or alternatively, [NixOS](https://nixos.org/download.html#nixos-iso)), [home-manager](https://github.com/nix-community/home-manager), and [git](https://git-scm.com/).
+The only real requirements for installing configuration files from here are [Nix](https://nixos.org/download.html#download-nix) and [git](https://git-scm.com); though certain machine configurations will only work on NixOS.
 
-If you're bootstrapping a NixOS configuration, you may not have the latter installed. It is recommended to install it temporarily for the initial setup via `nix-shell -p git` to prevent any potential issues using `nix-env`.
-
-If you _do_ end up running into issues, you may need to use `nix-env --set-flag priority <integer> git`, as this configuration tries to manage its own installation of git.
+If you're bootstrapping a NixOS configuration, you likely will not have Git installed by default. It is recommended to install it temporarily for the initial setup via `nix-shell -p git` to prevent any potential issues using `nix-env`.
 
 Unless you're installing this on [NixOS](https://nixos.org/download.html#nixos-iso), you'll first need to install [Nix (the package manager)](https://nixos.org/download.html#download-nix). You can do this quickly via running the following:
 
