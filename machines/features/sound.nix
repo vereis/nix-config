@@ -2,11 +2,11 @@
 
 with lib;
 {
-  options.hardware.sound = {
+  options.features.sound = {
     enable = mkOption { type = types.bool; default = false; };
   };
 
-  config = mkIf config.hardware.sound.enable {
+  config = mkIf config.features.sound.enable {
     sound.enable = true;
     hardware.pulseaudio.enable = true;
   };

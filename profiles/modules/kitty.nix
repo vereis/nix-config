@@ -12,15 +12,34 @@ with lib;
     programs.kitty.enable = true;
 
     programs.kitty.keybindings = {
+      "alt+enter" = "toggle_fullscreen";
+
       "ctrl+equal" = "change_font_size current +1.0";
       "ctrl+minus" = "change_font_size current -1.0";
+
+      "alt+shift+enter" = "new_window";
+      "alt+shift+space" = "next_layout";
+      "alt+shift+z" = "toggle_layout stack";
+      "alt+shift+r" = "start_resizing_window";
+      "alt+shift+w" = "close_window";
+      "alt+h" = "prev_window";
+      "alt+l" = "next_window";
+      "alt+shift+h" = "move_window_backward";
+      "alt+shift+l" = "move_window_forward";
+
+      "ctrl+shift+t" = "new_tab";
+      "ctrl+tab" = "next_tab";
+      "ctrl+shift+w" = "close_tab";
     };
 
     programs.kitty.settings = {
-      font_family = "FantasqueSansMono";
-      font_size = 15;
+      font_family      = "FantasqueSansMono";
+      bold_font        = "FantasqueSansMono-Regular";
+      bold_italic_font = "FantasqueSansMono-Italic";
 
-      window_padding_width = 20;
+      font_size = 11;
+
+      window_padding_width = 14;
 
       copy_on_select = "clipboard";
       enable_audio_bell = false;
@@ -48,7 +67,9 @@ with lib;
       selection_background = "#b4d5ff";
 
       adjust_line_height = "2";
-    };    
+
+      linux_display_server = "x11";
+    };
 
     home.sessionVariables = mkIf (config.globals.isWsl) {
       DEFAULT_TERMINAL = "kitty";
