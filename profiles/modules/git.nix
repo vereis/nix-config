@@ -14,6 +14,11 @@ with lib;
       pkgs.delta
     ];
 
+    home.file.".local/bin/custom-git-worktree" = {
+      executable = true;
+      source = ./git/worktree;
+    };
+
     # TODO: configurable email/name?
     home.file.".gitconfig" = {
       executable = false;
@@ -61,6 +66,11 @@ with lib;
         push-origin = "!f() { git push origin -u $(git rev-parse --abbrev-ref HEAD) $@; \n }; f"
         rewrite     = "!f() { git rebase -i HEAD~$1; \n }; f"
         gloat       = "!f() { git shortlog -sn; \n }; f"
+        root        = "!f() { git rev-parse --path-format=absolute --show-toplevel; \n }; f"
+
+        # Internal, scripting aliases.
+        wt-root     = "!f() { git rev-parse --path-format=absolute --git-common-dir; \n }; f"
+        wt-clone    = "!f() { git clone $@ --bare $(basename $1 .git); \n }; f"
       '';
     };
   };

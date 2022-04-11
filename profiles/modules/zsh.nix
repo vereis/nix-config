@@ -65,6 +65,20 @@ with lib;
         zstyle ':completion:*' group-name ${"''"}
         zstyle ':completion:*:descriptions' format %B%U%d:%u%b
       '')
+      (mkIf config.modules.git.enable ''
+        function git () {
+          GIT=$(which -a git)
+          case $1 in
+          worktree)
+            . custom-git-worktree "''${@:2}"
+            ;;
+
+          *)
+            $NIX_PROFILE/bin/git "$@"
+            ;;
+          esac
+        }
+      '')
       ''
         # == End modules/zsh.nix ==
       ''
