@@ -12,8 +12,13 @@
     ./modules/neovim.nix
     ./modules/ngrok.nix
     ./modules/zsh.nix
+    ./modules/slack.nix
+    ./modules/teams.nix
+    ./modules/synergy.nix
   ]; 
 
+  modules.slack.enable = true;
+  modules.teams.enable = true;
   modules.firefox.enable = true;
   modules.git.enable = true;
   modules.keychain.enable = true;
@@ -22,4 +27,5 @@
   modules.neovim.enable = true;
   modules.ngrok.enable = true;
   modules.zsh.enable = true;
+  modules.synergy.enable = true;
 }
