@@ -3,6 +3,7 @@
 with lib;
 {
   options.machine = {
+    turbo      = mkOption { type = types.bool; default = false; };
     uefiBoot   = mkOption { type = types.bool; default = true; };
     libinput   = mkOption { type = types.bool; default = true; };
     networking = mkOption { type = types.bool; default = true; };
@@ -28,5 +29,9 @@ with lib;
     # It doesn't seem like we _need_ DHCP though... will revisit.
     #networking.useDHCP = config.machine.networking;
     #networking.interfaces.wlp0s20f3.useDHCP = true;
+
+    # If turbo mode is set, don't throttle CPU freq
+    # powerManagement.cpuFreqGovernor = mkIf (config.machine.turbo) "performance";
+    # powerManagement.powertop.enable = true;
   };
 }
