@@ -69,6 +69,7 @@ with lib;
       adjust_line_height = "2";
 
       linux_display_server = "x11";
+      sync_to_monitor = "no";
     };
 
     home.sessionVariables = mkIf (config.globals.isWsl) {
