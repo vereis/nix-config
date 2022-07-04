@@ -21,7 +21,6 @@ with lib;
     networking.networkmanager.enable = config.machine.networking;
 
     services.xserver.libinput.enable = config.machine.libinput;
-    services.xserver.xkbOptions = "ctrl:swapcaps";
 
     # It may be prudent to enable the following, but it sucks that we need to enumerate all
     # of the network interfaces to enable DHCP.
