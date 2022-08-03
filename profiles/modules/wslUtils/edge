@@ -1,3 +1,0 @@
-#!/bin/sh
-# edge    Wrapper for launching Microsoft Edge
-(cmd.exe /c start microsoft-edge:"$*") >/dev/null 2>&1
