@@ -1,3 +1,0 @@
-#!/bin/sh
-# lorri-init    lorri init wrapper setting 'source_up' to true
-lorri init && printf "source_up\n%s" "$(cat .envrc)" >.envrc
