@@ -3,10 +3,16 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  environment.systemPackages = with pkgs; [ blueberry ];
+  environment.systemPackages = with pkgs; [ blueberry transmission-gtk ];
+  services.transmission.enable = true;
+  services.transmission.openFirewall = true;
 
   networking.hostName = "homura";
   networking.networkmanager.enable = true;
+
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 22 80 443 51413 ];
+  networking.firewall.allowedUDPPorts = [ 22 80 443 51413 ];
 
   hardware.bluetooth.enable = true;
 
