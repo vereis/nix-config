@@ -9,7 +9,7 @@ with lib;
 
   config = mkIf config.modules.kitty.enable {
     home = {
-      packages = with pkgs; [ kitty fantasque-sans-mono ]; 
+      packages = with pkgs; [ kitty nerdfonts ];
       sessionVariables.DEFAULT_TERMINAL = "kitty";
     };
 
@@ -39,7 +39,7 @@ with lib;
 
       settings = {
         font_size = config.modules.kitty.fontSize;
-	
+
         font_family      = "FantasqueSansMono";
         bold_font        = "FantasqueSansMono-Regular";
         bold_italic_font = "FantasqueSansMono-Italic";
@@ -48,7 +48,7 @@ with lib;
 
         copy_on_select = "clipboard";
         enable_audio_bell = false;
-   
+
         background = "#080808";
         foreground = "#bbbbbb";
         cursor     = "#bbbbbb";

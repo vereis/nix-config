@@ -10,18 +10,21 @@
   };
 
   environment.systemPackages = with pkgs; [
+      gcc
       acpi
       cacert
       git
       htop
       httpie
       killall
+      lsof
       openssh
       openssl
       pciutils
       pfetch
       tmux
       tree
+      unzip
       usbutils
       wget
       xclip
