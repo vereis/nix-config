@@ -7,7 +7,12 @@ with lib;
   };
 
   config = mkIf config.modules.neovim.enable {
-    home.packages = with pkgs; [ fzf ripgrep shellcheck shfmt ];
+    home.packages = with pkgs; [
+      stylua
+      sumneko-lua-language-server
+      shellcheck
+      shfmt
+    ];
 
     programs.fzf.enable = true;
     programs.fzf.enableZshIntegration = true;
@@ -18,17 +23,18 @@ with lib;
       VISUAL = "nvim";
     };
 
-    home.file.".dotfiles" = {
+    home.file.".config/nvim/lua/config.lua".source = ./neovim/config.lua;
+    home.file.".local/share/nvim/site/pack/packer/start/packer.nvim" = {
       source = builtins.fetchGit {
-        url = "https://github.com/vereis/dotfiles";
+        url = "https://github.com/wbthomason/packer.nvim";
         ref = "master";
-        rev = "8c51f9dbeb0684d01d7949af2ea48140e65625cc";
+        rev = "afab89594f4f702dc3368769c95b782dbdaeaf0a";
       };
     };
 
     programs.neovim = {
       enable = true;
-          
+
       viAlias = true;
       vimAlias = true;
       vimdiffAlias = true;
@@ -36,12 +42,8 @@ with lib;
       withNodeJs = true;
       withPython3 = true;
 
-      plugins = with pkgs; [ fzf ripgrep ];
-
       extraConfig = ''
-        let g:config_dir='~/.dotfiles/nvim'
-        let g:plugin_dir='~/.nvim_plugins'
-        execute "exe 'source' '" . g:config_dir . "/init.vim'"
+      lua require('config')
       '';
     };
   };
