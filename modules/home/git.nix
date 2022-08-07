@@ -8,6 +8,12 @@ with lib;
 
   config = mkIf config.modules.git.enable {
     home.packages = with pkgs; [ git gh delta ];
+
+    home.file.".local/bin/git/ssh-migrate.sh" = {
+      executable = true;
+      source = ./git/migrate-ssh.sh;
+    };
+
     home.file.".gitconfig" = {
       executable = false;
       text = ''
@@ -55,6 +61,7 @@ with lib;
         rewrite     = "!f() { git rebase -i HEAD~$1; \n }; f"
         gloat       = "!f() { git shortlog -sn; \n }; f"
         root        = "!f() { git rev-parse --path-format=absolute --show-toplevel; \n }; f"
+        ssh-migrate = "!f() { $HOME/.local/bin/git/ssh-migrate.sh \n }; f"
       '';
     };
   };
