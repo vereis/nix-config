@@ -12,6 +12,7 @@ with lib;
       sumneko-lua-language-server
       shellcheck
       shfmt
+      vale
     ];
 
     programs.fzf.enable = true;
@@ -23,6 +24,7 @@ with lib;
       VISUAL = "nvim";
     };
 
+    home.file.".vale.ini".source = ./neovim/.vale.ini;
     home.file.".config/nvim/lua/config.lua".source = ./neovim/config.lua;
     home.file.".local/share/nvim/site/pack/packer/start/packer.nvim" = {
       source = builtins.fetchGit {
