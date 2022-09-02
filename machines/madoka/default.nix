@@ -9,8 +9,8 @@
   networking.networkmanager.enable = true;
 
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 443 51413 ];
-  networking.firewall.allowedUDPPorts = [ 22 80 443 51413 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 443 24800 51413 ];
+  networking.firewall.allowedUDPPorts = [ 22 80 443 24800 51413 ];
 
   programs.steam.enable = true;
   hardware.bluetooth.enable = true;
