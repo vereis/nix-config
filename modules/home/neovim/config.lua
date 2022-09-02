@@ -1,5 +1,8 @@
 -- Plugin Installation
 require("packer").startup(function(use)
+	-- Bootstrap
+	use("wbthomason/packer.nvim")
+
 	-- Themeing
 	use("flazz/vim-colorschemes")
 	use({
