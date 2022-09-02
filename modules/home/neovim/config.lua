@@ -26,7 +26,6 @@ require("packer").startup(function(use)
 
 	-- Neovim LSP
 	use("mhartington/formatter.nvim")
-	use({ "jose-elias-alvarez/null-ls.nvim", run = "vale sync" })
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		run = function()
@@ -39,7 +38,8 @@ require("packer").startup(function(use)
 		requires = {
 			-- Core Modules
 			{ "neovim/nvim-lspconfig" },
-			{ "williamboman/nvim-lsp-installer" },
+			{ "williamboman/mason.nvim" },
+			{ "williamboman/mason-lspconfig.nvim" },
 
 			-- Auto Complete
 			{ "hrsh7th/nvim-cmp" },
@@ -71,8 +71,6 @@ end)
 
 -- Globals
 local lsp = require("lsp-zero")
-local null_ls = require("null-ls")
-local null_opts = lsp.build_options("null-ls", {})
 local tree = require("nvim-tree")
 local treesitter = require("nvim-treesitter.configs")
 local rebind = require("which-key")
@@ -129,14 +127,6 @@ vim.api.nvim_create_autocmd(
 )
 
 -- Init LSP
-null_ls.setup({
-	on_attach = null_opts.on_attach,
-	sources = {
-		null_ls.builtins.completion.spell,
-		null_ls.builtins.diagnostics.vale,
-	},
-})
-
 lsp.preset("recommended")
 lsp.nvim_workspace()
 lsp.setup()
