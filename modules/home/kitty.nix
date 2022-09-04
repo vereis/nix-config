@@ -76,7 +76,7 @@ with lib;
         linux_display_server = "x11";
         sync_to_monitor = "no";
 
-        inactive_text_alpha = "0.8";
+        inactive_text_alpha = "0.5";
       };
     };
   };
