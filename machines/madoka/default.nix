@@ -3,7 +3,7 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  environment.systemPackages = with pkgs; [ blueberry ];
+  environment.systemPackages = with pkgs; [ blueberry vulkan-loader vulkan-tools vulkan-validation-layers ];
 
   networking.hostName = "madoka";
   networking.networkmanager.enable = true;
