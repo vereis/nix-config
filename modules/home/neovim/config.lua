@@ -129,6 +129,24 @@ vim.api.nvim_create_autocmd(
 -- Init LSP
 lsp.preset("recommended")
 lsp.nvim_workspace()
+
+---- By default, LSP Zero uses up and down arrow keys to move through suggestions.
+---- Restore to Vim's default (C-n and C-p)
+local cmp = require("cmp")
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
+local cmp_mappings = lsp.defaults.cmp_mappings({
+	["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+	["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+})
+cmp_mappings["<Tab>"] = nil -- Delete the tab key mapping for LSP since I prefer C-n
+
+lsp.setup_nvim_cmp({
+	mapping = cmp_mappings,
+	-- Override completion so nothing is selected by default, meaning I have to opt into it
+	-- with C-n or C-p
+	completion = { completeopt = "menu,menuone,noinsert,noselect" },
+})
+
 lsp.setup()
 vim.diagnostic.config({ virtual_text = true })
 
