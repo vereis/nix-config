@@ -26,6 +26,7 @@ require("packer").startup(function(use)
 
 	-- Neovim LSP
 	use("mhartington/formatter.nvim")
+	use({ "jose-elias-alvarez/null-ls.nvim", run = "vale sync" })
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		run = function()
@@ -71,6 +72,8 @@ end)
 
 -- Globals
 local lsp = require("lsp-zero")
+local cmp = require("cmp")
+local null_ls = require("null-ls")
 local tree = require("nvim-tree")
 local treesitter = require("nvim-treesitter.configs")
 local rebind = require("which-key")
@@ -132,7 +135,6 @@ lsp.nvim_workspace()
 
 ---- By default, LSP Zero uses up and down arrow keys to move through suggestions.
 ---- Restore to Vim's default (C-n and C-p)
-local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
 	["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
@@ -149,6 +151,18 @@ lsp.setup_nvim_cmp({
 
 lsp.setup()
 vim.diagnostic.config({ virtual_text = true })
+
+require("lspconfig").grammarly.setup({
+	init_options = { clientId = "client_BaDkMgx4X19X9UxxYRCXZo" },
+})
+
+null_ls.setup({
+	on_attach = lsp.build_options("null-ls", {}).on_attach,
+	sources = {
+		null_ls.builtins.completion.spell,
+		null_ls.builtins.diagnostics.vale,
+	},
+})
 
 -- Init TreeSitter
 treesitter.setup({
