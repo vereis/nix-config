@@ -25,7 +25,7 @@ with lib;
       font = "Fantasque Sans Mono ${toString config.modules.awesome.fontSize}";
       location = "center";
       theme = {
-        "*" = { border = 0; margin = 0; padding = config.modules.awesome.fontSize / 2; spacing = 0; };  
+        "*" = { border = 0; margin = 0; padding = config.modules.awesome.fontSize / 2; spacing = 0; };
       };
     };
 
@@ -35,9 +35,6 @@ with lib;
     services.picom = {
       enable = true;
       shadow = false;
-      settings = {
-        inactive-dim = 0.2;
-      };
     };
   };
 }
