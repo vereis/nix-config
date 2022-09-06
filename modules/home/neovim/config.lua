@@ -173,9 +173,19 @@ treesitter.setup({
 
 -- Misc Setup & Rebinds
 lualine.setup()
-tree.setup()
+
+tree.setup({
+	view = {
+		mappings = {
+			list = {
+				{ key = "u", action = "dir_up" },
+			},
+		},
+	},
+})
+
 rebind.register({
-	["<C-n>"] = { "<Cmd>NvimTreeToggle<CR>", "Toggle Tree" },
+	["<C-n>"] = { "<Cmd>NvimTreeFindFileToggle<CR>", "Toggle Tree" },
 	["s"] = { "<Plug>(easymotion-overwin-f)", "Easymotion" },
 	["<C-p>"] = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "Find Files" },
 	["<C-f>"] = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search Files" },
