@@ -17,7 +17,6 @@ require("packer").startup(function(use)
 
 	-- Extended STDLIB
 	use("machakann/vim-swap")
-	use("scrooloose/nerdtree")
 	use("airblade/vim-gitgutter")
 	use("easymotion/vim-easymotion")
 
