@@ -13,6 +13,8 @@ with lib;
       shellcheck
       shfmt
       vale
+      deno
+      nodePackages.prettier
     ];
 
     programs.fzf.enable = true;
