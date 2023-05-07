@@ -1,0 +1,55 @@
+/* By default, tabs are really squished... let's give it some more room to breathe */
+#all-tabs {
+  padding: 1px 3px;
+}
+
+tab-item:not(.collapsed):not(.pinned):not(:first-of-type) {
+  margin-top: -3px;
+}
+
+tab-item:not(.pinned) tab-label {
+  padding: 8px 0;
+  margin-left: 0.5em;
+}
+
+tab-item:not(.pinned) tab-closebox {
+  margin-right: 5px;
+}
+
+tab-item:not(.pinned) tab-favicon {
+  margin-left: -3px;
+}
+
+/* The new tab button is also smaller than tabs, let's fix that */
+.newtab-button {
+  padding: 12px 0;
+}
+
+/* I'll never use the additional options when creating new tabs; hide */
+.newtab-action-selector-anchor {
+  display: none;
+}
+
+/* Hide the favicon of any tab that has children since the tab twisty makes the tab
+ * way too crowded when it's being rendered...
+ *
+ * Instead, we should replace the favicon with the twisty :-) */
+tab-item[data-child-ids] tab-twisty + tab-favicon {
+  display: none;
+}
+
+tab-item[data-child-ids] tab-twisty {
+  margin-left: 14px;
+}
+
+tab-item[data-child-ids] tab-twisty:after {
+  background-color: #00000022;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 18px;
+  height: 18px;
+  content: "";
+  z-index: -1;
+  border-radius: 100% !important;
+}

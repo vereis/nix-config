@@ -1,0 +1,44 @@
+/* Hide the "Tree Style Tab" header */
+#sidebar-header {
+  visibility: collapse;
+}
+
+/* Hide the actual tab bar */
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"])
+  #TabsToolbar
+  > .toolbar-items {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+  visibility: collapse !important;
+}
+
+/* Add some additional y-padding around the URL bar container */
+#nav-bar {
+  height: 54px !important;
+}
+
+#nav-bar-customization-target {
+  padding: 4px 0 !important;
+}
+
+#urlbar {
+  margin-top: -3px !important;
+}
+
+#personal-bookmarks {
+  padding: 4px 0;
+  margin-top: -8px;
+}
+
+/* Hide ugly border on the side of sidebars */
+.sidebar-splitter {
+  display: none;
+}
+
+/* Hide window controls when in fullscreen */
+#window-controls {
+  visibility: collapse;
+}
