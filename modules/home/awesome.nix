@@ -37,9 +37,14 @@ with lib;
       shadow = false;
       backend = "glx";
       extraArgs = [ "--experimental-backends" ];
-      opacityRules = [  ];
       settings = {
         shadow = false;
+        blur-background-exclude = [
+          "window_type = 'dock'"
+          "window_type = 'desktop'"
+          "class_g = 'slop'"    # maim (screenshot tool) uses slop to cover the whole screen, don't blur!
+          "class_g = 'firefox'" # firefox subwindows shouldn't have blur
+        ];
         blur = {
           method = "dual_kawase";
           strength = 8;
