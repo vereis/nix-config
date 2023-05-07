@@ -36,6 +36,9 @@
       mpd
     ];
 
+  # Allow dynamic linking of packages I build
+  programs.nix-ld.enable = true;
+
   time.timeZone = "Europe/London";
   i18n.defaultLocale = "en_US.utf8";
 
