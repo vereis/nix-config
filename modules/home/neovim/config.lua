@@ -1,11 +1,10 @@
 -- Plugin Installation
 require("packer").startup(function(use)
 	-- Themeing
-	use("flazz/vim-colorschemes")
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
+	use({ "catppuccin/nvim", as = "catppuccin" })
+	use({ "nvim-lualine/lualine.nvim", requires = { "kyazdani42/nvim-web-devicons", opt = true } })
+	use({ "kyazdani42/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
+	use({ "nanozuki/tabby.nvim", requires = { "kyazdani42/nvim-web-devicons" } })
 
 	-- Tim Pope's STDLIB
 	use("tpope/vim-fugitive")
@@ -55,12 +54,6 @@ require("packer").startup(function(use)
 		},
 	})
 
-	-- File Tree
-	use({
-		"kyazdani42/nvim-tree.lua",
-		requires = { "kyazdani42/nvim-web-devicons" },
-	})
-
 	-- Fuzzy Finder
 	use({
 		"nvim-telescope/telescope.nvim",
@@ -78,9 +71,12 @@ local treesitter = require("nvim-treesitter.configs")
 local rebind = require("which-key")
 local formatter = require("formatter")
 local lualine = require("lualine")
+local tabbar = require("tabby.tabline")
+local catppuccin = require("catppuccin")
 
 -- Defaults
 vim.g.mapleader = " "
+vim.opt.termguicolors = true
 
 vim.opt.hidden = true
 vim.opt.lazyredraw = true
@@ -112,15 +108,21 @@ vim.opt.smartcase = true
 vim.opt.completeopt = "menuone,noinsert,noselect"
 vim.opt.shortmess = vim.o.shortmess .. "c"
 
--- Init Colorscheme
-pcall(vim.cmd, "colorscheme monokain")
-pcall(vim.cmd, "highlight Normal ctermbg=None")
+-- Always show tabbar
+vim.opt.showtabline = 2
 
--- Trailing Whitespace is bad
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-	pattern = { "*" },
-	command = [[%s/\s\+$//e]],
+-- Init Colorscheme
+catppuccin.setup({
+	color_overrides = {
+		all = {
+			base = "#030303",
+			mantle = "#030303",
+			crust = "#030303",
+		},
+	},
 })
+
+vim.cmd("colorscheme catppuccin")
 
 -- Return to last position in previously opened file
 vim.api.nvim_create_autocmd(
@@ -209,6 +211,38 @@ formatter.setup({
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
 	},
 })
+
+tabbar.set(function(line)
+	local theme = {
+		fill = "TabLineFill",
+		head = "TabLine",
+		current_tab = "TabLineSel",
+		tab = "TabLine",
+		win = "TabLine",
+		tail = "TabLine",
+	}
+
+	return {
+		{
+			{ "  ", hl = theme.tead },
+			line.sep("", theme.head, theme.fill),
+		},
+		line.tabs().foreach(function(tab)
+			local hl = tab.is_current() and theme.current_tab or theme.tab
+
+			return {
+				line.sep("", hl, theme.fill),
+				tab.current_win().file_icon(),
+				tab.name(),
+				tab.close_btn(""),
+				line.sep("", hl, theme.fill),
+				hl = hl,
+				margin = " ",
+			}
+		end),
+		hl = theme.fill,
+	}
+end)
 
 vim.api.nvim_exec(
 	[[

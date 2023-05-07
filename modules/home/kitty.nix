@@ -38,45 +38,50 @@ with lib;
       };
 
       settings = {
+        # Fonts
         font_size = config.modules.kitty.fontSize;
-
-        font_family      = "FantasqueSansMono";
-        bold_font        = "FantasqueSansMono-Regular";
-        bold_italic_font = "FantasqueSansMono-Italic";
-
-        window_padding_width = config.modules.kitty.fontSize + 3;
-
-        copy_on_select = "clipboard";
-        enable_audio_bell = false;
-
-        background = "#080808";
-        foreground = "#bbbbbb";
-        cursor     = "#bbbbbb";
-        color0     = "#121212";
-        color8     = "#545454";
-        color1     = "#fa2573";
-        color9     = "#f5669c";
-        color2     = "#97e123";
-        color10    = "#b0e05e";
-        color3     = "#dfd460";
-        color11    = "#fef26c";
-        color4     = "#0f7fcf";
-        color12    = "#00afff";
-        color5     = "#8700ff";
-        color13    = "#af87ff";
-        color6     = "#42a7cf";
-        color14    = "#50cdfe";
-        color7     = "#bbbbbb";
-        color15    = "#ffffff";
-        selection_foreground = "#121212";
-        selection_background = "#b4d5ff";
-
+        font_family = "FantasqueSansMono Nerd Font Mono";
         adjust_line_height = "2";
 
+        # Padding
+        window_padding_width = config.modules.kitty.fontSize + 3;
+
+        # Behaviour
+        copy_on_select = "clipboard";
+        enable_audio_bell = false;
         linux_display_server = "x11";
         sync_to_monitor = "no";
 
-        inactive_text_alpha = "0.5";
+        # Colors / Theming
+        foreground           = "#CDD6F4";
+        background           = "#030303";
+        selection_foreground = "#1E1E2E";
+        selection_background = "#F5E0DC";
+        cursor               = "#F5E0DC";
+        cursor_text_color    = "#1E1E2E";
+        color0               = "#45475A"; # Black
+        color8               = "#585B70"; # Black
+        color1               = "#F38BA8"; # Red
+        color9               = "#F38BA8"; # Red
+        color2               = "#A6E3A1"; # Green
+        color10              = "#A6E3A1"; # Green
+        color3               = "#F9E2AF"; # Yellow
+        color11              = "#F9E2AF"; # Yellow
+        color4               = "#89B4FA"; # Blue
+        color12              = "#89B4FA"; # Blue
+        color5               = "#F5C2E7"; # Magenta
+        color13              = "#F5C2E7"; # Magenta
+        color6               = "#94E2D5"; # Cyan
+        color14              = "#94E2D5"; # Cyan
+        color7               = "#BAC2DE"; # White
+        color15              = "#A6ADC8"; # White
+        mark1_foreground     = "#1E1E2E";
+        mark1_background     = "#B4BEFE";
+        mark2_foreground     = "#1E1E2E";
+        mark2_background     = "#CBA6F7";
+        mark3_foreground     = "#1E1E2E";
+        mark3_background     = "#74C7EC";
+        inactive_text_alpha  = "0.5";
       };
     };
   };
