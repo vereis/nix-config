@@ -24,12 +24,12 @@ theme.fg_focus = "#444444"
 theme.fg_urgent = theme.fg_normal
 theme.fg_minimize = theme.fg_normal
 
-theme.useless_gap = dpi(8)
+theme.useless_gap = dpi(9)
 
-theme.border_width = 0
-theme.border_normal = theme.bg_normal
-theme.border_focus = theme.bg_normal
-theme.border_marked = theme.bg_normal
+theme.border_width = dpi(1)
+theme.border_normal = "#6a6060"
+theme.border_focus = "#dcbcc4"
+theme.border_marked = "#dcbcc4"
 
 -- There are other variable sets
 -- overriding the default one when
