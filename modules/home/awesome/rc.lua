@@ -309,3 +309,25 @@ end)
 -- Signals: Reset Wallpaper on Geometry Change
 ------------------------------------------------------------------------------------------
 screen.connect_signal("property::geometry", set_wallpaper)
+
+------------------------------------------------------------------------------------------
+-- Signals: Change border color on focus
+------------------------------------------------------------------------------------------
+client.connect_signal("focus", function(c)
+	c.border_color = beautiful.border_focus
+end)
+
+client.connect_signal("unfocus", function(c)
+	c.border_color = beautiful.border_normal
+end)
+
+screen.connect_signal("arrange", function(s)
+	local only_one = #s.tiled_clients == 1
+	for _, c in pairs(s.clients) do
+		if only_one and not c.floating or c.maximized then
+			c.border_width = 0
+		else
+			c.border_width = beautiful.border_width
+		end
+	end
+end)
