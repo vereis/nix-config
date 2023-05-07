@@ -22,6 +22,15 @@ with lib;
       prezto = {
         enable = true;
         prompt.theme = "powerlevel10k";
+        editor.keymap = "vi";
+        syntaxHighlighting.highlighters = [ "main" "brackets" "pattern" "line" "cursor" "root" ];
+        terminal = {
+          autoTitle = true;
+          multiplexerTitleFormat = "%s";
+          tabTitleFormat = "%s";
+          windowTitleFormat = "%s";
+        };
+        utility.safeOps = true;
       };
 
       cdpath = mkIf config.modules.zsh.enablePortals [ config.modules.zsh.portalPath ];
@@ -47,6 +56,12 @@ with lib;
 
           source $HOME/.p10k.zsh
         '')
+        ''
+        # Normal mode 'v' to edit command in vim
+        autoload -Uz edit-command-line
+        zle -N edit-command-line
+        bindkey -M vicmd v edit-command-line
+        ''
       ]);
     };
 
