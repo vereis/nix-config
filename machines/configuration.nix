@@ -3,6 +3,8 @@
 {
   nixpkgs.config.allowUnfree = true;
 
+  programs.zsh.enable = true;
+
   users.users.${username} = {
     isNormalUser = true;
     extraGroups = [ "networkmanager" "wheel" "docker" ];
