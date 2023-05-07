@@ -20,6 +20,16 @@ tab-item:not(.pinned) tab-favicon {
   margin-left: -3px;
 }
 
+/* Container tab color should be a bubble in the tab instead of a border */
+tab-item:not(.pinned) .contextual-identity-marker {
+  right: 39px;
+  height: 12px;
+  width: 12px;
+  top: 16px;
+  border-radius: 100%;
+  box-shadow: inset 0 0 1px #fffa;
+}
+
 /* The new tab button is also smaller than tabs, let's fix that */
 .newtab-button {
   padding: 12px 0;
