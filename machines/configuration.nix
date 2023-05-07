@@ -32,6 +32,7 @@
       usbutils
       wget
       xclip
+      mpd
     ];
 
   time.timeZone = "Europe/London";
@@ -81,8 +82,36 @@
     };
   };
 
+  fonts.fonts = [ pkgs.corefonts ];
+
   sound.enable = true;
   hardware.pulseaudio.enable = false;
+
+  services.mpd = {
+    user = "chris";
+    enable = true;
+
+    musicDirectory = "/home/chris/music";
+    extraConfig = ''
+    audio_output {
+      type   "pipewire"
+      name   "My PipeWire Output"
+    }
+    audio_output {
+      type   "fifo"
+      name   "my_fifo"
+      path   "/tmp/mpd.fifo"
+      format "44100:16:2"
+    }
+    '';
+
+    network.listenAddress = "any";
+    startWhenNeeded = true;
+  };
+
+  systemd.services.mpd.environment = {
+    XDG_RUNTIME_DIR = "/run/user/1000";
+  };
 
   security.rtkit.enable = true;
 

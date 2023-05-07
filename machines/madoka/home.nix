@@ -9,6 +9,7 @@
     ../../modules/home/neovim.nix
     ../../modules/home/vetspire.nix
     ../../modules/home/zsh.nix
+    ../../modules/home/ncmpcpp.nix
   ];
 
   modules.awesome.enable    = true;
@@ -20,4 +21,5 @@
   modules.neovim.enable     = true;
   modules.vetspire.enable   = true;
   modules.zsh.enable        = true;
+  modules.ncmpcpp.enable    = true;
 }
