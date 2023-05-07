@@ -8,7 +8,7 @@ with lib;
   };
 
   config = mkIf config.modules.awesome.enable {
-    home.packages = with pkgs; [ awesome rofi fantasque-sans-mono maim ];
+    home.packages = with pkgs; [ awesome rofi maim (nerdfonts.override { fonts = [ "FantasqueSansMono" ]; }) ];
 
     home.file.".config/awesome" = {
       recursive = true;
@@ -22,7 +22,7 @@ with lib;
 
     programs.rofi = {
       enable = true;
-      font = "Fantasque Sans Mono ${toString config.modules.awesome.fontSize}";
+      font = "FantasqueSansMono Nerd Font Mono ${toString config.modules.awesome.fontSize}";
       location = "center";
       theme = {
         "*" = { border = 0; margin = 0; padding = config.modules.awesome.fontSize / 2; spacing = 0; };
