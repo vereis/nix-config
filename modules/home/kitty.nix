@@ -52,6 +52,10 @@ with lib;
         linux_display_server = "x11";
         sync_to_monitor = "no";
 
+        # Transparency
+        background_opacity = "0.875";
+        dynamic_background_opacity = "yes";
+
         # Colors / Theming
         foreground           = "#CDD6F4";
         background           = "#030303";
@@ -81,7 +85,7 @@ with lib;
         mark2_background     = "#CBA6F7";
         mark3_foreground     = "#1E1E2E";
         mark3_background     = "#74C7EC";
-        inactive_text_alpha  = "0.5";
+        inactive_text_alpha  = "0.35";
       };
     };
   };

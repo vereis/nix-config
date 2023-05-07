@@ -69,14 +69,17 @@ awful.layout.layouts = {
 -- Initialise and set Wallpapers
 ------------------------------------------------------------------------------------------
 local function set_wallpaper(s)
-	gears.wallpaper.set("#222222")
+	gears.wallpaper.set("#dcbcc4")
+	gears.wallpaper.maximized(string.format("%s/.wallpaper", os.getenv("HOME")), s)
 end
 
 awful.screen.connect_for_each_screen(function(s)
 	set_wallpaper(s)
-	s.padding = -2
+	s.padding = 0
 	awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 end)
+
+beautiful.gap_single_client = false
 
 ------------------------------------------------------------------------------------------
 -- Misc and General Keybinds
