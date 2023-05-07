@@ -31,6 +31,7 @@ require("packer").startup(function(use)
 			require("nvim-treesitter.install").update({ with_sync = true })
 		end,
 	})
+	use("nvim-treesitter/nvim-treesitter-context")
 
 	use({
 		"VonHeikemen/lsp-zero.nvim",
@@ -68,6 +69,7 @@ local cmp = require("cmp")
 local null_ls = require("null-ls")
 local tree = require("nvim-tree")
 local treesitter = require("nvim-treesitter.configs")
+local context = require("treesitter-context")
 local rebind = require("which-key")
 local formatter = require("formatter")
 local lualine = require("lualine")
@@ -171,6 +173,18 @@ treesitter.setup({
 	highlight = {
 		enable = true,
 	},
+})
+
+context.setup({
+	enable = true,
+	max_lines = 0,
+	min_window_height = 0,
+	line_numbers = true,
+	multiline_threshold = 20,
+	trim_scope = "outer",
+	mode = "cursor",
+	separator = nil,
+	zindex = 20,
 })
 
 -- Misc Setup & Rebinds
