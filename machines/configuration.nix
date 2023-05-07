@@ -32,6 +32,7 @@
       usbutils
       wget
       xclip
+      ranger
       mpd
     ];
 
