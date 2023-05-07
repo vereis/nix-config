@@ -18,6 +18,7 @@ require("packer").startup(function(use)
 	use("machakann/vim-swap")
 	use("airblade/vim-gitgutter")
 	use("easymotion/vim-easymotion")
+	use("mbbill/undotree")
 
 	-- NVIM Lua sucks at key rebinding
 	use("folke/which-key.nvim")
@@ -205,6 +206,7 @@ rebind.register({
 	["s"] = { "<Plug>(easymotion-overwin-f)", "Easymotion" },
 	["<C-p>"] = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "Find Files" },
 	["<C-f>"] = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search Files" },
+	["U"] = { "<Cmd>UndotreeToggle<CR>", "Undo Tree" },
 })
 
 formatter.setup({
