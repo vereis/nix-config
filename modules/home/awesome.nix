@@ -35,6 +35,16 @@ with lib;
     services.picom = {
       enable = true;
       shadow = false;
+      backend = "glx";
+      extraArgs = [ "--experimental-backends" ];
+      opacityRules = [  ];
+      settings = {
+        shadow = false;
+        blur = {
+          method = "dual_kawase";
+          strength = 8;
+        };
+      };
     };
   };
 }

@@ -121,7 +121,7 @@ catppuccin.setup({
 		},
 	},
 })
-
+vim.cmd("set fillchars+=vert:\\ ") -- fixes weird pixel border when trans.
 vim.cmd("colorscheme catppuccin")
 
 -- Return to last position in previously opened file
@@ -224,18 +224,20 @@ tabbar.set(function(line)
 
 	return {
 		{
-			{ "  ", hl = theme.tead },
-			line.sep("", theme.head, theme.fill),
+			{ "  ", hl = theme.head },
+			line.sep("", theme.head, theme.fill),
 		},
 		line.tabs().foreach(function(tab)
 			local hl = tab.is_current() and theme.current_tab or theme.tab
+			local sepl = tab.is_current() and "" or " "
+			local sepr = tab.is_current() and "" or " "
 
 			return {
-				line.sep("", hl, theme.fill),
+				line.sep(sepl, hl, theme.fill),
 				tab.current_win().file_icon(),
 				tab.name(),
 				tab.close_btn(""),
-				line.sep("", hl, theme.fill),
+				line.sep(sepr, hl, theme.fill),
 				hl = hl,
 				margin = " ",
 			}
