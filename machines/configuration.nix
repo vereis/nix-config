@@ -33,6 +33,7 @@
       wget
       xclip
       mpd
+      zip
     ];
 
   # Allow dynamic linking of packages I build
