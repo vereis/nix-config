@@ -135,7 +135,7 @@ globalkeys = gears.table.join(
 		awful.spawn(terminal)
 	end, { description = "spawn terminal", group = "launchers" }),
 	awful.key({ modkey }, "r", function()
-		awful.spawn("rofi -show run")
+		awful.spawn('rofi -show drun -display-drun ">"')
 	end, { description = "spawn launcher", group = "launchers" }),
 	awful.key({ modkey }, "w", function()
 		awful.spawn(browser)
