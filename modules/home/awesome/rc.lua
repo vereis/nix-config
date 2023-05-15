@@ -116,10 +116,10 @@ globalkeys = gears.table.join(
 	-- Layout Manipulation Keybinds
 	------------------------------------------------------------------------------------------
 	awful.key({ modkey }, "l", function()
-		awful.tag.incmwfact(0.05)
+		awful.tag.incmwfact(0.025)
 	end, { description = "inc. master", group = "layout" }),
 	awful.key({ modkey }, "h", function()
-		awful.tag.incmwfact(-0.05)
+		awful.tag.incmwfact(-0.025)
 	end, { description = "dec. master", group = "layout" }),
 	awful.key({ modkey }, "space", function()
 		awful.layout.inc(1)
