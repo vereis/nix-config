@@ -75,7 +75,7 @@ end
 
 awful.screen.connect_for_each_screen(function(s)
 	set_wallpaper(s)
-	s.padding = 0
+	s.padding = dpi(-1)
 	awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 end)
 
