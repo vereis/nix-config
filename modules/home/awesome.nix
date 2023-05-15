@@ -8,7 +8,7 @@ with lib;
   };
 
   config = mkIf config.modules.awesome.enable {
-    home.packages = with pkgs; [ awesome rofi maim (nerdfonts.override { fonts = [ "FantasqueSansMono" ]; }) ];
+    home.packages = with pkgs; [ awesome rofi maim libnotify (nerdfonts.override { fonts = [ "FantasqueSansMono" ]; }) ];
 
     home.file.".config/awesome" = {
       recursive = true;
@@ -23,9 +23,20 @@ with lib;
     programs.rofi = {
       enable = true;
       font = "FantasqueSansMono Nerd Font Mono ${toString config.modules.awesome.fontSize}";
-      location = "center";
-      theme = {
-        "*" = { border = 0; margin = 0; padding = config.modules.awesome.fontSize / 2; spacing = 0; };
+      theme = let
+        inherit (config.lib.formats.rasi) mkLiteral;
+      in {
+        "*" = {
+          border = 0;
+          margin = 0;
+          padding = config.modules.awesome.fontSize / 3;
+          spacing = 0;
+          border-radius = 8;
+          bg0 = mkLiteral "#FFFFFF8A";
+          background-color = mkLiteral "transparent";
+        };
+        "window" = { background-color =   mkLiteral "@bg0"; width = 640; padding = config.modules.awesome.fontSize / 2; };
+        "listview" = { lines = 10; columns = 1; fixed-height = false; };
       };
     };
 
