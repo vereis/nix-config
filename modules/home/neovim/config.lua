@@ -55,7 +55,7 @@ require("packer").startup(function(use)
 			{ "rafamadriz/friendly-snippets" },
 		},
 	})
-	use({ "elixir-tools/elixir-tools.nvim", requires = { "nvim-lua/plenary.nvim" } })
+	use("github/copilot.vim")
 
 	-- Fuzzy Finder
 	use({
@@ -77,7 +77,6 @@ local formatter = require("formatter")
 local lualine = require("lualine")
 local tabbar = require("tabby.tabline")
 local catppuccin = require("catppuccin")
-local elixir = require("elixir")
 
 -- Defaults
 vim.g.mapleader = " "
@@ -139,7 +138,6 @@ vim.api.nvim_create_autocmd(
 lsp.preset("recommended")
 lsp.nvim_workspace()
 lsp.default_keymaps({ preserve_mappings = false })
-elixir.setup()
 
 ---- By default, LSP Zero uses up and down arrow keys to move through suggestions.
 ---- Restore to Vim's default (C-n and C-p)
