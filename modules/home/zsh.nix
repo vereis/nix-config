@@ -61,6 +61,10 @@ with lib;
         autoload -Uz edit-command-line
         zle -N edit-command-line
         bindkey -M vicmd v edit-command-line
+
+        # Vim mode doesn't let you use ctrl-a/e to go to the beginning/end of the line
+        bindkey "^A" vi-beginning-of-line
+        bindkey "^E" vi-end-of-line
         ''
       ]);
     };
