@@ -1,7 +1,7 @@
 { pkgs, lib, username, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ ./hardware-configuration.nix ./services.nix ];
 
   environment.systemPackages = with pkgs; [ blueberry transmission-gtk ];
   services.transmission.enable = true;
