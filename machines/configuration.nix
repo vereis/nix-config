@@ -3,6 +3,14 @@
 {
   nixpkgs.config.allowUnfree = true;
 
+  # Enable ZFS support
+  boot = {
+    supportedFilesystems = [ "zfs" ];
+    zfs.forceImportRoot = false;
+  };
+
+  networking.hostId = "808fa590"; # required for ZFS
+
   programs.zsh.enable = true;
 
   users.users.${username} = {

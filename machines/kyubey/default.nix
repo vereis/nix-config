@@ -3,6 +3,10 @@
 {
   imports = [ ./hardware-configuration.nix ./services.nix ];
 
+  boot.zfs.extraPools = [ "storage" ];
+  services.zfs.autoScrub.enable = true;
+  services.zfs.trim.enable = true;
+
   environment.systemPackages = with pkgs; [ vulkan-loader vulkan-tools vulkan-validation-layers ];
 
   networking.hostName = "kyubey";
