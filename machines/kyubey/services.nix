@@ -24,5 +24,6 @@
   modules.radarr.openFirewall = true;
 
   modules.tailscale.enable = true;
+  modules.tailscale.ssh.enable = true;
   modules.tailscale.openFirewall = true;
 }
