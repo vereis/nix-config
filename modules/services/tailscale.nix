@@ -6,6 +6,7 @@ with lib;
     enable = mkOption { type = types.bool; default = false; };
     openFirewall = mkOption { type = types.bool; default = false; };
     authTokenFile = mkOption { type = types.path; default = ../../secrets/tailscale; };
+    ssh.enable = mkOption { type = types.bool; default = false; };
   };
 
   config = mkIf config.modules.tailscale.enable {
@@ -17,7 +18,12 @@ with lib;
     networking.firewall = mkIf config.modules.tailscale.openFirewall {
       trustedInterfaces = [ "tailscale0" ];
       allowedUDPPorts = [ config.services.tailscale.port ];
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = mkIf config.modules.tailscale.ssh.enable [ 22 ];
+    };
+
+    # If we want to use tailscale.ssh, then we need to ensure that sshd is running
+    services.openssh = mkIf config.modules.tailscale.ssh.enable {
+      enable = true;
     };
 
     # Automatically connect/auth w/ Tailscale
@@ -34,7 +40,11 @@ with lib;
 
       # have the job run this shell script
       # tailscale auth key is read from `$HOME/.tailscale.ak`
-      script = with pkgs; ''
+      script = with pkgs;
+      (mkMerge [
+        # 1) Standard tailscale service template which tries to start tailscaled with the appropriate
+        #    auth key
+        ''
         # wait for tailscaled to settle
         sleep 2
 
@@ -46,7 +56,13 @@ with lib;
 
         # otherwise authenticate with tailscale
         ${tailscale}/bin/tailscale up -authkey ${(builtins.readFile config.modules.tailscale.authTokenFile)}
-      '';
+        ''
+        # 2) If we want to use tailscale.ssh, then we need to ensure that tailscaled is executed with
+        #    tailscale up --ssh
+        (mkIf config.modules.tailscale.ssh.enable ''
+          ${tailscale}/bin/tailscale up --ssh --accept-risk=lose-ssh
+        '')
+      ]);
     };
   };
 }
