@@ -7,10 +7,12 @@
     ../../modules/services/jellyfin.nix
     ../../modules/services/sonarr.nix
     ../../modules/services/radarr.nix
+    ../../modules/services/prowlarr.nix
   ];
 
   modules.transmission.enable = true;
   modules.transmission.openFirewall = true;
+  modules.transmission.downloadDir = "/storage/media/downloads/transmission";
 
   modules.jellyfin.enable = true;
   modules.jellyfin.nvidiaVaapi  = true;
@@ -22,6 +24,9 @@
 
   modules.radarr.enable = true;
   modules.radarr.openFirewall = true;
+
+  modules.prowlarr.enable = true;
+  modules.prowlarr.openFirewall = true;
 
   modules.tailscale.enable = true;
   modules.tailscale.ssh.enable = true;
