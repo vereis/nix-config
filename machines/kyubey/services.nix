@@ -2,15 +2,15 @@
 
 {
   imports = [
-    ../../modules/services/aria2.nix
+    ../../modules/services/transmission.nix
     ../../modules/services/tailscale.nix
     ../../modules/services/jellyfin.nix
     ../../modules/services/sonarr.nix
     ../../modules/services/radarr.nix
   ];
 
-  modules.aria2.enable = true;
-  modules.aria2.openFirewall = true;
+  modules.transmission.enable = true;
+  modules.transmission.openFirewall = true;
 
   modules.jellyfin.enable = true;
   modules.jellyfin.nvidiaVaapi  = true;
