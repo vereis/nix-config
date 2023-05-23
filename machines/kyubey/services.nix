@@ -10,6 +10,7 @@
     ../../modules/services/radarr.nix
     ../../modules/services/lidarr.nix
     ../../modules/services/prowlarr.nix
+    ../../modules/services/flaresolverr.nix
   ];
 
   modules.transmission.enable = true;
@@ -35,6 +36,9 @@
 
   modules.prowlarr.enable = true;
   modules.prowlarr.openFirewall = true;
+
+  modules.flareSolverr.enable = true;
+  modules.flareSolverr.openFirewall = true;
 
   modules.tailscale.enable = true;
   modules.tailscale.ssh.enable = true;
