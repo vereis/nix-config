@@ -8,8 +8,12 @@ with lib;
   };
 
   config = mkIf config.modules.readarr.enable {
+    # Ensure a `media` group exists
+    users.groups.media = { };
+
     services.readarr = {
       enable = true;
+      group = "media";
       openFirewall = config.modules.readarr.openFirewall;
     };
   };

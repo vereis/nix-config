@@ -22,8 +22,12 @@ with lib;
       ];
     };
 
+    # Ensure a `media` group exists
+    users.groups.media = { };
+
     services.jellyfin = {
       enable = true;
+      group = "media";
       openFirewall = config.modules.jellyfin.openFirewall;
     };
 

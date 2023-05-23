@@ -8,8 +8,12 @@ with lib;
   };
 
   config = mkIf config.modules.radarr.enable {
+    # Ensure a `media` group exists
+    users.groups.media = { };
+
     services.radarr = {
       enable = true;
+      group = "media";
       openFirewall = config.modules.radarr.openFirewall;
     };
   };
