@@ -8,8 +8,12 @@ with lib;
   };
 
   config = mkIf config.modules.sonarr.enable {
+    # Ensure a `media` group exists
+    users.groups.media = { };
+
     services.sonarr = {
       enable = true;
+      group = "media";
       openFirewall = config.modules.sonarr.openFirewall;
     };
   };

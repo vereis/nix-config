@@ -8,8 +8,12 @@ with lib;
   };
 
   config = mkIf config.modules.lidarr.enable {
+    # Ensure a `media` group exists
+    users.groups.media = { };
+
     services.lidarr = {
       enable = true;
+      group = "media";
       openFirewall = config.modules.lidarr.openFirewall;
     };
   };

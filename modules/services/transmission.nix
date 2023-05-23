@@ -11,8 +11,12 @@ with lib;
   config = mkIf config.modules.transmission.enable {
     environment.systemPackages = with pkgs; [ transmission transmission-gtk ];
 
+    # Ensure a `media` group exists
+    users.groups.media = { };
+
     services.transmission = {
       enable = true;
+      group = "media";
       downloadDirPermissions = "775";
 
       openFirewall = config.modules.transmission.openFirewall;
