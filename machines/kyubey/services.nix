@@ -6,7 +6,9 @@
     ../../modules/services/tailscale.nix
     ../../modules/services/jellyfin.nix
     ../../modules/services/sonarr.nix
+    ../../modules/services/readarr.nix
     ../../modules/services/radarr.nix
+    ../../modules/services/lidarr.nix
     ../../modules/services/prowlarr.nix
   ];
 
@@ -24,6 +26,12 @@
 
   modules.radarr.enable = true;
   modules.radarr.openFirewall = true;
+
+  modules.readarr.enable = true;
+  modules.readarr.openFirewall = true;
+
+  modules.lidarr.enable = true;
+  modules.lidarr.openFirewall = true;
 
   modules.prowlarr.enable = true;
   modules.prowlarr.openFirewall = true;
