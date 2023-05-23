@@ -30,7 +30,7 @@ with lib;
         incomplete-dir = "${config.modules.transmission.downloadDir}/incomplete";
 
         # Quality of life
-        download-queue-size = 15;
+        download-queue-size = 25;
 
         # Remote access / webui configuration
         rpc-enabled = true;
