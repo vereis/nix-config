@@ -11,6 +11,7 @@
     ../../modules/services/lidarr.nix
     ../../modules/services/prowlarr.nix
     ../../modules/services/flaresolverr.nix
+    ../../modules/services/proxy.nix
   ];
 
   modules.transmission.enable = true;
@@ -43,4 +44,16 @@
   modules.tailscale.enable = true;
   modules.tailscale.ssh.enable = true;
   modules.tailscale.openFirewall = true;
+
+  modules.proxy.enable = true;
+  modules.proxy.openFirewall = true;
+  modules.proxy.proxies = {
+    "jellyfin.vereis.com" = 8096;
+    "sonarr.vereis.com" = 8989;
+    "radarr.vereis.com" = 7878;
+    "prowlarr.vereis.com" = 9696;
+    "transmission.vereis.com" = 9091;
+    "lidarr.vereis.com" = 8686;
+    "readarr.vereis.com" = 8787;
+  };
 }
