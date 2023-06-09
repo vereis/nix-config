@@ -1,7 +1,7 @@
 { pkgs, lib, username, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ./services.nix ];
+  imports = [ ./hardware-configuration.nix ./services.nix ./hardware.nix ];
 
   environment.systemPackages = with pkgs; [ blueberry vulkan-loader vulkan-tools vulkan-validation-layers ];
 
