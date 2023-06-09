@@ -223,7 +223,16 @@ formatter.setup({
 		typescriptreact = { require("formatter.filetypes.typescriptreact").prettier },
 		markdown = { require("formatter.filetypes.markdown").prettier },
 		lua = { require("formatter.filetypes.lua").stylua },
-		elixir = { require("formatter.filetypes.elixir").mixformat },
+		elixir = {
+			function()
+				local util = require("formatter.util")
+				return {
+					exe = "mix",
+					args = { "format", "-", "--stdin-filename", util.escape_path(util.get_current_buffer_file_path()) },
+					stdin = true,
+				}
+			end,
+		},
 		yaml = { require("formatter.filetypes.yaml").prettier },
 		toml = { require("formatter.filetypes.toml").prettier },
 		["*"] = { require("formatter.filetypes.any").remove_trailing_whitespace },
