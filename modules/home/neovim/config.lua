@@ -225,12 +225,18 @@ formatter.setup({
 		lua = { require("formatter.filetypes.lua").stylua },
 		elixir = {
 			function()
+				local args
 				local util = require("formatter.util")
-				return {
-					exe = "mix",
-					args = { "format", "-", "--stdin-filename", util.escape_path(util.get_current_buffer_file_path()) },
-					stdin = true,
-				}
+				local supports_stdin_filename =
+					string.match(vim.fn.system("mix format --stdin-filename"), "Missing argument")
+
+				if supports_stdin_filename ~= nil then
+					args = { "format", "-", "--stdin-filename", util.escape_path(util.get_current_buffer_file_path()) }
+				else
+					args = { "format", "-" }
+				end
+
+				return { exe = "mix", args = args, stdin = true }
 			end,
 		},
 		yaml = { require("formatter.filetypes.yaml").prettier },
