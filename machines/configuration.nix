@@ -1,6 +1,8 @@
 { config, lib, pkgs, inputs, username, ... }:
 
 {
+  imports = [ ../modules/services/gpg.nix ];
+
   nixpkgs.config.allowUnfree = true;
 
   # Enable ZFS support
@@ -135,6 +137,8 @@
       enableOnBoot = true;
     };
   };
+
+  modules.gpg.enable = true;
 
   system.stateVersion = "22.11";
 }
