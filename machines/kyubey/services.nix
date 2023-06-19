@@ -56,6 +56,7 @@
     "transmission.vereis.com" = 9091;
     "lidarr.vereis.com" = 8686;
     "readarr.vereis.com" = 8787;
+    "printer.vereis.com" = 631;
   };
 
   modules.printing.enable = true;
