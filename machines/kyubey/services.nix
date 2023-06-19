@@ -12,6 +12,7 @@
     ../../modules/services/prowlarr.nix
     ../../modules/services/flaresolverr.nix
     ../../modules/services/proxy.nix
+    ../../modules/services/printing.nix
   ];
 
   modules.transmission.enable = true;
@@ -56,4 +57,7 @@
     "lidarr.vereis.com" = 8686;
     "readarr.vereis.com" = 8787;
   };
+
+  modules.printing.enable = true;
+  modules.printing.wifi = true;
 }
