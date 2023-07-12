@@ -10,6 +10,7 @@
     ../../modules/home/neovim.nix
     ../../modules/home/ranger.nix
     ../../modules/home/vetspire.nix
+    ../../modules/home/jira.nix
     ../../modules/home/zsh.nix
   ];
 
@@ -23,5 +24,6 @@
   modules.neovim.enable     = true;
   modules.ranger.enable     = true;
   modules.vetspire.enable   = true;
+  modules.jira.enable       = true;
   modules.zsh.enable        = true;
 }
