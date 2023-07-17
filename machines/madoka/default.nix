@@ -25,7 +25,7 @@
       # Should enable the correct screen resolutions, refresh rates, rotations, etc.
       # Generated from `nvidia-settings`, if this gets too flakey invest in autorandr
       screenSection = ''
-      Option "metamodes" "DP-4: 3840x2160_144 +0+570, DP-2: 3840x2160_144 +3840+0 {rotation=left}"
+      Option "metamodes" "DP-4: 3840x2160_144 +0+840, DP-2: 3840x2160_144 +3840+0 {rotation=left}"
       '';
     };
   };
