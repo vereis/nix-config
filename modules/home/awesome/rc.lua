@@ -61,8 +61,7 @@ awful.layout.layouts = {
 	awful.layout.suit.tile,
 	awful.layout.suit.tile.bottom,
 	awful.layout.suit.max.fullscreen,
-	-- TODO: can we get away with not specifying floating layout at all?
-	-- awful.layout.suit.floating,
+	awful.layout.suit.floating,
 }
 
 ------------------------------------------------------------------------------------------
@@ -329,5 +328,23 @@ screen.connect_signal("arrange", function(s)
 		else
 			c.border_width = beautiful.border_width
 		end
+	end
+end)
+
+------------------------------------------------------------------------------------------
+-- Signals: toggle titlebar based on layout
+------------------------------------------------------------------------------------------
+client.connect_signal("property::floating", function(c)
+	if c.floating and not c.requests_no_titlebar then
+		awful.titlebar.show(c)
+	else
+		awful.titlebar.hide(c)
+	end
+end)
+
+awful.tag.attached_connect_signal(nil, "property::layout", function(t)
+	local float = t.layout.name == "floating"
+	for _, c in pairs(t:clients()) do
+		c.floating = float
 	end
 end)
