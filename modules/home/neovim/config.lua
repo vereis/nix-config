@@ -1,7 +1,7 @@
 -- Plugin Installation
 require("packer").startup(function(use)
 	-- Themeing
-	use({ "catppuccin/nvim", as = "catppuccin" })
+	use({ "rose-pine/neovim", as = "rose-pine" })
 	use({ "nvim-lualine/lualine.nvim", requires = { "kyazdani42/nvim-web-devicons", opt = true } })
 	use({ "kyazdani42/nvim-tree.lua", requires = { "kyazdani42/nvim-web-devicons" } })
 	use({ "nanozuki/tabby.nvim", requires = { "kyazdani42/nvim-web-devicons" } })
@@ -60,7 +60,7 @@ require("packer").startup(function(use)
 	-- Fuzzy Finder
 	use({
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.0",
+		tag = "0.1.4",
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 end)
@@ -76,7 +76,7 @@ local rebind = require("which-key")
 local formatter = require("formatter")
 local lualine = require("lualine")
 local tabbar = require("tabby.tabline")
-local catppuccin = require("catppuccin")
+local rosepine = require("rose-pine")
 
 -- Defaults
 vim.g.mapleader = " "
@@ -116,17 +116,64 @@ vim.opt.shortmess = vim.o.shortmess .. "c"
 vim.opt.showtabline = 2
 
 -- Init Colorscheme
-catppuccin.setup({
-	color_overrides = {
-		all = {
-			base = "#030303",
-			mantle = "#030303",
-			crust = "#030303",
+
+rosepine.setup({
+	--- @usage 'auto'|'main'|'moon'|'dawn'
+	variant = "main",
+	--- @usage 'main'|'moon'|'dawn'
+	dark_variant = "main",
+	bold_vert_split = true,
+	dim_nc_background = false,
+	disable_background = true,
+	disable_float_background = true,
+	disable_italics = false,
+
+	--- @usage string hex value or named color from rosepinetheme.com/palette
+	groups = {
+		background = "base",
+		background_nc = "_experimental_nc",
+		panel = "surface",
+		panel_nc = "base",
+		border = "highlight_med",
+		comment = "muted",
+		link = "iris",
+		punctuation = "subtle",
+
+		error = "love",
+		hint = "iris",
+		info = "foam",
+		warn = "gold",
+
+		headings = {
+			h1 = "iris",
+			h2 = "foam",
+			h3 = "rose",
+			h4 = "gold",
+			h5 = "pine",
+			h6 = "foam",
 		},
+		-- or set all headings at once
+		-- headings = 'subtle'
+	},
+
+	-- Change specific vim highlight groups
+	-- https://github.com/rose-pine/neovim/wiki/Recipes
+	highlight_groups = {
+		ColorColumn = { bg = "rose" },
+
+		-- Blend colours against the "base" background
+		CursorLine = { bg = "foam", blend = 10 },
+		StatusLine = { fg = "love", bg = "love", blend = 10 },
+
+		-- By default each group adds to the existing config.
+		-- If you only want to set what is written in this config exactly,
+		-- you can set the inherit option:
+		Search = { bg = "gold", inherit = false },
 	},
 })
-vim.cmd("set fillchars+=vert:\\ ") -- fixes weird pixel border when trans.
-vim.cmd("colorscheme catppuccin")
+
+-- vim.cmd("set fillchars+=vert:\\ ") -- fixes weird pixel border when trans.
+vim.cmd("colorscheme rose-pine")
 
 -- Return to last position in previously opened file
 vim.api.nvim_create_autocmd(
@@ -135,23 +182,24 @@ vim.api.nvim_create_autocmd(
 )
 
 -- Init LSP
-lsp.preset("recommended")
-lsp.nvim_workspace()
-lsp.default_keymaps({ preserve_mappings = false })
+lsp.on_attach(function(client, bufnr)
+	-- see :help lsp-zero-keybindings
+	-- to learn the available actions
+	lsp.default_keymaps({ buffer = bufnr })
+end)
+
+require("mason").setup({})
+require("mason-lspconfig").setup({
+	ensure_installed = {},
+	handlers = {
+		lsp.default_setup,
+	},
+})
 
 ---- By default, LSP Zero uses up and down arrow keys to move through suggestions.
 ---- Restore to Vim's default (C-n and C-p)
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-	["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-	["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-})
-cmp_mappings["<Tab>"] = nil -- Delete the tab key mapping for LSP since I prefer C-n
-
-lsp.setup_nvim_cmp({
-	mapping = cmp_mappings,
-	-- Override completion so nothing is selected by default, meaning I have to opt into it
-	-- with C-n or C-p
+local cmp_action = lsp.cmp_action()
+cmp.setup({
 	completion = { completeopt = "menu,menuone,noinsert,noselect" },
 })
 
@@ -191,24 +239,21 @@ context.setup({
 })
 
 -- Misc Setup & Rebinds
-lualine.setup()
-
-tree.setup({
-	view = {
-		mappings = {
-			list = {
-				{ key = "u", action = "dir_up" },
-			},
-		},
+lualine.setup({
+	options = {
+		theme = "auto",
+		component_separators = { left = "|", right = "|" },
+		section_separators = { left = "", right = "" },
 	},
 })
+tree.setup({})
 
 rebind.register({
-	["<C-n>"] = { "<Cmd>NvimTreeFindFileToggle<CR>", "Toggle Tree" },
+	["<Leader>n"] = { "<Cmd>NvimTreeFindFileToggle<CR>", "Toggle Tree" },
 	["s"] = { "<Plug>(easymotion-overwin-f)", "Easymotion" },
-	["<C-p>"] = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "Find Files" },
-	["<C-f>"] = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search Files" },
-	["U"] = { "<Cmd>UndotreeToggle<CR>", "Undo Tree" },
+	["<Leader>p"] = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "Find Files" },
+	["<Leader>f"] = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Search Files" },
+	["<Leader>u"] = { "<Cmd>UndotreeToggle<CR>", "Undo Tree" },
 })
 
 formatter.setup({
@@ -247,29 +292,29 @@ formatter.setup({
 
 tabbar.set(function(line)
 	local theme = {
-		fill = "TabLineFill",
-		head = "TabLine",
-		current_tab = "TabLineSel",
-		tab = "TabLine",
+		fill = "Normal",
+		head = { bg = "#ebbcba", fg = "#191724" },
+		current_tab = { bg = "#9ccfd8", fg = "#191724" },
+		tab = { bg = "#191724", fg = "#403d52" },
 		win = "TabLine",
 		tail = "TabLine",
 	}
 
 	return {
 		{
-			{ "  ", hl = theme.head },
+			{ " (っ˘ڡ˘ς) ", hl = theme.head },
 			line.sep("", theme.head, theme.fill),
 		},
 		line.tabs().foreach(function(tab)
 			local hl = tab.is_current() and theme.current_tab or theme.tab
-			local sepl = tab.is_current() and "" or " "
-			local sepr = tab.is_current() and "" or " "
+			local sepl = tab.is_current() and " " or " "
+			local sepr = tab.is_current() and "" or ""
 
 			return {
 				line.sep(sepl, hl, theme.fill),
 				tab.current_win().file_icon(),
 				tab.name(),
-				tab.close_btn(""),
+				tab.close_btn(""),
 				line.sep(sepr, hl, theme.fill),
 				hl = hl,
 				margin = " ",

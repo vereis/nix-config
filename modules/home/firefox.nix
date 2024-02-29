@@ -9,8 +9,16 @@ with lib;
   config = mkIf config.modules.firefox.enable {
     home.packages = with pkgs; [ firefox ];
 
-    home.sessionVariables = {
-      BROWSER = "firefox";
+
+    programs.zsh = {
+      initExtra = ''
+        # TODO: This is a hack to get Windows' Firefox set as Browser when
+        #       running in WSL
+        export BROWSER="firefox";
+        if [[ -v WSL_DISTRO_NAME ]]; then
+          export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe";
+        fi
+        '';
     };
 
     # TODO: Set everything up so that we can install userChrome.css and treeStyleTabs.css

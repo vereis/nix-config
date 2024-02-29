@@ -7,7 +7,10 @@ with lib;
   };
 
   config = mkIf config.modules.vetspire.enable {
-    home.packages = with pkgs; [ slack teams dbeaver ngrok synergy onlyoffice-bin ];
+    programs.zsh = {
+      shellAliases = {
+        vetspire = "nohup ~/.config/zellij/scripts/vetspire";
+      };
+    };
   };
 }
-

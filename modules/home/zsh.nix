@@ -19,6 +19,8 @@ with lib;
       enableCompletion = true;
       enableAutosuggestions = true;
 
+      shellAliases = { nixos = "tmuxinator start nixos"; };
+
       prezto = {
         enable = true;
         prompt.theme = "powerlevel10k";
@@ -31,11 +33,13 @@ with lib;
           windowTitleFormat = "%s";
         };
         utility.safeOps = true;
+        tmux.autoStartLocal = true;
       };
 
       cdpath = mkIf config.modules.zsh.enablePortals [ config.modules.zsh.portalPath ];
 
       initExtraFirst = ''
+        export TERM=xterm-256color
         if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then . "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi
       '';
 
