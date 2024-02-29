@@ -3,9 +3,9 @@
 with lib;
 {
   options.modules.zsh = {
-    enable        = mkOption { type = types.bool; default = false; };
+    enable = mkOption { type = types.bool; default = false; };
     enablePortals = mkOption { type = types.bool; default = true; };
-    portalPath    = mkOption { type = types.str;  default = "$HOME/.portals"; };
+    portalPath = mkOption { type = types.str; default = "$HOME/.portals"; };
   };
 
   config = mkIf config.modules.zsh.enable {
@@ -61,14 +61,14 @@ with lib;
           source $HOME/.p10k.zsh
         '')
         ''
-        # Normal mode 'v' to edit command in vim
-        autoload -Uz edit-command-line
-        zle -N edit-command-line
-        bindkey -M vicmd v edit-command-line
+          # Normal mode 'v' to edit command in vim
+          autoload -Uz edit-command-line
+          zle -N edit-command-line
+          bindkey -M vicmd v edit-command-line
 
-        # Vim mode doesn't let you use ctrl-a/e to go to the beginning/end of the line
-        bindkey "^A" vi-beginning-of-line
-        bindkey "^E" vi-end-of-line
+          # Vim mode doesn't let you use ctrl-a/e to go to the beginning/end of the line
+          bindkey "^A" vi-beginning-of-line
+          bindkey "^E" vi-end-of-line
         ''
       ]);
     };

@@ -11,9 +11,9 @@ with lib;
     environment.systemPackages = [ pkgs.pinentry-curses ];
     services.pcscd.enable = true;
     programs.gnupg.agent = {
-       enable = true;
-       pinentryFlavor = "curses";
-       enableSSHSupport = true;
+      enable = true;
+      pinentryFlavor = "curses";
+      enableSSHSupport = true;
     };
   };
 }

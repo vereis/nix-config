@@ -3,7 +3,7 @@
 {
   imports = [ ./services.nix ./hardware.nix ];
 
-  environment.systemPackages = with pkgs; [wslu];
+  environment.systemPackages = with pkgs; [ wslu ];
 
   wsl.enable = true;
   wsl.defaultUser = username;

@@ -12,5 +12,7 @@ with lib;
         vetspire = "nohup ~/.config/zellij/scripts/vetspire";
       };
     };
+
+    home.packages = with pkgs; [ slack teams dbeaver ngrok synergy ];
   };
 }

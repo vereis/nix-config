@@ -1,69 +1,42 @@
-{ config, lib, pkgs, inputs, username, ... }:
+{ self, config, system, lib, pkgs, inputs, zjstatus, username, home-manager, ... }:
 
 {
-  imports = [ ../modules/services/gpg.nix ];
-
-  nixpkgs.config.allowUnfree = true;
-  programs.zsh.enable = true;
-
-  users.users.${username} = {
-    isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" "docker" "media" ];
-    shell = pkgs.zsh;
+  nixpkgs = {
+    hostPlatform = system;
+    config.allowUnfree = true;
   };
-
-  security.polkit.enable = true;
-  environment.systemPackages = with pkgs; [
-      acpi
-      bsd-finger
-      cacert
-      fd
-      gcc
-      git
-      htop
-      httpie
-      killall
-      lsof
-      openssh
-      openssl
-      pciutils
-      pfetch
-      ripgrep
-      tmux
-      tree
-      unzip
-      usbutils
-      wget
-      xclip
-      mpd
-      zip
-    ];
-
-  # Allow dynamic linking of packages I build
-  programs.nix-ld.enable = true;
-
-  time.timeZone = "Europe/London";
-  i18n.defaultLocale = "en_US.utf8";
 
   nix = {
     package = pkgs.nixFlakes;
     settings.auto-optimise-store = true;
     registry.nixpkgs.flake = inputs.nixpkgs;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
+    settings.experimental-features = "nix-command flakes";
   };
 
-  security.rtkit.enable = true;
-  programs.ssh.askPassword = "";
+  programs.zsh.enable = true;
+  services.nix-daemon.enable = true;
 
-  virtualisation = {
-    docker = {
-      enable = true;
-      enableOnBoot = true;
-    };
-  };
-
-  modules.gpg.enable = true;
-  system.stateVersion = "22.11";
+  environment.systemPackages = with pkgs; [
+    cacert
+    fd
+    gcc
+    git
+    htop
+    httpie
+    killall
+    lsof
+    nixpkgs-fmt
+    nixpkgs-lint
+    openssh
+    openssl
+    pciutils
+    pfetch
+    ripgrep
+    tmux
+    tree
+    unzip
+    wget
+    xclip
+    zip
+  ];
 }

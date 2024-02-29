@@ -173,6 +173,8 @@ rosepine.setup({
 })
 
 -- vim.cmd("set fillchars+=vert:\\ ") -- fixes weird pixel border when trans.
+vim.cmd("au ColorScheme * hi Normal ctermbg=none guibg=none")
+vim.cmd("au ColorScheme myspecialcolors hi Normal ctermbg=red guibg=red")
 vim.cmd("colorscheme rose-pine")
 
 -- Return to last position in previously opened file

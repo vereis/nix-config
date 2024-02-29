@@ -3,13 +3,18 @@
 with lib;
 {
   options.modules.kitty = {
-    enable   = mkOption { type = types.bool; default = false; };
-    fontSize = mkOption { type = types.int;  default = 11; };
+    enable = mkOption { type = types.bool; default = false; };
+    fontSize = mkOption { type = types.int; default = 11; };
   };
 
   config = mkIf config.modules.kitty.enable {
     home = {
-      packages = with pkgs; [ kitty nerdfonts ];
+      packages = with pkgs; [
+        kitty
+        nerdfonts
+        (nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+      ];
+
       sessionVariables.DEFAULT_TERMINAL = "kitty";
     };
 
@@ -17,81 +22,84 @@ with lib;
       enable = true;
 
       keybindings = {
-        "alt+enter" = "toggle_fullscreen";
-
+        "cmd+enter" = "no_op";
+        "cmd+f" = "no_op";
+        "cmd+q" = "close_tab";
         "ctrl+equal" = "change_font_size current +1.0";
         "ctrl+minus" = "change_font_size current -1.0";
-
-        "alt+shift+enter" = "new_window";
-        "alt+shift+space" = "next_layout";
-        "alt+shift+z" = "toggle_layout stack";
-        "alt+shift+r" = "start_resizing_window";
-        "alt+shift+w" = "close_window";
-        "alt+h" = "prev_window";
-        "alt+l" = "next_window";
-        "alt+shift+h" = "move_window_backward";
-        "alt+shift+l" = "move_window_forward";
-
-        "ctrl+shift+t" = "new_tab";
-        "ctrl+tab" = "next_tab";
-        "ctrl+shift+w" = "close_tab";
       };
 
-      settings = {
-        # Fonts
-        font_size = config.modules.kitty.fontSize;
-        font_family = "FantasqueSansMono Nerd Font Mono";
-        adjust_line_height = "2";
+      settings = (mkMerge [
+        # Set up some generic settings
+        {
+          # Fonts
+          font_size = config.modules.kitty.fontSize;
+          font_family = lib.mkDefault "FantasqueSansMono Nerd Font Mono";
 
-        # Padding
-        window_padding_width = config.modules.kitty.fontSize + 3;
+          adjust_line_height = "2";
 
-        # Behaviour
-        copy_on_select = "clipboard";
-        enable_audio_bell = false;
-        linux_display_server = "x11";
-        sync_to_monitor = "no";
+          # Padding
+          window_padding_width = config.modules.kitty.fontSize + 3;
 
-        # Transparency
-        background_opacity = "0.875";
-        dynamic_background_opacity = "yes";
+          # Behaviour
+          copy_on_select = "clipboard";
+          enable_audio_bell = false;
+          linux_display_server = "x11";
+          sync_to_monitor = "no";
+          close_on_child_death = "yes";
+          hide_window_decorations = "no";
+          confirm_os_window_close = -1;
 
-        # Colors / Theming
-        foreground              = "#CDD6F4";
-        background              = "#030303";
-        selection_foreground    = "#1E1E2E";
-        selection_background    = "#F5E0DC";
-        cursor                  = "#F5E0DC";
-        cursor_text_color       = "#1E1E2E";
-        color0                  = "#45475A"; # Black
-        color8                  = "#585B70"; # Black
-        color1                  = "#F38BA8"; # Red
-        color9                  = "#F38BA8"; # Red
-        color2                  = "#A6E3A1"; # Green
-        color10                 = "#A6E3A1"; # Green
-        color3                  = "#F9E2AF"; # Yellow
-        color11                 = "#F9E2AF"; # Yellow
-        color4                  = "#89B4FA"; # Blue
-        color12                 = "#89B4FA"; # Blue
-        color5                  = "#F5C2E7"; # Magenta
-        color13                 = "#F5C2E7"; # Magenta
-        color6                  = "#94E2D5"; # Cyan
-        color14                 = "#94E2D5"; # Cyan
-        color7                  = "#BAC2DE"; # White
-        color15                 = "#A6ADC8"; # White
-        mark1_foreground        = "#1E1E2E";
-        mark1_background        = "#B4BEFE";
-        mark2_foreground        = "#1E1E2E";
-        mark2_background        = "#CBA6F7";
-        mark3_foreground        = "#1E1E2E";
-        mark3_background        = "#74C7EC";
-        active_tab_foreground   = "#11111B";
-        active_tab_background   = "#CBA6F7";
-        inactive_tab_foreground = "#CDD6F4";
-        inactive_tab_background = "#181825";
-        inactive_text_alpha     = "0.35";
-        tab_bar_style           = "powerline";
-      };
+          # Transparency
+          background_blur = 32;
+          background_opacity = "0.825";
+          dynamic_background_opacity = "yes";
+
+          # Cursor
+          cursor_shape = "block";
+          cursor_blink_interval = -1;
+
+          # Colors / Theming
+          tab_bar_style = "powerline";
+          foreground = "#e0def4";
+          background = "#020203";
+          selection_foreground = "#e0def4";
+          selection_background = "#403d52";
+          cursor = "#524f67";
+          cursor_text_color = "#e0def4";
+          url_color = "#c4a7e7";
+          active_tab_foreground = "#e0def4";
+          active_tab_background = "#26233a";
+          inactive_tab_foreground = "#6e6a86";
+          inactive_tab_background = "#191724";
+          active_border_color = "#31748f";
+          inactive_border_color = "#403d52";
+          color0 = "#26233a";
+          color8 = "#6e6a86";
+          color1 = "#eb6f92";
+          color9 = "#eb6f92";
+          color2 = "#31748f";
+          color10 = "#31748f";
+          color3 = "#f6c177";
+          color11 = "#f6c177";
+          color4 = "#9ccfd8";
+          color12 = "#9ccfd8";
+          color5 = "#c4a7e7";
+          color13 = "#c4a7e7";
+          color6 = "#ebbcba";
+          color14 = "#ebbcba";
+          color7 = "#e0def4";
+          color15 = "#e0def4";
+        }
+        # Set up some MacOS only settings
+        (mkIf pkgs.stdenv.isDarwin {
+          font_family = "FantasqueSansM Nerd Font Mono";
+          macos_quit_when_last_window_closed = "yes";
+          macos_window_resizable = "yes";
+          macos_traditional_fullscreen = "no";
+          macos_custom_beam_cursor = "yes";
+        })
+      ]);
     };
   };
 }

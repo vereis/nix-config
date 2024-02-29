@@ -20,7 +20,7 @@
   modules.transmission.downloadDir = "/storage/media/downloads/transmission";
 
   modules.jellyfin.enable = true;
-  modules.jellyfin.nvidiaVaapi  = true;
+  modules.jellyfin.nvidiaVaapi = true;
   modules.jellyfin.openFirewall = true;
   modules.jellyfin.jellyseerr.enable = true;
 
