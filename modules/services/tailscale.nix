@@ -10,7 +10,7 @@ with lib;
   };
 
   config = mkIf config.modules.tailscale.enable {
-    environment.systemPackages = with pkgs; [ tailscale jq ];
+    environment.systemPackages = with pkgs; [ tailscale jq mosh ];
 
     services.tailscale.enable = true;
 

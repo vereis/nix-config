@@ -4,15 +4,6 @@
   imports = [ ../modules/services/gpg.nix ];
 
   nixpkgs.config.allowUnfree = true;
-
-  # Enable ZFS support
-  boot = {
-    supportedFilesystems = [ "zfs" ];
-    zfs.forceImportRoot = false;
-  };
-
-  networking.hostId = "808fa590"; # required for ZFS
-
   programs.zsh.enable = true;
 
   users.users.${username} = {
@@ -21,8 +12,10 @@
     shell = pkgs.zsh;
   };
 
+  security.polkit.enable = true;
   environment.systemPackages = with pkgs; [
       acpi
+      bsd-finger
       cacert
       fd
       gcc
@@ -61,74 +54,7 @@
     '';
   };
 
-  services = {
-    getty.autologinUser = "${username}";
-
-    pipewire = {
-      enable = true;
-      alsa = {
-        enable = true;
-        support32Bit = true;
-      };
-      pulse.enable = true;
-    };
-
-    # Allow Home-Manager to control starting WMs via XSession
-    xserver = {
-      enable = true;
-      layout = "us";
-      xkbVariant = "";
-      libinput.enable = true;
-
-      displayManager = {
-        defaultSession = "xsession";
-        autoLogin.user = "${username}";
-
-        session = [{
-          manage = "desktop";
-          name = "xsession";
-          start = ''
-	          exec $HOME/.xsession &
-	          waitPID=$!
-	        '';
-        }];
-      };
-    };
-  };
-
-  fonts.fonts = [ pkgs.corefonts ];
-
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-
-  services.mpd = {
-    user = "chris";
-    enable = true;
-
-    musicDirectory = "/home/chris/music";
-    extraConfig = ''
-    audio_output {
-      type   "pipewire"
-      name   "My PipeWire Output"
-    }
-    audio_output {
-      type   "fifo"
-      name   "my_fifo"
-      path   "/tmp/mpd.fifo"
-      format "44100:16:2"
-    }
-    '';
-
-    network.listenAddress = "any";
-    startWhenNeeded = true;
-  };
-
-  systemd.services.mpd.environment = {
-    XDG_RUNTIME_DIR = "/run/user/1000";
-  };
-
   security.rtkit.enable = true;
-
   programs.ssh.askPassword = "";
 
   virtualisation = {
@@ -139,6 +65,5 @@
   };
 
   modules.gpg.enable = true;
-
   system.stateVersion = "22.11";
 }
