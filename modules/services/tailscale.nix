@@ -41,28 +41,28 @@ with lib;
       # have the job run this shell script
       # tailscale auth key is read from `$HOME/.tailscale.ak`
       script = with pkgs;
-      (mkMerge [
-        # 1) Standard tailscale service template which tries to start tailscaled with the appropriate
-        #    auth key
-        ''
-        # wait for tailscaled to settle
-        sleep 2
+        (mkMerge [
+          # 1) Standard tailscale service template which tries to start tailscaled with the appropriate
+          #    auth key
+          ''
+            # wait for tailscaled to settle
+            sleep 2
 
-        # check if we are already authenticated to tailscale
-        status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
-        if [ $status = "Running" ]; then # if so, then do nothing
-          exit 0
-        fi
+            # check if we are already authenticated to tailscale
+            status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
+            if [ $status = "Running" ]; then # if so, then do nothing
+              exit 0
+            fi
 
-        # otherwise authenticate with tailscale
-        ${tailscale}/bin/tailscale up -authkey ${(builtins.readFile config.modules.tailscale.authTokenFile)}
-        ''
-        # 2) If we want to use tailscale.ssh, then we need to ensure that tailscaled is executed with
-        #    tailscale up --ssh
-        (mkIf config.modules.tailscale.ssh.enable ''
-          ${tailscale}/bin/tailscale up --ssh --accept-risk=lose-ssh
-        '')
-      ]);
+            # otherwise authenticate with tailscale
+            ${tailscale}/bin/tailscale up -authkey ${(builtins.readFile config.modules.tailscale.authTokenFile)}
+          ''
+          # 2) If we want to use tailscale.ssh, then we need to ensure that tailscaled is executed with
+          #    tailscale up --ssh
+          (mkIf config.modules.tailscale.ssh.enable ''
+            ${tailscale}/bin/tailscale up --ssh --accept-risk=lose-ssh
+          '')
+        ]);
     };
   };
 }

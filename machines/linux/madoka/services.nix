@@ -2,8 +2,8 @@
 
 {
   imports = [
-    ../../modules/services/tailscale.nix
-    ../../modules/services/printing.nix
+    ../../../modules/services/tailscale.nix
+    ../../../modules/services/printing.nix
   ];
 
   modules.printing.enable = true;

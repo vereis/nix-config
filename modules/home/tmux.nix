@@ -210,76 +210,76 @@ with lib;
     home.file.".config/zellij/scripts/execute.sh" = {
       executable = true;
       text = ''
-      #!/bin/sh
-      if [[ -e ../shell.nix ]]; then
-        nix-shell --command "$1" ../shell.nix
-      else
-        if [[ -e ./shell.nix ]]; then
-          nix-shell --command "$1" ./shell.nix
+        #!/bin/sh
+        if [[ -e ../shell.nix ]]; then
+          nix-shell --command "$1" ../shell.nix
+        else
+          if [[ -e ./shell.nix ]]; then
+            nix-shell --command "$1" ./shell.nix
+          fi
         fi
-      fi
       '';
     };
 
     home.file.".config/zellij/scripts/spawn.sh" = {
       executable = true;
       text = ''
-      #!/bin/sh
-      if [[ -e ./shell.nix ]]; then
-        zellij run -f -- nix-shell --command "$1" ./shell.nix
-      fi
+        #!/bin/sh
+        if [[ -e ./shell.nix ]]; then
+          zellij run -f -- nix-shell --command "$1" ./shell.nix
+        fi
 
-      if [[ -e ../shell.nix ]]; then
-        zellij run -f -- nix-shell --command "$1" ../shell.nix
-      fi
+        if [[ -e ../shell.nix ]]; then
+          zellij run -f -- nix-shell --command "$1" ../shell.nix
+        fi
       '';
     };
 
     home.file.".config/zellij/scripts/vetspire" = {
       executable = true;
       text = ''
-      zellij action go-to-tab-name "Temp" -c;
-      sleep .2
+        zellij action go-to-tab-name "Temp" -c;
+        sleep .2
 
-      # Start API
-      zellij action go-to-tab-name "Vetspire (API)" -c;
-      sleep .2
-      zellij action close-tab
-      sleep .2
-      zellij action new-tab --layout "default" --cwd "/home/chris/git/vetspire/vetspire/api" --name "Vetspire (API)";
-      zellij action go-to-tab-name "Vetspire (API)";
-      sleep .2
-      zellij run -f -c --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "docker-compose up -d"
-      sleep .5
-      zellij run -f --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "mix deps.get && mix ecto.migrate && iex -S mix phx.server"
-      sleep .2
-      zellij run -s -f --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "mix deps.get && mix test"
-      sleep .2
-      zellij run -s -f --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "mix deps.get && mix do credo, dialyzer && mix format --check-formatted"
+        # Start API
+        zellij action go-to-tab-name "Vetspire (API)" -c;
+        sleep .2
+        zellij action close-tab
+        sleep .2
+        zellij action new-tab --layout "default" --cwd "/home/chris/git/vetspire/vetspire/api" --name "Vetspire (API)";
+        zellij action go-to-tab-name "Vetspire (API)";
+        sleep .2
+        zellij run -f -c --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "docker-compose up -d"
+        sleep .5
+        zellij run -f --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "mix deps.get && mix ecto.migrate && iex -S mix phx.server"
+        sleep .2
+        zellij run -s -f --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "mix deps.get && mix test"
+        sleep .2
+        zellij run -s -f --cwd "/home/chris/git/vetspire/vetspire/api" -- /home/chris/.config/zellij/scripts/execute.sh "mix deps.get && mix do credo, dialyzer && mix format --check-formatted"
 
-      # Start Web
-      zellij action go-to-tab-name "Vetspire (Web)" -c;
-      sleep .2
-      zellij action close-tab
-      zellij action new-tab --layout "default" --cwd "/home/chris/git/vetspire/vetspire/web" --name "Vetspire (Web)";
-      zellij action go-to-tab-name "Vetspire (Web)";
-      sleep .2
-      zellij run -f --cwd "/home/chris/git/vetspire/vetspire/web" -- /home/chris/.config/zellij/scripts/execute.sh "yarn && yarn start"
+        # Start Web
+        zellij action go-to-tab-name "Vetspire (Web)" -c;
+        sleep .2
+        zellij action close-tab
+        zellij action new-tab --layout "default" --cwd "/home/chris/git/vetspire/vetspire/web" --name "Vetspire (Web)";
+        zellij action go-to-tab-name "Vetspire (Web)";
+        sleep .2
+        zellij run -f --cwd "/home/chris/git/vetspire/vetspire/web" -- /home/chris/.config/zellij/scripts/execute.sh "yarn && yarn start"
 
-      # Start Monorepo
-      zellij action go-to-tab-name "Vetspire (Git)" -c;
-      sleep .2
-      zellij action close-tab
-      zellij action new-tab --layout "default" --cwd "/home/chris/git/vetspire/vetspire" --name "Vetspire (Git)";
+        # Start Monorepo
+        zellij action go-to-tab-name "Vetspire (Git)" -c;
+        sleep .2
+        zellij action close-tab
+        zellij action new-tab --layout "default" --cwd "/home/chris/git/vetspire/vetspire" --name "Vetspire (Git)";
 
-      # Restore View in API
-      zellij action go-to-tab-name "Temp";
-      sleep .2
-      zellij action close-tab
-      sleep .2
-      zellij action go-to-tab-name "Vetspire (API)";
-      sleep .2
-      zellij action move-focus down
+        # Restore View in API
+        zellij action go-to-tab-name "Temp";
+        sleep .2
+        zellij action close-tab
+        sleep .2
+        zellij action go-to-tab-name "Vetspire (API)";
+        sleep .2
+        zellij action move-focus down
       '';
     };
 

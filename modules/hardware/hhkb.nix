@@ -3,7 +3,7 @@
 with lib;
 {
   options.modules.hhkb = {
-    enable = mkOption   { type = types.bool; default = false; };
+    enable = mkOption { type = types.bool; default = false; };
   };
 
   config = mkIf config.modules.hhkb.enable {

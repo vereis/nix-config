@@ -47,7 +47,7 @@ with lib;
       withPython3 = true;
 
       extraConfig = ''
-      lua require('config')
+        lua require('config')
       '';
     };
   };

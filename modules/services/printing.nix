@@ -4,8 +4,8 @@ with lib;
 {
   options.modules.printing = {
     enable = mkOption { type = types.bool; default = false; };
-    wifi   = mkOption { type = types.bool; default = false; };
-    extraDrivers = mkOption { type = types.listOf types.package; default = []; };
+    wifi = mkOption { type = types.bool; default = false; };
+    extraDrivers = mkOption { type = types.listOf types.package; default = [ ]; };
   };
 
   config = mkIf config.modules.printing.enable {
@@ -20,16 +20,16 @@ with lib;
       defaultShared = true;
       drivers = [ pkgs.gutenprint pkgs.gutenprintBin ] ++ config.modules.printing.extraDrivers;
       extraConf = ''
-      DefaultEncryption Never
+        DefaultEncryption Never
       '';
       clientConf = ''
-      DefaultEncryption Never
+        DefaultEncryption Never
       '';
     };
 
     services.avahi = {
       enable = true;
-      nssmdns = true;
+      nssmdns4 = true;
       openFirewall = config.modules.printing.wifi;
       publish.enable = true;
       publish.userServices = true;

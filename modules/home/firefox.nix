@@ -18,7 +18,7 @@ with lib;
         if [[ -v WSL_DISTRO_NAME ]]; then
           export BROWSER="/mnt/c/Program\ Files/Mozilla\ Firefox/firefox.exe";
         fi
-        '';
+      '';
     };
 
     # TODO: Set everything up so that we can install userChrome.css and treeStyleTabs.css

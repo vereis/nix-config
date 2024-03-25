@@ -18,11 +18,13 @@ with lib;
     services.nginx = {
       enable = true;
       virtualHosts =
-        builtins.mapAttrs (host: port: {
-          enableACME = true;
-          forceSSL = true;
-          locations."/".proxyPass = "http://127.0.0.1:${toString port}/";
-        }) config.modules.proxy.proxies;
+        builtins.mapAttrs
+          (host: port: {
+            enableACME = true;
+            forceSSL = true;
+            locations."/".proxyPass = "http://127.0.0.1:${toString port}/";
+          })
+          config.modules.proxy.proxies;
     };
   };
 }
