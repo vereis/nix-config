@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/hardware/hhkb.nix
+    ../../../modules/hardware/hhkb.nix
   ];
 
   modules.hhkb.enable = true;

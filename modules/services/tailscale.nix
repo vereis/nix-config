@@ -55,12 +55,12 @@ with lib;
             fi
 
             # otherwise authenticate with tailscale
-            ${tailscale}/bin/tailscale up -authkey ${(builtins.readFile config.modules.tailscale.authTokenFile)}
+            ${tailscale}/bin/tailscale up --authkey ${(builtins.readFile config.modules.tailscale.authTokenFile)}
           ''
           # 2) If we want to use tailscale.ssh, then we need to ensure that tailscaled is executed with
           #    tailscale up --ssh
           (mkIf config.modules.tailscale.ssh.enable ''
-            ${tailscale}/bin/tailscale up --ssh --accept-risk=lose-ssh
+            ${tailscale}/bin/tailscale up --authkey ${(builtins.readFile config.modules.tailscale.authTokenFile)} --ssh --accept-risk=lose-ssh
           '')
         ]);
     };
