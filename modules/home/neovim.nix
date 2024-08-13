@@ -7,15 +7,7 @@ with lib;
   };
 
   config = mkIf config.modules.neovim.enable {
-    home.packages = with pkgs; [
-      stylua
-      sumneko-lua-language-server
-      shellcheck
-      shfmt
-      vale
-      deno
-      nodePackages.prettier
-    ];
+    home.packages = with pkgs; [ shellcheck shfmt lua-language-server cargo go rebar3 ];
 
     programs.fzf.enable = true;
     programs.fzf.enableZshIntegration = true;
@@ -26,14 +18,9 @@ with lib;
       VISUAL = "nvim";
     };
 
-    home.file.".vale.ini".source = ./neovim/.vale.ini;
-    home.file.".config/nvim/lua/config.lua".source = ./neovim/config.lua;
-    home.file.".local/share/nvim/site/pack/packer/start/packer.nvim" = {
-      source = builtins.fetchGit {
-        url = "https://github.com/wbthomason/packer.nvim";
-        ref = "master";
-        rev = "afab89594f4f702dc3368769c95b782dbdaeaf0a";
-      };
+    home.file.".config/nvim/lua/" = {
+      source = ./neovim/lua;
+      recursive = true;
     };
 
     programs.neovim = {
@@ -52,4 +39,3 @@ with lib;
     };
   };
 }
-
