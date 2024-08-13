@@ -3,7 +3,7 @@
 {
   imports = [ ./services.nix ./hardware.nix ];
 
-  environment.systemPackages = with pkgs; [ wslu ];
+  environment.systemPackages = with pkgs; [ wslu dos2unix ];
 
   wsl.enable = true;
   wsl.defaultUser = username;
@@ -21,4 +21,5 @@
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 80 443 24800 51413 ];
   networking.firewall.allowedUDPPorts = [ 22 80 443 24800 51413 ];
+  system.stateVersion = lib.mkForce "24.05";
 }
