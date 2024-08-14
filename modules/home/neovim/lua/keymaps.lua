@@ -14,6 +14,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Buffer management
+vim.keymap.set("n", "bj", ":<cmd>bfirst<cr><cr>", { desc = 'First buffer' })
+vim.keymap.set("n", "bk", ":<cmd>blast<cr><cr>", { desc = 'Last buffer' })
+vim.keymap.set("n", "bh", ":<cmd>bprev<cr><cr>", { desc = 'Previous buffer' })
+vim.keymap.set("n", "bl", ":<cmd>bnext<cr><cr>", { desc = 'Next buffer' })
 vim.keymap.set("n", "bn", ":<cmd>bnext<cr><cr>", { desc = 'Next buffer' })
 vim.keymap.set("n", "bN", ":<cmd>bprev<cr><cr>", { desc = 'Previous buffer' })
 vim.keymap.set("n", "bp", ":<cmd>bprev<cr><cr>", { desc = 'Previous buffer' })
