@@ -42,22 +42,22 @@ with lib;
               border_format   "#[fg=#6C7086]{char}"
               border_position "top"
 
-              tab_normal         "#[bg=#1C1C1C,fg=#403d52] {name} #[fg=#403d52] "
-              tab_active         "#[bg=#9ccfd8,fg=#191724,italic] {name} #[fg=#403d52] "
-              mode_normal        "#[bg=#ebbcba,fg=#191724,bold] NORMAL "
-              mode_locked        "#[bg=#ebbcba,fg=#191724,bold] LOCKED "
-              mode_resize        "#[bg=#ebbcba,fg=#191724,bold] RESIZE "
-              mode_pane          "#[bg=#ebbcba,fg=#191724,bold] PANE "
-              mode_tab           "#[bg=#ebbcba,fg=#191724,bold] TAB "
-              mode_scroll        "#[bg=#ebbcba,fg=#191724,bold] SCROLL "
-              mode_enter_search  "#[bg=#ebbcba,fg=#191724,bold] ENTER SEARCH "
-              mode_search        "#[bg=#ebbcba,fg=#191724,bold] SEARCH "
-              mode_rename_tab    "#[bg=#ebbcba,fg=#191724,bold] RENAME TAB "
-              mode_rename_pane   "#[bg=#ebbcba,fg=#191724,bold] RENAME PANE "
-              mode_session       "#[bg=#ebbcba,fg=#191724,bold] SESSION "
-              mode_move          "#[bg=#ebbcba,fg=#191724,bold] MOVE "
-              mode_prompt        "#[bg=#ebbcba,fg=#191724,bold] PROMPT "
-              mode_tmux          "#[bg=#ebbcba,fg=#191724,bold] TMUX "
+              tab_normal         "#[bg=#9090aa,fg=#191724] {name} #[fg=#403d52] "
+              tab_active         "#[bg=#dedef4,fg=#191724,italic] {name} #[fg=#403d52] "
+              mode_normal        "#[bg=#ebbcba,fg=#191724,bold] Normal "
+              mode_locked        "#[bg=#ebbcba,fg=#191724,bold] Locked "
+              mode_resize        "#[bg=#ebbcba,fg=#191724,bold] Resize "
+              mode_pane          "#[bg=#ebbcba,fg=#191724,bold] Pane "
+              mode_tab           "#[bg=#ebbcba,fg=#191724,bold] Tab "
+              mode_scroll        "#[bg=#ebbcba,fg=#191724,bold] Scroll "
+              mode_enter_search  "#[bg=#ebbcba,fg=#191724,bold] Enter Search "
+              mode_search        "#[bg=#ebbcba,fg=#191724,bold] Search "
+              mode_rename_tab    "#[bg=#ebbcba,fg=#191724,bold] Rename Tab "
+              mode_rename_pane   "#[bg=#ebbcba,fg=#191724,bold] Rename Pane "
+              mode_session       "#[bg=#ebbcba,fg=#191724,bold] Session "
+              mode_move          "#[bg=#ebbcba,fg=#191724,bold] Move "
+              mode_prompt        "#[bg=#ebbcba,fg=#191724,bold] Prompt "
+              mode_tmux          "#[bg=#ebbcba,fg=#191724,bold] Tmux "
 
               datetime        "#[fg=#6C7086] {format} "
               datetime_format "%b %d %Y %l:%M %p"
@@ -79,8 +79,8 @@ with lib;
               border_format   "#[fg=#6C7086]{char}"
               border_position "top"
 
-              tab_normal         "#[bg=#1C1C1C,fg=#403d52] {name} #[fg=#403d52] "
-              tab_active         "#[bg=#9ccfd8,fg=#191724,italic] {name} #[fg=#403d52] "
+              tab_normal         "#[bg=#1C1C1C,fg=#403d52] {name} #[fg=#403d52]"
+              tab_active         "#[bg=#9ccfd8,fg=#191724,italic] {name} #[fg=#403d52]"
               mode_normal        "#[bg=#ebbcba,fg=#191724,bold] NORMAL "
               mode_locked        "#[bg=#ebbcba,fg=#191724,bold] LOCKED "
               mode_resize        "#[bg=#ebbcba,fg=#191724,bold] RESIZE "
@@ -299,6 +299,8 @@ with lib;
 
       keybinds {
         unbind "Ctrl o";
+        unbind "Ctrl n";
+
         normal {
           bind "Ctrl s" { SwitchToMode "Session"; }
 
