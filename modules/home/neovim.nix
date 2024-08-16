@@ -7,7 +7,7 @@ with lib;
   };
 
   config = mkIf config.modules.neovim.enable {
-    home.packages = with pkgs; [ shellcheck shfmt lua-language-server cargo go rebar3 ];
+    home.packages = with pkgs; [ shellcheck shfmt cargo go rebar3 ];
 
     programs.fzf.enable = true;
     programs.fzf.enableZshIntegration = true;
