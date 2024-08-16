@@ -13,6 +13,6 @@ with lib;
       };
     };
 
-    home.packages = with pkgs; [ slack dbeaver ngrok synergy ];
+    home.packages = with pkgs; [ ];
   };
 }

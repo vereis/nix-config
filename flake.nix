@@ -92,6 +92,11 @@
                     autoMigrate = true;
                   };
                 }
+                {
+                  nixpkgs.overlays = [
+                    (import ./overlays/delta.nix)
+                  ];
+                }
               ];
             }
           )
@@ -119,6 +124,11 @@
                   home-manager.users.${user}.imports =
                     [ (import ./machines/home.nix) ] ++
                     [ (import ./machines/linux/${hostname}/home.nix) ];
+                }
+                {
+                  nixpkgs.overlays = [
+                    (import ./overlays/delta.nix)
+                  ];
                 }
               ];
             }

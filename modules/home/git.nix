@@ -7,7 +7,12 @@ with lib;
   };
 
   config = mkIf config.modules.git.enable {
-    home.packages = with pkgs; [ git gh delta ];
+
+    home.packages = with pkgs; [
+      git
+      gh
+      delta
+    ];
 
     home.file.".local/bin/git/ssh-migrate.sh" = {
       executable = true;
