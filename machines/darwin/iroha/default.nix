@@ -6,6 +6,7 @@
     casks = [
       "tailscale"
       "kitty"
+      "wezterm"
       "firefox"
       "microsoft-teams"
       "slack"
