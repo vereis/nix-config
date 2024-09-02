@@ -13,6 +13,23 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- Use `<Esc><Esc> to exit terminal mode.`
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+-- Use `<Leader>t` to run Elixir tests in a floating Zellij pane.
+vim.keymap.set("n", "<leader>t", ":!zellij run -f -- nix develop --command bash -c 'mix test %'<CR><CR>", {
+  desc = "Run (current) Elixir [T]ests",
+  silent = false
+})
+
+vim.keymap.set("n", "<leader>T", ":!zellij run -f -- nix develop --command bash -c 'mix test'<CR><CR>", {
+  desc = "Run (all) Elixir [T]ests",
+  silent = false
+})
+
+-- Use `<Leader>l` to run Elixir linting
+vim.keymap.set("n", "<leader>l", ":!zellij run -f -- nix develop --command bash -c 'mix credo --strict && mix dialyzer'<CR><CR>", {
+  desc = "Run Elixir [L]inting",
+  silent = false
+})
+
 -- Buffer management
 vim.keymap.set("n", "bj", ":<cmd>bfirst<cr><cr>", { desc = 'First buffer' })
 vim.keymap.set("n", "bk", ":<cmd>blast<cr><cr>", { desc = 'Last buffer' })
