@@ -7,7 +7,6 @@ with lib;
   };
 
   config = mkIf config.modules.git.enable {
-
     home.packages = with pkgs; [
       git
       gh
