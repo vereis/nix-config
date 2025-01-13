@@ -14,7 +14,6 @@ with lib;
 
     hardware.opengl = mkIf config.modules.jellyfin.nvidiaVaapi {
       enable = true;
-      driSupport = true;
       extraPackages = with pkgs; [
         vaapiVdpau
         libvdpau-va-gl

@@ -4,6 +4,7 @@
   inputs =
     {
       nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+      nix-minecraft.url = "github:Infinidoge/nix-minecraft";
       zjstatus.url = "github:dj95/zjstatus";
       nix-darwin = {
         url = "github:LnL7/nix-darwin";
@@ -42,6 +43,7 @@
     , nix-darwin
     , nix-homebrew
     , nixos-wsl
+    , nix-minecraft
     , nixpkgs
     , self
     , zjstatus
@@ -109,7 +111,7 @@
               inherit system;
               specialArgs = {
                 inherit (nixpkgs) lib;
-                inherit inputs self system user username zjstatus;
+                inherit inputs self system user username zjstatus nix-minecraft;
               };
               modules = [
                 nixos-wsl.nixosModules.wsl
@@ -126,6 +128,8 @@
                     [ (import ./machines/linux/${hostname}/home.nix) ];
                 }
                 {
+                  imports = [ nix-minecraft.nixosModules.minecraft-servers ];
+                  #nixpkgs.overlays = [ nix-minecraft.overlays ];
                   nixpkgs.overlays = [
                     (import ./overlays/delta.nix)
                   ];

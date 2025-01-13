@@ -3,12 +3,14 @@
 {
   imports = [ ./hardware-configuration.nix ./services.nix ];
 
+  boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.extraPools = [ "storage" ];
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  environment.systemPackages = with pkgs; [ vulkan-loader vulkan-tools vulkan-validation-layers ];
+  environment.systemPackages = with pkgs; [ vulkan-loader vulkan-tools ];
 
+  networking.hostId = "8453be09";
   networking.hostName = "kyubey";
   networking.networkmanager.enable = true;
 
@@ -21,6 +23,7 @@
 
   services.xserver.dpi = 100;
   services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = false;
 
   boot.loader = {
     systemd-boot.enable = true;

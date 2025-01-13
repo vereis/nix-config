@@ -13,7 +13,11 @@
     ../../../modules/services/flaresolverr.nix
     ../../../modules/services/proxy.nix
     ../../../modules/services/printing.nix
+    ../../../modules/services/minecraft.nix
   ];
+
+  modules.minecraft.enable = true;
+  modules.minecraft.openFirewall = true;
 
   modules.transmission.enable = true;
   modules.transmission.openFirewall = true;
