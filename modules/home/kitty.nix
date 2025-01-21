@@ -13,9 +13,10 @@ with lib;
         kitty
         nerdfonts
         (nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+        wezterm
       ];
 
-      sessionVariables.DEFAULT_TERMINAL = "kitty";
+      sessionVariables.DEFAULT_TERMINAL = "wezterm";
     };
 
     programs.kitty = {

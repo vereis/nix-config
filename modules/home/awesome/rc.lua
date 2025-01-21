@@ -48,7 +48,7 @@ beautiful.init(theme_path)
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
-terminal = "kitty"
+terminal = "wezterm"
 browser = os.getenv("BROWSER") or "firefox"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
@@ -58,24 +58,59 @@ modkey = "Mod4"
 -- Enabled Layouts
 ------------------------------------------------------------------------------------------
 awful.layout.layouts = {
+	awful.layout.suit.floating,
 	awful.layout.suit.tile,
 	awful.layout.suit.tile.bottom,
 	awful.layout.suit.max.fullscreen,
-	awful.layout.suit.floating,
 }
 
 ------------------------------------------------------------------------------------------
 -- Initialise and set Wallpapers
 ------------------------------------------------------------------------------------------
-local function set_wallpaper(s)
-	gears.wallpaper.set("#dcbcc4")
-	gears.wallpaper.maximized(string.format("%s/.wallpaper", os.getenv("HOME")), s)
+local function set_wallpaper(force)
+  local t = awful.screen.focused().selected_tag
+
+  if force then
+    gears.wallpaper.maximized(wallpaper)
+  end
+  if not t then return end
+
+  local wallpaper = string.format("%s/.wallpaper", os.getenv("HOME"))
+  local floating = t.layout.name == "floating"
+  local is_empty = true
+
+  for _, c in pairs(t:clients()) do
+    is_empty = false
+    break
+  end
+
+  if floating or is_empty then
+    gears.wallpaper.maximized(wallpaper, t.screen)
+  else
+    gears.wallpaper.set("#222222", t.screen)
+  end
 end
 
 awful.screen.connect_for_each_screen(function(s)
-	set_wallpaper(s)
-	s.padding = dpi(-1)
-	awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+  set_wallpaper(true)
+  s.padding = dpi(-2)
+  awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+end)
+
+tag.connect_signal("property::layout", function(t)
+  set_wallpaper()
+end)
+
+tag.connect_signal("property::selected", function(t)
+  set_wallpaper()
+end)
+
+client.connect_signal("manage", function (c)
+  set_wallpaper()
+end)
+
+client.connect_signal("unmanage", function ()
+  set_wallpaper()
 end)
 
 beautiful.gap_single_client = false
@@ -163,6 +198,22 @@ clientkeys = gears.table.join(
 	end, { description = "master", group = "client" })
 )
 
+
+
+clientbuttons = gears.table.join(
+    awful.button({ }, 1, function (c)
+        c:emit_signal("request::activate", "mouse_click", {raise = true})
+    end),
+    awful.button({ modkey }, 1, function (c)
+        c:emit_signal("request::activate", "mouse_click", {raise = true})
+        awful.mouse.client.move(c)
+    end),
+    awful.button({ modkey }, 3, function (c)
+        c:emit_signal("request::activate", "mouse_click", {raise = true})
+        awful.mouse.client.resize(c)
+    end)
+)
+
 ------------------------------------------------------------------------------------------
 -- More Tag Manipulation Keybinds
 ------------------------------------------------------------------------------------------
@@ -227,12 +278,17 @@ awful.rules.rules = {
 		rule_any = { type = { "normal", "dialog" } },
 		properties = { titlebars_enabled = false },
 	},
+	{
+		rule_any = { class = { "firefox" } },
+		properties = { titlebars_enabled = false },
+	},
 }
 
 ------------------------------------------------------------------------------------------
 -- Signals: On Boot Up
 ------------------------------------------------------------------------------------------
 client.connect_signal("manage", function(c)
+	c:keys(clientkeys)
 	if awesome.startup and not c.size_hints.user_position and not c.size_hints.program_position then
 		awful.placement.no_offscreen(c)
 	end
@@ -305,42 +361,26 @@ tag.connect_signal("property::selected", function(t)
 end)
 
 ------------------------------------------------------------------------------------------
--- Signals: Reset Wallpaper on Geometry Change
-------------------------------------------------------------------------------------------
-screen.connect_signal("property::geometry", set_wallpaper)
-
-------------------------------------------------------------------------------------------
 -- Signals: Change border color on focus
 ------------------------------------------------------------------------------------------
-client.connect_signal("focus", function(c)
-	c.border_color = beautiful.border_focus
-end)
-
-client.connect_signal("unfocus", function(c)
-	c.border_color = beautiful.border_normal
-end)
-
-screen.connect_signal("arrange", function(s)
-	local only_one = #s.tiled_clients == 1
-	for _, c in pairs(s.clients) do
-		if only_one and not c.floating or c.maximized then
-			c.border_width = 0
-		else
-			c.border_width = beautiful.border_width
-		end
-	end
-end)
+-- client.connect_signal("focus", function(c)
+-- 	c.border_color = beautiful.border_focus
+-- end)
+--
+-- client.connect_signal("unfocus", function(c)
+-- 	c.border_color = beautiful.border_normal
+-- end)
 
 ------------------------------------------------------------------------------------------
 -- Signals: toggle titlebar based on layout
 ------------------------------------------------------------------------------------------
-client.connect_signal("property::floating", function(c)
-	if c.floating and not c.requests_no_titlebar then
-		awful.titlebar.show(c)
-	else
-		awful.titlebar.hide(c)
-	end
-end)
+-- client.connect_signal("property::floating", function(c)
+-- 	if c.floating and not c.requests_no_titlebar then
+-- 		awful.titlebar.show(c)
+-- 	else
+-- 		awful.titlebar.hide(c)
+-- 	end
+-- end)
 
 awful.tag.attached_connect_signal(nil, "property::layout", function(t)
 	local float = t.layout.name == "floating"
@@ -348,3 +388,5 @@ awful.tag.attached_connect_signal(nil, "property::layout", function(t)
 		c.floating = float
 	end
 end)
+
+awful.spawn.once("picom")

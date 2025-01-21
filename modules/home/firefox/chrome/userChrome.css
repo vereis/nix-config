@@ -15,30 +15,72 @@
   visibility: collapse !important;
 }
 
-/* Add some additional y-padding around the URL bar container */
-#nav-bar {
-  height: 54px !important;
-}
-
 #nav-bar-customization-target {
   padding: 4px 0 !important;
 }
 
 #urlbar {
-  margin-top: -3px !important;
+  border: none !important;
 }
 
-#personal-bookmarks {
-  padding: 4px 0;
-  margin-top: -8px;
+#webext-panels-stack {
+  margin-top: -4px !important;
 }
 
 /* Hide ugly border on the side of sidebars */
 .sidebar-splitter {
   display: none;
 }
+#sidebar-box {
+  padding-top: 0 !important;
+}
 
 /* Hide window controls when in fullscreen */
 #window-controls {
   visibility: collapse;
+}
+
+#nav-bar {
+  background-color: #080808 !important;
+}
+
+#urlbar-container {
+  position: absolute !important;
+  width: calc(100% - 13px) !important;
+}
+
+#navigator-toolbox {
+  position: absolute;
+  top: calc(100% - 49px);
+  background-color: #080808 !important;
+  padding: 5px !important;
+  z-index: 999999;
+  width: 100%;
+}
+
+#urlbar-input {
+  margin-top: -8px !important;
+}
+
+#browser {
+  padding-top: 4px;
+  padding-right: 4px;
+  padding-bottom: 50px;
+  background-color: #080808;
+}
+
+#urlbar-background {
+  background-color: #080808 !important;
+  outline: none !important;
+}
+
+#identity-box, #tracking-protection-icon-container, #reader-mode-button, #star-button-box, #pageAction-urlbar-_testpilot-containers, #PanelUI-menu-button, .urlbar-icon {
+  display: none;
+}
+
+/* set the initial borders of the urlbar and search bar to gray */
+#urlbar > #urlbar-background, #urlbar[breakout][breakout-extend] > #urlbar-background, #searchbar { border: none !important; outline: none !important; border-radius: 0px !important; }
+
+#PersonalToolbar {
+  display: none !important;
 }
