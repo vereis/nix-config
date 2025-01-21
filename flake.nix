@@ -51,12 +51,10 @@
     }:
     let
       # Config
-      user = "chris";
-      username = "chris";
+      user = "vereis";
+      username = "vereis";
 
       # Configured Hosts
-      # TODO: technically `madoka` is currently a `wsl` host, so we should probably treat those slightly
-      #       differently...
       darwinSystems = { iroha = "aarch64-darwin"; };
       linuxSystems = { madoka = "x86_64-linux"; homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
     in

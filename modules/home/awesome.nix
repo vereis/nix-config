@@ -20,6 +20,11 @@ with lib;
       source = ./awesome/screenshot;
     };
 
+    home.file.".wezterm.lua" = {
+      executable = true;
+      source = ./wezterm/.wezterm.lua;
+    };
+
     programs.rofi = {
       enable = true;
       font = "FantasqueSansMono Nerd Font Mono ${toString config.modules.awesome.fontSize}";

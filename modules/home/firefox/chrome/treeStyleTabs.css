@@ -63,3 +63,18 @@ tab-item[data-child-ids] tab-twisty:after {
   z-index: -1;
   border-radius: 100% !important;
 }
+
+
+/*
+*
+* #root.root {--tabs-height: 40px;}
+* #root.root {--tabs-activated-shadow: 0;}
+* #root.root {--tabs-normal-fg: #77767bff;}
+* #root.root {--tabs-activated-bg: #111111;}
+* #root.root {--tabs-activated-fg: rgb(251,251,254);}
+* #root.root {--tabs-border-radius: 0;}
+* #root.root {--frame-el-overlay-selected-bg: #e5a50aff;}
+* #root.root {--frame-bg: #080808;}
+* #root.root {--toolbar-bg: #080808;}
+* #root.root {--general-border-radius: 0;}
+* */
