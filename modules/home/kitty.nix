@@ -9,13 +9,7 @@ with lib;
 
   config = mkIf config.modules.kitty.enable {
     home = {
-      packages = with pkgs; [
-        kitty
-        nerdfonts
-        (nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-        wezterm
-      ];
-
+      packages = with pkgs; [ kitty wezterm ];
       sessionVariables.DEFAULT_TERMINAL = "wezterm";
     };
 

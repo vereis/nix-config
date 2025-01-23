@@ -7,7 +7,7 @@
   };
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     settings.auto-optimise-store = true;
     registry.nixpkgs.flake = inputs.nixpkgs;
     settings.experimental-features = "nix-command flakes";
