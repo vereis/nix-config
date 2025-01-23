@@ -8,7 +8,7 @@ with lib;
   };
 
   config = mkIf config.modules.awesome.enable {
-    home.packages = with pkgs; [ awesome rofi maim libnotify (nerdfonts.override { fonts = [ "FantasqueSansMono" ]; }) ];
+    home.packages = with pkgs; [ awesome rofi maim libnotify ];
 
     home.file.".config/awesome" = {
       recursive = true;
