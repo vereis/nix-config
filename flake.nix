@@ -55,8 +55,9 @@
       username = "vereis";
 
       # Configured Hosts
+      windowsSystems = { madoka = "x86_64-linux"; };
       darwinSystems = { iroha = "aarch64-darwin"; };
-      linuxSystems = { madoka = "x86_64-linux"; homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
+      linuxSystems = { homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
     in
     {
       darwinConfigurations =
@@ -103,38 +104,71 @@
           darwinSystems;
 
       nixosConfigurations =
-        builtins.mapAttrs
-          (hostname: system:
-            nixpkgs.lib.nixosSystem {
-              inherit system;
-              specialArgs = {
-                inherit (nixpkgs) lib;
-                inherit inputs self system user username zjstatus nix-minecraft;
-              };
-              modules = [
-                nixos-wsl.nixosModules.wsl
-                ./machines/configuration.nix
-                ./machines/linux/configuration.nix
-                ./machines/linux/${hostname}
-                home-manager.nixosModules.home-manager
-                {
-                  home-manager.useGlobalPkgs = true;
-                  home-manager.useUserPackages = true;
-                  home-manager.extraSpecialArgs = { inherit inputs user username zjstatus; };
-                  home-manager.users.${user}.imports =
-                    [ (import ./machines/home.nix) ] ++
-                    [ (import ./machines/linux/${hostname}/home.nix) ];
-                }
-                {
-                  imports = [ nix-minecraft.nixosModules.minecraft-servers ];
-                  #nixpkgs.overlays = [ nix-minecraft.overlays ];
-                  nixpkgs.overlays = [
-                    (import ./overlays/delta.nix)
-                  ];
-                }
-              ];
-            }
-          )
-          linuxSystems;
+        (
+	  builtins.mapAttrs
+            (hostname: system:
+              nixpkgs.lib.nixosSystem {
+                inherit system;
+                specialArgs = {
+                  inherit (nixpkgs) lib;
+                  inherit inputs self system user username zjstatus nix-minecraft;
+                };
+                modules = [
+                  ./machines/configuration.nix
+                  ./machines/linux/configuration.nix
+                  ./machines/linux/${hostname}
+                  home-manager.nixosModules.home-manager
+                  {
+                    home-manager.useGlobalPkgs = true;
+                    home-manager.useUserPackages = true;
+                    home-manager.extraSpecialArgs = { inherit inputs user username zjstatus; };
+                    home-manager.users.${user}.imports =
+                      [ (import ./machines/home.nix) ] ++
+                      [ (import ./machines/linux/${hostname}/home.nix) ];
+                  }
+                  {
+                    imports = [ nix-minecraft.nixosModules.minecraft-servers ];
+                    nixpkgs.overlays = [
+                      (import ./overlays/delta.nix)
+                    ];
+                  }
+                ];
+              }
+            )
+            linuxSystems
+	) // (
+          builtins.mapAttrs
+            (hostname: system:
+              nixpkgs.lib.nixosSystem {
+                inherit system;
+                specialArgs = {
+                  inherit (nixpkgs) lib;
+                  inherit inputs self system user username zjstatus nix-minecraft;
+                };
+                modules = [
+                  nixos-wsl.nixosModules.wsl
+                  ./machines/configuration.nix
+                  ./machines/windows/configuration.nix
+                  ./machines/windows/${hostname}
+                  home-manager.nixosModules.home-manager
+                  {
+                    home-manager.useGlobalPkgs = true;
+                    home-manager.useUserPackages = true;
+                    home-manager.extraSpecialArgs = { inherit inputs user username zjstatus; };
+                    home-manager.users.${user}.imports =
+                      [ (import ./machines/home.nix) ] ++
+                      [ (import ./machines/windows/${hostname}/home.nix) ];
+                  }
+                  {
+                    imports = [ nix-minecraft.nixosModules.minecraft-servers ];
+                    nixpkgs.overlays = [
+                      (import ./overlays/delta.nix)
+                    ];
+                  }
+                ];
+              }
+            )
+            windowsSystems
+	);
     };
 }

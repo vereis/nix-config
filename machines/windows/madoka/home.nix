@@ -14,9 +14,6 @@
     ../../../modules/home/zsh.nix
   ];
 
-  modules.awesome.enable = true;
-  modules.awesome.fontSize = 14;
-  modules.firefox.enable = true;
   modules.git.enable = true;
   modules.jira.enable = true;
   modules.kitty.enable = true;
