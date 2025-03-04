@@ -1,7 +1,3 @@
-; Registers a hook which is run whenever a new non-X11 Window
-; is activated. If that window is 'firefox', remove its window
-; decorations
-;
 ; Needs to be executed before any hotkeys are set
 
 SetBatchLines, -1
@@ -21,9 +17,26 @@ ShellMessage( wParam,lParam )
   {
     WinTitle := lParam = "A" ? "A" : "ahk_id " . lParam
     WinGet, WinProcess, ProcessName, %WinTitle%
-    If (WinProcess == "firefox.exe" || WinProcess == "WindowsTerminal.exe")
+    If (WinProcess == "qutebrowser.exe" || WinProcess == "WindowsTerminal.exe")
     {
-      WinSet, Style, ^0xC40000,  %WinTitle%
+      WinSet, Style, ^0xC40000, %WinTitle%
     }
   }
 }
+
+^#q::
+  If Transparent := !Transparent
+  {
+    WinSet, Transparent, 0, ahk_class Shell_TrayWnd
+  }
+  Else
+  {
+    WinSet, Transparent, 255, ahk_class Shell_TrayWnd
+    WinSet, TransColor, OFF, ahk_class Shell_TrayWnd
+    WinSet, Transparent, OFF, ahk_class Shell_TrayWnd
+    WinSet, Redraw,, ahk_class Shell_TrayWnd
+  }
+  Return
+
+^#e::
+  WinSet, Style, ^0xC40000, A
