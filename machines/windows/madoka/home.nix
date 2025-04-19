@@ -12,6 +12,7 @@
     ../../../modules/home/ranger.nix
     ../../../modules/home/tmux.nix
     ../../../modules/home/zsh.nix
+    ../../../modules/services/winget.nix
   ];
 
   modules.git.enable = true;
@@ -23,4 +24,27 @@
   modules.ranger.enable = true;
   modules.tmux.enable = true;
   modules.zsh.enable = true;
+  modules.winget.enable = true;
+  modules.winget.packages = [
+    "AutoHotkey.AutoHotkey"
+    "Mozilla.Firefox"
+    "Microsoft.Office"
+    "Microsoft.OneDrive"
+    "Microsoft.Edge"
+    "Valve.Steam"
+    "Microsoft.VCRedist.2015+.x64"
+    "Microsoft.VCRedist.2015+.x86"
+    "AltDrag.AltDrag"
+    "Discord.Discord"
+    "Spotify.Spotify"
+    "qutebrowser.qutebrowser"
+    "SlackTechnologies.Slack"
+    "Microsoft.Teams"
+    "Microsoft.AppInstaller"
+    "Microsoft.UI.Xaml.2.8"
+    "Microsoft.VCLibs.Desktop.14"
+    "Microsoft.WindowsTerminal"
+    "Microsoft.WSL"
+    "7zip.7zip"
+  ];
 }
