@@ -11,6 +11,7 @@
     settings.auto-optimise-store = true;
     registry.nixpkgs.flake = inputs.nixpkgs;
     settings.experimental-features = "nix-command flakes";
+    settings.download-buffer-size = 5000000000000000;
   };
 
   programs.zsh.enable = true;
@@ -29,7 +30,7 @@
     openssh
     openssl
     pciutils
-    pfetch
+    nerdfetch
     ripgrep
     tmux
     tree

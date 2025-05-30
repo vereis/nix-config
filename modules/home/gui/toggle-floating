@@ -1,0 +1,19 @@
+#!/bin/sh
+
+WORKSPACE=$(hyprctl -j activeworkspace | jq -r '.id')
+WINDOWS=$(hyprctl -j clients | jq -r --argjson w "$WORKSPACE" '.[] | select(.workspace.id == $w).address')
+
+for address in $WINDOWS; do
+  hyprctl dispatch togglefloating address:$address
+done
+
+FLOAT=$(hyprctl -j activewindow | jq -r '.floating')
+
+# NOTE: this can be `null` if no window is active which is why we check for "false"
+if [ "$FLOAT" = "false" ]; then
+  hyprctl keyword windowrulev2 "tile, workspace:$WORKSPACE"
+  notify-send "Tile Mode Enabled" --category=custom
+else
+  hyprctl keyword windowrulev2 "float, workspace:$WORKSPACE"
+  notify-send "Float Mode Enabled" --category=custom
+fi

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for app in slack teams-for-linux; do
+  hyprctl dispatch exec "[workspace 7 silent;] $app"
+done
+
+notify-send "Slack and Teams launched in Workspace 7" --category=custom

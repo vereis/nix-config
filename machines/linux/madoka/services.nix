@@ -6,6 +6,5 @@
     ../../../modules/services/tailscale.nix
   ];
 
-  modules.printing.enable = true;
   modules.tailscale.enable = true;
 }

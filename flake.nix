@@ -55,9 +55,9 @@
       username = "vereis";
 
       # Configured Hosts
-      windowsSystems = { madoka = "x86_64-linux"; };
+      windowsSystems = {};
       darwinSystems = { iroha = "aarch64-darwin"; };
-      linuxSystems = { homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
+      linuxSystems = { madoka = "x86_64-linux"; homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
     in
     {
       darwinConfigurations =
