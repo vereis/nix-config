@@ -1,0 +1,16 @@
+#!/bin/sh
+
+wf-recorder -y -g "$(slurp)" -f /tmp/screenrecord.mp4&
+
+DONE=$(notify-send --action="default=blah" "Screen Recording" "In Progress... Click to Finish" --category=custom --urgency=low --wait)
+
+if [ "$DONE" = "default" ]; then
+  pgrep -x "wf-recorder" && pkill -INT -x wf-recorder
+  wl-copy < /tmp/screenrecord.mp4
+  notify-send "Screen Recording" "Saved to Clipboard & /tmp/screenrecord.mp4" --category=custom --urgency=low
+  exit 0
+else
+  pgrep -x "wf-recorder" && pkill -INT -x wf-recorder
+  notify-send "Screen Recording" "Aborted" --category=custom --urgency=critical
+  exit 1
+fi
