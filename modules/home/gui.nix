@@ -55,7 +55,6 @@ with lib;
       wezterm
       pavucontrol
       tamzen
-      qutebrowser
       wl-clipboard
       wl-clipboard-x11
       tofi
@@ -65,6 +64,7 @@ with lib;
       grim
       slurp
       wf-recorder
+      (qutebrowser.override { enableWideVine = true; })
       lf
     ] ++ config.modules.gui.extraPackages
       ++ builtins.attrValues (
@@ -173,6 +173,7 @@ with lib;
 
     programs.qutebrowser = {
       enable = true;
+      package = (pkgs.qutebrowser.override { enableWideVine = true; });
       enableDefaultBindings = true;
       settings = {
         colors = {
