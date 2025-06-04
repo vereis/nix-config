@@ -398,6 +398,8 @@ with lib;
         env = [
           "QT_WAYLAND_DISABLE_WINDOWDECORATIONS,1"
           "QT_QPA_PLATFORM,wayland"
+          "GDK_SCALE,1"
+          "XCURSOR_SIZE,16"
         ];
 
         exec = [
@@ -408,6 +410,10 @@ with lib;
           "hyprctl setcursor Bibata-Modern-Classic 16"
           "mako"
         ];
+
+        xwayland = {
+          force_zero_scaling = true;
+        };
 
         # For all monitors, choose the highest refresh rate possible
         monitor = ", highrr, auto, ${toString config.modules.gui.scale}";
