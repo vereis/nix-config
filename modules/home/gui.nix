@@ -492,7 +492,7 @@ with lib;
           resize_on_border = true;
           hover_icon_on_border = true;
           extend_border_grab_area = 32;
-          "col.active_border" = "rgb(f2e9e1)";
+          "col.active_border" = "rgb(191724)";
           "col.inactive_border" = "rgb(191724)";
         };
 
@@ -509,7 +509,7 @@ with lib;
           inactive_opacity = 1.0;
           fullscreen_opacity = 1.0;
           dim_inactive = true;
-          dim_strength = 0.125;
+          dim_strength = 0.25;
 
           blur = {
             enabled = false;
@@ -522,9 +522,21 @@ with lib;
         };
 
         animations = {
-          enabled = false;
+          enabled = true;
           first_launch_animation = false;
         };
+
+        animation = [
+          "windows, 0"
+          "layers, 0"
+          "border, 0"
+          "borderangle, 0"
+          "fadeIn, 0"
+          "fadeOut, 0"
+          "fadeSwitch, 0"
+          "fadeShadow, 0"
+          "fadeLayers, 0"
+        ];
 
         input = {
           repeat_delay = 500;
