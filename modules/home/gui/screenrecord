@@ -2,7 +2,7 @@
 
 wf-recorder -y -g "$(slurp)" -f /tmp/screenrecord.mp4&
 
-DONE=$(notify-send --action="default=blah" "Screen Recording" "In Progress... Click to Finish" --category=custom --urgency=low --wait)
+DONE=$(notify-send --action="default=blah" "Screen Recording" "In Progress... Click to Finish" --category=custom --urgency=low --wait --expire-time=99999999)
 
 if [ "$DONE" = "default" ]; then
   pgrep -x "wf-recorder" && pkill -INT -x wf-recorder
