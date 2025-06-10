@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for app in "slack" "teams-for-linux --enable-features=UseOzonePlatform --ozone-platform=wayland"; do
+for app in "slack --enable-features=UseOzonePlatform --ozone-platform=wayland" "teams-for-linux --enable-features=UseOzonePlatform --ozone-platform=wayland"; do
   hyprctl dispatch exec "[workspace 7 silent;] $app"
 done
 
