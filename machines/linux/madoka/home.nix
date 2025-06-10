@@ -24,6 +24,7 @@
       yt-dlp
       tealdeer
       bsd-finger
+      claude-code
     ];
   };
 }
