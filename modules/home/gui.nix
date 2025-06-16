@@ -24,7 +24,13 @@ with lib;
     font.name = mkOption {
       type = types.str;
       default = "Tamzen";
-      description = "Default font name for GUI applications.";
+      description = "Primary font name for GUI applications.";
+    };
+
+    font.secondary = mkOption {
+      type = types.str;
+      default = "Fantasque Sans Mono";
+      description = "Secondary font name for GUI applications (used for font switching).";
     };
 
     font.size = mkOption {
@@ -64,6 +70,7 @@ with lib;
       grim
       slurp
       wf-recorder
+      fantasque-sans-mono
       (qutebrowser.override { enableWideVine = true; })
       lf
     ] ++ config.modules.gui.extraPackages
@@ -326,10 +333,32 @@ with lib;
       enableBashIntegration = true;
       enableZshIntegration = true;
       extraConfig = ''
+        local wezterm = require('wezterm')
+        local act = wezterm.action
+        
         local deshou = wezterm.color.get_builtin_schemes()['rose-pine'];
         deshou.background = '#060606';
 
-        return {
+        local function toggle_font(window, pane)
+          local overrides = window:get_config_overrides() or {}
+          
+          -- Track current font state using a custom key
+          local is_secondary_font = overrides.font_is_secondary or false
+          local new_font
+          
+          if is_secondary_font then
+            new_font = wezterm.font_with_fallback({'${config.modules.gui.font.name}', 'Material Icons'})
+            overrides.font_is_secondary = false
+          else
+            new_font = wezterm.font_with_fallback({'${config.modules.gui.font.secondary}', 'Material Icons'})
+            overrides.font_is_secondary = true
+          end
+          
+          overrides.font = new_font
+          window:set_config_overrides(overrides)
+        end
+
+        local config = {
           enable_tab_bar = false;
           enable_scroll_bar = false;
           default_cursor_style = 'BlinkingBlock';
@@ -354,7 +383,17 @@ with lib;
           };
 
           color_scheme = 'deshou';
+          
+          keys = {
+            {
+              key = 'f',
+              mods = 'CTRL|SHIFT',
+              action = wezterm.action_callback(toggle_font),
+            },
+          };
         }
+
+        return config
       '';
     };
 
