@@ -30,6 +30,9 @@ vim.keymap.set("n", "<leader>l", ":!zellij run -f -- nix develop --command bash 
   silent = false
 })
 
+-- Use `<Leader>c` to toggle AvanteChat
+vim.keymap.set("n", "<leader>c", ":AvanteChat<CR>", { desc = "Toggle Avante [C]hat", silent = true })
+
 -- Buffer management
 vim.keymap.set("n", "bj", ":<cmd>bfirst<cr><cr>", { desc = 'First buffer' })
 vim.keymap.set("n", "bk", ":<cmd>blast<cr><cr>", { desc = 'Last buffer' })

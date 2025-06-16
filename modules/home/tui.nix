@@ -39,6 +39,7 @@ with lib;
       wget
       zip
       zsh
+      gnumake
     ] ++ config.modules.tui.extraPackages;
     programs.direnv = {
       enable = true;
