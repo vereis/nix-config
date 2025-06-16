@@ -34,12 +34,10 @@ with lib;
       }
 
       keybinds {
-        unbind "Ctrl o";
-        unbind "Ctrl n";
-
         normal {
-          bind "Ctrl s" { SwitchToMode "Session"; }
-
+          unbind "Ctrl o"
+          unbind "Ctrl n"
+          unbind "Ctrl g"
           bind "Alt t" { NewTab; }
           bind "Alt q" { CloseFocus; }
           bind "Alt f" { ToggleFloatingPanes; }
