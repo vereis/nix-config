@@ -2,14 +2,11 @@ return {
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
-      require("mini.indentscope").setup()
       require("mini.starter").setup()
       require("mini.cursorword").setup()
       require("mini.tabline").setup()
       require("mini.statusline").setup()
       require("mini.bufremove").setup()
-      require("mini.jump2d").setup()
-      require("mini.operators").setup()  -- provides sorting via `gss` or `gsS`
       require("mini.trailspace").setup() -- trim/show trailing spaces
 
       -- Trim trailing spaces on save
