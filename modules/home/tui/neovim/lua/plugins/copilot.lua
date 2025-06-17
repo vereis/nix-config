@@ -8,13 +8,16 @@ return {
           enabled = true,
           auto_trigger = true,
           keymap = {
-            accept = "<C-n>",
+            accept = "<C-]>",
             next = "<M-]>",
             prev = "<M-[>",
-            dismiss = "<C-]>",
+            dismiss = "<C-[>",
           },
         },
         panel = { enabled = false },
+        filetypes = {
+          ['*'] = true,  -- Enable in all filetypes
+        },
       })
     end
   }
