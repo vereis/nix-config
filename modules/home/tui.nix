@@ -40,6 +40,7 @@ with lib;
       zip
       zsh
       gnumake
+      git-crypt
     ] ++ config.modules.tui.extraPackages;
     programs.direnv = {
       enable = true;
