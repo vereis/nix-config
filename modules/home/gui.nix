@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, nixpkgs-stable, ... }:
 
 with lib;
 {
@@ -335,17 +335,17 @@ with lib;
       extraConfig = ''
         local wezterm = require('wezterm')
         local act = wezterm.action
-        
+
         local deshou = wezterm.color.get_builtin_schemes()['rose-pine'];
         deshou.background = '#060606';
 
         local function toggle_font(window, pane)
           local overrides = window:get_config_overrides() or {}
-          
+
           -- Track current font state using a custom key
           local is_secondary_font = overrides.font_is_secondary or false
           local new_font
-          
+
           if is_secondary_font then
             new_font = wezterm.font_with_fallback({'${config.modules.gui.font.name}', 'Material Icons'})
             overrides.font_is_secondary = false
@@ -353,7 +353,7 @@ with lib;
             new_font = wezterm.font_with_fallback({'${config.modules.gui.font.secondary}', 'Material Icons'})
             overrides.font_is_secondary = true
           end
-          
+
           overrides.font = new_font
           window:set_config_overrides(overrides)
         end
@@ -383,7 +383,7 @@ with lib;
           };
 
           color_scheme = 'deshou';
-          
+
           keys = {
             {
               key = 'f',

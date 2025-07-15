@@ -4,6 +4,7 @@
   inputs =
     {
       nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+      nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
       nix-minecraft.url = "github:Infinidoge/nix-minecraft";
       zjstatus.url = "github:dj95/zjstatus";
       nix-darwin = {
@@ -42,6 +43,7 @@
     , homebrew-core
     , nix-darwin
     , nix-homebrew
+    , nixpkgs-stable
     , nixos-wsl
     , nix-minecraft
     , nixpkgs
@@ -94,11 +96,6 @@
                     autoMigrate = true;
                   };
                 }
-                {
-                  nixpkgs.overlays = [
-                    (import ./overlays/delta.nix)
-                  ];
-                }
               ];
             }
           )
@@ -113,6 +110,10 @@
                 specialArgs = {
                   inherit (nixpkgs) lib;
                   inherit inputs self system user username email zjstatus nix-minecraft;
+                  nixpkgs-stable = import nixpkgs-stable {
+                    inherit system;
+                    config.allowUnfree = true;
+                  };
                 };
                 modules = [
                   ./machines/configuration.nix
@@ -122,16 +123,19 @@
                   {
                     home-manager.useGlobalPkgs = true;
                     home-manager.useUserPackages = true;
-                    home-manager.extraSpecialArgs = { inherit inputs user username email zjstatus; };
+                    home-manager.extraSpecialArgs = {
+                      inherit inputs user username email zjstatus;
+                      nixpkgs-stable = import nixpkgs-stable {
+                        inherit system;
+                        config.allowUnfree = true;
+                      };
+                    };
                     home-manager.users.${user}.imports =
                       [ (import ./machines/home.nix) ] ++
                       [ (import ./machines/linux/${hostname}/home.nix) ];
                   }
                   {
                     imports = [ nix-minecraft.nixosModules.minecraft-servers ];
-                    nixpkgs.overlays = [
-                      (import ./overlays/delta.nix)
-                    ];
                   }
                 ];
               }
@@ -162,9 +166,6 @@
                   }
                   {
                     imports = [ nix-minecraft.nixosModules.minecraft-servers ];
-                    nixpkgs.overlays = [
-                      (import ./overlays/delta.nix)
-                    ];
                   }
                 ];
               }
