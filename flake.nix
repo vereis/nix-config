@@ -61,6 +61,9 @@
       windowsSystems = {};
       darwinSystems = { iroha = "aarch64-darwin"; };
       linuxSystems = { madoka = "x86_64-linux"; homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
+
+      # Secrets
+      secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
     in
     {
       darwinConfigurations =
@@ -68,7 +71,7 @@
           (hostname: system:
             nix-darwin.lib.darwinSystem {
               inherit system;
-              specialArgs = { inherit (nixpkgs) lib; inherit inputs self system user username email zjstatus; };
+              specialArgs = { inherit (nixpkgs) lib; inherit inputs self system user username email zjstatus secrets; };
               modules = [
                 ./machines/configuration.nix
                 ./machines/darwin/configuration.nix
@@ -77,7 +80,7 @@
                 {
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.extraSpecialArgs = { inherit inputs user username email zjstatus; };
+                  home-manager.extraSpecialArgs = { inherit inputs user username email zjstatus secrets; };
                   home-manager.users.${user}.imports =
                     [ (import ./machines/home.nix) ] ++
                     [ (import ./machines/darwin/${hostname}/home.nix) ];
@@ -109,7 +112,7 @@
                 inherit system;
                 specialArgs = {
                   inherit (nixpkgs) lib;
-                  inherit inputs self system user username email zjstatus nix-minecraft;
+                  inherit inputs self system user username email zjstatus nix-minecraft secrets;
                   nixpkgs-stable = import nixpkgs-stable {
                     inherit system;
                     config.allowUnfree = true;
@@ -124,7 +127,7 @@
                     home-manager.useGlobalPkgs = true;
                     home-manager.useUserPackages = true;
                     home-manager.extraSpecialArgs = {
-                      inherit inputs user username email zjstatus;
+                      inherit inputs user username email zjstatus secrets;
                       nixpkgs-stable = import nixpkgs-stable {
                         inherit system;
                         config.allowUnfree = true;
@@ -148,7 +151,7 @@
                 inherit system;
                 specialArgs = {
                   inherit (nixpkgs) lib;
-                  inherit inputs self system user username email zjstatus nix-minecraft;
+                  inherit inputs self system user username email zjstatus nix-minecraft secrets;
                 };
                 modules = [
                   nixos-wsl.nixosModules.wsl
@@ -159,7 +162,7 @@
                   {
                     home-manager.useGlobalPkgs = true;
                     home-manager.useUserPackages = true;
-                    home-manager.extraSpecialArgs = { inherit inputs user username email zjstatus; };
+                    home-manager.extraSpecialArgs = { inherit inputs user username email zjstatus secrets; };
                     home-manager.users.${user}.imports =
                       [ (import ./machines/home.nix) ] ++
                       [ (import ./machines/windows/${hostname}/home.nix) ];

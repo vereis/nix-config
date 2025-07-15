@@ -1,4 +1,4 @@
-{ config, lib, pkgs, user, email, ... }:
+{ config, lib, pkgs, user, email, secrets, ... }:
 
 with lib;
 {
@@ -176,6 +176,7 @@ with lib;
       FZF_DEFAULT_COMMAND = "rg --files | sort -u";
       EDITOR = "nvim";
       VISUAL = "nvim";
+      GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
     };
   };
 }
