@@ -11,7 +11,10 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # GPU
-  hardware.graphics.enable = true;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true; # Required for Steam
+  };
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia = {
     open = true; # Use open source kernel module
@@ -19,6 +22,13 @@
     modesetting.enable = true;
     powerManagement.enable = true;
     nvidiaSettings = true;
+  };
+
+  # Steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
   };
 
   # Needed for `../../../modules/home/gui.nix`
@@ -50,6 +60,14 @@
         dates = "weekly";
       };
     };
+  };
+
+  hardware.keyboard.qmk.enable = true;
+  environment.systemPackages = with pkgs; [qmk via vial];
+  services.udev = {
+    packages = with pkgs; [
+      qmk qmk-udev-rules qmk_hid via vial
+    ];
   };
 
   system.stateVersion = lib.mkForce "24.05";

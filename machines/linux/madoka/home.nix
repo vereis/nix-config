@@ -12,6 +12,7 @@
       discord-canary
       slack
       teams-for-linux
+      steam
     ];
     customScripts = {
       workspace-vetspire = ../../../bin/workspace-vetspire;
