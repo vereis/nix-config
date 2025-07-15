@@ -26,6 +26,7 @@
       tealdeer
       bsd-finger
       claude-code
+      gemini-cli
     ];
   };
 }
