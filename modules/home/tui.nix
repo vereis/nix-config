@@ -177,6 +177,7 @@ with lib;
       EDITOR = "nvim";
       VISUAL = "nvim";
       GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
+      JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
     };
   };
 }
