@@ -10,10 +10,9 @@ A comprehensive NixOS and nix-darwin configuration setup with modular machine-sp
 │   │   └── iroha/     # macOS machine named "iroha"
 │   ├── linux/         # Linux configurations
 │   │   ├── homura/    # Linux machine named "homura"
-│   │   ├── kyubey/    # Linux machine named "kyubey"
-│   │   └── madoka/    # Linux machine named "madoka"
+│   │   └── kyubey/    # Linux machine named "kyubey"
 │   └── windows/       # Windows configurations
-│       └── sayaka/    # Windows machine named "sayaka"
+│       └── madoka/    # Windows machine named "madoka"
 ├── modules/           # Reusable configuration modules
 │   ├── hardware/      # Hardware-specific modules
 │   ├── home/          # Home-manager modules
@@ -29,13 +28,12 @@ A comprehensive NixOS and nix-darwin configuration setup with modular machine-sp
 ### Linux
 - **homura**: Linux workstation configuration
 - **kyubey**: Linux server configuration
-- **madoka**: Linux configuration
 
 ### macOS
 - **iroha**: macOS configuration with nix-darwin
 
 ### Windows
-- **sayaka**: Windows configuration with nix support
+- **madoka**: Windows configuration with nix support
 
 ## Modules
 
