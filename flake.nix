@@ -58,9 +58,9 @@
       email = "me@vereis.com";
 
       # Configured Hosts
-      windowsSystems = {};
+      windowsSystems = { madoka = "x86_64-linux"; };
       darwinSystems = { iroha = "aarch64-darwin"; };
-      linuxSystems = { madoka = "x86_64-linux"; homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
+      linuxSystems = { homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
 
       # Secrets
       secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
