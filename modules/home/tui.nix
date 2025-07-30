@@ -197,8 +197,8 @@ with lib;
       FZF_DEFAULT_COMMAND = "rg --files | sort -u";
       EDITOR = "nvim";
       VISUAL = "nvim";
-      # GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
-      # JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
+      GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
+      JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
     };
   };
 }

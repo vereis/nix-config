@@ -63,8 +63,7 @@
       linuxSystems = { homura = "x86_64-linux"; kyubey = "x86_64-linux"; };
 
       # Secrets
-      #secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
-      secrets = {};
+      secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
     in
     {
       darwinConfigurations =
