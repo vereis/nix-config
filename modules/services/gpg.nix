@@ -8,11 +8,14 @@ with lib;
   };
 
   config = mkIf config.modules.gpg.enable {
-    environment.systemPackages = [ pkgs.pinentry-curses ];
+    environment.systemPackages = with pkgs; [
+      pinentry-curses
+    ];
+
     services.pcscd.enable = true;
     programs.gnupg.agent = {
       enable = true;
-      pinentryFlavor = "curses";
+      pinentryPackage = pkgs.pinentry-curses;
       enableSSHSupport = true;
     };
   };
