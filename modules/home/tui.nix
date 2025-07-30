@@ -41,6 +41,7 @@ with lib;
       zsh
       gnumake
       git-crypt
+      lf
     ] ++ config.modules.tui.extraPackages;
     programs.direnv = {
       enable = true;
@@ -169,6 +170,26 @@ with lib;
         lua require('config')
       '';
     };
+
+    programs.lf = {
+      enable = true;
+      previewer.source = pkgs.writeShellScriptBin "lf-preview" ''
+        #!/bin/sh
+
+        case "$1" in
+          *.tar*) tar tf "$1";;
+          *.zip) unzip -l "$1";;
+          *.rar) unrar l "$1";;
+          *.7z) 7z l "$1";;
+          *.pdf) pdftotext "$1" -;;
+          *) highlight -O ansi "$1" || cat "$1";;
+        esac
+      '';
+      settings = {
+        cursorpreviewfmt = "";
+      };
+    };
+
 
     home.file.".config/nvim/lua/" = { source = ./tui/neovim/lua; recursive = true; };
 
