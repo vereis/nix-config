@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, secrets, ... }:
 
 {
   imports = [
@@ -8,7 +8,22 @@
   ];
 
   modules.tailscale.enable = true;
+
   modules.copyparty.enable = true;
+  modules.copyparty.accounts.vereis.password = secrets.copyparty.vereis;
+  modules.copyparty.accounts.turtz.password = secrets.copyparty.turtz;
+  modules.copyparty.volumes = {
+    "/" = {
+      path = "/storage";
+      access = { rwmd = [ "turtz" ]; A = [ "vereis" ]; };
+      flags = {
+        fk = 4;
+        scan = 60;
+        e2d = true;
+        nohash = "\.iso$";
+      };
+    };
+  };
 
   modules.proxy.enable = true;
   modules.proxy.openFirewall = true;
