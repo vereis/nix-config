@@ -7,29 +7,37 @@
       nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
       nix-minecraft.url = "github:Infinidoge/nix-minecraft";
       zjstatus.url = "github:dj95/zjstatus";
+      copyparty.url = "github:9001/copyparty";
+
       nix-darwin = {
         url = "github:LnL7/nix-darwin";
         inputs.nixpkgs.follows = "nixpkgs";
       };
+
       nix-homebrew = {
         url = "github:zhaofengli-wip/nix-homebrew";
       };
+
       homebrew-bundle = {
         url = "github:homebrew/homebrew-bundle";
         flake = false;
       };
+
       homebrew-core = {
         url = "github:homebrew/homebrew-core";
         flake = false;
       };
+
       homebrew-cask = {
         url = "github:homebrew/homebrew-cask";
         flake = false;
       };
+
       home-manager = {
         url = "github:nix-community/home-manager";
         inputs.nixpkgs.follows = "nixpkgs";
       };
+
       nixos-wsl = {
         url = "github:nix-community/NixOS-WSL";
         inputs.nixpkgs.follows = "nixpkgs";
@@ -49,6 +57,7 @@
     , nixpkgs
     , self
     , zjstatus
+    , copyparty
     , ...
     }:
     let
@@ -71,11 +80,12 @@
           (hostname: system:
             nix-darwin.lib.darwinSystem {
               inherit system;
-              specialArgs = { inherit (nixpkgs) lib; inherit inputs self system user username email zjstatus secrets; };
+              specialArgs = { inherit (nixpkgs) lib; inherit inputs self system user username email zjstatus copyparty secrets; };
               modules = [
                 ./machines/configuration.nix
                 ./machines/darwin/configuration.nix
                 ./machines/darwin/${hostname}
+                copyparty.nixosModules.default
                 home-manager.darwinModules.home-manager
                 {
                   home-manager.useGlobalPkgs = true;
@@ -112,7 +122,7 @@
                 inherit system;
                 specialArgs = {
                   inherit (nixpkgs) lib;
-                  inherit inputs self system user username email zjstatus nix-minecraft secrets;
+                  inherit inputs self system user username email zjstatus copyparty nix-minecraft secrets;
                   nixpkgs-stable = import nixpkgs-stable {
                     inherit system;
                     config.allowUnfree = true;
@@ -122,6 +132,7 @@
                   ./machines/configuration.nix
                   ./machines/linux/configuration.nix
                   ./machines/linux/${hostname}
+                  copyparty.nixosModules.default
                   home-manager.nixosModules.home-manager
                   {
                     home-manager.useGlobalPkgs = true;
@@ -151,13 +162,14 @@
                 inherit system;
                 specialArgs = {
                   inherit (nixpkgs) lib;
-                  inherit inputs self system user username email zjstatus nix-minecraft secrets;
+                  inherit inputs self system user username email zjstatus copyparty nix-minecraft secrets;
                 };
                 modules = [
                   nixos-wsl.nixosModules.wsl
                   ./machines/configuration.nix
                   ./machines/windows/configuration.nix
                   ./machines/windows/${hostname}
+                  copyparty.nixosModules.default
                   home-manager.nixosModules.home-manager
                   {
                     home-manager.useGlobalPkgs = true;

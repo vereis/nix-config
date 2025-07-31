@@ -4,13 +4,16 @@
   imports = [
     ../../../modules/services/tailscale.nix
     ../../../modules/services/proxy.nix
+    ../../../modules/services/copyparty.nix
   ];
 
   modules.tailscale.enable = true;
+  modules.copyparty.enable = true;
 
   modules.proxy.enable = true;
   modules.proxy.openFirewall = true;
   modules.proxy.proxies = {
+    "files.vereis.com" = { port = 3210; useSSL = false; };
     "jellyfin.vereis.com" = { port = 8096; };
     "sonarr.vereis.com" = { port = 8989; useSSL = false; };
     "radarr.vereis.com" = { port = 7878; useSSL = false; };
