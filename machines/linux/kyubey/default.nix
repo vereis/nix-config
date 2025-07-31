@@ -31,6 +31,17 @@
     idle-delay=uint32 0
   '';
 
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+  systemd.services.systemd-suspend.enable = false;
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 80 443 24800 51413 ];
   networking.firewall.allowedUDPPorts = [ 22 80 443 24800 51413 ];
