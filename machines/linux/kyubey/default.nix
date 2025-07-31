@@ -46,9 +46,6 @@
   networking.firewall.allowedTCPPorts = [ 22 80 443 24800 51413 ];
   networking.firewall.allowedUDPPorts = [ 22 80 443 24800 51413 ];
 
-  programs.steam.enable = true;
-  hardware.steam-hardware.enable = true;
-
   services.xserver.dpi = 100;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.open = false;
