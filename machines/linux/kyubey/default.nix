@@ -16,6 +16,21 @@
 
   services.getty.autologinUser = username;
 
+  # Disable Sleep in LoginD
+  services.logind = {
+    lidSwitch = "ignore";
+    extraConfig = ''
+      IdleAction=ignore
+      HandleSuspendKey=ignore
+    '';
+  };
+
+  # Disable Sleep in Gnome
+  services.desktopManager.gnome.extraGSettingsOverrides = ''
+    [org.gnome.desktop.session]
+    idle-delay=uint32 0
+  '';
+
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 80 443 24800 51413 ];
   networking.firewall.allowedUDPPorts = [ 22 80 443 24800 51413 ];
