@@ -6,7 +6,20 @@ with lib;
     enable = mkOption { type = types.bool; default = false; };
     openFirewall = mkOption { type = types.bool; default = false; };
     firewallPorts = mkOption { type = types.listOf types.port; default = [ 80 443 ]; };
-    proxies = mkOption { type = types.attrsOf types.port; default = { }; };
+    proxies = mkOption {
+      description = "Template for defining reverse proxy hosts.";
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            port = mkOption { type = types.port; };
+            http2 = mkOption { type = types.bool; default = true; };
+            useSSL = mkOption { type = types.bool; default = false; };
+            extraConfig = mkOption { type = types.str; default = ""; };
+          };
+        }
+      );
+      default = { };
+    };
   };
 
   config = mkIf config.modules.proxy.enable {
@@ -17,12 +30,17 @@ with lib;
 
     services.nginx = {
       enable = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
       virtualHosts =
         builtins.mapAttrs
-          (host: port: {
-            enableACME = true;
-            forceSSL = true;
-            locations."/".proxyPass = "http://127.0.0.1:${toString port}/";
+          (host: config: {
+            enableACME = config.useSSL;
+            forceSSL = config.useSSL;
+            locations."/".proxyPass = "http://127.0.0.1:${toString config.port}/";
+            locations."/".proxyWebsockets = true;
+            http2 = config.http2;
+            extraConfig = config.extraConfig;
           })
           config.modules.proxy.proxies;
     };
