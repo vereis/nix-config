@@ -14,6 +14,8 @@
   networking.hostName = "kyubey";
   networking.networkmanager.enable = true;
 
+  services.getty.autologinUser = username;
+
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 80 443 24800 51413 ];
   networking.firewall.allowedUDPPorts = [ 22 80 443 24800 51413 ];
