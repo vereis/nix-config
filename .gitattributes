@@ -1,1 +1,2 @@
 secrets/** filter=git-crypt diff=git-crypt
+bin/mount-kyubey-dav.bat filter=git-crypt diff=git-crypt
