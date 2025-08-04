@@ -21,6 +21,7 @@
         scan = 60;
         e2d = true;
         nohash = "\.iso$";
+        daw = true;
       };
     };
   };
