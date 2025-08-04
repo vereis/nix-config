@@ -12,11 +12,11 @@ with lib;
       pinentry-curses
     ];
 
-    services.pcscd.enable = true;
-    programs.gnupg.agent = {
-      enable = true;
-      pinentryPackage = pkgs.pinentry-curses;
-      enableSSHSupport = true;
+    programs.ssh = {
+      startAgent = true;
+      extraConfig = ''
+      AddKeysToAgent yes
+      '';
     };
   };
 }
