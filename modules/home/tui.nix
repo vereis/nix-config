@@ -42,6 +42,7 @@ with lib;
       gnumake
       git-crypt
       lf
+      socat
     ] ++ config.modules.tui.extraPackages;
     programs.direnv = {
       enable = true;
@@ -91,6 +92,23 @@ with lib;
           bindkey "^E" vi-end-of-line
 
           source $HOME/.p10k.zsh
+
+          # If in WSL, when launching vim, set up `npiperelay` to forward stdin/stdout to Windows
+          vim() {
+            if [ -n "$WSL_DISTRO_NAME" ]; then
+              if ! pidof socat > /dev/null 2>&1; then
+                  [ -e /tmp/discord-ipc-0 ] && rm -f /tmp/discord-ipc-0
+                  socat UNIX-LISTEN:/tmp/discord-ipc-0,fork \
+                      EXEC:"npiperelay.exe //./pipe/discord-ipc-0" 2>/dev/null &
+              fi
+            fi
+
+            if [ $# -eq 0 ]; then
+              command nvim
+            else
+              command nvim "$@"
+            fi
+          }
         '';
       in lib.mkMerge [contentBefore contentAfter];
     };
@@ -150,6 +168,8 @@ with lib;
 
     home.file.".local/bin/git/ssh-migrate.sh" = { executable = true; source = ./tui/git/migrate-ssh.sh; };
 
+    home.file.".local/bin/npiperelay.exe" = { executable = true; source = ../../bin/npiperelay.exe; };
+
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
@@ -158,10 +178,6 @@ with lib;
 
     programs.neovim = {
       enable = true;
-
-      viAlias = true;
-      vimAlias = true;
-      vimdiffAlias = true;
 
       withNodeJs = true;
       withPython3 = true;
