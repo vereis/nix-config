@@ -5,6 +5,7 @@
     ../../../modules/services/tailscale.nix
     ../../../modules/services/serve.nix
     ../../../modules/services/copyparty.nix
+    ../../../modules/services/minecraft.nix
   ];
 
   modules.tailscale.enable = true;
@@ -32,6 +33,18 @@
     acmeEmail = "serve@vereis.com";
 
     sites = {
+      "minecraft.vereis.com" = {
+        port = 25565;
+        ssl = true;
+        ddns = {
+          enable = true;
+          protocol = "cloudflare";
+          login = "token";
+          password = secrets.cloudflare.ddclient;
+          zone = "vereis.com";
+        };
+      };
+
       "files.vereis.com" = {
         port = 3210;
         ssl = false;
@@ -66,6 +79,41 @@
           "X-Plex-Device-Vendor" = "$http_x_plex_device_vendor";
           "X-Plex-Model" = "$http_x_plex_model";
         };
+      };
+    };
+  };
+
+  modules.minecraft = {
+    enable = true;
+    openFirewall = true;
+
+    servers.minnacraft = {
+      enable = true;
+      autoStart = true;
+      package = pkgs.papermcServers.papermc-1_21_5;
+      jvmOpts = "-Xms6144M -Xmx8192M";
+
+      serverProperties = {
+        difficulty = 3;
+        gamemode = 1;
+        max-players = 999;
+        view-distance = 32;
+        simulation-distance = 10;
+        enable-command-block = true;
+        motd = "minna, asobou yo~!!";
+
+        enable-rcon = true;
+        "rcon.password" = secrets.minecraft.minnacraft.rcon.password;
+        "rcon.port" = secrets.minecraft.minnacraft.rcon.port;
+
+        online-mode = true;
+        spawn-protection = 16;
+        player-idle-timeout = 30;
+        network-compression-threshold = 256;
+
+        spawn-animals = true;
+        spawn-monsters = true;
+        generate-structures = true;
       };
     };
   };
