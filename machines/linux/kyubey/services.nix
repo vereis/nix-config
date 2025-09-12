@@ -90,7 +90,7 @@
     servers.minnacraft = {
       enable = true;
       autoStart = true;
-      package = pkgs.papermcServers.papermc-1_21_5;
+      package = pkgs.minecraftServers.paper-1_21_8;
       jvmOpts = "-Xms6144M -Xmx8192M";
 
       serverProperties = {

@@ -148,8 +148,10 @@
                       [ (import ./machines/home.nix) ] ++
                       [ (import ./machines/linux/${hostname}/home.nix) ];
                   }
+                  nix-minecraft.nixosModules.minecraft-servers
                   {
                     imports = [ nix-minecraft.nixosModules.minecraft-servers ];
+                    nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
                   }
                 ];
               }
