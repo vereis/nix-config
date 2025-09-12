@@ -11,8 +11,7 @@
       yt-dlp
       tealdeer
       bsd-finger
-      claude-code
-      gemini-cli
+      opencode
     ];
   };
 }

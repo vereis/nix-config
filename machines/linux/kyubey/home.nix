@@ -9,8 +9,7 @@
     enable = true;
     extraPackages = with pkgs; [
       yt-dlp
-      claude-code
-      gemini-cli
+      opencode
     ];
   };
 }
