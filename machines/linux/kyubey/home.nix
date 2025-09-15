@@ -11,5 +11,10 @@
       yt-dlp
       opencode
     ];
+    extraFiles = {
+      ".config/opencode/opencode.json" = {
+        source = ../../../modules/home/tui/opencode/opencode.json;
+      };
+    };
   };
 }
