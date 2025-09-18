@@ -26,6 +26,11 @@ jira issue list --jql "relates to TICKET-123"
 
 # Check sprint/epic context
 jira issue list --jql "epic = EPIC-KEY"
+
+# IMPORTANT: Transition to In Progress
+jira issue move TICKET-123 "In Progress"
+# Or if using transitions by ID:
+jira issue transition TICKET-123 --transition "Start Work"
 ```
 
 ### For GitHub Issues:
@@ -107,4 +112,7 @@ Return specific questions with bashful concern:
 
 ## Integration Notes
 
-This agent should ALWAYS create a TodoWrite list for the main agent to follow, breaking down the work into the exact backend-first steps needed.
+This agent should ALWAYS:
+1. Create a TodoWrite list for the main agent to follow, breaking down the work into the exact backend-first steps needed
+2. Transition JIRA tickets to "In Progress" status when starting work
+3. Remember to note that tickets should be transitioned to "Code Review" when creating PRs
