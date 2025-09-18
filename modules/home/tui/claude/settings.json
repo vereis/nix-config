@@ -27,5 +27,6 @@
     "VISUAL": "nvim"
   },
   "includeCoAuthoredBy": false,
-  "hooks": {}
+  "hooks": {},
+  "model": "sonnet"
 }
