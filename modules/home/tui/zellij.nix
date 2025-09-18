@@ -9,7 +9,7 @@ with lib;
   config = mkIf config.modules.zellij.enable {
     home.packages = with pkgs; [
       zellij
-      zjstatus.packages.${system}.default
+      zjstatus.packages.${pkgs.system}.default
     ];
 
     programs.zellij = {
@@ -69,7 +69,7 @@ with lib;
         default_tab_template {
           children
           pane size=1 borderless=true {
-            plugin location="file:${zjstatus.packages.${system}.default}/bin/zjstatus.wasm" {
+            plugin location="file:${zjstatus.packages.${pkgs.system}.default}/bin/zjstatus.wasm" {
               format_left  "{tabs}"
               format_right "{datetime} {mode}"
               format_space ""
@@ -106,7 +106,7 @@ with lib;
         tab_template name="ui" {
           children
           pane size=1 borderless=true {
-            plugin location="file:${zjstatus.packages.${system}.default}/bin/zjstatus.wasm" {
+            plugin location="file:${zjstatus.packages.${pkgs.system}.default}/bin/zjstatus.wasm" {
               format_left  "{tabs}"
               format_right "{datetime} {mode}"
               format_space ""
