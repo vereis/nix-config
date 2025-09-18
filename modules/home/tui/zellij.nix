@@ -6,7 +6,7 @@ with lib;
     enable = mkOption { type = types.bool; default = true; };
   };
 
-  config = {
+  config = mkIf config.modules.zellij.enable {
     home.packages = with pkgs; [
       zellij
       zjstatus.packages.${system}.default
@@ -38,6 +38,7 @@ with lib;
           unbind "Ctrl o"
           unbind "Ctrl n"
           unbind "Ctrl g"
+          unbind "Ctrl t"
           bind "Alt t" { NewTab; }
           bind "Alt q" { CloseFocus; }
           bind "Alt f" { ToggleFloatingPanes; }
@@ -68,7 +69,7 @@ with lib;
         default_tab_template {
           children
           pane size=1 borderless=true {
-            plugin location="file:${zjstatus.packages.${pkgs.system}.default}/bin/zjstatus.wasm" {
+            plugin location="file:${zjstatus.packages.${system}.default}/bin/zjstatus.wasm" {
               format_left  "{tabs}"
               format_right "{datetime} {mode}"
               format_space ""
@@ -105,7 +106,7 @@ with lib;
         tab_template name="ui" {
           children
           pane size=1 borderless=true {
-            plugin location="file:/home/chris/statusbar.wasm" {
+            plugin location="file:${zjstatus.packages.${system}.default}/bin/zjstatus.wasm" {
               format_left  "{tabs}"
               format_right "{datetime} {mode}"
               format_space ""
