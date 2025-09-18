@@ -16,6 +16,11 @@ with lib;
       default = {};
       description = "Extra files to create in the home directory. Accepts any valid home-manager file attributes.";
     };
+    extraSessionVariables = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      description = "Extra session variables to set. Use this for machine-specific secrets and configuration.";
+    };
   };
 
   config = mkIf config.modules.tui.enable {
@@ -48,6 +53,11 @@ with lib;
       git-crypt
       lf
       socat
+      # Dependencies for lf previewer
+      poppler_utils  # provides pdftotext
+      highlight
+      unrar
+      p7zip         # provides 7z
     ] ++ config.modules.tui.extraPackages;
     programs.direnv = {
       enable = true;
@@ -132,7 +142,7 @@ with lib;
             (builtins.readFile ./tui/git/.gitconfig);
         };
       }
-      (lib.mapAttrs (path: fileConfig: fileConfig) config.modules.tui.extraFiles)
+      config.modules.tui.extraFiles
     ];
 
     programs.fzf = {
@@ -172,11 +182,9 @@ with lib;
     };
 
     home.sessionVariables = {
-      FZF_DEFAULT_COMMAND = "rg --files | sort -u";
+      FZF_DEFAULT_COMMAND = "rg --files";
       EDITOR = "nvim";
       VISUAL = "nvim";
-      GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
-      JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
-    };
+    } // config.modules.tui.extraSessionVariables;
   };
 }
