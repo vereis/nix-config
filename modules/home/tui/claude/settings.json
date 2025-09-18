@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "ask": [
+      "Edit",
+      "MultiEdit",
+      "Write",
+      "Bash(git commit:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -f:*)",
+      "Bash(nixos-rebuild switch:*)",
+      "Bash(systemctl stop:*)",
+      "Bash(systemctl disable:*)",
+      "Bash(nix-collect-garbage -d:*)",
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)"
+    ],
+    "allow": [
+      "Bash",
+      "WebFetch"
+    ],
+    "defaultMode": "default"
+  },
+  "env": {
+    "EDITOR": "nvim",
+    "VISUAL": "nvim"
+  },
+  "includeCoAuthoredBy": false,
+  "hooks": {}
+}

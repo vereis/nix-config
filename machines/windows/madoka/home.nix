@@ -11,12 +11,10 @@
       yt-dlp
       tealdeer
       bsd-finger
-      opencode
+      claude-code
     ];
     extraFiles = {
-      ".config/opencode/opencode.json" = {
-        source = ../../../modules/home/tui/opencode/opencode.json;
-      };
+      "./.claude/" = { recursive = true; source = ../../../modules/home/tui/claude; };
     };
   };
 }
