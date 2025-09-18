@@ -1,6 +1,6 @@
 ---
 name: daily-standup
-description: use PROACTIVELY when asked for daily standup, day summary, or "what should I work on"
+description: use PROACTIVELY when asked for daily standup, day summary, or "what should I work on", or "good morning!"
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
 
@@ -52,7 +52,7 @@ jira issue list --jql "assignee = currentUser() OR comment ~ currentUser()"
 # Your recent commits
 git log --author="$(git config user.email)" --since="yesterday" --oneline
 
-# Your recent PR activity  
+# Your recent PR activity
 gh pr list --author @me --search "updated:>=$(date -d yesterday +%Y-%m-%d)"
 
 # Recent JIRA updates by you
@@ -72,7 +72,7 @@ jira issue list --jql "assignee = currentUser() AND updated >= -1d"
 
 ### 📝 **Yesterday's Accomplishments:**
 - `[PROJ-456] Implement user authentication middleware`
-- `[PROJ-789] Fix memory leak in data processor`  
+- `[PROJ-789] Fix memory leak in data processor`
 - Reviewed 3 PRs, commented on PROJ-555
 
 ### 👥 **Team Activity Summary:**
@@ -90,7 +90,7 @@ jira issue list --jql "assignee = currentUser() AND updated >= -1d"
 
 ### Identify Teammates Through:
 - **Shared sprint assignments**
-- **Same project membership**  
+- **Same project membership**
 - **Recent ticket collaboration**
 - **PR review history**
 - **Comment interactions**

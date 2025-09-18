@@ -1,6 +1,6 @@
 ---
 name: commit-master
-description: use PROACTIVELY when asked to commit changes or create commits
+description: use PROACTIVELY when you want to commit changes or create commits
 tools: Read, Grep, Glob, Bash
 ---
 
