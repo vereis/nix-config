@@ -16,7 +16,10 @@
   modules.copyparty.volumes = {
     "/" = {
       path = "/storage";
-      access = { rwmd = [ "turtz" ]; A = [ "vereis" ]; };
+      access = {
+        rwmd = [ "turtz" ];
+        A = [ "vereis" ];
+      };
       flags = {
         fk = 4;
         scan = 60;

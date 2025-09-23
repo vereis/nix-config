@@ -1,4 +1,10 @@
-{ config, lib, pkgs, nixpkgs-stable, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  nixpkgs-stable,
+  ...
+}:
 
 with lib;
 {
@@ -11,7 +17,7 @@ with lib;
 
     wallpapers = mkOption {
       type = types.listOf types.str;
-      default = ["~/.wallpaper"];
+      default = [ "~/.wallpaper" ];
       description = "Path to wallpaper image files.";
     };
 
@@ -41,42 +47,46 @@ with lib;
 
     extraPackages = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = "Additional packages to install for GUI applications.";
     };
 
     customScripts = mkOption {
       type = types.attrsOf types.path;
-      default = {};
+      default = { };
       description = "Custom scripts to added to `/usr/bin` for quick launch.";
     };
   };
 
   config = mkIf config.modules.gui.enable {
-    home.packages = with pkgs; [
-      hyprland
-      hypridle
-      hyprlock
-      hyprpaper
-      wezterm
-      pavucontrol
-      tamzen
-      wl-clipboard
-      wl-clipboard-x11
-      tofi
-      mako
-      libnotify
-      jq
-      grim
-      slurp
-      wf-recorder
-      fantasque-sans-mono
-      (qutebrowser.override { enableWideVine = true; })
-    ] ++ config.modules.gui.extraPackages
+    home.packages =
+      with pkgs;
+      [
+        hyprland
+        hypridle
+        hyprlock
+        hyprpaper
+        wezterm
+        pavucontrol
+        tamzen
+        wl-clipboard
+        wl-clipboard-x11
+        tofi
+        mako
+        libnotify
+        jq
+        grim
+        slurp
+        wf-recorder
+        fantasque-sans-mono
+        (qutebrowser.override { enableWideVine = true; })
+      ]
+      ++ config.modules.gui.extraPackages
       ++ builtins.attrValues (
-           builtins.mapAttrs (name: path:
-             (writeShellScriptBin name (builtins.readFile path)))
-           config.modules.gui.customScripts);
+        builtins.mapAttrs (
+          name: path: (writeShellScriptBin name (builtins.readFile path))
+        ) config.modules.gui.customScripts
+      );
 
     home.pointerCursor = {
       gtk.enable = true;
@@ -381,7 +391,7 @@ with lib;
       enable = true;
       settings = {
         preload = config.modules.gui.wallpapers;
-        wallpaper = builtins.map(wp: ", ${wp}") config.modules.gui.wallpapers;
+        wallpaper = builtins.map (wp: ", ${wp}") config.modules.gui.wallpapers;
       };
     };
 
@@ -411,7 +421,7 @@ with lib;
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
-      systemd.variables = ["--all"];
+      systemd.variables = [ "--all" ];
       settings = {
         "$mod" = "SUPER";
 
@@ -483,17 +493,21 @@ with lib;
           "$mod SHIFT, S, exec, slurp | grim -g - - | wl-copy"
           "$mod SHIFT, V, exec, sh $HOME/.local/bin/hyprland/screenrecord"
         ]
-          ++ (
-            # workspaces
-            builtins.concatLists (builtins.genList (i:
-                let ws = i + 1;
-                in [
-                  "$mod, code:1${toString i}, workspace, ${toString ws}"
-                  "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
-                ]
-              )
-              9)
-          );
+        ++ (
+          # workspaces
+          builtins.concatLists (
+            builtins.genList (
+              i:
+              let
+                ws = i + 1;
+              in
+              [
+                "$mod, code:1${toString i}, workspace, ${toString ws}"
+                "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
+              ]
+            ) 9
+          )
+        );
 
         general = {
           snap = {
@@ -504,7 +518,7 @@ with lib;
           };
 
           border_size = 2;
-          gaps_in = -1;  # When tiling, adjacent windows will share a border
+          gaps_in = -1; # When tiling, adjacent windows will share a border
           gaps_out = -2; # When tiling, borders touching the monitor edge will be removed
           layout = "master";
           allow_tearing = true;

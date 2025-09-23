@@ -1,12 +1,31 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 {
   options.modules.prowlarr = {
-    enable = mkOption { type = types.bool; default = false; };
-    openFirewall = mkOption { type = types.bool; default = false; };
-    user = mkOption { type = types.str; default = "sonarr"; description = lib.mdDoc "User account under which Prowlarr runs."; };
-    group = mkOption { type = types.str; default = "sonarr"; description = lib.mdDoc "Group under which Prowlarr runs."; };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    user = mkOption {
+      type = types.str;
+      default = "sonarr";
+      description = lib.mdDoc "User account under which Prowlarr runs.";
+    };
+    group = mkOption {
+      type = types.str;
+      default = "sonarr";
+      description = lib.mdDoc "Group under which Prowlarr runs.";
+    };
   };
 
   config = mkIf config.modules.prowlarr.enable {

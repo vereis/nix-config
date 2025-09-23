@@ -1,67 +1,95 @@
-{ pkgs, lib, config, nix-minecraft, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  nix-minecraft,
+  ...
+}:
 
 with lib;
 {
   options.modules.minecraft = {
-    enable = mkOption { type = types.bool; default = false; };
-    openFirewall = mkOption { type = types.bool; default = false; };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+    };
 
     servers = mkOption {
-      type = types.attrsOf (types.submodule {
-        options = {
-          enable = mkOption { type = types.bool; default = true; };
-          autoStart = mkOption { type = types.bool; default = true; };
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+            };
+            autoStart = mkOption {
+              type = types.bool;
+              default = true;
+            };
 
-          package = mkOption {
-            type = types.package;
-            default = pkgs.minecraft-server;
-            description = "Minecraft server package (vanilla, fabric, paper, etc.)";
-          };
+            package = mkOption {
+              type = types.package;
+              default = pkgs.minecraft-server;
+              description = "Minecraft server package (vanilla, fabric, paper, etc.)";
+            };
 
-          jvmOpts = mkOption {
-            type = types.either types.str (types.listOf types.str);
-            default = "-Xms6144M -Xmx8192M";
-            description = "JVM options for the server";
-          };
+            jvmOpts = mkOption {
+              type = types.either types.str (types.listOf types.str);
+              default = "-Xms6144M -Xmx8192M";
+              description = "JVM options for the server";
+            };
 
-          serverProperties = mkOption {
-            type = types.attrsOf types.anything;
-            default = {};
-            description = "server.properties configuration";
-          };
+            serverProperties = mkOption {
+              type = types.attrsOf types.anything;
+              default = { };
+              description = "server.properties configuration";
+            };
 
-          whitelist = mkOption {
-            type = types.attrsOf types.str;
-            default = {};
-            description = "Whitelisted players by UUID";
-          };
+            whitelist = mkOption {
+              type = types.attrsOf types.str;
+              default = { };
+              description = "Whitelisted players by UUID";
+            };
 
-          operators = mkOption {
-            type = types.attrsOf (types.submodule {
-              options = {
-                name = mkOption { type = types.str; };
-                level = mkOption { type = types.int; default = 4; };
-                bypassesPlayerLimit = mkOption { type = types.bool; default = false; };
-              };
-            });
-            default = {};
-            description = "Server operators";
-          };
+            operators = mkOption {
+              type = types.attrsOf (
+                types.submodule {
+                  options = {
+                    name = mkOption { type = types.str; };
+                    level = mkOption {
+                      type = types.int;
+                      default = 4;
+                    };
+                    bypassesPlayerLimit = mkOption {
+                      type = types.bool;
+                      default = false;
+                    };
+                  };
+                }
+              );
+              default = { };
+              description = "Server operators";
+            };
 
-          restart = mkOption {
-            type = types.str;
-            default = "always";
-            description = "Systemd restart behavior";
-          };
+            restart = mkOption {
+              type = types.str;
+              default = "always";
+              description = "Systemd restart behavior";
+            };
 
-          stopCommand = mkOption {
-            type = types.str;
-            default = "stop";
-            description = "Console command to stop server";
+            stopCommand = mkOption {
+              type = types.str;
+              default = "stop";
+              description = "Console command to stop server";
+            };
           };
-        };
-      });
-      default = {};
+        }
+      );
+      default = { };
     };
   };
 

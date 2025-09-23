@@ -1,9 +1,18 @@
-{ config, lib, pkgs, zjstatus, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  zjstatus,
+  ...
+}:
 
 with lib;
 {
   options.modules.zellij = {
-    enable = mkOption { type = types.bool; default = true; };
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+    };
   };
 
   config = mkIf config.modules.zellij.enable {
