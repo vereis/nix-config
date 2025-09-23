@@ -6,6 +6,7 @@
     ../../../modules/services/serve.nix
     ../../../modules/services/copyparty.nix
     ../../../modules/services/minecraft.nix
+    ../../../modules/services/media-server.nix
   ];
 
   modules.tailscale.enable = true;
@@ -81,6 +82,12 @@
           "X-Plex-Provides" = "$http_x_plex_provides";
           "X-Plex-Device-Vendor" = "$http_x_plex_device_vendor";
           "X-Plex-Model" = "$http_x_plex_model";
+          "X-Forwarded-For" = "$proxy_add_x_forwarded_for";
+          "X-Forwarded-Proto" = "$scheme";
+          "X-Forwarded-Host" = "$host";
+          "Host" = "127.0.0.1:32400";
+          "Referer" = "$scheme://127.0.0.1:32400";
+          "Origin" = "http://127.0.0.1:32400";
         };
       };
     };
@@ -119,5 +126,12 @@
         generate-structures = true;
       };
     };
+  };
+
+  modules.media-server = {
+    enable = true;
+    openFirewall = true;
+    mediaPath = "/storage/media";
+    enableHardwareAcceleration = true;
   };
 }

@@ -45,12 +45,12 @@ Each host configuration then gets configured via `hosts/<platform>/configuration
 ## Usage
 
 1. Clone this repository
-2. Install `nix` (ideally via Determinate Systems) or `nixos`
-3. Decrypt secrets with `git-crypt`:
+1. Install `nix` (ideally via Determinate Systems) or `nixos`
+1. Decrypt secrets with `git-crypt`:
    ```bash
    git-crypt unlock <path-to-key>
    ```
-4. Install:
+1. Install:
    ```bash
    sudo nixos-rebuild switch --flake .#<machine-name>
    darwin-rebuild switch --flake .#<machine-name>
