@@ -1,14 +1,25 @@
-{ pkgs, lib, username, ... }:
+{
+  pkgs,
+  lib,
+  username,
+  ...
+}:
 
 {
-  imports = [ ./hardware-configuration.nix ./services.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./services.nix
+  ];
 
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.extraPools = [ "storage" ];
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
 
-  environment.systemPackages = with pkgs; [ vulkan-loader vulkan-tools ];
+  environment.systemPackages = with pkgs; [
+    vulkan-loader
+    vulkan-tools
+  ];
 
   networking.hostId = "8453be09";
   networking.hostName = "kyubey";
@@ -43,8 +54,20 @@
   '';
 
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 443 24800 51413 ];
-  networking.firewall.allowedUDPPorts = [ 22 80 443 24800 51413 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    80
+    443
+    24800
+    51413
+  ];
+  networking.firewall.allowedUDPPorts = [
+    22
+    80
+    443
+    24800
+    51413
+  ];
 
   services.xserver.dpi = 100;
   services.xserver.videoDrivers = [ "nvidia" ];

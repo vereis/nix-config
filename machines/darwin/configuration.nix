@@ -1,4 +1,9 @@
-{ self, config, username, ... }:
+{
+  self,
+  config,
+  username,
+  ...
+}:
 
 {
   services.nix-daemon.enable = true;
@@ -29,7 +34,10 @@
       };
 
       finder._FXShowPosixPathInTitle = true;
-      trackpad = { Clicking = true; TrackpadThreeFingerDrag = true; };
+      trackpad = {
+        Clicking = true;
+        TrackpadThreeFingerDrag = true;
+      };
     };
 
     configurationRevision = self.rev or self.dirtyRev or null;

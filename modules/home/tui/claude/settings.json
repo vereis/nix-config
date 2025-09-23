@@ -16,10 +16,7 @@
       "Bash(rm -rf:*)",
       "Bash(sudo:*)"
     ],
-    "allow": [
-      "Bash",
-      "WebFetch"
-    ],
+    "allow": ["Bash", "WebFetch"],
     "defaultMode": "default"
   },
   "env": {

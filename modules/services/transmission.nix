@@ -1,15 +1,33 @@
-{ pkgs, lib, config, username, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  username,
+  ...
+}:
 
 with lib;
 {
   options.modules.transmission = {
-    enable = mkOption { type = types.bool; default = false; };
-    openFirewall = mkOption { type = types.bool; default = false; };
-    downloadDir = mkOption { type = types.str; default = "/var/lib/transmission/downloads"; };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    downloadDir = mkOption {
+      type = types.str;
+      default = "/var/lib/transmission/downloads";
+    };
   };
 
   config = mkIf config.modules.transmission.enable {
-    environment.systemPackages = with pkgs; [ transmission transmission-gtk ];
+    environment.systemPackages = with pkgs; [
+      transmission
+      transmission-gtk
+    ];
 
     # Ensure a `media` group exists
     users.groups.media = { };
