@@ -1,4 +1,9 @@
-{ pkgs, username, wsl, ... }:
+{
+  pkgs,
+  username,
+  wsl,
+  ...
+}:
 
 {
   wsl.defaultUser = username;

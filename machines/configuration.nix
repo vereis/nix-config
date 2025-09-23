@@ -1,10 +1,22 @@
-{ self, system, username, pkgs, inputs, ... }:
+{
+  self,
+  system,
+  username,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   users.users.${username} = {
     isNormalUser = true;
     name = "${username}";
-    extraGroups = [ "networkmanager" "wheel" "docker" "media" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "media"
+    ];
     shell = pkgs.zsh;
   };
 

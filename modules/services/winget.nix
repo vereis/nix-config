@@ -1,12 +1,20 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 {
   options.modules.winget = {
-    enable = mkOption { type = types.bool; default = false; };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
     packages = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = literalExpression "[ \"AutoHotkey.AutoHotkey\" ]";
       description = ''
         List of packages to install via winget.exe
@@ -26,11 +34,9 @@ with lib;
             {
               "Packages":
               [
-                ${
-                  lib.concatMapStringsSep "\n" (pkg: ''
-                    { "PackageIdentifier" : "${pkg}" },
-                  '') config.modules.winget.packages
-                }
+                ${lib.concatMapStringsSep "\n" (pkg: ''
+                  { "PackageIdentifier" : "${pkg}" },
+                '') config.modules.winget.packages}
               ],
               "SourceDetails":
               {
@@ -46,7 +52,7 @@ with lib;
       '';
     };
 
-    home.activation.winget = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    home.activation.winget = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       run /mnt/c/Users/vereis/AppData/Local/Microsoft/WindowsApps/winget.exe import $(/bin/wslpath -m $HOME/.config/winget/manifest.json) || true
     '';
   };

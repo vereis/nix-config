@@ -16,10 +16,12 @@ in
 {
   delta = super.delta.overrideAttrs (drv: {
     inherit version src;
-    cargoDeps = drv.cargoDeps.overrideAttrs (super.lib.const {
-      inherit src;
-      name = "delta-vendor.tar.gz";
-      outputHash = "sha256-QwBhtIddxkf2uVWBsYZRZ1EVOe7L8v31xK2ihhvCDlo=";
-    });
+    cargoDeps = drv.cargoDeps.overrideAttrs (
+      super.lib.const {
+        inherit src;
+        name = "delta-vendor.tar.gz";
+        outputHash = "sha256-QwBhtIddxkf2uVWBsYZRZ1EVOe7L8v31xK2ihhvCDlo=";
+      }
+    );
   });
 }

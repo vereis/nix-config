@@ -1,12 +1,29 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 {
   options.modules.jellyfin = {
-    enable = mkOption { type = types.bool; default = false; };
-    nvidiaVaapi = mkOption { type = types.bool; default = false; };
-    openFirewall = mkOption { type = types.bool; default = false; };
-    jellyseerr.enable = mkOption { type = types.bool; default = false; };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    nvidiaVaapi = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    jellyseerr.enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
   };
 
   config = mkIf config.modules.jellyfin.enable {

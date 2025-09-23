@@ -1,9 +1,20 @@
-{ pkgs, lib, username, ... }:
+{
+  pkgs,
+  lib,
+  username,
+  ...
+}:
 
 {
-  imports = [ ./hardware-configuration.nix ./services.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./services.nix
+  ];
 
-  environment.systemPackages = with pkgs; [ blueberry transmission-gtk ];
+  environment.systemPackages = with pkgs; [
+    blueberry
+    transmission-gtk
+  ];
   services.transmission.enable = true;
   services.transmission.openFirewall = true;
 
@@ -11,8 +22,18 @@
   networking.networkmanager.enable = true;
 
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 443 51413 ];
-  networking.firewall.allowedUDPPorts = [ 22 80 443 51413 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    80
+    443
+    51413
+  ];
+  networking.firewall.allowedUDPPorts = [
+    22
+    80
+    443
+    51413
+  ];
 
   hardware.bluetooth.enable = true;
 
