@@ -1,20 +1,38 @@
 {
-  self,
-  config,
   username,
+  pkgs,
+  inputs,
+  system,
+  lib,
+  self,
   ...
 }:
 
 {
-  services.nix-daemon.enable = true;
+  programs.zsh.enable = lib.mkForce true;
+  system.primaryUser = username;
 
-  config.users.${username} = {
+  users.users.${username} = {
     home = "/Users/${username}";
     isHidden = false;
   };
 
+  nixpkgs = {
+    hostPlatform = system;
+    config.allowUnfree = true;
+  };
+
+  nix = {
+    package = pkgs.nixVersions.stable;
+    optimise.automatic = true;
+    registry.nixpkgs.flake = inputs.nixpkgs;
+    settings.experimental-features = "nix-command flakes";
+    settings.download-buffer-size = 5000000000000000;
+  };
+
   system = {
     keyboard.enableKeyMapping = true;
+    stateVersion = 4;
 
     defaults = {
       NSGlobalDomain = {
@@ -41,6 +59,5 @@
     };
 
     configurationRevision = self.rev or self.dirtyRev or null;
-    stateVersion = 4;
   };
 }
