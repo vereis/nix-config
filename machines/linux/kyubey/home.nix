@@ -12,7 +12,10 @@
       opencode
     ];
     extraFiles = {
-      "./.claude/" = { recursive = true; source = ../../../modules/home/tui/claude; };
+      "./.claude/" = {
+        recursive = true;
+        source = ../../../modules/home/tui/claude;
+      };
     };
     extraSessionVariables = {
       GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;

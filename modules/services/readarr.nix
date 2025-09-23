@@ -1,10 +1,21 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 {
   options.modules.readarr = {
-    enable = mkOption { type = types.bool; default = false; };
-    openFirewall = mkOption { type = types.bool; default = false; };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+    };
   };
 
   config = mkIf config.modules.readarr.enable {

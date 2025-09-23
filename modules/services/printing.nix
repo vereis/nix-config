@@ -1,11 +1,25 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 {
   options.modules.printing = {
-    enable = mkOption { type = types.bool; default = false; };
-    wifi = mkOption { type = types.bool; default = false; };
-    extraDrivers = mkOption { type = types.listOf types.package; default = [ ]; };
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    wifi = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    extraDrivers = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+    };
   };
 
   config = mkIf config.modules.printing.enable {
@@ -18,7 +32,11 @@ with lib;
       listenAddresses = [ "*:631" ];
       allowFrom = [ "all" ];
       defaultShared = true;
-      drivers = [ pkgs.gutenprint pkgs.gutenprintBin ] ++ config.modules.printing.extraDrivers;
+      drivers = [
+        pkgs.gutenprint
+        pkgs.gutenprintBin
+      ]
+      ++ config.modules.printing.extraDrivers;
       extraConf = ''
         DefaultEncryption Never
       '';

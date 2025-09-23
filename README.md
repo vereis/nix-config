@@ -26,18 +26,22 @@ A comprehensive NixOS and nix-darwin configuration setup with modular machine-sp
 ## Machines
 
 ### Linux
+
 - **homura**: Linux workstation configuration
 - **kyubey**: Linux server configuration
 
 ### macOS
+
 - **iroha**: macOS configuration with nix-darwin
 
 ### Windows
+
 - **madoka**: Windows configuration with nix support
 
 ## Modules
 
 ### Home Manager
+
 - **GUI**: Desktop applications, window managers, and graphical tools
 - **TUI**: Terminal applications including:
   - Neovim with extensive plugin configuration
@@ -46,6 +50,7 @@ A comprehensive NixOS and nix-darwin configuration setup with modular machine-sp
   - Zellij terminal multiplexer
 
 ### Services
+
 - **Media Server Stack**: Jellyfin, Sonarr, Radarr, Lidarr, Readarr
 - **Network**: Tailscale, Proxy, FlareSolverr
 - **System**: GPG, Printing, Transmission
@@ -53,6 +58,7 @@ A comprehensive NixOS and nix-darwin configuration setup with modular machine-sp
 - **Package Management**: Winget proxy
 
 ### Hardware
+
 - HHKB keyboard support
 - GPU customization
 
@@ -61,8 +67,8 @@ A comprehensive NixOS and nix-darwin configuration setup with modular machine-sp
 ### Initial Setup
 
 1. Clone this repository
-2. Ensure you have Nix with flakes enabled
-3. For secrets, set up git-crypt:
+1. Ensure you have Nix with flakes enabled
+1. For secrets, set up git-crypt:
    ```bash
    git-crypt unlock
    ```
@@ -70,6 +76,7 @@ A comprehensive NixOS and nix-darwin configuration setup with modular machine-sp
 ### Building Configurations
 
 #### NixOS (Linux)
+
 ```bash
 # Build and switch to configuration
 sudo nixos-rebuild switch --flake .#<machine-name>
@@ -79,6 +86,7 @@ sudo nixos-rebuild switch --flake .#homura
 ```
 
 #### nix-darwin (macOS)
+
 ```bash
 # Build and switch to configuration
 darwin-rebuild switch --flake .#<machine-name>
@@ -93,13 +101,15 @@ darwin-rebuild switch --flake .#iroha
 - **Multi-Platform**: Support for Linux, macOS, and Windows
 - **Encrypted Secrets**: Secure secret management with git-crypt
 - **Rich Development Environment**: Comprehensive Neovim setup with LSP, completion, and modern plugins
-- **Media Server**: Complete *arr stack for media management
+- **Media Server**: Complete \*arr stack for media management
 - **Networking**: Tailscale integration for secure remote access
 
 ## Development Tools
 
 ### Neovim Configuration
+
 Located in `modules/home/tui/neovim/`, featuring:
+
 - LSP integration with multiple language servers
 - Completion with nvim-cmp
 - Git integration with gitsigns
@@ -109,6 +119,7 @@ Located in `modules/home/tui/neovim/`, featuring:
 - Modern UI with various quality-of-life plugins
 
 ### Shell Setup
+
 - Zsh with custom configuration
 - Git helpers and aliases
 - Terminal multiplexing with Zellij
@@ -116,6 +127,7 @@ Located in `modules/home/tui/neovim/`, featuring:
 ## Security
 
 ### Current: git-crypt
+
 This configuration currently uses git-crypt for managing secrets. While functional, git-crypt has several limitations:
 
 - **Plain-Text Secrets at Rest**: Secrets are stored in plain text in the repository, and in the `/nix/store`.
@@ -123,6 +135,7 @@ This configuration currently uses git-crypt for managing secrets. While function
 - **Limited Integration**: Secrets are not integrated into the Nix evaluation process, requiring manual handling.
 
 ### Future: agenix
+
 Planning to migrate to [agenix](https://github.com/ryantm/agenix) when more advanced secret management is needed:
 
 - **Per-secret encryption**: Each secret can have different access permissions

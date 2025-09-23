@@ -1,4 +1,11 @@
-{ pkgs, config, lib, zjstatus, username, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  zjstatus,
+  username,
+  ...
+}:
 
 {
   imports = [

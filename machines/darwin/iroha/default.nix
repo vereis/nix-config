@@ -1,4 +1,16 @@
-{ self, config, lib, pkgs, system, inputs, zjstatus, username, homebrew, home-manager, ... }:
+{
+  self,
+  config,
+  lib,
+  pkgs,
+  system,
+  inputs,
+  zjstatus,
+  username,
+  homebrew,
+  home-manager,
+  ...
+}:
 
 {
   homebrew = {
