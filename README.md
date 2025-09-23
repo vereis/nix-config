@@ -2,48 +2,56 @@
 
 This is my personal Nix configuration for Windows (WSL), Linux (NixOS), and macOS (nix-darwin).
 
-It uses **flake-parts** to help with organization and modularity (especially for multi-platform support).
-
-## Structure
+It uses **flake-parts** to help with organization and modularity (especially for multi-platform support):
 
 ```
-├── flake.nix          # Main flake configuration using flake-parts
-├── lib/               # Core builder functions and utilities
-│   └── default.nix    # Platform-specific system builders
-├── parts/             # Flake-parts modules
-│   ├── devshell.nix   # Development shell configuration
-│   ├── formatter.nix  # Code formatting (treefmt-nix)
-│   ├── hosts.nix      # Host system definitions
-│   └── overlays.nix   # Package overlays
-├── hosts/             # Host configurations
-│   ├── linux/         # Linux/NixOS base configuration
-│   │   ├── configuration.nix  # Shared Linux configuration
-│   │   ├── homura/    # Linux machine "homura"
-│   │   └── kyubey/    # Linux machine "kyubey"
-│   ├── darwin/        # macOS configurations
-│   │   ├── configuration.nix  # Darwin base configuration
-│   │   └── iroha/     # macOS machine "iroha"
-│   ├── wsl/           # WSL configurations
-│   │   ├── configuration.nix  # WSL base (inherits from linux/configuration.nix)
-│   │   └── madoka/    # WSL machine "madoka"
-│   └── home.nix       # Shared home-manager configuration
-└── secrets/           # Encrypted secrets (git-crypt)
+├── flake.nix
+├── lib/                         # Utility functions
+│   └── default.nix
+├── parts/                       # Flake parts
+│   ├── devshell.nix
+│   ├── formatter.nix
+│   ├── hosts.nix
+│   └── overlays.nix
+├── hosts/                       # Host-specific configurations
+│   ├── linux/                   ## NixOS machine configurations
+│   │   ├── configuration.nix
+│   │   ├── homura/
+│   │   └── kyubey/
+│   ├── darwin/                  ## MacOS machine configurations
+│   │   ├── configuration.nix
+│   │   └── iroha/
+│   ├── wsl/                     ## WSL2 machine configurations
+│   │   ├── configuration.nix
+│   │   └── madoka/
+│   └── home.nix
+├── modules/                     # Reusable modules
+│   ├── hardware/                ## Hardware-specific modules
+│   ├── home/                    ## User-specific modules, applications
+│   │   ├── gui/
+│   │   ├── tui/
+│   │   ├── gui.nix              ## GUI applications
+│   │   └── tui.nix              ## TUI applications
+│   └── services/                ## Background service modules
+├── overlays/                    # Overlays
+├── secrets/                     # Encrypted secrets
+└── bin/                         # Custom scripts, utilities
 ```
+
+Installation starts at the top level `flake.nix`, which uses `lib/default.nix` and `parts/hosts.nix` to build configurations for each platform I support.
+
+Each host configuration then gets configured via `hosts/<platform>/configuration.nix` and `hosts/<platform>/<hostname>/`, which pulls in reusable modules from `modules/`.
 
 ## Usage
 
-### Initial Setup
-
 1. Clone this repository
-2. Ensure you have Nix with flakes enabled
-3. For secrets, set up git-crypt:
+2. Install `nix` (ideally via Determinate Systems) or `nixos`
+3. Decrypt secrets with `git-crypt`:
    ```bash
-   git-crypt unlock
+   git-crypt unlock <path-to-key>
    ```
-
-### Building Configurations
-
-```bash
-sudo nixos-rebuild switch --flake .#<machine-name>
-darwin-rebuild switch --flake .#<machine-name>
-```
+4. Install:
+   ```bash
+   sudo nixos-rebuild switch --flake .#<machine-name>
+   darwin-rebuild switch --flake .#<machine-name>
+   ```
