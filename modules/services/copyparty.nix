@@ -90,7 +90,7 @@ with lib;
         passwordFile = "/etc/copyparty/${username}.passwd";
       }) config.modules.copyparty.accounts;
 
-      volumes = config.modules.copyparty.volumes;
+      inherit (config.modules.copyparty) volumes;
     };
   };
 }

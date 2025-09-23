@@ -99,8 +99,8 @@ with lib;
       enable = true;
 
       font = {
-        name = config.modules.gui.font.name;
-        size = config.modules.gui.font.size;
+        inherit (config.modules.gui.font) name;
+        inherit (config.modules.gui.font) size;
       };
     };
 
@@ -170,7 +170,7 @@ with lib;
 
     programs.qutebrowser = {
       enable = true;
-      package = (pkgs.qutebrowser.override { enableWideVine = true; });
+      package = pkgs.qutebrowser.override { enableWideVine = true; };
       enableDefaultBindings = true;
       settings = {
         colors = {

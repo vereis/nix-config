@@ -132,7 +132,7 @@ with lib;
         ) config.modules.serve.sites;
         hasEnabledDomains = enabledDomains != { };
       in
-      mkIf (hasEnabledDomains) {
+      mkIf hasEnabledDomains {
         text = ''
           use=web
           web=ipinfo.io/ip
@@ -157,7 +157,7 @@ with lib;
         ) config.modules.serve.sites;
         hasEnabledDomains = enabledDomains != { };
       in
-      mkIf (hasEnabledDomains) {
+      mkIf hasEnabledDomains {
         enable = true;
         interval = "5min";
         configFile = "/etc/ddclient.conf";
@@ -248,7 +248,7 @@ with lib;
           forceSSL = siteConfig.ssl;
           locations."/".proxyPass = "http://127.0.0.1:${toString siteConfig.port}/";
           locations."/".proxyWebsockets = true;
-          http2 = siteConfig.http2;
+          inherit (siteConfig) http2;
           extraConfig = finalExtraConfig;
         }
       ) config.modules.serve.sites;

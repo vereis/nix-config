@@ -1,43 +1,47 @@
 {
-  description = "Vereis' personal configurations for Linux, WSL, and MacOS";
+  description = "vereis' personal nix config";
 
   inputs = {
+    # Package sets
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    nix-minecraft.url = "github:Infinidoge/nix-minecraft";
-    zjstatus.url = "github:dj95/zjstatus";
-    copyparty.url = "github:9001/copyparty";
+
+    # Modern flake framework
+    flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-homebrew = {
-      url = "github:zhaofengli-wip/nix-homebrew";
-    };
-
-    homebrew-bundle = {
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
-    };
-
-    homebrew-core = {
-      url = "github:homebrew/homebrew-core";
-      flake = false;
-    };
-
-    homebrew-cask = {
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Extra Applications
+    nix-minecraft.url = "github:Infinidoge/nix-minecraft";
+    zjstatus.url = "github:dj95/zjstatus";
+    copyparty.url = "github:9001/copyparty";
+
+    # Darwin Support
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    homebrew-bundle = {
+      url = "github:homebrew/homebrew-bundle";
+      flake = false;
+    };
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+      flake = true;
+    };
+
+    # WSL Support
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,296 +49,19 @@
   };
 
   outputs =
-    inputs@{
-      home-manager,
-      homebrew-bundle,
-      homebrew-cask,
-      homebrew-core,
-      nix-darwin,
-      nix-homebrew,
-      nixpkgs-stable,
-      nixos-wsl,
-      nix-minecraft,
-      nixpkgs,
-      self,
-      zjstatus,
-      copyparty,
-      treefmt-nix,
-      ...
-    }:
-    let
-      # Config
-      user = "vereis";
-      username = "vereis";
-      email = "me@vereis.com";
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
 
-      # Configured Hosts
-      windowsSystems = {
-        madoka = "x86_64-linux";
-      };
-      darwinSystems = {
-        iroha = "aarch64-darwin";
-      };
-      linuxSystems = {
-        homura = "x86_64-linux";
-        kyubey = "x86_64-linux";
-      };
-
-      # Secrets
-      secrets = builtins.fromJSON (builtins.readFile "${self}/secrets/secrets.json");
-
-      # All systems we support
-      allSystems =
-        builtins.attrValues windowsSystems
-        ++ builtins.attrValues darwinSystems
-        ++ builtins.attrValues linuxSystems;
-      forAllSystems = nixpkgs.lib.genAttrs allSystems;
-    in
-    {
-      darwinConfigurations = builtins.mapAttrs (
-        hostname: system:
-        nix-darwin.lib.darwinSystem {
-          inherit system;
-          specialArgs = {
-            inherit (nixpkgs) lib;
-            inherit
-              inputs
-              self
-              system
-              user
-              username
-              email
-              zjstatus
-              copyparty
-              secrets
-              ;
-          };
-          modules = [
-            ./machines/configuration.nix
-            ./machines/darwin/configuration.nix
-            ./machines/darwin/${hostname}
-            copyparty.nixosModules.default
-            home-manager.darwinModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit
-                  inputs
-                  user
-                  username
-                  email
-                  zjstatus
-                  secrets
-                  ;
-              };
-              home-manager.users.${user}.imports = [
-                (import ./machines/home.nix)
-              ]
-              ++ [ (import ./machines/darwin/${hostname}/home.nix) ];
-            }
-            nix-homebrew.darwinModules.nix-homebrew
-            {
-              nix-homebrew = {
-                user = username;
-                enable = true;
-                taps = {
-                  "homebrew/homebrew-core" = homebrew-core;
-                  "homebrew/homebrew-cask" = homebrew-cask;
-                  "homebrew/homebrew-bundle" = homebrew-bundle;
-                };
-                mutableTaps = false;
-                autoMigrate = true;
-              };
-            }
-          ];
-        }
-      ) darwinSystems;
-
-      nixosConfigurations =
-        (builtins.mapAttrs (
-          hostname: system:
-          nixpkgs.lib.nixosSystem {
-            inherit system;
-            specialArgs = {
-              inherit (nixpkgs) lib;
-              inherit
-                inputs
-                self
-                system
-                user
-                username
-                email
-                zjstatus
-                copyparty
-                nix-minecraft
-                secrets
-                ;
-              nixpkgs-stable = import nixpkgs-stable {
-                inherit system;
-                config.allowUnfree = true;
-              };
-            };
-            modules = [
-              ./machines/configuration.nix
-              ./machines/linux/configuration.nix
-              ./machines/linux/${hostname}
-              copyparty.nixosModules.default
-              home-manager.nixosModules.home-manager
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = {
-                  inherit
-                    inputs
-                    user
-                    username
-                    email
-                    zjstatus
-                    secrets
-                    ;
-                  nixpkgs-stable = import nixpkgs-stable {
-                    inherit system;
-                    config.allowUnfree = true;
-                  };
-                };
-                home-manager.users.${user}.imports = [
-                  (import ./machines/home.nix)
-                ]
-                ++ [ (import ./machines/linux/${hostname}/home.nix) ];
-              }
-              nix-minecraft.nixosModules.minecraft-servers
-              {
-                imports = [ nix-minecraft.nixosModules.minecraft-servers ];
-                nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
-              }
-            ];
-          }
-        ) linuxSystems)
-        // (builtins.mapAttrs (
-          hostname: system:
-          nixpkgs.lib.nixosSystem {
-            inherit system;
-            specialArgs = {
-              inherit (nixpkgs) lib;
-              inherit
-                inputs
-                self
-                system
-                user
-                username
-                email
-                zjstatus
-                copyparty
-                nix-minecraft
-                secrets
-                ;
-            };
-            modules = [
-              nixos-wsl.nixosModules.wsl
-              ./machines/configuration.nix
-              ./machines/windows/configuration.nix
-              ./machines/windows/${hostname}
-              copyparty.nixosModules.default
-              home-manager.nixosModules.home-manager
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = {
-                  inherit
-                    inputs
-                    user
-                    username
-                    email
-                    zjstatus
-                    secrets
-                    ;
-                };
-                home-manager.users.${user}.imports = [
-                  (import ./machines/home.nix)
-                ]
-                ++ [ (import ./machines/windows/${hostname}/home.nix) ];
-              }
-              {
-                imports = [ nix-minecraft.nixosModules.minecraft-servers ];
-              }
-            ];
-          }
-        ) windowsSystems);
-
-      # Formatter configuration using treefmt
-      formatter = forAllSystems (
-        system:
-        treefmt-nix.lib.mkWrapper nixpkgs.legacyPackages.${system} {
-          projectRootFile = "flake.nix";
-          programs = {
-            # Nix formatting with official nixfmt-rfc-style
-            nixfmt = {
-              enable = true;
-              package = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
-            };
-            # Shell script formatting
-            shfmt = {
-              enable = true;
-              indent_size = 2;
-            };
-            # Shell script linting
-            shellcheck.enable = true;
-            # JSON formatting
-            prettier = {
-              enable = true;
-              includes = [ "*.json" ];
-              excludes = [ "secrets/**" ]; # Don't format secrets
-            };
-            # Markdown formatting
-            mdformat = {
-              enable = true;
-              settings = {
-                wrap = "no";
-              };
-            };
-          };
-        }
-      );
-
-      # Checks to ensure everything is formatted
-      checks = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-          treefmt = treefmt-nix.lib.mkWrapper pkgs {
-            projectRootFile = "flake.nix";
-            programs = {
-              nixfmt = {
-                enable = true;
-                package = pkgs.nixfmt-rfc-style;
-              };
-              shfmt = {
-                enable = true;
-                indent_size = 2;
-              };
-              shellcheck.enable = true;
-              prettier = {
-                enable = true;
-                includes = [ "*.json" ];
-                excludes = [ "secrets/**" ];
-              };
-              mdformat = {
-                enable = true;
-                settings = {
-                  wrap = "no";
-                };
-              };
-            };
-          };
-        in
-        {
-          formatting = pkgs.runCommand "check-formatting" { } ''
-            cd ${./.}
-            ${treefmt}/bin/treefmt --fail-on-change
-            touch $out
-          '';
-        }
-      );
+      imports = [
+        inputs.treefmt-nix.flakeModule
+        ./parts/hosts.nix
+        ./parts/formatter.nix
+        ./parts/devshell.nix
+        ./parts/overlays.nix
+      ];
     };
 }

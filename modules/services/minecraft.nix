@@ -97,19 +97,19 @@ with lib;
     services.minecraft-servers = {
       enable = true;
       eula = true;
-      openFirewall = config.modules.minecraft.openFirewall;
+      inherit (config.modules.minecraft) openFirewall;
 
       servers = mapAttrs (name: serverConfig: {
-        enable = serverConfig.enable;
-        autoStart = serverConfig.autoStart;
-        openFirewall = config.modules.minecraft.openFirewall;
-        package = serverConfig.package;
-        jvmOpts = serverConfig.jvmOpts;
-        restart = serverConfig.restart;
-        stopCommand = serverConfig.stopCommand;
-        serverProperties = serverConfig.serverProperties;
-        whitelist = serverConfig.whitelist;
-        operators = serverConfig.operators;
+        inherit (serverConfig) enable;
+        inherit (serverConfig) autoStart;
+        inherit (config.modules.minecraft) openFirewall;
+        inherit (serverConfig) package;
+        inherit (serverConfig) jvmOpts;
+        inherit (serverConfig) restart;
+        inherit (serverConfig) stopCommand;
+        inherit (serverConfig) serverProperties;
+        inherit (serverConfig) whitelist;
+        inherit (serverConfig) operators;
       }) config.modules.minecraft.servers;
     };
   };
