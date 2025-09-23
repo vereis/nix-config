@@ -83,6 +83,8 @@ with lib;
         ];
         no-reload = true;
         ignored-flag = false;
+        rproxy = -1;
+        xff-hdr = "x-forwarded-for";
       };
 
       # Configure accounts with password files
