@@ -27,15 +27,6 @@
 
   services.getty.autologinUser = username;
 
-  # Disable Sleep in LoginD
-  services.logind = {
-    lidSwitch = "ignore";
-    extraConfig = ''
-      IdleAction=ignore
-      HandleSuspendKey=ignore
-    '';
-  };
-
   # Disable Sleep in Gnome
   services.desktopManager.gnome.extraGSettingsOverrides = ''
     [org.gnome.desktop.session]
