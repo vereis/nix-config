@@ -9,7 +9,7 @@
     enable = true;
     extraPackages = with pkgs; [
       yt-dlp
-      opencode
+      claude-code
     ];
     extraFiles = {
       "./.claude/" = {
