@@ -1,4 +1,9 @@
-{ pkgs, secrets, ... }:
+{
+  pkgs,
+  config,
+  osConfig,
+  ...
+}:
 
 {
   imports = [
@@ -20,8 +25,8 @@
       };
     };
     extraSessionVariables = {
-      GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
-      JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
+      GOOGLE_CLOUD_PROJECT = builtins.readFile osConfig.age.secrets."gemini-project-id.age".path;
+      JIRA_API_TOKEN = builtins.readFile osConfig.age.secrets."jira-api-key.age".path;
     };
   };
 }

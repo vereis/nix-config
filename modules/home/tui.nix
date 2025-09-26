@@ -4,7 +4,6 @@
   pkgs,
   user,
   email,
-  secrets,
   ...
 }:
 
@@ -63,7 +62,6 @@ with lib;
         zip
         zsh
         gnumake
-        git-crypt
         lf
         socat
         # Dependencies for lf previewer

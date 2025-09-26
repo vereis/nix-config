@@ -13,6 +13,13 @@
 }:
 
 {
+  age = {
+    secrets = [ ];
+    identityPaths = [
+      "/Users/${username}/.ssh/id_ed25519"
+    ];
+  };
+
   homebrew = {
     enable = true;
     casks = [

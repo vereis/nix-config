@@ -2,7 +2,7 @@
 
 This is my personal Nix configuration for Windows (WSL), Linux (NixOS), and macOS (nix-darwin).
 
-It uses **flake-parts** to help with organization and modularity (especially for multi-platform support):
+It uses **flake-parts** to help with organization and modularity (especially for multi-platform support) and **agenix** for managing secrets:
 
 ```
 ├── flake.nix
@@ -34,7 +34,9 @@ It uses **flake-parts** to help with organization and modularity (especially for
 │   │   └── tui.nix              ## TUI applications
 │   └── services/                ## Background service modules
 ├── overlays/                    # Overlays
-├── secrets/                     # Encrypted secrets
+├── keys/                        # Public keys for agenix
+├── secrets/                     # Encrypted secrets for agenix
+├── secrets.nix                  # agenix configuration
 └── bin/                         # Custom scripts, utilities
 ```
 
@@ -42,16 +44,39 @@ Installation starts at the top level `flake.nix`, which uses `lib/default.nix` a
 
 Each host configuration then gets configured via `hosts/<platform>/configuration.nix` and `hosts/<platform>/<hostname>/`, which pulls in reusable modules from `modules/`.
 
-## Usage
+## Installation
 
 1. Clone this repository
-2. Install `nix` (ideally via Determinate Systems) or `nixos`
-3. Decrypt secrets with `git-crypt`:
+1. Install `nix` (ideally via Determinate Systems) or `nixos`
+1. Install:
    ```bash
-   git-crypt unlock <path-to-key>
-   ```
-4. Install:
-   ```bash
+   # For Linux/WSL hosts
    sudo nixos-rebuild switch --flake .#<machine-name>
+   # For macOS hosts
    darwin-rebuild switch --flake .#<machine-name>
    ```
+
+## Secrets
+
+Secrets are managed via `agenix` and automatically decrypted on each system using SSH keys.
+
+To edit secrets:
+
+```bash
+agenix -e <secret-name>.age
+```
+
+To decrypt a secret manually:
+
+```bash
+agenix -d <secret-name>.age
+```
+
+All secrets are defined in `secrets.nix` and encrypted files are stored in `secrets/`.
+
+## Development
+
+- Format code: `nix fmt`
+- Lint code: `statix`
+- Dead code elimination: `deadnix`
+- Test configurations: `nix build '.#nixosConfigurations.<host>.config.system.build.toplevel' --dry-run`

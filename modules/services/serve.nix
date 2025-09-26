@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  secrets,
   ...
 }:
 
@@ -97,7 +96,7 @@ with lib;
                       default = "cloudflare";
                     };
                     login = mkOption { type = types.str; };
-                    password = mkOption { type = types.str; };
+                    passwordFile = mkOption { type = types.path; };
                     zone = mkOption {
                       type = types.nullOr types.str;
                       default = null;
@@ -142,7 +141,7 @@ with lib;
             lib.mapAttrsToList (domain: proxy: ''
               protocol=${proxy.ddns.protocol}
               login=${proxy.ddns.login}
-              password=${proxy.ddns.password}
+              password=${builtins.readFile proxy.ddns.passwordFile}
               ${lib.optionalString (proxy.ddns.zone != null) "zone=${proxy.ddns.zone}"}
               ${domain}
             '') enabledDomains

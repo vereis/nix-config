@@ -1,4 +1,4 @@
-{ pkgs, secrets, ... }:
+{ pkgs, config, ... }:
 
 {
   imports = [
@@ -11,8 +11,10 @@
   modules.tailscale.enable = true;
 
   modules.copyparty.enable = true;
-  modules.copyparty.accounts.vereis.password = secrets.copyparty.vereis;
-  modules.copyparty.accounts.turtz.password = secrets.copyparty.turtz;
+  modules.copyparty.accounts.vereis.passwordFile =
+    config.age.secrets."copyparty-vereis-password.age".path;
+  modules.copyparty.accounts.turtz.passwordFile =
+    config.age.secrets."copyparty-turtz-password.age".path;
   modules.copyparty.volumes = {
     "/" = {
       path = "/storage";
@@ -43,7 +45,7 @@
           enable = true;
           protocol = "cloudflare";
           login = "token";
-          password = secrets.cloudflare.ddclient;
+          passwordFile = config.age.secrets."cloudflare-ddclient-token.age".path;
           zone = "vereis.com";
         };
       };
@@ -55,7 +57,7 @@
           enable = true;
           protocol = "cloudflare";
           login = "token";
-          password = secrets.cloudflare.ddclient;
+          passwordFile = config.age.secrets."cloudflare-ddclient-token.age".path;
           zone = "vereis.com";
         };
       };
@@ -106,8 +108,8 @@
         motd = "minna, asobou yo~!!";
 
         enable-rcon = true;
-        "rcon.password" = secrets.minecraft.minnacraft.rcon.password;
-        "rcon.port" = secrets.minecraft.minnacraft.rcon.port;
+        "rcon.password" = builtins.readFile config.age.secrets."minecraft-rcon-password.age".path;
+        "rcon.port" = 25565;
 
         online-mode = true;
         spawn-protection = 16;

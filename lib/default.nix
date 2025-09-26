@@ -17,8 +17,6 @@ let
     email = "me@vereis.com";
   };
 
-  secrets = builtins.fromJSON (builtins.readFile ../secrets/secrets.json);
-
   mkSpecialArgs =
     system:
     userConfig
@@ -28,7 +26,6 @@ let
         inputs
         self
         system
-        secrets
         ;
       inherit (inputs) zjstatus copyparty;
       nixpkgs-stable = import nixpkgs-stable {
@@ -47,7 +44,7 @@ let
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
       home-manager.extraSpecialArgs = userConfig // {
-        inherit inputs secrets;
+        inherit inputs;
         inherit (inputs) zjstatus;
         nixpkgs-stable = import nixpkgs-stable {
           inherit system;
@@ -64,6 +61,7 @@ let
     linux = hostname: [
       ../hosts/linux/configuration.nix
       ../hosts/linux/${hostname}
+      inputs.agenix.nixosModules.default
       inputs.copyparty.nixosModules.default
       inputs.nix-minecraft.nixosModules.minecraft-servers
       {
@@ -75,6 +73,7 @@ let
     darwin = hostname: [
       ../hosts/darwin/configuration.nix
       ../hosts/darwin/${hostname}
+      inputs.agenix.darwinModules.default
       inputs.nix-homebrew.darwinModules.nix-homebrew
       {
         nix-homebrew = {
@@ -95,6 +94,7 @@ let
       nixos-wsl.nixosModules.wsl
       ../hosts/wsl/configuration.nix
       ../hosts/wsl/${hostname}
+      inputs.agenix.nixosModules.default
     ];
   };
 

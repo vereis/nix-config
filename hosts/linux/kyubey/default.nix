@@ -64,6 +64,32 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.open = false;
 
+  age = {
+    secrets = builtins.listToAttrs (
+      builtins.map
+        (secretName: {
+          name = secretName;
+          value = {
+            file = ../../../secrets + "/${secretName}";
+          };
+        })
+        [
+          "anthropic-api-key.age"
+          "gemini-api-key.age"
+          "gemini-project-id.age"
+          "jira-api-key.age"
+          "mount-kyubey-dav-bat.age"
+          "copyparty-vereis-password.age"
+          "copyparty-turtz-password.age"
+          "cloudflare-ddclient-token.age"
+          "minecraft-rcon-password.age"
+        ]
+    );
+    identityPaths = [
+      "/home/${username}/.ssh/id_ed25519"
+    ];
+  };
+
   boot.loader = {
     systemd-boot.enable = true;
     efi = {

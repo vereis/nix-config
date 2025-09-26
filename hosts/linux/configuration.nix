@@ -36,10 +36,21 @@
   };
 
   programs.ssh.askPassword = "";
+  services.openssh.enable = true;
   security.polkit.enable = true;
   security.rtkit.enable = true;
   time.timeZone = "Europe/London";
   i18n.defaultLocale = "en_US.UTF-8";
+
+  virtualisation = {
+    docker = {
+      enable = true;
+      autoPrune = {
+        enable = true;
+        dates = "weekly";
+      };
+    };
+  };
 
   system.stateVersion = "24.05";
 }
