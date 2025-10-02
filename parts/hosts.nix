@@ -6,11 +6,11 @@ in
   flake = {
     nixosConfigurations =
       lib.buildLinuxHosts {
-        homura = "x86_64-linux";
         kyubey = "x86_64-linux";
       }
       // lib.buildWSLHosts {
         madoka = "x86_64-linux";
+        homura = "aarch64-linux";
       };
 
     darwinConfigurations = lib.buildDarwinHosts {

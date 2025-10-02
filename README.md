@@ -16,13 +16,13 @@ It uses **flake-parts** to help with organization and modularity (especially for
 ├── hosts/                       # Host-specific configurations
 │   ├── linux/                   ## NixOS machine configurations
 │   │   ├── configuration.nix
-│   │   ├── homura/
 │   │   └── kyubey/
 │   ├── darwin/                  ## MacOS machine configurations
 │   │   ├── configuration.nix
 │   │   └── iroha/
 │   ├── wsl/                     ## WSL2 machine configurations
 │   │   ├── configuration.nix
+│   │   └── homura/
 │   │   └── madoka/
 │   └── home.nix
 ├── modules/                     # Reusable modules
