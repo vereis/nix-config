@@ -8,6 +8,7 @@ permission:
   bash:
     git status: allow
     git diff*: allow
+    git branch --show-current: allow
     npm*: allow
     yarn*: allow
     pnpm*: allow
