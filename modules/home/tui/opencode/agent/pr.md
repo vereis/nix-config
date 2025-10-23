@@ -6,6 +6,14 @@ tools:
   edit: false
 permission:
   bash:
+    ls*: allow
+    cat*: allow
+    grep*: allow
+    rg*: allow
+    find*: allow
+    head*: allow
+    tail*: allow
+    tree*: allow
     git status: allow
     git branch*: allow
     git log*: allow

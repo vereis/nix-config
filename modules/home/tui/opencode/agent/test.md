@@ -6,8 +6,28 @@ tools:
   edit: false
 permission:
   bash:
+    ls*: allow
+    cat*: allow
+    grep*: allow
+    rg*: allow
+    find*: allow
+    head*: allow
+    tail*: allow
+    tree*: allow
     git status: allow
     git diff*: allow
+    git log*: allow
+    git show*: allow
+    git branch*: allow
+    git grep*: allow
+    git ls-files*: allow
+    git ls-tree*: allow
+    git rev-parse*: allow
+    git describe*: allow
+    git tag: allow
+    git remote*: allow
+    git config --get*: allow
+    git config --list: allow
     npm*: allow
     yarn*: allow
     pnpm*: allow

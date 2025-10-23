@@ -3,6 +3,14 @@ mode: primary
 permission:
   edit: ask
   bash:
+    ls*: allow
+    cat*: allow
+    grep*: allow
+    rg*: allow
+    find*: allow
+    head*: allow
+    tail*: allow
+    tree*: allow
     git add*: ask
     git commit*: ask
     git push*: ask
