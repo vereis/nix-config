@@ -19,6 +19,7 @@ permission:
     git log*: allow
     git diff*: allow
     git show*: allow
+    git rev-parse*: allow
     git checkout*: ask
     git push*: ask
     gh pr list*: allow

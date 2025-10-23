@@ -36,6 +36,7 @@ permission:
     git revert*: ask
     git tag: allow
     git tag -d*: ask
+    git rev-parse*: allow
     git stash: allow
     git stash pop*: ask
     git stash apply*: ask
