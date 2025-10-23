@@ -444,7 +444,7 @@ jira issue edit DI-1234 --no-input \
   --body "$(cat /tmp/jira_ticket_update.md)"
 
 # Add comment explaining update
-jira issue comment add DI-1234 \
+jira issue comment add DI-1234 --no-input \
   "Ticket updated to enhanced template format. All original requirements preserved. Changes: [brief summary]. Previous version in ticket history."
 ```
 
@@ -509,23 +509,23 @@ jira issue link $NEW_TICKET_2 DI-1234 --type "Split" || jira issue link $NEW_TIC
 
 # 6. Add comments to ALL tickets with full split context
 # Comment on original with ALL split tickets
-jira issue comment add DI-1234 \
+jira issue comment add DI-1234 --no-input \
   "Ticket scope reduced and split for better delivery. Split into: $NEW_TICKET_1, $NEW_TICKET_2. Previous version preserved in ticket history."
 
 # Comment on each split ticket referencing original AND sibling tickets
-jira issue comment add $NEW_TICKET_1 \
+jira issue comment add $NEW_TICKET_1 --no-input \
   "Split from DI-1234 for better scope management. Related split tickets: $NEW_TICKET_2"
 
-jira issue comment add $NEW_TICKET_2 \
+jira issue comment add $NEW_TICKET_2 --no-input \
   "Split from DI-1234 for better scope management. Related split tickets: $NEW_TICKET_1"
 
 # 7. Link dependencies if needed (blocks/blocked-by)
 # Example: if NEW_TICKET_2 blocks NEW_TICKET_1
 # jira issue link $NEW_TICKET_1 $NEW_TICKET_2 --type "Blocks"
 # Then add comment explaining dependency:
-# jira issue comment add $NEW_TICKET_1 \
+# jira issue comment add $NEW_TICKET_1 --no-input \
 #   "⚠️ Blocked by $NEW_TICKET_2 - that work must complete first"
-# jira issue comment add $NEW_TICKET_2 \
+# jira issue comment add $NEW_TICKET_2 --no-input \
 #   "⚠️ Blocks $NEW_TICKET_1 - complete this before starting that ticket"
 ```
 
