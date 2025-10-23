@@ -12,11 +12,17 @@
       tealdeer
       bsd-finger
       claude-code
+      opencode
+      jira-cli-go
     ];
     extraFiles = {
-      "./.claude/" = {
+      # "./.claude/" = {
+      #   recursive = true;
+      #   source = ../../../modules/home/tui/claude;
+      # };
+      "./.config/opencode/" = {
         recursive = true;
-        source = ../../../modules/home/tui/claude;
+        source = ../../../modules/home/tui/opencode;
       };
     };
     extraSessionVariables = {
