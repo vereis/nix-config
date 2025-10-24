@@ -14,6 +14,7 @@ permission:
     head*: allow
     tail*: allow
     wc*: allow
+    git remote*: allow
 ---
 
 # Learn:Read Command - Display Captured Learnings
