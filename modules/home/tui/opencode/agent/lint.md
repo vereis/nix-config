@@ -108,6 +108,17 @@ Look for:
 
 Execute the discovered lint/format/typecheck commands from CI or project detection.
 
+**IMPORTANT: Run commands directly without piping to `tail` or `head`!**
+```bash
+# ✅ GOOD - streaming output
+npm run lint
+
+# ❌ BAD - buffers all output until completion
+npm run lint 2>&1 | tail -50
+```
+
+The Bash tool will automatically handle output truncation if needed, while still showing you streaming output. Don't manually pipe to tail/head, idiot!
+
 ### 3. Parse Output
 
 **If NO violations:**
