@@ -74,14 +74,22 @@ $ARGUMENTS
   - [Call out anything NOT in scope if helpful e.g. **Out of Scope:** changes to underlying ledger entries]
   ...
 
-**Dev Notes:** (Optional - include when helpful but generally err on side of NOT including)
-  - [Pointers to similar implementations in codebase]
-  - [Known gotchas or pitfalls to avoid]
-  ...
+**Dev Notes:** (Optional - high-level pointers only)
+  - [Relevant file paths with line numbers, e.g., src/medications.ex:142]
+  - [Similar implementations for reference]
+  - [Important constants/config to be aware of]
+  
+  **NEVER include:**
+  - Database migrations
+  - GraphQL schema changes
+  - Low-level implementation steps
+  - These belong in the PR, not the ticket!
 
-**Questions:** (Optional - include if there are open questions needing clarification)
-  - [(Tag individuals if needed) Can you confirm the expected behavior for ...?]
-  ...
+**Questions:** (Optional - ONLY genuine unknowns that BLOCK progress)
+  - Make reasonable decisions instead of asking
+  - Document decisions in Dev Notes
+  - User will review and correct during draft phase
+  - If you DO include questions, tag specific people
 
 **Acceptance Criteria:**
 ```gherkin
@@ -109,24 +117,55 @@ Given [error condition: invalid input, permissions]
 
 ### Guidance
 
-*Actor Guidance:* Be specific! Common actors:
-  - Developer/Engineer (for technical enablement)
-  - Product Manager (for insights/reporting)
-  - Veterinary staff user (for UI changes)
-  - Data analyst (for analytics features)
-  - Financial controller (for accounting/finance features)
-  - You can also look up the current project's seed script for role ideas, this will be stored in the backend.
+*Actor Guidance:* Be specific! Find real actors by:
+  - Check seed data in backend (e.g., priv/repo/seeds.exs or similar)
+  - Look at permission/role definitions in codebase
+  - Use actual role names when possible
+  - Common fallbacks: Developer/Engineer, Product Manager, Veterinary staff user, Data analyst, Financial controller
 
 *Scope = "What needs to be touched"* - Be specific about WHERE work happens, not HOW to implement
-
-*When to include Dev Notes:*
-  - Only do this if absolutely needed for technical reasons
 
 **Acceptance Criteria Tips:**
 - Focus on INPUTS and OUTPUTS, not implementation details
 - Cover happy path, edge cases, and error scenarios
 
 ## Creation Workflow
+
+### Step 0: Research Phase (if user references existing context)
+
+**Only execute this step if user mentions:**
+- Existing JIRA ticket numbers (e.g., "based on DI-1234")
+- GitHub PRs or issues
+- Specific code files or features
+- "Similar to X" or "follow pattern from Y"
+
+**Research Actions:**
+```bash
+# View referenced JIRA tickets
+jira issue view DI-1234
+
+# View linked GitHub PRs/issues
+gh pr view 123
+gh issue view 456
+
+# Search codebase for relevant patterns
+rg "pattern" --type elixir
+read /path/to/relevant/file.ex
+
+# Find configuration defaults/constants
+rg "default_timezone" --type elixir
+```
+
+**Research Goals:**
+- Understand current implementation before designing ticket
+- Find defaults/constants that should be explicitly documented
+- Identify similar patterns in codebase for Dev Notes
+- Discover relationships between tickets/features
+
+**Linking Related Tickets:**
+- If obvious relationship exists, link during creation (Step 6)
+- If unclear whether to link, ASK user: "Should I link this to DI-1234 as [relationship type]?"
+- Common relationships: Blocks, Relates, Epic-Story
 
 ### Step 1: Gather Requirements
 - Ask clarifying questions if anything is unclear
@@ -164,27 +203,40 @@ Given [error condition: invalid input, permissions]
 **CRITICAL: You MUST write to /tmp first, then cat it in!**
 
 ```bash
-# Step 1: Clean up any existing temp file
-rm -f /tmp/jira_ticket_description.md
-
-# Step 2: Write ticket body to temp file using heredoc
+# Step 1: Write ticket body to temp file using heredoc
 # IMPORTANT: Follow the EXACT template structure provided above!
 cat > /tmp/jira_ticket_description.md <<'EOF'
   ... filled out ticket template ...
 EOF
 
-# Step 3: Verify file was written correctly
+# Step 2: Verify file was written correctly
 cat /tmp/jira_ticket_description.md
 
-# Step 4: Create ticket using the file
+# Step 3: Create ticket using the file
 jira issue create \
   --type "[Story|Task|Bug|...]" \
   --project DI \
   --summary "[Concise summary < 80 chars]" \
   --body "$(cat /tmp/jira_ticket_description.md)"
 
-# Step 5: If linking to epic/parent (ASK PERMISSION FIRST):
-jira issue link [NEW-TICKET] [EPIC-123] --type "Epic-Story"
+# Step 4: Link to related tickets if applicable
+# IMPORTANT: Ticket linking syntax does NOT use --type flag!
+
+# Link to epic/parent (ASK PERMISSION FIRST if not obvious):
+jira issue link [NEW-TICKET] [EPIC-123] "Epic-Story"
+
+# Link as blocker (blocker comes FIRST):
+jira issue link [BLOCKING-TICKET] [BLOCKED-TICKET] "Blocks"
+
+# General relationship:
+jira issue link [TICKET-1] [TICKET-2] "Relates"
+
+# Available link types (use exact strings):
+# - "Blocks" - First ticket blocks second ticket
+# - "Relates" - General relationship
+# - "Duplicate" - Marks as duplicate
+# - "Epic-Story" - Epic to child story relationship
+# - "Work item split" - Second ticket was split from first
 ```
 
 **Remember:**

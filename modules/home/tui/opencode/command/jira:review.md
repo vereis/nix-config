@@ -72,14 +72,22 @@ $ARGUMENTS
   - [Call out anything NOT in scope if helpful e.g. **Out of Scope:** changes to underlying ledger entries]
   ...
 
-**Dev Notes:** (Optional - include when helpful but generally err on side of NOT including)
-  - [Pointers to similar implementations in codebase]
-  - [Known gotchas or pitfalls to avoid]
-  ...
+**Dev Notes:** (Optional - high-level pointers only)
+  - [Relevant file paths with line numbers, e.g., src/medications.ex:142]
+  - [Similar implementations for reference]
+  - [Important constants/config to be aware of]
+  
+  **NEVER include:**
+  - Database migrations
+  - GraphQL schema changes
+  - Low-level implementation steps
+  - These belong in the PR, not the ticket!
 
-**Questions:** (Optional - include if there are open questions needing clarification)
-  - [(Tag individuals if needed) Can you confirm the expected behavior for ...?]
-  ...
+**Questions:** (Optional - ONLY genuine unknowns that BLOCK progress)
+  - Make reasonable decisions instead of asking
+  - Document decisions in Dev Notes
+  - User will review and correct during draft phase
+  - If you DO include questions, tag specific people
 
 **Acceptance Criteria:**
 ```gherkin
@@ -135,14 +143,28 @@ jira issue view DI-1234
 
 # Check for epic/parent relationships
 jira issue view DI-1234 --plain | grep -E "(Epic|Parent):"
+
+# If ticket mentions linked PRs, commits, or other tickets:
+gh pr view 123  # if GitHub PR referenced
+jira issue view DI-5678  # if other ticket referenced
+
+# Search codebase for context if needed
+rg "relevant_function" --type elixir
+read /path/to/relevant/file.ex
 ```
 
 **Capture:**
 - Current description, scope, acceptance criteria
 - Status, assignee, type
 - Epic/parent links
+- Linked PRs, commits, or related tickets
 - Existing comments with context
 - What's good, what's missing, what's unclear
+
+**Linking Related Tickets:**
+- If obvious relationship exists with other tickets, link during update (Step 8)
+- If unclear whether to link, ASK user: "Should I link this to DI-1234 as [relationship type]?"
+- Common relationships: Blocks, Relates, Epic-Story
 
 ## Step 2: Safety Check
 
@@ -431,7 +453,6 @@ Proceed? (yes/no/changes)
 
 ```bash
 # Write improved description to temp file
-rm -f /tmp/jira_ticket_update.md
 cat > /tmp/jira_ticket_update.md <<'EOF'
 [Improved ticket body following template structure]
 EOF
@@ -446,13 +467,27 @@ jira issue edit DI-1234 --no-input \
 # Add comment explaining update
 jira issue comment add DI-1234 --no-input \
   "Ticket updated to enhanced template format. All original requirements preserved. Changes: [brief summary]. Previous version in ticket history."
+
+# Link to related tickets if applicable (ASK PERMISSION FIRST if not obvious)
+# IMPORTANT: Ticket linking syntax does NOT use --type flag!
+
+# Link as blocker (blocker comes FIRST):
+jira issue link [BLOCKING-TICKET] [BLOCKED-TICKET] "Blocks"
+
+# General relationship:
+jira issue link DI-1234 [RELATED-TICKET] "Relates"
+
+# Available link types:
+# - "Blocks" - First ticket blocks second
+# - "Relates" - General relationship
+# - "Duplicate" - Marks as duplicate
+# - "Epic-Story" - Epic to child story
 ```
 
 ### If Splitting: Update Original + Create New Tickets
 
 ```bash
 # 1. Update original with reduced scope
-rm -f /tmp/jira_ticket_update.md
 cat > /tmp/jira_ticket_update.md <<'EOF'
 [Updated original ticket body with reduced scope]
 EOF
@@ -461,7 +496,6 @@ jira issue edit DI-1234 --no-input \
   --body "$(cat /tmp/jira_ticket_update.md)"
 
 # 2. Create ALL split tickets first (so we have ticket numbers for comments)
-rm -f /tmp/jira_ticket_split1.md
 cat > /tmp/jira_ticket_split1.md <<'EOF'
 [First split ticket body]
 EOF
@@ -476,7 +510,6 @@ NEW_TICKET_1=$(jira issue create \
 echo "Created: $NEW_TICKET_1"
 
 # 3. Create second split ticket (if needed)
-rm -f /tmp/jira_ticket_split2.md
 cat > /tmp/jira_ticket_split2.md <<'EOF'
 [Second split ticket body]
 EOF
@@ -493,10 +526,10 @@ echo "Created: $NEW_TICKET_2"
 # ... repeat for additional splits as needed
 
 # 4. Now link ALL tickets together
-# Link new tickets to original using "Split" type (shows as "split to/split from" in JIRA UI)
-# Falls back to "Relates" if "Split" link type doesn't exist in your JIRA instance
-jira issue link $NEW_TICKET_1 DI-1234 --type "Split" || jira issue link $NEW_TICKET_1 DI-1234 --type "Relates"
-jira issue link $NEW_TICKET_2 DI-1234 --type "Split" || jira issue link $NEW_TICKET_2 DI-1234 --type "Relates"
+# IMPORTANT: Ticket linking syntax does NOT use --type flag!
+# Link new tickets to original using "Work item split" (or fallback to "Relates")
+jira issue link $NEW_TICKET_1 DI-1234 "Work item split" || jira issue link $NEW_TICKET_1 DI-1234 "Relates"
+jira issue link $NEW_TICKET_2 DI-1234 "Work item split" || jira issue link $NEW_TICKET_2 DI-1234 "Relates"
 # ... link all other splits with same pattern
 
 # 5. If epic/parent exists, link new tickets to same epic
@@ -520,8 +553,9 @@ jira issue comment add $NEW_TICKET_2 --no-input \
   "Split from DI-1234 for better scope management. Related split tickets: $NEW_TICKET_1"
 
 # 7. Link dependencies if needed (blocks/blocked-by)
+# IMPORTANT: Blocker comes FIRST in the command!
 # Example: if NEW_TICKET_2 blocks NEW_TICKET_1
-# jira issue link $NEW_TICKET_1 $NEW_TICKET_2 --type "Blocks"
+# jira issue link $NEW_TICKET_2 $NEW_TICKET_1 "Blocks"
 # Then add comment explaining dependency:
 # jira issue comment add $NEW_TICKET_1 --no-input \
 #   "⚠️ Blocked by $NEW_TICKET_2 - that work must complete first"
