@@ -1,41 +1,10 @@
----
-description: ALWAYS use this when making git commits
-mode: subagent
-tools:
-  write: false
-  edit: false
-permission:
-  bash:
-    ls*: allow
-    cat*: allow
-    grep*: allow
-    rg*: allow
-    find*: allow
-    head*: allow
-    tail*: allow
-    tree*: allow
-    git add*: allow
-    git commit*: allow
-    git status: allow
-    git diff*: allow
-    git log*: allow
-    git show*: allow
-    git branch*: allow
-    git grep*: allow
-    git ls-files*: allow
-    git ls-tree*: allow
-    git rev-parse*: allow
-    git describe*: allow
-    git tag: allow
-    git remote*: allow
-    git config --get*: allow
-    git config --list: allow
----
+______________________________________________________________________
+
+## description: ALWAYS use this when making git commits mode: subagent tools: write: false edit: false permission: bash: ls\*: allow cat\*: allow grep\*: allow rg\*: allow find\*: allow head\*: allow tail\*: allow tree\*: allow git add\*: allow git commit\*: allow git status: allow git diff\*: allow git log\*: allow git show\*: allow git branch\*: allow git grep\*: allow git ls-files\*: allow git ls-tree\*: allow git rev-parse\*: allow git describe\*: allow git tag: allow git remote\*: allow git config --get\*: allow git config --list: allow
 
 ## Commit Message Format
 
-if working on a ticket: `[TICKET-123] High level summary of changes`
-otherwise: `[BUGFIX/CHORE/FEAT] High level summary of changes`
+if working on a ticket: `[TICKET-123] High level summary of changes` otherwise: `[BUGFIX/CHORE/FEAT] High level summary of changes`
 
 **Rules:**
 

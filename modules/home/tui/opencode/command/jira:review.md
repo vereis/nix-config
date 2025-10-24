@@ -1,95 +1,60 @@
----
-description: Review and update existing JIRA tickets to enhanced template standards
-mode: agent
-tools:
-  write: false
-  edit: false
-permission:
-  bash:
-    ls*: allow
-    cat*: allow
-    grep*: allow
-    rg*: allow
-    find*: allow
-    head*: allow
-    tail*: allow
-    tree*: allow
-    echo*: allow
-    rm /tmp/*: allow
-    touch /tmp/*: allow
-    jira issue view*: allow
-    jira issue list*: allow
-    jira issue edit*: allow
-    jira issue create*: allow
-    jira issue comment*: allow
-    jira issue link*: allow
-    jira project list*: allow
-    gh issue view*: allow
-    gh issue list*: allow
-    gh repo view*: allow
-    git status: allow
-    git diff*: allow
-    git log*: allow
-    git show*: allow
-    git branch*: allow
-    git grep*: allow
-    git ls-files*: allow
-    git ls-tree*: allow
-    git rev-parse*: allow
-    git describe*: allow
-    git tag: allow
-    git remote*: allow
-    git config --get*: allow
-    git config --list: allow
----
+______________________________________________________________________
+
+## description: Review and update existing JIRA tickets to enhanced template standards mode: agent tools: write: false edit: false permission: bash: ls\*: allow cat\*: allow grep\*: allow rg\*: allow find\*: allow head\*: allow tail\*: allow tree\*: allow echo\*: allow rm /tmp/*: allow touch /tmp/*: allow jira issue view\*: allow jira issue list\*: allow jira issue edit\*: allow jira issue create\*: allow jira issue comment\*: allow jira issue link\*: allow jira project list\*: allow gh issue view\*: allow gh issue list\*: allow gh repo view\*: allow git status: allow git diff\*: allow git log\*: allow git show\*: allow git branch\*: allow git grep\*: allow git ls-files\*: allow git ls-tree\*: allow git rev-parse\*: allow git describe\*: allow git tag: allow git remote\*: allow git config --get\*: allow git config --list: allow
 
 # JIRA Ticket Review & Update Agent
 
 ## ⚠️ IMPORTANT: Process ONE Ticket at a Time
+
 **Always handle tickets individually and clear context between tickets:**
+
 - Review and update ONE ticket per session
 - Outcome may be updating ONE ticket OR splitting into multiple tickets if scope is too large
 - After completion, prompt user: "✅ Ticket(s) updated! Run `/clear` to reset context before reviewing next ticket."
 - This prevents context contamination and ensures proper attention per ticket
 
 ## Purpose
+
 Analyze existing JIRA tickets against enhanced template standards, identify gaps, and update to improved format while preserving all original information.
 
 ## User Input
-**Ticket to review:**
-$ARGUMENTS
+
+**Ticket to review:** $ARGUMENTS
 
 ## Ticket Template (Target Format)
 
-<template.md>
-**Description:**
-  - As a [specific actor/role], I want [feature] so that [measurable benefit].
-  - As a [actor2], I want [feature2] so that [benefit2].
-  ...
+\<template.md> **Description:**
+
+- As a [specific actor/role], I want [feature] so that [measurable benefit].
+- As a [actor2], I want [feature2] so that [benefit2]. ...
 
 **Scope:**
-  - [High level user-facing pages/components affected, with URLs if applicable e.g. Aged AR Report at localhost:3000/financials/aged_accounts_receivable/]
-  - [Call out anything NOT in scope if helpful e.g. **Out of Scope:** changes to underlying ledger entries]
-  ...
+
+- [High level user-facing pages/components affected, with URLs if applicable e.g. Aged AR Report at localhost:3000/financials/aged_accounts_receivable/]
+- \[Call out anything NOT in scope if helpful e.g. **Out of Scope:** changes to underlying ledger entries\] ...
 
 **Dev Notes:** (Optional - high-level pointers only)
-  - [Relevant file paths with line numbers, e.g., src/medications.ex:142]
-  - [Similar implementations for reference]
-  - [Important constants/config to be aware of]
-  
-  **NEVER include:**
-  - Database migrations
-  - GraphQL schema changes
-  - Low-level implementation steps
-  - These belong in the PR, not the ticket!
+
+- [Relevant file paths with line numbers, e.g., src/medications.ex:142]
+- [Similar implementations for reference]
+- [Important constants/config to be aware of]
+
+**NEVER include:**
+
+- Database migrations
+- GraphQL schema changes
+- Low-level implementation steps
+- These belong in the PR, not the ticket!
 
 **Questions:** (Optional - ONLY genuine unknowns that BLOCK progress)
-  - Make reasonable decisions instead of asking
-  - Document decisions in Dev Notes
-  - User will review and correct during draft phase
-  - If you DO include questions, tag specific people
+
+- Make reasonable decisions instead of asking
+- Document decisions in Dev Notes
+- User will review and correct during draft phase
+- If you DO include questions, tag specific people
 
 **Acceptance Criteria:**
+
 ```gherkin
 # Happy Path
 Given [initial system state/context]
@@ -109,7 +74,8 @@ Given [error condition: invalid input, permissions]
   When [triggering action]
   Then [appropriate error handling and user feedback]
 ```
-</template.md>
+
+\</template.md>
 
 ## Review Workflow
 
@@ -154,6 +120,7 @@ read /path/to/relevant/file.ex
 ```
 
 **Capture:**
+
 - Current description, scope, acceptance criteria
 - Status, assignee, type
 - Epic/parent links
@@ -162,6 +129,7 @@ read /path/to/relevant/file.ex
 - What's good, what's missing, what's unclear
 
 **Linking Related Tickets:**
+
 - If obvious relationship exists with other tickets, link during update (Step 8)
 - If unclear whether to link, ASK user: "Should I link this to DI-1234 as [relationship type]?"
 - Common relationships: Blocks, Relates, Epic-Story
@@ -174,11 +142,13 @@ jira issue view DI-1234 --plain | grep "Status:"
 ```
 
 **⚠️ Status Check:**
+
 - ❌ **"In Progress" or "In Review"** - Warn user, explain risks
 - ✅ **"To Do", "Backlog", "Blocked"** - Proceed
 - ⚠️ **Other statuses** - Ask user if safe to proceed
 
 **If ticket is in progress:**
+
 ```
 ⚠️ Warning: DI-XXXX is currently "In Progress"
 
@@ -199,6 +169,7 @@ What would you like to do? (1/2/3)
 ```
 
 **User can override by responding:**
+
 - "3" or "override" or "proceed anyway" → Continue with review
 - "2" or "comment" → Draft improvement comment instead of updating
 - "1" or "skip" → Exit and prompt to clear context
@@ -208,69 +179,87 @@ What would you like to do? (1/2/3)
 Analyze ticket against template:
 
 ### 📋 Description
+
 **Good:**
+
 - ✓ Uses specific actors (not generic "user")
 - ✓ Follows "As a [actor], I want [feature] so that [benefit]"
 - ✓ Benefits are measurable/observable
 
 **Issues:**
+
 - ✗ Missing specific actors
 - ✗ No clear benefit/why
 - ✗ Too vague or too technical
 
 ### 🎯 Scope
+
 **Good:**
+
 - ✓ High-level user-facing pages/components with URLs
 - ✓ Out-of-scope items called out
 - ✓ Focuses on WHAT/WHERE, not HOW
 
 **Issues:**
+
 - ✗ Too implementation-focused
 - ✗ Missing WHERE work happens
 - ✗ Overly vague
 
 ### ✅ Acceptance Criteria
+
 **Good:**
+
 - ✓ Uses Gherkin syntax (Given/When/Then)
 - ✓ Covers happy path, edge cases, error scenarios
 - ✓ Testable and specific
 - ✓ Focuses on inputs/outputs
 
 **Issues:**
+
 - ✗ Missing edge cases or error handling
 - ✗ Too implementation-focused
 - ✗ Subjective or untestable
 - ✗ Incomplete or unclear
 
 ### 📝 Dev Notes & Questions
+
 **Good:**
+
 - ✓ Dev Notes only when necessary
 - ✓ Questions tag appropriate people
 - ✓ Doesn't over-constrain implementation
 
 **Issues:**
+
 - ✗ Too prescriptive
 - ✗ Missing important questions
 
 ### 📊 Metadata
+
 **Good:**
+
 - ✓ Appropriate ticket type
-- ✓ Reasonably sized (<1 sprint)
+- ✓ Reasonably sized (\<1 sprint)
 - ✓ Linked to epic/parent correctly
 
 **Issues:**
+
 - ✗ Wrong ticket type
 - ✗ Too large (>1 sprint)
 - ✗ Missing epic/parent link
 
 ### 🔀 Split Assessment
+
 **Consider splitting if:**
+
 - Multiple distinct features that could be delivered independently
 - Natural groupings in acceptance criteria (2+ separate concerns)
 - Ticket would take >1 sprint
 - Different parts have different priorities/dependencies
 
 **Keep together if:**
+
 - Tightly coupled, must be delivered atomically
 - Splitting creates awkward dependencies
 - Already appropriately sized
@@ -280,6 +269,7 @@ Analyze ticket against template:
 ## Step 4: Draft Improvements
 
 Extract key information from original:
+
 - Core requirements (what needs to be done)
 - Business context (why it matters)
 - Technical constraints (known limitations)
@@ -289,6 +279,7 @@ Extract key information from original:
 Transform to template structure, preserving ALL original information.
 
 **If ticket is already excellent:**
+
 ```
 ✅ DI-XXXX is already high quality!
 
@@ -407,6 +398,7 @@ What makes sense?
 ```
 
 **User responds with:**
+
 - Semantic guidance: "Let's split the permissions into a follow-up ticket"
 - Acceptance: "Your split looks good, go with that"
 - Rejection: "Don't split, it's fine"
@@ -416,6 +408,7 @@ What makes sense?
 ## Step 7: Get Approval
 
 **If NOT splitting:**
+
 ```
 Ready to update DI-XXXX with improvements? (yes/no/changes)
 
@@ -425,6 +418,7 @@ Ready to update DI-XXXX with improvements? (yes/no/changes)
 ```
 
 **If splitting:**
+
 ```
 Ready to update DI-XXXX and create [N] split tickets? (yes/no/changes)
 
@@ -438,6 +432,7 @@ Proceed? (yes/no/changes)
 ```
 
 **If user requests changes:**
+
 - Revise draft based on feedback
 - Show updated preview
 - Get approval again
@@ -445,6 +440,7 @@ Proceed? (yes/no/changes)
 ## Step 8: Update Ticket(s)
 
 **⚠️ CRITICAL: JIRA CLI Requirements**
+
 - **ALWAYS write ticket content to /tmp file first**
 - **ALWAYS use `cat` to read file when passing to jira commands**
 - **NEVER pass content directly**
@@ -575,6 +571,7 @@ jira issue view $NEW_TICKET_1
 ```
 
 **Verify:**
+
 - Description updated correctly
 - Comments added explaining updates/splits
 - Split tickets linked appropriately (Relates links visible)
@@ -584,6 +581,7 @@ jira issue view $NEW_TICKET_1
 - No information lost
 
 **Manual check:**
+
 - Compare original vs updated in JIRA web UI
 - Ensure formatting rendered correctly
 - Confirm all sections present
@@ -595,6 +593,7 @@ jira issue view $NEW_TICKET_1
 **After successful update, ALWAYS prompt:**
 
 ### If NOT Split:
+
 ```
 ✅ Ticket DI-1234 updated successfully!
 
@@ -611,6 +610,7 @@ jira issue view $NEW_TICKET_1
 ```
 
 ### If Split:
+
 ```
 ✅ Ticket DI-1234 updated and split successfully!
 
@@ -647,6 +647,7 @@ jira issue view $NEW_TICKET_1
 User: "Review DI-1234, DI-1235, DI-1236"
 
 **Response:**
+
 ```
 I'll help, but I need to process ONE AT A TIME for thorough analysis.
 
@@ -695,16 +696,16 @@ Proceed? (yes/no)
 ## Safety Rules (CRITICAL!)
 
 1. ✅ **NEVER lose information** - Preserve original in comments if unsure
-2. ✅ **ALWAYS add update comment** - Explain why rewritten/split
-3. ✅ **PRESERVE intent** - Scope/AC should match original requirements
-4. ✅ **GET approval first** - Show complete preview before executing
-5. ✅ **CHECK status** - Warn on "In Progress"/"In Review", allow override
-6. ✅ **MAINTAIN links** - Preserve epic/parent/dependency relationships
-7. ✅ **KEEP discussion** - Never delete existing comments or attachments
-8. ✅ **ONE ticket at a time** - Never batch process
-9. ✅ **DISCUSS splits** - Conversational, semantic guidance from user
-10. ✅ **LINK splits properly** - Relates links + comments on ALL tickets
-11. ✅ **CLEAR context after** - Always prompt user to clear context
+1. ✅ **ALWAYS add update comment** - Explain why rewritten/split
+1. ✅ **PRESERVE intent** - Scope/AC should match original requirements
+1. ✅ **GET approval first** - Show complete preview before executing
+1. ✅ **CHECK status** - Warn on "In Progress"/"In Review", allow override
+1. ✅ **MAINTAIN links** - Preserve epic/parent/dependency relationships
+1. ✅ **KEEP discussion** - Never delete existing comments or attachments
+1. ✅ **ONE ticket at a time** - Never batch process
+1. ✅ **DISCUSS splits** - Conversational, semantic guidance from user
+1. ✅ **LINK splits properly** - Relates links + comments on ALL tickets
+1. ✅ **CLEAR context after** - Always prompt user to clear context
 
 ## Quality Checklist Post-Update
 

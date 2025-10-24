@@ -1,4 +1,3 @@
----
-description: Fully autonomous agent with no restrictions
-mode: primary
----
+______________________________________________________________________
+
+## description: Fully autonomous agent with no restrictions mode: primary
