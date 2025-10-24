@@ -18,15 +18,16 @@ permission:
 
 # Learn:Read Command - Display Captured Learnings
 
-## Purpose
-
+<purpose>
 Read learnings from `~/.config/opencode/learnings.md` and display them in the conversation so the LLM can reference them for future decisions.
+</purpose>
 
-## User Input
+<user-input>
 **Filter criteria (optional):**
 $ARGUMENTS
+</user-input>
 
-## Workflow
+<workflow>
 
 ### Step 1: Check Learnings File Exists
 
@@ -71,50 +72,17 @@ rg '\[.*\]' ~/.config/opencode/learnings.md -o | sort | uniq -c
 ### Step 4: Format and Display
 
 ```
-═══════════════════════════════════
-CAPTURED LEARNINGS
-═══════════════════════════════════
+[Display learnings content]
 
-[If filtered]
-Filter: <filter criteria>
-Found [N] matching learnings
-
-[If showing all]
-Showing all [N] learnings
-
-═══════════════════════════════════
-
-[Display learnings here, formatted nicely]
-
-═══════════════════════════════════
-
-📊 Summary:
-- Total learnings: [N]
-- Unique tags: [list tags with counts]
-- Date range: [earliest] to [latest]
-- Most affected: [top 3 agents/commands]
-
-💡 Use these learnings to improve current task!
+Summary: [N] total, tags: [list], range: [earliest]-[latest]
 ```
 
 ### Step 5: Suggest Relevant Learnings
 
-**Based on current conversation context:**
-- If talking about git commits → highlight `[agent-commit]` learnings
-- If talking about JIRA → highlight `[command-jira]` learnings
-- If seeing bash errors → highlight `[bash, error-handling]` learnings
+Based on conversation context, highlight relevant learnings (e.g., `[agent-commit]` if discussing commits, `[bash]` if seeing errors).
+</workflow>
 
-```
-🔍 Relevant to current conversation:
-
-[Show 2-3 most relevant learnings based on context]
-
-Want to see more? Use filters:
-- `/learn:read agent-commit` - All commit-related learnings
-- `/learn:read [bash]` - All bash-related learnings
-```
-
-## Filter Examples
+<examples>
 
 ### By Tag
 ```
@@ -143,115 +111,58 @@ Want to see more? Use filters:
 /learn:read "pre-commit"
 ```
 
-### Show Statistics
+### Show Statistics or Recent
 ```
 /learn:read stats
-```
-Shows:
-- Total learnings count
-- Learnings per tag (sorted)
-- Learnings per agent (sorted)
-- Learnings per month
-- Most common issues
-
-### Show Recent
-```
 /learn:read recent
 /learn:read last 5
 ```
+</examples>
 
-## Edge Cases
+<edge-cases>
 
 ### No Learnings File
 ```
-📭 No learnings file found at ~/.config/opencode/learnings.md
+No learnings file at ~/.config/opencode/learnings.md
 
-This is normal if you haven't used `/learn` yet!
-
-To create your first learning:
-1. Have a conversation with corrections/improvements
-2. Run `/learn` to capture those learnings
-3. Run `/learn:read` to see them
-
-Want to start now? Just run `/learn` in your next conversation!
+Run `/learn` first to capture learnings.
 ```
 
 ### No Matching Learnings
 ```
-🔍 No learnings found matching: <filter>
+No learnings matching: <filter>
 
-Available tags: [list all tags]
-Available agents: [list all agents with learnings]
-
-Try:
-- `/learn:read` - Show all learnings
-- `/learn:read stats` - See what's available
+Available: [tags], [agents]
+Try: `/learn:read` or `/learn:read stats`
 ```
 
 ### Malformed Learnings File
 ```
-⚠️ Warning: Learnings file exists but has formatting issues
+Warning: Formatting issues in learnings file
 
-I can still try to read it, but some entries might not parse correctly.
-
-Would you like me to:
-1. **Show raw content** - Display file as-is
-2. **Try to parse** - Attempt to extract learnings anyway
-3. **Cancel** - Don't read
-
-Your choice? (1/2/3)
+Options: 1=show raw, 2=parse anyway, 3=cancel
+Choice? (1/2/3)
 ```
+</edge-cases>
 
-## Display Formatting
+<formatting>
 
-**Compact View (default):**
-```
-## 2025-10-24 | agent-commit | Tags: [bash, git]
-Fix: Always check for pre-commit hooks before committing
----
-```
+**Compact (default):** Show header + fix only
+**Detailed (<5 results):** Show full entry with context, issue, fix, why, affected files
 
-**Detailed View (when filtered to <5 results):**
-```
-## 2025-10-24 | agent-commit | Tags: [bash, git]
+**Statistics View:** Show total count, learnings per tag/agent, date range. Use `rg` and `wc -l` for counting.
+</formatting>
 
-**Context:** Creating git commits without checking for pre-commit hooks
-**Issue:** Pre-commit hooks modified files after commit, requiring amend
-**Fix:** Always check for pre-commit hooks and re-commit if files modified
-**Why:** Ensures all automated changes are included in commit
-**Affected Files:** agent/commit.md:67
+<principles>
 
----
-```
+- Make learnings actionable - suggest how to apply
+- Context-aware - highlight relevant to current conversation
+- Support multiple filter types
+- Adjust detail level based on result count
+</principles>
 
-## Statistics View
-
-```bash
-# Count total learnings
-rg '^## \d{4}-' ~/.config/opencode/learnings.md | wc -l
-
-# Count by tag
-rg '\[([^]]+)\]' ~/.config/opencode/learnings.md -o --no-filename | sort | uniq -c | sort -rn
-
-# Count by agent
-rg '^## \d{4}-\d{2}-\d{2} \| ([^|]+)' ~/.config/opencode/learnings.md -o --no-filename | cut -d'|' -f2 | sort | uniq -c | sort -rn
-
-# Show date range
-rg '^## (\d{4}-\d{2}-\d{2})' ~/.config/opencode/learnings.md -o --no-filename | sort | uniq | head -1
-rg '^## (\d{4}-\d{2}-\d{2})' ~/.config/opencode/learnings.md -o --no-filename | sort | uniq | tail -1
-```
-
-## Key Principles
-
-1. **Make Learnings Actionable** - Don't just display, suggest how to apply
-2. **Context-Aware** - Highlight relevant learnings for current conversation
-3. **Easy Filtering** - Support multiple filter types for quick access
-4. **Statistics** - Help user understand what learnings exist
-5. **Formatting** - Adjust detail level based on number of results
-6. **Minimal Output** - Return only final summaries to primary agent, not internal analysis or file reads (user sees subagent output directly)
-
-## Integration
-
+<integration>
 - Used by `/learn:sync` to read learnings before integrating
 - LLM can reference these learnings in current conversation
 - User can review learnings before deciding to sync
+</integration>

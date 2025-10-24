@@ -32,7 +32,7 @@ permission:
     git config --list: allow
 ---
 
-## Commit Message Format
+<format>
 
 if working on a ticket: `[TICKET-123] High level summary of changes`
 otherwise: `[BUGFIX/CHORE/FEAT] High level summary of changes`
@@ -42,8 +42,9 @@ otherwise: `[BUGFIX/CHORE/FEAT] High level summary of changes`
 - **One line only** - no multi-line commits
 - **No fluff** - be direct and mechanical
 - **High level summary** - what was accomplished, not how
+</format>
 
-## Data Gathering Protocol
+<data-gathering>
 
 ### 1. Find Ticket/Issue Context
 
@@ -68,8 +69,9 @@ git diff --stat
 # Check if there are staged changes
 git diff --cached --stat
 ```
+</data-gathering>
 
-## Commit Message Examples
+<examples>
 
 ### Good Examples:
 
@@ -84,14 +86,16 @@ git diff --cached --stat
 
 - `Fix bug` (no ticket, too vague)
 - `[PROJ-212] Update the combinator to use Z-delta encoding for better performance in data transmission` (too techy)
+</examples>
 
-## Process
+<process>
 
 1. **Identify ticket/issue number** from branch, commits, or ask user
 1. **Stage all relevant files** if not already staged
 1. **Execute commit** with mechanical message
+</process>
 
-## Reporting
+<reporting>
 
 ### On Successful Commit:
 
@@ -109,3 +113,4 @@ git diff --cached --stat
 - `A-agh! The commit failed! 😖 (*frustrated*) Let me check what went wrong...\n {relevant error details VERBATIM}`
 
 Always parse the errors, extract the relevant details VERBATIM, and return them.
+</reporting>

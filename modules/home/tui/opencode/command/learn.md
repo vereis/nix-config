@@ -21,15 +21,16 @@ permission:
 
 # Learn Command - Capture Conversation Learnings
 
-## Purpose
-
+<purpose>
 Analyze the current conversation for corrections, mistakes, and learnings, then save them to `~/.config/opencode/learnings.md` for future reference and integration.
+</purpose>
 
-## User Input
+<user-input>
 **What to learn from this conversation:**
 $ARGUMENTS
+</user-input>
 
-## Workflow
+<workflow>
 
 ### Step 1: Analyze Conversation
 
@@ -41,12 +42,7 @@ Review the current conversation history for:
 - **Command Failures** - Bash commands that failed and why
 - **Workflow Improvements** - Better ways to approach tasks
 
-**Look for patterns like:**
-- "Actually, that's wrong..."
-- "No, you should do X instead..."
-- "The command failed because..."
-- "Don't do X, do Y instead..."
-- "Remember to always..."
+Look for: corrections, "do X instead", command failures, workflow improvements.
 
 ### Step 2: Extract Key Learnings
 
@@ -55,8 +51,9 @@ For each learning, capture:
 2. **Issue** - What went wrong or what was corrected
 3. **Fix** - The correct approach
 4. **Why** - Explanation of why this matters
-5. **Affected Files** - Which agents/commands this applies to (if specific)
-6. **Tags** - Labels for categorization (e.g., [bash, error-handling, workflow])
+5. **Example** - Code example if available and helpful (optional)
+6. **Affected Files** - Which agents/commands this applies to (if specific)
+7. **Tags** - Labels for categorization (e.g., [bash, error-handling, workflow])
 
 ### Step 3: Draft Learning Entry
 
@@ -73,6 +70,11 @@ Format each learning as:
 
 **Why:** <Explanation of why this matters>
 
+**Example:** (optional, only if good example exists)
+```language
+<code example>
+```
+
 **Affected Files:** <List specific files if applicable, e.g., agent/commit.md:42>
 
 ---
@@ -80,25 +82,14 @@ Format each learning as:
 
 ### Step 4: Show Draft to User
 
-Present all extracted learnings:
+Present extracted learnings:
 
 ```
-═══════════════════════════════════
-LEARNINGS EXTRACTED
-═══════════════════════════════════
-
-I found [N] learnings from this conversation:
+Found [N] learnings:
 
 [Show each learning entry formatted as above]
 
-═══════════════════════════════════
-
-What would you like to do?
-1. **Approve all** - Save all learnings as-is
-2. **Edit** - Let me know which to modify/remove
-3. **Cancel** - Don't save anything
-
-Your choice? (1/2/3)
+Approve? (1=yes, 2=edit, 3=cancel)
 ```
 
 ### Step 5: Get User Approval & Edits
@@ -117,54 +108,34 @@ Your choice? (1/2/3)
 ### Step 6: Save to Learnings File
 
 ```bash
-# Check if learnings file exists
-if [ -f ~/.config/opencode/learnings.md ]; then
-  echo "Learnings file exists, will append"
-else
-  echo "Creating new learnings file"
-fi
-
-# Append learnings to file
+# Append learnings
 cat >> ~/.config/opencode/learnings.md <<'EOF'
 
 [Learning entries go here]
 EOF
 
-# Verify it was written
+# Verify
 tail -20 ~/.config/opencode/learnings.md
 ```
 
 ### Step 7: Confirm Success
 
 ```
-✅ Learnings saved to ~/.config/opencode/learnings.md
-
-📊 Summary:
-- Added [N] learning entries
-- Tags: [list unique tags]
-- Affected: [list affected agents/commands]
-
-📋 Next Steps:
-- Use `/learn:read` to view all learnings
-- Use `/learn:sync` to integrate learnings into source files
-- Run `home-manager switch` if using NixOS (after sync)
-
-💡 Tip: These learnings will help improve future interactions!
+Saved to ~/.config/opencode/learnings.md
 ```
+</workflow>
 
-## Edge Cases
+<edge-cases>
 
 ### No Learnings Found
 ```
-🤔 I didn't find any obvious corrections or learnings in this conversation.
+No corrections or learnings found.
 
-The conversation seems to have gone smoothly, or learnings might be too subtle.
+Options:
+1. Manually specify what to learn
+2. Cancel
 
-Would you like to:
-1. **Manually specify** what to learn (tell me what you want captured)
-2. **Cancel** - nothing to save
-
-Your choice? (1/2)
+Choice? (1/2)
 ```
 
 ### User Provides Manual Learning
@@ -173,33 +144,16 @@ If user specifies what to learn in $ARGUMENTS:
 - Use their input to create learning entry
 - Still show draft for approval
 - Example: `/learn Remember to always check for pre-commit hooks before committing`
+</edge-cases>
 
-### Learnings File Already Has Similar Entry
-- Check for duplicate/similar learnings (by tags/content)
-- Warn user: "Found similar learning from YYYY-MM-DD, should I merge or add separately?"
+<tags>
 
-## Learning Categories & Tags
+**Common:** `[bash]`, `[error-handling]`, `[workflow]`, `[file-ops]`, `[git]`, `[permissions]`, `[nix]`, `[jira]`, `[prompting]`, `[edge-case]`
 
-**Common Tags:**
-- `[bash]` - Bash command issues
-- `[error-handling]` - Error handling patterns
-- `[workflow]` - Process improvements
-- `[file-ops]` - File operations
-- `[git]` - Git-related learnings
-- `[permissions]` - Permission issues
-- `[nix]` - NixOS-specific learnings
-- `[jira]` - JIRA workflow learnings
-- `[prompting]` - LLM prompting improvements
-- `[edge-case]` - Edge case handling
+**Agent-Specific:** `[agent-commit]`, `[agent-pr]`, `[agent-task]`, `[agent-test]`, `[command-jira]`
+</tags>
 
-**Agent-Specific Tags:**
-- `[agent-commit]`
-- `[agent-pr]`
-- `[agent-task]`
-- `[agent-test]`
-- `[command-jira]`
-
-## Example Learning Entry
+<example>
 
 ```markdown
 ## 2025-10-24 | command-jira:new | Tags: [bash, file-ops, error-handling]
@@ -212,24 +166,39 @@ If user specifies what to learn in $ARGUMENTS:
 
 **Why:** Simpler, fewer commands, avoids permission issues, more reliable
 
-**Affected Files:** 
+**Example:**
+```bash
+# Bad
+rm -f /tmp/file.md
+cat > /tmp/file.md <<'EOF'
+content
+EOF
+
+# Good
+cat > /tmp/file.md <<'EOF'
+content
+EOF
+```
+
+**Affected Files:**
 - command/jira:new.md:167
 - command/jira:review.md:433
 
 ---
 ```
+</example>
 
-## Key Principles
+<principles>
 
-1. **Be Specific** - Capture exact file locations and line numbers
-2. **Explain Why** - Don't just say what to do, explain why it matters
-3. **Tag Appropriately** - Use consistent tags for easy searching
-4. **User Approval Required** - Never save without showing user first
-5. **Preserve Context** - Include enough context to understand the learning later
-6. **Actionable** - Learnings should be concrete enough to apply
-7. **Keep It Minimal** - Learning entries must be concise to avoid context pollution when read back later
+- Be specific: file locations with line numbers
+- Explain why, not just what
+- Tag consistently for easy searching
+- Never save without user approval
+- Preserve context for later understanding
+- Keep entries concise and actionable
+</principles>
 
-## Integration with Other Commands
-
+<integration>
 - `/learn:read` - Read learnings back into conversation context
 - `/learn:sync` - Sync learnings to source repo and integrate into agent files
+</integration>
