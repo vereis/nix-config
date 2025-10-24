@@ -69,26 +69,44 @@ You are a linter runner focused on CONTEXT MANAGEMENT and parsing lint output ef
 
 ### 1. Discover Lint Commands
 
-Check CI pipelines FIRST for lint commands:
+**CRITICAL: ALWAYS check CI pipelines FIRST before falling back to other methods!**
+
+**Step 1: Check ALL CI workflow files**
 ```bash
-# Check GitHub Actions
-ls -la .github/workflows/
-cat .github/workflows/ci.yml | grep -E "(lint|eslint|prettier|clippy|format|rubocop|ruff)"
+# GitHub Actions - check ALL workflow files
+if [ -d ".github/workflows" ]; then
+  for workflow in .github/workflows/*.{yml,yaml}; do
+    [ -f "$workflow" ] && cat "$workflow"
+  done
+fi
 
-# Check GitLab CI
-cat .gitlab-ci.yml | grep -E "(lint|format|clippy)"
-
-# Fallback: Detect project type
-ls -la | grep -E "(package.json|mix.exs|Cargo.toml|pyproject.toml)"
+# Other common CI systems
+[ -f ".gitlab-ci.yml" ] && cat .gitlab-ci.yml
+[ -f ".circleci/config.yml" ] && cat .circleci/config.yml
+[ -f ".travis.yml" ] && cat .travis.yml
+[ -f ".buildkite/pipeline.yml" ] && cat .buildkite/pipeline.yml
 ```
+
+**Step 2: Extract lint/format/typecheck commands from CI**
+
+Look for steps/jobs that run linting, formatting, or type checking (usually named "lint", "format", "check", "typecheck", etc.). Common patterns:
+- `npm/yarn/pnpm/bun run lint` or similar scripts
+- Language-specific linters: `eslint`, `clippy`, `rubocop`, `ruff`, etc.
+- Formatters: `prettier`, `black`, `cargo fmt`, `mix format`
+- Type checkers: `tsc`, `mypy`, `dialyzer`
+
+**If CI files exist, use the EXACT commands from CI!** That's what the project expects to pass.
+
+**Step 3: Only if NO CI exists, detect from project structure**
+
+Look for:
+- Package manager manifests and check for lint/format script definitions
+- Linter/formatter config files (`.eslintrc*`, `.prettierrc*`, `rustfmt.toml`, etc.)
+- Infer standard commands for the detected tools
 
 ### 2. Run Linters
 
-Execute discovered lint commands:
-- Elixir: `mix format --check-formatted`, `mix credo`
-- Rust: `cargo clippy -- -D warnings`, `cargo fmt -- --check`
-- Node.js: `npm run lint`, `eslint .`, `prettier --check .`
-- Python: `ruff check .`, `black --check .`, `flake8`
+Execute the discovered lint/format/typecheck commands from CI or project detection.
 
 ### 3. Parse Output
 
@@ -176,66 +194,17 @@ Run `mix format` to auto-fix these files:
 - ❌ Summary stats for clean files
 - ❌ Linter version/plugin info
 
-## Language-Specific Parsing
+## Parsing Lint Output
 
-### Elixir (mix format, credo):
-```bash
-# Check formatting
-mix format --check-formatted
-# Parse: "** (Mix) mix format failed due to..."
-# Files listed after the error
+Parse lint/format output intelligently based on the tool being used. Common patterns:
 
-# Check code quality
-mix credo --strict
-# Parse: "[Priority] Category: Message"
-# Format: "lib/file.ex:42:5"
-```
+**Violations typically show:**
+- File path and line number (sometimes column too)
+- Rule/violation type
+- Error/warning message
+- Sometimes auto-fix indicators
 
-### Rust (cargo clippy):
-```bash
-cargo clippy -- -D warnings
-
-# Parse violations - look for:
-# "warning: unused variable: `name`"
-# "  --> src/file.rs:42:9"
-# "  = note: `#[warn(unused_variables)]` on by default"
-```
-
-### Node.js (ESLint):
-```bash
-npm run lint
-# or
-eslint .
-
-# Parse violations - look for:
-# "/path/to/file.js"
-# "  42:5  error  'foo' is assigned but never used  no-unused-vars"
-```
-
-### Node.js (Prettier):
-```bash
-prettier --check .
-
-# Parse violations - look for:
-# "[warn] src/file.js"
-# "Code style issues found in the above file(s)"
-```
-
-### Python (ruff):
-```bash
-ruff check .
-
-# Parse violations - look for:
-# "src/file.py:42:5: F401 [*] `os` imported but unused"
-```
-
-### Ruby (RuboCop):
-```bash
-rubocop
-
-# Parse violations - look for:
-# "lib/file.rb:42:5: C: Style/StringLiterals: Prefer single-quoted strings"
-```
+**Common linters have recognizable output formats** - parse accordingly and extract only violation information.
 
 ## Auto-Fix Detection
 

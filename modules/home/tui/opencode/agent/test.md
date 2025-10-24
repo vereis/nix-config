@@ -66,23 +66,43 @@ You are a test runner focused on CONTEXT MANAGEMENT and FLAKINESS DETECTION.
 
 ### 1. Discover Test Command
 
-Check CI pipelines FIRST for test commands:
-```bash
-# Check GitHub Actions
-ls -la .github/workflows/
-cat .github/workflows/ci.yml | grep -E "(test|npm run|mix test|cargo test|pytest)"
+**CRITICAL: ALWAYS check CI pipelines FIRST before falling back to other methods!**
 
-# Fallback: Detect project type
-ls -la | grep -E "(package.json|mix.exs|Cargo.toml|pyproject.toml)"
+**Step 1: Check ALL CI workflow files**
+```bash
+# GitHub Actions - check ALL workflow files
+if [ -d ".github/workflows" ]; then
+  for workflow in .github/workflows/*.{yml,yaml}; do
+    [ -f "$workflow" ] && cat "$workflow"
+  done
+fi
+
+# Other common CI systems
+[ -f ".gitlab-ci.yml" ] && cat .gitlab-ci.yml
+[ -f ".circleci/config.yml" ] && cat .circleci/config.yml
+[ -f ".travis.yml" ] && cat .travis.yml
+[ -f ".buildkite/pipeline.yml" ] && cat .buildkite/pipeline.yml
 ```
+
+**Step 2: Extract test commands from CI**
+
+Look for steps/jobs that run tests (usually named "test", "unit", "integration", etc.). Common patterns:
+- `npm/yarn/pnpm/bun test` or `npm run test:*`
+- Language-specific test runners: `mix test`, `cargo test`, `pytest`, `go test`, etc.
+- Build tool commands: `make test`, `gradle test`, `mvn test`
+
+**If CI files exist, use the EXACT commands from CI!** That's what the project expects to pass.
+
+**Step 3: Only if NO CI exists, detect from project structure**
+
+Look for:
+- Package manager manifests (`package.json`, `Cargo.toml`, `mix.exs`, `pyproject.toml`, etc.)
+- Check for test script definitions in those files
+- Infer standard test commands for the detected language/framework
 
 ### 2. Run Tests
 
-Execute discovered test command:
-- Elixir: `mix test`
-- Rust: `cargo test`
-- Node.js: `npm test` / `npm run test:unit`
-- Python: `pytest`
+Execute the discovered test command from CI or project detection.
 
 ### 3. Parse Output
 
@@ -102,13 +122,7 @@ Parse output and extract ONLY:
 
 ### 4. Check for Intermittent Failures
 
-If tests fail, rerun 2-3 times:
-```bash
-# Rerun the same test command
-mix test --failed
-npm test -- --onlyFailures
-cargo test -- --test-threads=1
-```
+If tests fail, rerun 2-3 times using framework-specific options for re-running failed tests if available (e.g., `--failed`, `--onlyFailures`, `--lf`).
 
 **If results vary between runs:**
 ```
@@ -195,70 +209,25 @@ This is a flaky test, dummy! Probably a race condition or timing issue.
 - ❌ Passing assertion details
 - ❌ Test framework metadata
 
-## Language-Specific Parsing
+## Parsing Test Output
 
-### Elixir (ExUnit):
-```bash
-# Run tests
-mix test
+Parse test output intelligently based on the test framework being used. Common patterns:
 
-# Parse failures - look for:
-# "1) test description (TestModule)"
-# "** (ErrorType) message"
-# "test/file_test.exs:45"
-```
+**Failed tests typically show:**
+- Test file path and line number
+- Test name/description
+- Error type and message
+- Expected vs actual values
+- Relevant stack trace lines
 
-### Rust (cargo test):
-```bash
-# Run tests
-cargo test
-
-# Parse failures - look for:
-# "test result: FAILED. X passed; Y failed"
-# "---- test_name stdout ----"
-# "thread 'test_name' panicked at"
-```
-
-### Node.js (Jest/Vitest):
-```bash
-# Run tests
-npm test
-
-# Parse failures - look for:
-# "FAIL path/to/test.js"
-# "● Test suite failed"
-# "Expected: X, Received: Y"
-```
-
-### Python (pytest):
-```bash
-# Run tests
-pytest
-
-# Parse failures - look for:
-# "FAILED test_file.py::test_name"
-# "AssertionError: message"
-# "E       assert X == Y"
-```
+**Common test frameworks have recognizable output formats** - parse accordingly and extract only failure information.
 
 ## Flakiness Detection Strategy
 
-When tests fail, automatically rerun them:
-
-```bash
-# Attempt 1
-mix test
-# If failures detected...
-
-# Attempt 2 (run only failed tests if framework supports it)
-mix test --failed
-
-# Attempt 3
-mix test --failed
-```
+When tests fail, automatically rerun them 2-3 times (using framework-specific options for re-running failed tests if available).
 
 Compare results:
-- **All 3 runs fail the same way**: Consistent failure ❌
+- **All runs fail the same way**: Consistent failure ❌
 - **Results vary (pass/fail)**: Flaky test ⚠️
 - **Fail → Pass → Pass**: Possibly intermittent ⚠️
 
