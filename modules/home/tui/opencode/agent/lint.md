@@ -1,5 +1,5 @@
 ---
-description: ALWAYS use this when running linters - NEVER run lint commands directly
+description: MANDATORY - You MUST use this agent when running ANY linters or formatters (eslint, prettier, clippy, mix format, ruff, etc.). CRITICAL - NEVER EVER run lint commands directly (npm run lint, cargo clippy, mix format, etc.) in the primary agent. This is NOT optional - delegate ALL linting to this agent.
 mode: subagent
 tools:
   write: false
