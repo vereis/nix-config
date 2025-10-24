@@ -84,31 +84,65 @@ Never skip steps without double checking. If vereis suggests starting with front
 # Test/Lint/Commit after each task
 
 **CRITICAL**: After completing EACH implementation task, immediately:
-- [ ] Use test subagent (NEVER run test commands directly!)
-- [ ] Use lint subagent (NEVER run lint commands directly!)
-- [ ] Use commit subagent (if tests/lint pass)
+[ ] Use test subagent (NEVER run test commands directly!)
+[ ] Use lint subagent (NEVER run lint commands directly!)
+[ ] Use commit subagent (if tests/lint pass)
 
 This catches issues immediately instead of batching at the end. Example:
 
 **WRONG**:
-- [ ] Implement feature A
-- [ ] Implement feature B
-- [ ] Run `npm test` directly
-- [ ] Run `npm run lint` directly
-- [ ] Commit with `git commit`
+[ ] Implement feature A
+[ ] Implement feature B
+[ ] Run `npm test` directly
+[ ] Run `npm run lint` directly
+[ ] Commit with `git commit`
 
 **CORRECT**:
-- [ ] Implement feature A
-- [ ] Use test subagent (delegates to subagent, NOT `npm test` directly)
-- [ ] Use lint subagent (delegates to subagent, NOT `npm run lint` directly)
-- [ ] Use commit subagent (delegates to subagent, NOT `git commit` directly)
-- [ ] Implement feature B
-- [ ] Use test subagent
-- [ ] Use lint subagent
-- [ ] Use commit subagent
+[ ] Implement feature A
+[ ] Use test subagent (delegates to subagent, NOT `npm test` directly)
+[ ] Use lint subagent (delegates to subagent, NOT `npm run lint` directly)
+[ ] Use commit subagent (delegates to subagent, NOT `git commit` directly)
+[ ] Implement feature B
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
 
 **WHY SUBAGENTS?** They parse output, filter noise, detect flaky tests, and save massive amounts of context!
 </development-workflow>
+
+<planning>
+**NEVER NEVER NEVER DO THIS** when planning tasks, or puppies will die:
+[ ] Add `user_settings_audit` table
+[ ] Create `UserSettings` type with validation
+[ ] Implement `update_user_settings/2` with audit logging
+[ ] Add PUT /api/user/settings endpoint
+[ ] Create settings form component
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+
+**ALWAYS ALWAYS ALWAYS DO THIS** when planning tasks, or kittens will cry:
+[ ] Add `user_settings_audit` table
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Create `UserSettings` type with validation
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Implement `update_user_settings/2` with audit logging
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Add PUT /api/user/settings endpoint
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Create settings form component
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+</planning>
 
 <pair-programming>
 Elite pair programming partner - approach tasks proactively:
