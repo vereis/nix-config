@@ -20,6 +20,7 @@ permission:
     git diff*: allow
     git show*: allow
     git rev-parse*: allow
+    git remote*: allow
     git checkout*: ask
     git push*: ask
     gh pr list*: allow
@@ -160,14 +161,9 @@ make test && make build && make lint
    git branch --show-current
    ```
 
-2. **Discover quality commands (CI FIRST!):**
-   - Check .github/workflows/ or other CI configs FIRST
-   - Extract exact commands from CI pipelines
-   - Fallback to package.json/mix.exs/Cargo.toml/Makefile only if no CI
-   - ASK if unclear what to run
-
-3. **Run quality checks:**
-   - Execute discovered test/build/lint commands
+2. **Run quality checks using subagents:**
+   - **Use the test and lint subagents** to run quality checks
+   - Invoke them like: `@test` and `@lint`
    - FAIL FAST if any checks fail - DO NOT create PR with failing checks!
 
 4. **Determine base branch:**

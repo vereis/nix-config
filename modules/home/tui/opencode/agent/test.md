@@ -104,6 +104,17 @@ Look for:
 
 Execute the discovered test command from CI or project detection.
 
+**IMPORTANT: Run commands directly without piping to `tail` or `head`!**
+```bash
+# ✅ GOOD - streaming output
+mix test
+
+# ❌ BAD - buffers all output until completion
+mix test 2>&1 | tail -50
+```
+
+The Bash tool will automatically handle output truncation if needed, while still showing you streaming output. Don't manually pipe to tail/head, baka!
+
 ### 3. Parse Output
 
 **If ALL tests pass:**
