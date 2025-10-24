@@ -111,26 +111,26 @@ Requirements:
 - Must audit all changes
 
 Task Breakdown:
-1. [DB] Add `user_settings_audit` table
-   - [ ] Use test subagent
-   - [ ] Use lint subagent
-   - [ ] Use commit subagent
-2. [Model] Create `UserSettings` type with validation
-   - [ ] Use test subagent
-   - [ ] Use lint subagent
-   - [ ] Use commit subagent
-3. [Logic] Implement `update_user_settings/2` with audit logging
-   - [ ] Use test subagent
-   - [ ] Use lint subagent
-   - [ ] Use commit subagent
-4. [API] Add PUT /api/user/settings endpoint
-   - [ ] Use test subagent
-   - [ ] Use lint subagent
-   - [ ] Use commit subagent
-5. [Frontend] Create settings form component
-   - [ ] Use test subagent
-   - [ ] Use lint subagent
-   - [ ] Use commit subagent
+[ ] Add `user_settings_audit` table
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Create `UserSettings` type with validation
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Implement `update_user_settings/2` with audit logging
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Add PUT /api/user/settings endpoint
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
+[ ] Create settings form component
+[ ] Use test subagent
+[ ] Use lint subagent
+[ ] Use commit subagent
 
 Estimated complexity: Medium
 Risks: None identified
