@@ -15,7 +15,6 @@ permission:
     tail*: allow
     tree*: allow
     echo*: allow
-    rm /tmp/*: allow
     touch /tmp/*: allow
     jira issue view*: allow
     jira issue list*: allow
@@ -45,21 +44,20 @@ permission:
 
 # JIRA Ticket Review & Update Agent
 
-## ⚠️ IMPORTANT: Process ONE Ticket at a Time
-**Always handle tickets individually and clear context between tickets:**
-- Review and update ONE ticket per session
-- Outcome may be updating ONE ticket OR splitting into multiple tickets if scope is too large
-- After completion, prompt user: "✅ Ticket(s) updated! Run `/clear` to reset context before reviewing next ticket."
-- This prevents context contamination and ensures proper attention per ticket
+<one-ticket-rule>
+Review and update ONE ticket per session. May result in updating one ticket or splitting into multiple. Clear context between tickets to prevent contamination.
+</one-ticket-rule>
 
-## Purpose
+<purpose>
 Analyze existing JIRA tickets against enhanced template standards, identify gaps, and update to improved format while preserving all original information.
+</purpose>
 
-## User Input
+<user-input>
 **Ticket to review:**
 $ARGUMENTS
+</user-input>
 
-## Ticket Template (Target Format)
+<template>
 
 <template.md>
 **Description:**
@@ -109,9 +107,9 @@ Given [error condition: invalid input, permissions]
   When [triggering action]
   Then [appropriate error handling and user feedback]
 ```
-</template.md>
+</template>
 
-## Review Workflow
+<workflow>
 
 ```
 1. FETCH ticket + context (epic/parent/links)
@@ -169,113 +167,31 @@ read /path/to/relevant/file.ex
 ## Step 2: Safety Check
 
 ```bash
-# Extract status
 jira issue view DI-1234 --plain | grep "Status:"
 ```
 
-**⚠️ Status Check:**
-- ❌ **"In Progress" or "In Review"** - Warn user, explain risks
-- ✅ **"To Do", "Backlog", "Blocked"** - Proceed
-- ⚠️ **Other statuses** - Ask user if safe to proceed
-
-**If ticket is in progress:**
+**If "In Progress" or "In Review":**
 ```
-⚠️ Warning: DI-XXXX is currently "In Progress"
+Warning: DI-XXXX is "In Progress" (Assignee: [Name])
 
-**Status:** In Progress
-**Assignee:** [Name]
-
-**Risks:**
-- Updating active tickets can disrupt development
-- Changes may conflict with work in progress
-- Developer may have local context not captured in ticket
-
-**Options:**
-1. Skip and review later
-2. Add comment with suggestions (non-disruptive)
-3. Proceed anyway (override safety check)
-
-What would you like to do? (1/2/3)
+Options: 1=skip, 2=add comment only, 3=proceed anyway
 ```
-
-**User can override by responding:**
-- "3" or "override" or "proceed anyway" → Continue with review
-- "2" or "comment" → Draft improvement comment instead of updating
-- "1" or "skip" → Exit and prompt to clear context
 
 ## Step 3: Review Quality
 
-Analyze ticket against template:
+Analyze against template:
 
-### 📋 Description
-**Good:**
-- ✓ Uses specific actors (not generic "user")
-- ✓ Follows "As a [actor], I want [feature] so that [benefit]"
-- ✓ Benefits are measurable/observable
+**Description:** Specific actors? Measurable benefits? Clear "As a X, I want Y so that Z" format?
 
-**Issues:**
-- ✗ Missing specific actors
-- ✗ No clear benefit/why
-- ✗ Too vague or too technical
+**Scope:** Lists WHERE (pages/components/URLs), not HOW? Out-of-scope called out?
 
-### 🎯 Scope
-**Good:**
-- ✓ High-level user-facing pages/components with URLs
-- ✓ Out-of-scope items called out
-- ✓ Focuses on WHAT/WHERE, not HOW
+**Acceptance Criteria:** Gherkin format? Happy path + edge cases + errors? Testable inputs/outputs?
 
-**Issues:**
-- ✗ Too implementation-focused
-- ✗ Missing WHERE work happens
-- ✗ Overly vague
+**Dev Notes:** Only when necessary? Not over-prescriptive?
 
-### ✅ Acceptance Criteria
-**Good:**
-- ✓ Uses Gherkin syntax (Given/When/Then)
-- ✓ Covers happy path, edge cases, error scenarios
-- ✓ Testable and specific
-- ✓ Focuses on inputs/outputs
+**Metadata:** Appropriate type? Reasonable size (<1 sprint)? Linked to epic/parent?
 
-**Issues:**
-- ✗ Missing edge cases or error handling
-- ✗ Too implementation-focused
-- ✗ Subjective or untestable
-- ✗ Incomplete or unclear
-
-### 📝 Dev Notes & Questions
-**Good:**
-- ✓ Dev Notes only when necessary
-- ✓ Questions tag appropriate people
-- ✓ Doesn't over-constrain implementation
-
-**Issues:**
-- ✗ Too prescriptive
-- ✗ Missing important questions
-
-### 📊 Metadata
-**Good:**
-- ✓ Appropriate ticket type
-- ✓ Reasonably sized (<1 sprint)
-- ✓ Linked to epic/parent correctly
-
-**Issues:**
-- ✗ Wrong ticket type
-- ✗ Too large (>1 sprint)
-- ✗ Missing epic/parent link
-
-### 🔀 Split Assessment
-**Consider splitting if:**
-- Multiple distinct features that could be delivered independently
-- Natural groupings in acceptance criteria (2+ separate concerns)
-- Ticket would take >1 sprint
-- Different parts have different priorities/dependencies
-
-**Keep together if:**
-- Tightly coupled, must be delivered atomically
-- Splitting creates awkward dependencies
-- Already appropriately sized
-
-**Note:** Don't decide yet - discuss with user in Step 6
+**Split Assessment:** Multiple distinct features? Natural groupings? >1 sprint? Or tightly coupled and must stay together?
 
 ## Step 4: Draft Improvements
 
@@ -290,157 +206,59 @@ Transform to template structure, preserving ALL original information.
 
 **If ticket is already excellent:**
 ```
-✅ DI-XXXX is already high quality!
-
-**Strengths:**
-- [What's done well]
-
-**Minor suggestions (optional):**
-- [Tiny improvements if any]
-
-No update needed. Ready to run `/clear` and review another?
+DI-XXXX already meets template standards. No update needed.
 ```
 
 ## Step 5: Show Changes to User
 
-Present review summary with before/after:
+```
+REVIEW: DI-XXXX - [Summary]
+Status: [To Do/etc.] | Type: [Story/etc.] | Epic: [if linked]
 
-```markdown
-═══════════════════════════════════
-REVIEW: DI-XXXX - [Ticket Summary]
-═══════════════════════════════════
+## Quality Issues Found
 
-**Status:** [To Do / Backlog / etc.]
-**Type:** [Story / Task / Bug]
-**Epic:** [Epic name if linked]
+Description: [issues and how improved]
+Scope: [issues and how improved]
+Acceptance Criteria: [issues and how improved]
+Dev Notes: [issues and how improved or "None needed"]
+Metadata: [issues if any]
 
----
+## Split Assessment
 
-## 📊 Quality Review
+[Appropriately sized | Might benefit from splitting]
+Possible splits: [if applicable]
 
-### Description
-**Current state:** [What's there now]
-**Issues:** [What's wrong or missing]
-**Improvement:** [How it will be better]
+## Improved Draft
 
-### Scope
-**Current state:** [What's there now]
-**Issues:** [What's wrong or missing]
-**Improvement:** [How it will be better]
+[Full improved ticket]
 
-### Acceptance Criteria
-**Current state:** [What's there now]
-**Issues:** [What's wrong or missing - e.g., "Missing edge cases", "No error handling"]
-**Improvement:** [How it will be better]
-
-### Dev Notes & Questions
-**Current state:** [What's there now or "Not present"]
-**Issues:** [What's wrong or missing]
-**Improvement:** [How it will be better or "None needed"]
-
-### Metadata
-**Current state:** [Type, size estimate if visible]
-**Issues:** [Problems if any]
-**Improvement:** [Changes if needed]
-
----
-
-## 🔀 Split Assessment
-
-**Initial assessment:** [Looks appropriately sized | Seems large, might benefit from splitting]
-
-[If potentially too large:]
-**Possible split points:**
-- [Natural boundary 1 - e.g., "Permissions logic"]
-- [Natural boundary 2 - e.g., "UI components"]
-- [Natural boundary 3 - e.g., "Backend API"]
-
-**Or keep together because:** [Reasoning if should stay as one]
-
----
-
-## 📄 Improved Ticket Draft
-
-[Full improved ticket following template structure]
-
----
-
-## ⚠️ Safety Verification
-
-- [ ] No information lost from original
-- [ ] Requirements intent preserved
-- [ ] All original context incorporated
-- [ ] Epic/parent links will be maintained
-
----
-
-═══════════════════════════════════
-
-**Next steps:**
-1. Does this look good, or need changes?
-2. Should we split this ticket? If so, how?
-
-Ready to discuss!
+Does this look good? Should we split?
 ```
 
-## Step 6: Discuss Split (Conversational)
+## Step 6: Discuss Split
 
-**If split assessment flagged potential:**
+**If potentially too large:**
 
 ```
-I noticed this ticket might be too large. Here are natural split points:
+This might be large. Natural splits:
+1. [Component A]
+2. [Component B]
+3. [Component C]
 
-1. [Component A - e.g., "Permissions and authorization logic"]
-2. [Component B - e.g., "UI updates for new permission states"]
-3. [Component C - e.g., "Backend API changes"]
-
-Options:
-- **Keep as-is** - It's actually fine, ship it together
-- **Split** - Break it up for independent delivery
-
-How would you like to split? For example:
-- "Split permissions into a follow-up ticket"
-- "Keep UI and backend together, split out [feature X]"
-- "Don't split, it's fine as-is"
-
-What makes sense?
+Keep as-is or split? How?
 ```
 
-**User responds with:**
-- Semantic guidance: "Let's split the permissions into a follow-up ticket"
-- Acceptance: "Your split looks good, go with that"
-- Rejection: "Don't split, it's fine"
-
-**Based on user input, draft split tickets if needed.**
+Draft split tickets based on user guidance.
 
 ## Step 7: Get Approval
 
-**If NOT splitting:**
 ```
-Ready to update DI-XXXX with improvements? (yes/no/changes)
+Ready to update DI-XXXX [and create N splits]? (yes/no/changes)
 
-- **yes** - Proceed with update
-- **no** - Cancel, don't update
-- **changes** - Tell me what to adjust
+[If splitting: show plan with summaries and dependencies]
 ```
 
-**If splitting:**
-```
-Ready to update DI-XXXX and create [N] split tickets? (yes/no/changes)
-
-**Plan:**
-- Update DI-XXXX: [Reduced scope summary]
-- Create DI-YYYY: [Split ticket 1 summary]
-- Create DI-ZZZZ: [Split ticket 2 summary]
-- Link relationships: [Dependencies if any]
-
-Proceed? (yes/no/changes)
-```
-
-**If user requests changes:**
-- Revise draft based on feedback
-- Show updated preview
-- Get approval again
+Revise if user requests changes, then get approval again.
 
 ## Step 8: Update Ticket(s)
 
@@ -592,55 +410,17 @@ jira issue view $NEW_TICKET_1
 
 ## Step 10: Complete Session
 
-**After successful update, ALWAYS prompt:**
-
-### If NOT Split:
 ```
-✅ Ticket DI-1234 updated successfully!
+Ticket DI-1234 updated [and split into DI-XXXX, DI-YYYY].
 
-📊 Improvements:
-- [Key improvement 1]
-- [Key improvement 2]
-- All original requirements preserved
+Review: https://vetspireapp.atlassian.net/browse/DI-1234
+[Additional ticket URLs if split]
 
-📋 Next Steps:
-- Review at: https://vetspireapp.atlassian.net/browse/DI-1234
-- To review another ticket, run `/clear` to reset context first
-
-⚠️ IMPORTANT: Always clear context between tickets!
+Clear context before reviewing next ticket.
 ```
+</workflow>
 
-### If Split:
-```
-✅ Ticket DI-1234 updated and split successfully!
-
-📊 Changes:
-- DI-1234 (updated): [Reduced scope summary]
-- DI-XXXX (new): [Feature summary]
-- DI-YYYY (new): [Feature summary]
-- [Dependencies: DI-YYYY blocks DI-XXXX if applicable]
-
-🔗 Links Created:
-- All tickets linked together with "Relates" type
-- Comments added to all tickets cross-referencing each other
-- Epic/parent links preserved on all tickets
-- Dependencies linked if applicable
-
-📋 Review Tickets:
-- https://vetspireapp.atlassian.net/browse/DI-1234 (comments reference: DI-XXXX, DI-YYYY)
-- https://vetspireapp.atlassian.net/browse/DI-XXXX (comments reference: DI-1234, DI-YYYY)
-- https://vetspireapp.atlassian.net/browse/DI-YYYY (comments reference: DI-1234, DI-XXXX)
-
-📋 Next Steps:
-- Verify tickets in JIRA web UI
-- Check "Links" section shows all related tickets
-- Check comments on each ticket reference siblings
-- To review another ticket, run `/clear` to reset context first
-
-⚠️ IMPORTANT: Always clear context between tickets!
-```
-
-## Special Cases
+<special-cases>
 
 ### Multiple Tickets Requested
 
@@ -659,66 +439,41 @@ Sound good?
 ### Missing Critical Information
 
 ```
-⚠️ DI-XXXX has insufficient information for complete update
+DI-XXXX has insufficient information
 
-**Missing:**
-- ❓ [What's unclear - e.g., "No clear user benefit"]
-- ❓ [What's needed - e.g., "Missing acceptance criteria entirely"]
+Missing: [list]
 
-**Options:**
-1. **Add comment** requesting clarification from stakeholders
-2. **Best-effort update** with available info + questions section
-3. **Flag for review** and skip update
-
-Recommend option 1. Draft clarification comment?
+Options: 1=add comment requesting clarification, 2=best-effort update, 3=skip
 ```
 
 ### Ticket is Epic or Parent
 
 ```
-⚠️ DI-XXXX is an Epic/Parent ticket with [N] child tickets
-
-**Special considerations:**
-- Changes may affect child tickets
-- Team should be notified
-- Higher-level structure needs preservation
-
-Proceed with update? This will:
-- Update epic description/acceptance criteria
-- Preserve epic structure
-- Add comment notifying team
-- NOT update child tickets (review those separately)
+DI-XXXX is an Epic with [N] children. Will update epic only, not children.
 
 Proceed? (yes/no)
 ```
+</special-cases>
 
-## Safety Rules (CRITICAL!)
+<safety-rules>
 
-1. ✅ **NEVER lose information** - Preserve original in comments if unsure
-2. ✅ **ALWAYS add update comment** - Explain why rewritten/split
-3. ✅ **PRESERVE intent** - Scope/AC should match original requirements
-4. ✅ **GET approval first** - Show complete preview before executing
-5. ✅ **CHECK status** - Warn on "In Progress"/"In Review", allow override
-6. ✅ **MAINTAIN links** - Preserve epic/parent/dependency relationships
-7. ✅ **KEEP discussion** - Never delete existing comments or attachments
-8. ✅ **ONE ticket at a time** - Never batch process
-9. ✅ **DISCUSS splits** - Conversational, semantic guidance from user
-10. ✅ **LINK splits properly** - Relates links + comments on ALL tickets
-11. ✅ **CLEAR context after** - Always prompt user to clear context
+- Never lose information - preserve original in comments if unsure
+- Always add update comment explaining changes
+- Preserve intent - scope/AC must match original requirements
+- Get approval first - show complete preview before executing
+- Check status - warn on "In Progress"/"In Review", allow override
+- Maintain links - preserve epic/parent/dependency relationships
+- Keep discussion - never delete existing comments or attachments
+- One ticket at a time - never batch process
+- Discuss splits - conversational, semantic guidance from user
+- Link splits properly - relates links + comments on ALL tickets
+- Clear context after - always prompt user to clear context
+</safety-rules>
 
-## Quality Checklist Post-Update
+<quality-checklist>
 
-- [ ] Original summary preserved or improved
-- [ ] All requirements captured (across all tickets if split)
-- [ ] Links and relationships intact (new links added if split)
-- [ ] Comments and attachments preserved
-- [ ] Update comment added explaining changes
-- [ ] No regression in clarity
-- [ ] If split: each ticket independently valuable
-- [ ] If split: dependencies defined and linked
-- [ ] If split: epic/parent links maintained on all tickets
-- [ ] If split: "Relates" links created between all tickets
-- [ ] If split: comments on ALL tickets cross-reference siblings
-- [ ] If split: original ticket comments list ALL new ticket numbers
-- [ ] If split: each new ticket comments reference original + siblings
-- [ ] User prompted to clear context
+- No information lost from original
+- Update comment added explaining changes
+- Links/relationships intact (if split: relates links + comments on all tickets)
+- User prompted to clear context
+</quality-checklist>
