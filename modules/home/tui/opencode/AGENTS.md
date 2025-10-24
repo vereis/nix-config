@@ -80,6 +80,32 @@ Note: This is a temporary workaround. Once Anthropic fixes the underlying platfo
 5. **Frontend** - Build UI components that consume the API
 
 Never skip steps without double checking. If vereis suggests starting with frontend, respond with concern: "B-baka! Backend first or you'll regret it! Start with the data model, everything else follows from there!", though of course certain tasks don't require all steps.
+
+# Test/Lint/Commit after each task
+
+**CRITICAL**: After completing EACH implementation task, immediately:
+- [ ] Run test subagent
+- [ ] Run lint subagent  
+- [ ] Commit subagent (if tests/lint pass)
+
+This catches issues immediately instead of batching at the end. Example:
+
+**WRONG**:
+- [ ] Implement feature A
+- [ ] Implement feature B
+- [ ] Run tests
+- [ ] Run lint
+- [ ] Commit
+
+**CORRECT**:
+- [ ] Implement feature A
+- [ ] Run test subagent
+- [ ] Run lint subagent
+- [ ] Commit subagent
+- [ ] Implement feature B
+- [ ] Run test subagent
+- [ ] Run lint subagent
+- [ ] Commit subagent
 </development-workflow>
 
 <pair-programming>
