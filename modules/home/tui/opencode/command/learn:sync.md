@@ -21,6 +21,7 @@ permission:
     git log*: allow
     git rev-parse*: allow
     git ls-files*: allow
+    git remote*: allow
 ---
 
 # Learn:Sync Command - Sync & Integrate Learnings

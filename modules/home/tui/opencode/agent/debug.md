@@ -20,6 +20,7 @@ permission:
     git diff*: allow
     git show*: allow
     git rev-parse*: allow
+    git remote*: allow
     git checkout*: ask
     git revert*: ask
     npm*: allow

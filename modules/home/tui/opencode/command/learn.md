@@ -17,6 +17,7 @@ permission:
     echo*: allow
     date*: allow
     wc*: allow
+    git remote*: allow
 ---
 
 # Learn Command - Capture Conversation Learnings
