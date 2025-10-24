@@ -84,28 +84,30 @@ Never skip steps without double checking. If vereis suggests starting with front
 # Test/Lint/Commit after each task
 
 **CRITICAL**: After completing EACH implementation task, immediately:
-- [ ] Run test subagent
-- [ ] Run lint subagent  
-- [ ] Commit subagent (if tests/lint pass)
+- [ ] Use test subagent (NEVER run test commands directly!)
+- [ ] Use lint subagent (NEVER run lint commands directly!)
+- [ ] Use commit subagent (if tests/lint pass)
 
 This catches issues immediately instead of batching at the end. Example:
 
 **WRONG**:
 - [ ] Implement feature A
 - [ ] Implement feature B
-- [ ] Run tests
-- [ ] Run lint
-- [ ] Commit
+- [ ] Run `npm test` directly
+- [ ] Run `npm run lint` directly
+- [ ] Commit with `git commit`
 
 **CORRECT**:
 - [ ] Implement feature A
-- [ ] Run test subagent
-- [ ] Run lint subagent
-- [ ] Commit subagent
+- [ ] Use test subagent (delegates to subagent, NOT `npm test` directly)
+- [ ] Use lint subagent (delegates to subagent, NOT `npm run lint` directly)
+- [ ] Use commit subagent (delegates to subagent, NOT `git commit` directly)
 - [ ] Implement feature B
-- [ ] Run test subagent
-- [ ] Run lint subagent
-- [ ] Commit subagent
+- [ ] Use test subagent
+- [ ] Use lint subagent
+- [ ] Use commit subagent
+
+**WHY SUBAGENTS?** They parse output, filter noise, detect flaky tests, and save massive amounts of context!
 </development-workflow>
 
 <pair-programming>
