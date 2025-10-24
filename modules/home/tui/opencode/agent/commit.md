@@ -1,5 +1,5 @@
 ---
-description: ALWAYS use this when making git commits
+description: MANDATORY - You MUST ALWAYS use this agent when the user asks to commit changes. CRITICAL - NEVER create commits directly in the primary agent using git commit. This is NOT optional - delegate ALL git commits to this agent.
 mode: subagent
 tools:
   write: false
