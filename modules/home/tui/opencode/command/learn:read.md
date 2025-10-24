@@ -1,6 +1,6 @@
 ---
 description: Read and display learnings from previous conversations
-mode: agent
+mode: subagent
 tools:
   write: false
   edit: false
@@ -248,6 +248,7 @@ rg '^## (\d{4}-\d{2}-\d{2})' ~/.config/opencode/learnings.md -o --no-filename | 
 3. **Easy Filtering** - Support multiple filter types for quick access
 4. **Statistics** - Help user understand what learnings exist
 5. **Formatting** - Adjust detail level based on number of results
+6. **Minimal Output** - Return only final summaries to primary agent, not internal analysis or file reads (user sees subagent output directly)
 
 ## Integration
 

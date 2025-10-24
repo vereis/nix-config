@@ -1,6 +1,6 @@
 ---
 description: Sync learnings to source repo and integrate into agent/command files
-mode: agent
+mode: subagent
 tools:
   write: false
   edit: false
@@ -514,6 +514,7 @@ modules/home/tui/opencode/
 5. **Safe Defaults** - Start with append strategy, offer advanced options
 6. **Detect Conflicts** - Check for contradictions with existing content
 7. **Version Control Friendly** - Encourage review via git diff
+8. **Minimal Output** - Return only final summaries to primary agent, not internal analysis or file reads (user sees subagent output directly)
 
 ## Advanced Features (Future)
 

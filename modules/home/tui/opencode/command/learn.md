@@ -1,6 +1,6 @@
 ---
 description: Capture learnings from conversation corrections and mistakes
-mode: agent
+mode: subagent
 tools:
   write: false
   edit: false
@@ -227,6 +227,7 @@ If user specifies what to learn in $ARGUMENTS:
 4. **User Approval Required** - Never save without showing user first
 5. **Preserve Context** - Include enough context to understand the learning later
 6. **Actionable** - Learnings should be concrete enough to apply
+7. **Keep It Minimal** - Learning entries must be concise to avoid context pollution when read back later
 
 ## Integration with Other Commands
 
