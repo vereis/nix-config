@@ -67,7 +67,7 @@ with lib;
         lf
         socat
         # Dependencies for lf previewer
-        poppler_utils # provides pdftotext
+        poppler-utils # provides pdftotext
         highlight
         unrar
         p7zip # provides 7z
