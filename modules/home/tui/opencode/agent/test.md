@@ -177,6 +177,32 @@ mix test | grep -A 10 "failed"
 
 **The Bash tool automatically handles output if it's too large** - you get streaming output AND proper truncation when needed. Don't manually truncate or you'll miss critical error details.
 
+**RETRY STRATEGY:**
+
+**Automatically retry failed tests up to 2 times** to handle flaky tests:
+
+1. Run tests for the first time
+2. If tests fail, retry up to 2 more times (3 total attempts)
+3. **If possible, retry ONLY the failed tests** (check if test framework supports targeted reruns)
+4. If ANY attempt succeeds, report success but note flaky tests internally
+5. If ALL 3 attempts fail, report the failures from the last attempt
+
+**Why retry?**
+- Flaky tests can fail intermittently (network, timing, race conditions)
+- 2 retries catches true flakes without masking real issues
+- Only retry what failed to save time
+
+**Flaky test tracking:**
+- Internally track which tests passed on retry (don't output details)
+- If tests passed after retries, report success: `✅ All tests passed! (142 tests, 3.2s)`
+- Primary agent doesn't need flake details - just pass/fail matters
+
+**When all attempts fail:**
+```
+❌ 1 test failed (after 3 attempts)
+[filtered failure details]
+```
+
 ### 4. Parse Output
 
 **If ALL tests pass:**
