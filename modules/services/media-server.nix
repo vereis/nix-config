@@ -34,23 +34,17 @@ with lib;
   };
 
   config = mkIf config.modules.media-server.enable {
-    # Ensure a `media` group exists
     users.groups.media = { };
-
-    # Add plex user to media group for accessing media files
-    users.users.plex = {
-      extraGroups = [ "media" ];
-    };
 
     services.plex = {
       enable = true;
       openFirewall = config.modules.media-server.openFirewall;
       user = config.modules.media-server.user;
-      group = "plex";
-      accelerationDevices = mkIf config.modules.media-server.enableHardwareAcceleration [ "*" ];
+      group = "media";
+      dataDir = "/var/lib/plex";
+      extraGroups = [ "media" ];
     };
 
-    # Ensure the media directory exists and has proper permissions for media group
     systemd.tmpfiles.rules = [
       "d ${config.modules.media-server.mediaPath} 0755 root media - -"
       "Z ${config.modules.media-server.mediaPath} 0755 root media - -"
