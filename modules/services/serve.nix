@@ -163,6 +163,18 @@ with lib;
         configFile = "/etc/ddclient.conf";
       };
 
+    users.users.ddclient = mkIf (lib.filterAttrs (
+      name: proxy: proxy.ddns != null && proxy.ddns.enable
+    ) config.modules.serve.sites != {}) {
+      isSystemUser = true;
+      group = "ddclient";
+      home = "/var/lib/ddclient";
+    };
+
+    users.groups.ddclient = mkIf (lib.filterAttrs (
+      name: proxy: proxy.ddns != null && proxy.ddns.enable
+    ) config.modules.serve.sites != {}) {};
+
     services.nginx = {
       enable = true;
       recommendedProxySettings = true;
