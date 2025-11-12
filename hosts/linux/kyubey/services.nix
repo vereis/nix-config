@@ -69,6 +69,13 @@
         largeUploads = true;
         websocketSupport = true;
         sslOptimization = true;
+        ddns = {
+          enable = true;
+          protocol = "cloudflare";
+          login = "token";
+          password = secrets.cloudflare.ddclient;
+          zone = "vereis.com";
+        };
         headers = {
           "X-Plex-Client-Identifier" = "$http_x_plex_client_identifier";
           "X-Plex-Device" = "$http_x_plex_device";
