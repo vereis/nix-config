@@ -178,6 +178,12 @@ with lib;
             builtins.readFile ./tui/git/.gitconfig
           );
         };
+        ".gitconfig-vetspire" = {
+          executable = false;
+          text = builtins.replaceStrings [ "VETSPIRE_EMAIL_PLACEHOLDER" ] [ secrets.vetspire.gitEmail ] (
+            builtins.readFile ./tui/git/.gitconfig-vetspire
+          );
+        };
       }
       config.modules.tui.extraFiles
     ];

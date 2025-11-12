@@ -2,6 +2,9 @@
   email = EMAIL_PLACEHOLDER
   name = USER_PLACEHOLDER
 
+[includeIf "gitdir:~/git/vetspire/"]
+  path = ~/.gitconfig-vetspire
+
 [color]
   ui = true
 
