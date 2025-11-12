@@ -8,11 +8,9 @@
   "instructions": ["AGENTS.md"],
   "keybinds": {
     "leader": "ctrl+x",
-    "app_help": "<leader>h",
     "app_exit": "ctrl+c,<leader>q",
     "editor_open": "<leader>e",
     "theme_list": "<leader>t",
-    "project_init": "<leader>i",
     "session_new": "<leader>n",
     "session_list": "<leader>l",
     "session_share": "<leader>s",
