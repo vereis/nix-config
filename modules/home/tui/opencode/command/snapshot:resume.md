@@ -48,6 +48,23 @@ Examples:
 
 <workflow>
 
+### Step 0: Validate Arguments
+
+**Check if name provided:**
+```bash
+if [ -z "$ARGUMENTS" ]; then
+  echo "❌ Error: Snapshot name required"
+  echo ""
+  echo "Usage: /snapshot:resume <name>"
+  echo ""
+  echo "Available snapshots:"
+  ls -1 "$HOME/.config/opencode/snapshots/" 2>/dev/null || echo "  (none)"
+  echo ""
+  echo "Example: /snapshot:resume my-task"
+  exit 1
+fi
+```
+
 ### Step 1: Locate Snapshot File
 
 **Search order:**
