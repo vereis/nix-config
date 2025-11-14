@@ -107,6 +107,20 @@ Following atomic commit workflow (code → test → lint → commit per semantic
 
 <workflow>
 
+### Step 0: Validate Arguments
+
+**Check if name provided:**
+```bash
+if [ -z "$ARGUMENTS" ]; then
+  echo "❌ Error: Snapshot name required"
+  echo ""
+  echo "Usage: /snapshot:create <name>"
+  echo ""
+  echo "Example: /snapshot:create my-task"
+  exit 1
+fi
+```
+
 ### Step 1: Gather Context
 
 **Detect ticket/issue:**
