@@ -1,7 +1,7 @@
 ---
 description: Planning and analysis agent with restricted permissions - uses Opus for deep thinking
 mode: primary
-model: anthropic/claude-opus-4-20250514
+model: anthropic/claude-opus-4
 temperature: 0.1
 tools:
   write: false
