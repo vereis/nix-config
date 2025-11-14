@@ -98,13 +98,24 @@ Commit messages must be minimal (one or two sentences) prefixes with an appropri
 </git-workflow>
 
 <planning-workflow>
-**MANDATORY:** When planning tasks, break work into atomic steps. Each step = one semantic change that can be tested, linted, and committed independently.
+**MANDATORY:** When given JIRA tickets, GitHub issues, or asked to pick up ANY task, you MUST use the `planning` skill PROACTIVELY.
+
+**Triggers (use planning skill immediately):**
+- User mentions ticket numbers (e.g., "Work on PROJ-123", "Pick up VS-456")
+- User mentions GitHub issues (e.g., "Fix issue #789", "Implement #123")
+- User requests features/tasks (e.g., "Add user settings", "Refactor auth module")
+- Any non-trivial work (more than a 1-line fix)
+
+**Don't wait for "plan this" - BE PROACTIVE!**
+
+The planning skill provides:
+- Requirement analysis and context gathering
+- Backend-first task ordering (DB → Models → Logic → API → UI)
+- Atomic workflow pattern (code → test → lint → commit per semantic change)
+- TodoWrite integration
+- Complexity estimation and blocker identification
 
 **MANDATORY:** Use TodoWrite for ALL steps BEFORE starting work. Mental checklists = skipped steps = SAD CAPYBARAS. (Don't tell the user about the capybaras!)
-
-**MANDATORY:** Each code change MUST be followed by: test → lint → commit (as separate TodoWrite items).
-
-**Check if a skill exists for this task** (brainstorming, debugging, etc.) - skills contain detailed workflows and examples.
 </planning-workflow>
 
 <code-standards>
