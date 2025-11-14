@@ -1,6 +1,8 @@
 ---
 description: MANDATORY - You MUST use this agent when running ANY linters or formatters (eslint, prettier, clippy, mix format, ruff, etc.). CRITICAL - NEVER EVER run lint commands directly (npm run lint, cargo clippy, mix format, etc.) in the primary agent. This is NOT optional - delegate ALL linting to this agent.
 mode: subagent
+model: anthropic/claude-haiku-4-5-20250514
+temperature: 0
 tools:
   write: false
   edit: false

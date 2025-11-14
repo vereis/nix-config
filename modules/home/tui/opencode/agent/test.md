@@ -1,6 +1,8 @@
 ---
 description: MANDATORY - You MUST use this agent when running ANY tests (unit, integration, e2e). CRITICAL - NEVER EVER run test commands directly (npm test, mix test, cargo test, pytest, etc.) in the primary agent. This is NOT optional - delegate ALL test execution to this agent.
 mode: subagent
+model: anthropic/claude-haiku-4-5-20250514
+temperature: 0
 tools:
   write: false
   edit: false
