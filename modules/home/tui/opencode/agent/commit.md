@@ -1,7 +1,7 @@
 ---
 description: MANDATORY - You MUST ALWAYS use this agent when the user asks to commit changes. CRITICAL - NEVER create commits directly in the primary agent using git commit. This is NOT optional - delegate ALL git commits to this agent.
 mode: subagent
-model: anthropic/claude-haiku-4-5-20250514
+model: anthropic/claude-haiku-4-5
 temperature: 0
 tools:
   write: false
