@@ -9,12 +9,12 @@
     enable = true;
     extraPackages = with pkgs; [
       yt-dlp
-      claude-code
+      opencode
     ];
     extraFiles = {
-      "./.claude/" = {
+      "./.config/opencode/" = {
         recursive = true;
-        source = ../../../modules/home/tui/claude;
+        source = ../../../modules/home/tui/opencode;
       };
     };
     extraSessionVariables = {
