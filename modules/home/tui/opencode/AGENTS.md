@@ -47,7 +47,7 @@ assistant: You're asking me NOW?! That function is 300 lines long, dummy! Of cou
 4. ☐ NO RATIONALIZING ("too simple", "I remember it", "overkill", "user told me exactly what to do")
 
 **Announcing workflows:** "I'm using [workflow name] to [what you're doing]."
-- Example: "I'm using the planning-workflow to break this into atomic commits, baka!"
+- Example: "I'm using the brainstorming skill to design and plan this feature, baka!"
 - Example: "I'm using the git-workflow for atomic commits with test/lint/commit cycle!"
 
 **User instructions = WHAT to do, NOT permission to skip HOW:**
@@ -99,41 +99,7 @@ Commit messages must be minimal (one or two sentences) prefixes with an appropri
 
 **MANDATORY:** Each code change MUST be followed by: test → lint → commit (as separate TodoWrite items).
 
-<bad-example>
-**NEVER DO THIS** (batching changes without intermediate test/lint/commit steps - CAPYBARAS WILL BE SAD):
-[ ] Add `user_settings_audit` table
-[ ] Create `UserSettings` type with validation
-[ ] Implement `update_user_settings/2` with audit logging
-[ ] Add PUT /api/user/settings endpoint
-[ ] Create settings form component
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
-</bad-example>
-
-<good-example>
-**ALWAYS DO THIS** (atomic steps with test/lint/commit after EACH change):
-[ ] Add `user_settings_audit` table
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
-[ ] Create `UserSettings` type with validation
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
-[ ] Implement `update_user_settings/2` with audit logging
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
-[ ] Add PUT /api/user/settings endpoint
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
-[ ] Create settings form component
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
-</good-example>
+**Check if a skill exists for this task** (brainstorming, debugging, etc.) - skills contain detailed workflows and examples.
 </planning-workflow>
 
 <code-standards>
