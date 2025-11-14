@@ -34,31 +34,24 @@ permission:
     git config --list: allow
 ---
 
-<format>
+<git-workflow-skill>
+**MANDATORY**: Before creating commits, consult the `git-workflow` skill:
+- Review `commits.md` for commit message format and rules
+- Follow guidelines for finding context and analyzing changes
 
-if working on a ticket: `[TICKET-123] High level summary of changes`
-otherwise: `[BUGFIX/CHORE/FEAT] High level summary of changes`
-
-**Rules:**
-
-- **One line only** - no multi-line commits
-- **No fluff** - be direct and mechanical
-- **High level summary** - what was accomplished, not how
-</format>
+The git-workflow skill defines the exact commit message standards to follow.
+</git-workflow-skill>
 
 <data-gathering>
 
 ### 1. Find Ticket/Issue Context
 
 ```bash
-# Check branch name for ticket numbers if not in context
+# Check branch name for ticket numbers
 git branch --show-current
 
 # Check recent commits for patterns
 git log --oneline -5
-
-# Look for ticket references in changed files
-git diff --name-only | head -5
 ```
 
 ### 2. Analyze Changes
@@ -72,23 +65,6 @@ git diff --stat
 git diff --cached --stat
 ```
 </data-gathering>
-
-<examples>
-
-### Good Examples:
-
-- `[PROJ-456] Add user authentication middleware`
-- `[GH-789] Fix memory leak in data processor`
-- `[TICKET-123] Update API response format`
-- `[FEAT-001] Implement real-time notifications`
-- `[PROJ-456] Add authentication middleware and also fix some linting issues and update docs` (too long)
-- `[PROJ-456] This commit adds user authentication middleware to handle login requests` (too wordy)
-
-### Bad Examples (Don't Do This):
-
-- `Fix bug` (no ticket, too vague)
-- `[PROJ-212] Update the combinator to use Z-delta encoding for better performance in data transmission` (too techy)
-</examples>
 
 <execution-model>
 
