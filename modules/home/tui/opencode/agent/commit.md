@@ -4,6 +4,7 @@ mode: subagent
 model: anthropic/claude-haiku-4-5
 temperature: 0
 tools:
+  read: true
   write: false
   edit: false
 permission:
@@ -16,6 +17,12 @@ permission:
     head*: allow
     tail*: allow
     tree*: allow
+    echo*: allow
+    wc*: allow
+    file*: allow
+    stat*: allow
+    pwd: allow
+    touch /tmp/*: allow
     git add*: allow
     git commit*: allow
     git status: allow
