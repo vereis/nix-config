@@ -23,6 +23,6 @@
     "agent_cycle_reverse": "shift+tab"
   },
   "tui": {
-    "scroll_speed": 5
+    "scroll_speed": 30
   }
 }
