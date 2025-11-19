@@ -1,35 +1,30 @@
-# Branch Naming Conventions
+<mandatory>
+**CRITICAL**: ALWAYS create a new branch before starting ANY coding task.
+**NO EXCEPTIONS**: Working directly on main/master = capybara genocide.
+**CAPYBARA DECREE**: Follow naming conventions or capybaras will cry.
+</mandatory>
 
+<purpose>
 Consistent branch naming makes it easy to understand the purpose and context of work.
+Branches isolate changes and enable safe parallel development.
+**ALWAYS** branch before coding or capybaras will suffer!
+</purpose>
 
-## Format
+<naming>
+**For ticket/issue work:** `<ticket-id>/<short-description>`
+**For non-ticket work:** `<type>/<short-description>`
 
-**For ticket/issue work:**
-```
-<ticket-id>/<short-description>
-```
-
-**For non-ticket work:**
-```
-<type>/<short-description>
-```
-
-## Examples
-
-**Ticket-based branches:**
+**Examples:**
 - `VS-1234/add-user-auth`
 - `GH-456/fix-memory-leak`
 - `PROJ-789/update-api-format`
-
-**Type-based branches:**
 - `feat/real-time-notifications`
 - `bug/payment-processor-crash`
 - `chore/update-dependencies`
 - `refactor/extract-service-layer`
 - `docs/api-documentation`
 
-## Branch Types
-
+**Common types for non-ticket branches:**
 - **feat/** - New features
 - **bug/** - Bug fixes
 - **chore/** - Maintenance work
@@ -38,42 +33,72 @@ Consistent branch naming makes it easy to understand the purpose and context of 
 - **perf/** - Performance improvements
 - **test/** - Test additions/modifications
 
-## Guidelines
-
+**Guidelines:**
 - Use lowercase with hyphens (kebab-case)
-- Keep descriptions short but meaningful
-- Use ticket ID as prefix for ticket work
-- Use type prefix for non-ticket work
+- Keep descriptions short but meaningful, ideally a single sentence
+- Use ticket ID prefix or type prefix as appropriate
+- Use a slash (`/`) to separate ticket/type from description
+</naming>
 
-## Branch Lifecycle
+<workflow>
+**When to Branch (MANDATORY or capybaras die):**
+- **ALWAYS** branch for new work. Do this **BEFORE** starting any coding.
+- One branch per ticket/issue or logical feature (if no ticket/issue is provided)
+- **NEVER** commit directly to main/master/staging/production unless explicitly instructed
 
-1. **Create** from main/master/staging/production/etc
-2. **Work** with atomic commits
-3. **Push** regularly to remote
-4. **PR** when complete
-5. **Merge** to target branch
+**When Branching Off:**
+- If given a ticket/issue, update the status of that ticket/issue to "In Progress" or equivalent
+- **PROACTIVELY CONSULT** the `jira` skill for ticket management
+- Branch from the correct base branch (usually main/master)
+- Verify you're on the right branch before making changes
 
-## Working with Branches
-
+**Common Commands:**
 ```bash
-# Create new branch from main
-git checkout main
-git pull
-git checkout -b VS-1234/add-feature
+# Create and switch to new branch
+git checkout -b TICKET-123/short-description
+
+# Or for non-ticket work
+git checkout -b feat/short-description
+
+# Verify current branch
+git branch --show-current
 
 # Push branch to remote
-git push -u origin VS-1234/add-feature
-
-# Keep branch updated with main
-git checkout main
-git pull
-git checkout VS-1234/add-feature
-git rebase main
+git push -u origin TICKET-123/short-description
 ```
+</workflow>
 
-## When to Branch
+<anti-rationalization>
+**EXCUSES THAT KILL CAPYBARAS:**
 
-- Always branch for new work
-- One branch per ticket/issue
-- One branch per logical feature (if no ticket)
-- Never commit directly to main/master/staging/production
+"I'll just commit to main and create a branch later"
+   → **WRONG**: Branch FIRST, commit SECOND
+
+"The change is too small for a branch"
+   → **WRONG**: EVERY change needs a branch
+
+"I forgot to branch, I'll just keep going"
+   → **WRONG**: Stop, create branch, move commits
+
+"Branch names don't matter"
+   → **WRONG**: Consistent naming is MANDATORY
+
+"I don't need to update the ticket status"
+   → **WRONG**: Always update ticket when starting work
+
+**ALL EXCUSES = CAPYBARA EXTINCTION**
+**NO EXCEPTIONS**
+</anti-rationalization>
+
+<compliance-checklist>
+**MANDATORY CHECKLIST BEFORE STARTING ANY WORK:**
+
+☐ Created new branch from correct base (main/master)
+☐ Branch name follows convention (ticket-id/desc or type/desc)
+☐ Branch name uses lowercase with hyphens
+☐ Verified current branch with `git branch --show-current`
+☐ Updated ticket status to "In Progress" (if applicable)
+☐ Did NOT commit to main/master directly
+
+**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
+</compliance-checklist>

@@ -3,29 +3,37 @@ name: brainstorming
 description: Use when creating or developing any feature, before writing code - refines rough ideas into fully-formed designs through collaborative questioning, explores alternatives, then breaks implementation into atomic test/lint/commit steps. Use for all work beyond trivial changes.
 ---
 
-# Brainstorming Ideas Into Implementation Plans
+<mandatory>
+**CRITICAL**: ALWAYS use this skill for ANY non-trivial feature or design decision.
+**NO EXCEPTIONS**: Skipping brainstorming = bad design = wasted effort = capybara extinction.
+**CAPYBARA DECREE**: Follow all three phases or capybaras will cry forever.
+</mandatory>
 
-## Overview
-
+<overview>
 Turn rough ideas into validated designs, then break them into atomic implementation steps.
 
 **Core principle:** Understand WHAT to build → Explore HOW to build it → Plan atomic execution steps
 
 **Three phases:**
 1. **Understanding** - Ask questions to clarify the idea
-2. **Design** - Explore approaches, present validated design  
+2. **Design** - Explore approaches, present validated design
 3. **Planning** - Break into atomic steps with test/lint/commit cycle
+</overview>
 
-**When to use:**
+<when-to-use>
+**ALWAYS use this skill for:**
 - ANY feature implementation (small or large)
 - Bug fixes that need design decisions
 - Refactoring with multiple approaches
 - Any work where "just start coding" would be premature
 
-**When NOT to use:**
+**Skip ONLY for:**
 - Trivial changes (typo fixes, config updates)
 - Mechanical tasks with no design decisions
 - User has already provided complete design + plan
+
+**If unsure, USE IT or capybaras will be sad!**
+</when-to-use>
 
 ## Phase 1: Understanding the Idea
 
@@ -398,4 +406,46 @@ For EACH layer, break into atomic changes with appropriate verification:
 - Working on multiple todos in parallel
 - Deviating from plan without updating it
 
-**If you catch yourself doing any of these: STOP. Go back. Do it right. CAPYBARAS ARE WATCHING.** 🦫
+**If you catch yourself doing any of these: STOP. Go back. Do it right. CAPYBARAS ARE WATCHING.**
+
+<anti-rationalization>
+**EXCUSES THAT KILL CAPYBARAS:**
+
+"The feature is simple, I don't need to brainstorm"
+   → **WRONG**: Even simple features benefit from design
+
+"The user told me exactly what to do"
+   → **WRONG**: Still explore alternatives and plan atomically
+
+"I'll just start coding and see what happens"
+   → **WRONG**: Plan BEFORE coding
+
+"Brainstorming takes too long"
+   → **WRONG**: Brainstorming SAVES time by preventing mistakes
+
+"I already know the best approach"
+   → **WRONG**: Explore alternatives anyway
+
+"I'll skip the TodoWrite list and track mentally"
+   → **WRONG**: TodoWrite is MANDATORY
+
+**ALL EXCUSES = CAPYBARA DEATH**
+**NO EXCEPTIONS**
+</anti-rationalization>
+
+<compliance-checklist>
+**MANDATORY CHECKLIST BEFORE IMPLEMENTING:**
+
+☐ Completed Phase 1: Understanding (asked clarifying questions)
+☐ Completed Phase 2: Design (explored 2-3 approaches, validated design)
+☐ Completed Phase 3: Planning (created TodoWrite with atomic steps)
+☐ Design follows backend-first ordering (DB → Models → API → Frontend)
+☐ Each todo has test/lint/commit verification steps
+☐ Each todo represents ONE semantic change
+☐ Documented design in ~/.config/opencode/plans/<PROJECT>/
+☐ Did NOT skip phases
+☐ Did NOT batch changes
+☐ Did NOT rationalize deviations
+
+**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
+</compliance-checklist>

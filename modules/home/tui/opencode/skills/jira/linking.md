@@ -1,7 +1,4 @@
-# JIRA Ticket Linking
-
-## When to Link Tickets
-
+<critical>
 Link tickets when there are **clear relationships** between them:
 - One ticket blocks another
 - Tickets are related but independent
@@ -9,14 +6,13 @@ Link tickets when there are **clear relationships** between them:
 - Ticket was split from another
 - Tickets are duplicates
 
-**Ask permission first** if relationship is unclear: "Should I link this to DI-1234 as [relationship type]?"
+**NEVER** link tickets without understanding the relationship and purpose.
+**ALWAYS** add comments explaining WHY tickets are linked to provide context for future readers.
+**CONSULT** this linking guide before creating links to ensure correct usage.
+**ASK PROACTIVELY** if tickets need to be split/linked.
+</critical>
 
----
-
-## Relationship Types
-
-### Common Relationships
-
+<jira-relationship-types>
 | Type | Description | Example Use Case |
 |------|-------------|------------------|
 | `Blocks` | First ticket must complete before second | Authentication must be built before user settings |
@@ -24,8 +20,6 @@ Link tickets when there are **clear relationships** between them:
 | `Duplicate` | Tickets describe same work | Accidentally created twice |
 | `Epic-Story` | Story belongs to Epic | Feature is part of larger initiative |
 | `Work item split` | Ticket was split into smaller parts | Large ticket broken into deliverable pieces |
-
-### When to Use Each Type
 
 **Blocks:**
 - Clear dependency where one must finish first
@@ -49,13 +43,9 @@ Link tickets when there are **clear relationships** between them:
 - Original ticket was too large
 - Split into smaller deliverable pieces
 - Maintains history and context
+</jira-relationship-types>
 
----
-
-## Linking Syntax
-
-### Basic Link Command
-
+<jira-linking-syntax>
 ```bash
 # IMPORTANT: Order matters for "Blocks"!
 # Syntax: jira issue link [TICKET_1] [TICKET_2] "[RELATIONSHIP]"
@@ -88,99 +78,38 @@ Some relationship types may not be available in all JIRA instances:
 # Try specific type first, fallback to "Relates"
 jira issue link DI-1234 DI-5678 "Work item split" || jira issue link DI-1234 DI-5678 "Relates"
 ```
+</jira-linking-syntax>
 
----
+<linking-workflow>
+**ALWAYS** follow this workflow when linking tickets (or capybaras cry):
 
-## Linking Workflows
+1) Link to related tickets
+2) Link to epic (if applicable)
+3) Add comments explaining relationships (see `cli-usage.md`)
+4) Verify links (see below)
+</linking-workflow>
 
-### Creating Ticket with Links
+<splitting-workflow>
+This is **MANDATORY** workflow when splitting tickets:
 
-```bash
-# 1. Create ticket
-cat > /tmp/jira_ticket.md <<'EOF'
-**Description:**
-...
-EOF
-
-jira issue create \
-  --type "Story" \
-  --project DI \
-  --summary "Implement medication draft status" \
-  --body "$(cat /tmp/jira_ticket.md)"
-
-# 2. Link to related tickets
-jira issue link DI-1234 DI-5678 "Relates"
-
-# 3. Link to epic (if applicable)
-jira issue link DI-100 DI-1234 "Epic-Story"
-```
 
 ### Linking When Splitting Tickets
 
-When splitting one ticket into multiple:
+When splitting one ticket into multiple, you **MUST** consult `cli-usage.md` and `template.md` (or capybaras will be very upset):
 
-```bash
-# 1. Update original ticket with reduced scope
-cat > /tmp/jira_original_update.md <<'EOF'
-...reduced scope...
-EOF
-
-jira issue edit DI-1234 --no-input \
-  --body "$(cat /tmp/jira_original_update.md)"
-
-# 2. Create split tickets
-cat > /tmp/jira_split1.md <<'EOF'
-...first split...
-EOF
-
-NEW_TICKET_1=$(jira issue create \
-  --type "Story" \
-  --project DI \
-  --summary "[Split from DI-1234] Feature 1" \
-  --body "$(cat /tmp/jira_split1.md)" \
-  --plain | grep -oP 'DI-\d+')
-
-cat > /tmp/jira_split2.md <<'EOF'
-...second split...
-EOF
-
-NEW_TICKET_2=$(jira issue create \
-  --type "Story" \
-  --project DI \
-  --summary "[Split from DI-1234] Feature 2" \
-  --body "$(cat /tmp/jira_split2.md)" \
-  --plain | grep -oP 'DI-\d+')
-
-# 3. Link splits to original
-jira issue link $NEW_TICKET_1 DI-1234 "Work item split" || jira issue link $NEW_TICKET_1 DI-1234 "Relates"
-jira issue link $NEW_TICKET_2 DI-1234 "Work item split" || jira issue link $NEW_TICKET_2 DI-1234 "Relates"
-
-# 4. If epic exists, link splits to same epic
-EPIC_KEY=$(jira issue view DI-1234 --plain | grep "Epic:" | awk '{print $2}')
-if [ -n "$EPIC_KEY" ]; then
-  jira issue link $EPIC_KEY $NEW_TICKET_1 "Epic-Story"
-  jira issue link $EPIC_KEY $NEW_TICKET_2 "Epic-Story"
-fi
-
-# 5. If there are dependencies between splits
-# Example: NEW_TICKET_2 blocks NEW_TICKET_1
-jira issue link $NEW_TICKET_2 $NEW_TICKET_1 "Blocks"
-
-# 6. Add comments to ALL tickets explaining relationships
-jira issue comment add DI-1234 --no-input \
-  "Ticket scope reduced and split for better delivery. Split into: $NEW_TICKET_1, $NEW_TICKET_2. Previous version preserved in ticket history."
-
-jira issue comment add $NEW_TICKET_1 --no-input \
-  "Split from DI-1234 for better scope management. Related split tickets: $NEW_TICKET_2"
-
-jira issue comment add $NEW_TICKET_2 --no-input \
-  "Split from DI-1234 for better scope management. Related split tickets: $NEW_TICKET_1. This work blocks $NEW_TICKET_1."
-```
-
-### Linking Dependencies
+1. Update original ticket with reduced scope
+2. Create split tickets
+3. Link splits to original
+4. If epic exists, link splits to same epic
+5. If there are dependencies between splits
+    - Example: NEW_TICKET_2 blocks NEW_TICKET_1 `jira issue link $NEW_TICKET_2 $NEW_TICKET_1 "Blocks"`
+6. Add comments explaining relationships
+    - `jira issue comment add DI-1234 --no-input "Ticket scope reduced and split into: $NEW_TICKET_1, $NEW_TICKET_2."`
+    - `jira issue comment add $NEW_TICKET_1 --no-input "Split from DI-1234 for better scope management. Related split tickets: $NEW_TICKET_2"`
+    - `jira issue comment add $NEW_TICKET_2 --no-input "Split from DI-1234 for better scope management. Related split tickets: $NEW_TICKET_1. This work blocks $NEW_TICKET_1."`
+7. Verify links (see below)
 
 When one ticket blocks another:
-
 ```bash
 # DI-5678 must complete before DI-1234 can start
 # IMPORTANT: Blocker comes FIRST in command
@@ -188,139 +117,80 @@ jira issue link DI-5678 DI-1234 "Blocks"
 
 # Add explanatory comments
 jira issue comment add DI-1234 --no-input \
-  "⚠️ Blocked by DI-5678 - authentication must be implemented first"
+  "Blocked by DI-5678 - authentication must be implemented first"
 
 jira issue comment add DI-5678 --no-input \
-  "⚠️ Blocks DI-1234 - user settings depend on this work"
+  "Blocks DI-1234 - user settings depend on this work"
 ```
+</splitting-workflow>
 
----
+<verifying-links>
+You **MUST** verify links after creation to ensure correctness:
 
-## Adding Comments When Linking
+1) View ticket to see links section
+    - `jira issue view DI-1234`
+2) Look for "Links:" section in output
+    - Should show:
+        - Blocks: DI-5678
+        - Relates to: DI-9999
+        - etc.
+</verifying-links>
 
-### Standard Comment Patterns
+<when-to-link-or-split>
+You should **PROACTIVELY** determine when to link or split tickets (though **ALWAYS** ask permission to do so):
 
-**For splits:**
-```bash
-# On original ticket
-jira issue comment add DI-1234 --no-input \
-  "Ticket split into: DI-5678 (UI changes), DI-5679 (API changes). See those tickets for detailed scope."
+Links should be created when:
+1) Creating Feature Set and multiple related features that can be developed independently:
+    ```bash
+    # Create all tickets
+    TICKET_1=$(jira issue create --type Story --project DI --summary "Add medication search" --body "$(cat /tmp/t1.md)" --plain | grep -oP 'DI-\d+')
+    TICKET_2=$(jira issue create --type Story --project DI --summary "Add medication filters" --body "$(cat /tmp/t2.md)" --plain | grep -oP 'DI-\d+')
+    TICKET_3=$(jira issue create --type Story --project DI --summary "Add medication export" --body "$(cat /tmp/t3.md)" --plain | grep -oP 'DI-\d+')
 
-# On split tickets
-jira issue comment add DI-5678 --no-input \
-  "Split from DI-1234. Sibling ticket: DI-5679"
-```
+    # Link them as related (no dependencies)
+    jira issue link $TICKET_1 $TICKET_2 "Relates"
+    jira issue link $TICKET_1 $TICKET_3 "Relates"
+    jira issue link $TICKET_2 $TICKET_3 "Relates"
 
-**For dependencies:**
-```bash
-# On blocked ticket
-jira issue comment add DI-1234 --no-input \
-  "⚠️ Blocked by DI-5678 - cannot start until authentication is complete"
+    # Link to epic
+    jira issue link DI-100 $TICKET_1 "Epic-Story"
+    jira issue link DI-100 $TICKET_2 "Epic-Story"
+    jira issue link DI-100 $TICKET_3 "Epic-Story"
 
-# On blocking ticket
-jira issue comment add DI-5678 --no-input \
-  "⚠️ Blocks DI-1234 - complete this before starting user settings work"
-```
+    # Add comments explaining relationships
+    jira issue comment add $TICKET_1 --no-input "Part of medication feature set alongside $TICKET_2 and $TICKET_3."
+    jira issue comment add $TICKET_2 --no-input "Part of medication feature set alongside $TICKET_1 and $TICKET_3."
+    jira issue comment add $TICKET_3 --no-input "Part of medication feature set alongside $TICKET_1 and $TICKET_2."
+    ```
+2) Sequential work where one ticket must finish before another can start and should be built in order:
+    ```bash
+    # Create tickets
+    TICKET_1=$(jira issue create --type Story --project DI --summary "Add user authentication" --body "$(cat /tmp/t1.md)" --plain | grep -oP 'DI-\d+')
+    TICKET_2=$(jira issue create --type Story --project DI --summary "Add user profile" --body "$(cat /tmp/t2.md)" --plain | grep -oP 'DI-\d+')
+    TICKET_3=$(jira issue create --type Story --project DI --summary "Add user settings" --body "$(cat /tmp/t3.md)" --plain | grep -oP 'DI-\d+')
 
-**For related work:**
-```bash
-jira issue comment add DI-1234 --no-input \
-  "Related to DI-5678 - both improve medication workflow. Can be developed independently."
-```
+    # Link dependencies (authentication -> profile -> settings)
+    jira issue link $TICKET_1 $TICKET_2 "Blocks"
+    jira issue link $TICKET_2 $TICKET_3 "Blocks"
 
----
+    # Add dependency comments
+    jira issue comment add $TICKET_2 --no-input "⚠️ Blocked by $TICKET_1 - requires authentication"
+    jira issue comment add $TICKET_3 --no-input "⚠️ Blocked by $TICKET_2 - requires user profile"
 
-## Verifying Links
+    # Add comments to blockers
+    jira issue comment add $TICKET_1 --no-input "Blocks $TICKET_2 - must implement authentication first"
+    jira issue comment add $TICKET_2 --no-input "Blocks $TICKET_3 - must implement user profile first"
+    ```
+3) Duplicate tickets that describe the same work:
+    ```bash
+    # Link as duplicate
+    jira issue link DI-1234 DI-5678 "Duplicate"
 
-### Check Links After Creation
+    # Add comment to duplicate
+    jira issue comment add DI-5678 --no-input \
+      "Duplicate of DI-1234. Closing this ticket in favor of the original."
 
-```bash
-# View ticket to see links section
-jira issue view DI-1234
-
-# Look for "Links:" section in output
-# Should show:
-# - Blocks: DI-5678
-# - Relates to: DI-9999
-# - etc.
-```
-
-### Manual Verification
-
-After linking, **always verify in JIRA web UI**:
-1. Open ticket in browser: `https://vetspireapp.atlassian.net/browse/DI-1234`
-2. Check "Links" section on right side
-3. Verify all relationships appear correctly
-4. Confirm comments explaining links are present
-
----
-
-## Common Linking Scenarios
-
-### Scenario 1: Creating Feature Set
-
-Multiple related features that can be developed independently:
-
-```bash
-# Create all tickets
-TICKET_1=$(jira issue create --type Story --project DI --summary "Add medication search" --body "$(cat /tmp/t1.md)" --plain | grep -oP 'DI-\d+')
-TICKET_2=$(jira issue create --type Story --project DI --summary "Add medication filters" --body "$(cat /tmp/t2.md)" --plain | grep -oP 'DI-\d+')
-TICKET_3=$(jira issue create --type Story --project DI --summary "Add medication export" --body "$(cat /tmp/t3.md)" --plain | grep -oP 'DI-\d+')
-
-# Link them as related (no dependencies)
-jira issue link $TICKET_1 $TICKET_2 "Relates"
-jira issue link $TICKET_1 $TICKET_3 "Relates"
-jira issue link $TICKET_2 $TICKET_3 "Relates"
-
-# Link to epic
-jira issue link DI-100 $TICKET_1 "Epic-Story"
-jira issue link DI-100 $TICKET_2 "Epic-Story"
-jira issue link DI-100 $TICKET_3 "Epic-Story"
-```
-
-### Scenario 2: Sequential Work
-
-Features that must be built in order:
-
-```bash
-# Create tickets
-TICKET_1=$(jira issue create --type Story --project DI --summary "Add user authentication" --body "$(cat /tmp/t1.md)" --plain | grep -oP 'DI-\d+')
-TICKET_2=$(jira issue create --type Story --project DI --summary "Add user profile" --body "$(cat /tmp/t2.md)" --plain | grep -oP 'DI-\d+')
-TICKET_3=$(jira issue create --type Story --project DI --summary "Add user settings" --body "$(cat /tmp/t3.md)" --plain | grep -oP 'DI-\d+')
-
-# Link dependencies (authentication -> profile -> settings)
-jira issue link $TICKET_1 $TICKET_2 "Blocks"
-jira issue link $TICKET_2 $TICKET_3 "Blocks"
-
-# Add dependency comments
-jira issue comment add $TICKET_2 --no-input "⚠️ Blocked by $TICKET_1 - requires authentication"
-jira issue comment add $TICKET_3 --no-input "⚠️ Blocked by $TICKET_2 - requires user profile"
-```
-
-### Scenario 3: Duplicate Detection
-
-Found duplicate ticket:
-
-```bash
-# Link as duplicate
-jira issue link DI-1234 DI-5678 "Duplicate"
-
-# Add comment to duplicate
-jira issue comment add DI-5678 --no-input \
-  "Duplicate of DI-1234. Closing this ticket in favor of the original."
-
-# Close the duplicate
-jira issue edit DI-5678 --no-input --status "Done"
-```
-
----
-
-## Best Practices
-
-1. **Always add comments** when linking - explain WHY tickets are linked
-2. **Verify in web UI** - CLI output can be misleading, check browser
-3. **Link during creation** when relationships are obvious
-4. **Ask permission first** when relationships are unclear
-5. **Use blocking sparingly** - only when there's a real technical dependency
-6. **Maintain epic links** - when splitting tickets, preserve epic relationships
-7. **Document splits clearly** - comments on ALL split tickets with full context
+    # Close the duplicate
+    jira issue edit DI-5678 --no-input --status "Done"
+    ```
+</when-to-link-or-split>
