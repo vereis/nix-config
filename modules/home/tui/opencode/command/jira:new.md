@@ -42,8 +42,7 @@ permission:
 
 <jira-skill>
 **MANDATORY**: Before proceeding, consult the `jira` skill:
-- Review `template.md` for complete ticket structure and examples
-- Follow guidance in `guidance.md` for Description, Scope, Acceptance Criteria, Dev Notes, and Questions
+- Review `template.md` for complete ticket structure, section guidance, and examples
 - Use patterns from `cli-usage.md` for all JIRA CLI operations (CRITICAL: /tmp file pattern!)
 - Apply research workflow from `research.md` when gathering context
 - Reference `linking.md` for ticket relationships and linking syntax
@@ -78,7 +77,7 @@ Ensure all necessary details are collected, if not, GOTO Step 2.
 
 ### Step 4: Draft Ticket
 - Follow template structure from `template.md`
-- Apply guidance from `guidance.md` for each section
+- Apply section guidance from `template.md` for each section
 - Ensure description uses specific actors and measurable benefits
 - Verify scope identifies WHERE, not HOW
 - Confirm acceptance criteria covers happy path + edge cases + errors

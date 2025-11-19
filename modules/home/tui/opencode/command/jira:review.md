@@ -46,8 +46,7 @@ permission:
 
 <jira-skill>
 **MANDATORY**: Before proceeding, consult the `jira` skill:
-- Review `template.md` for complete ticket structure and examples
-- Follow guidance in `guidance.md` for analyzing each ticket section quality
+- Review `template.md` for complete ticket structure, section guidance, and examples
 - Use patterns from `cli-usage.md` for all JIRA CLI operations (CRITICAL: /tmp file pattern!)
 - Apply research workflow from `research.md` when gathering context about existing tickets
 - Reference `linking.md` for maintaining/adding ticket relationships
@@ -93,7 +92,7 @@ Follow research patterns from `research.md` to gather ticket context and related
 Check ticket status, warn if "In Progress" or "In Review".
 
 ### Step 3: Review Quality
-Analyze ticket against `template.md` and `guidance.md` standards for each section.
+Analyze ticket against `template.md` standards for each section (including section guidance).
 
 ### Step 4: Draft Improvements
 Transform to template structure while preserving ALL original information.
