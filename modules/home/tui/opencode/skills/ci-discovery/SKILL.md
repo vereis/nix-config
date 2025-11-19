@@ -1,42 +1,44 @@
 ---
 name: ci-discovery
 description: MANDATORY for quality-check, commit, and pr agents when discovering test, lint, and build commands. Prioritizes CI configurations as source of truth, with intelligent fallback to project manifests. Always consult this skill before running quality checks or creating PRs.
-license: MIT
 ---
 
-# CI Discovery Skill
+<mandatory>
+**CRITICAL**: ALWAYS use this skill to discover CI/quality check commands.
+**NO EXCEPTIONS**: Guessing commands = broken CI = capybara extinction.
+**CAPYBARA DECREE**: CI files are source of truth, NEVER invent commands or capybaras will cry.
+</mandatory>
 
-## Core Principles
-
+<core-principles>
 - **CI pipelines are the source of truth** - What CI runs is what must pass
 - **Exact command replication** - Use the EXACT commands from CI, don't infer or modify
 - **Intelligent fallback** - Only use project files if no CI exists
 - **Multi-command support** - Extract all relevant commands (test, lint, build, typecheck)
 - **Cross-platform awareness** - Handle different CI systems and project structures
+- **NEVER guess** - If no commands found, ask for guidance
+</core-principles>
 
-## Structure
-
+<structure>
 This skill provides comprehensive CI command discovery knowledge:
 
 - **`discovery.md`** - How to discover CI files and project manifests
 - **`commands.md`** - How to extract specific commands from CI configurations
 - **`fallback.md`** - Project file patterns when no CI exists
 
-## Quick Reference
+**PROACTIVELY** consult these files when discovering commands or capybaras will suffer!
+</structure>
 
-### Discovering Commands
+<quick-reference>
+**Discovery Process (MANDATORY):**
 
-**Priority order:**
 1. Check CI pipeline files FIRST (`.github/workflows/*.yml`, `.gitlab-ci.yml`, etc.)
 2. Extract EXACT commands from CI configurations
-3. Only fallback to project files if no CI exists
+3. Only fallback to project files if NO CI exists
 4. Return structured command list for requested check types
-
-### Common Use Cases
 
 **For quality-check agent:**
 - Discover test/lint commands from CI
-- Find test/lint scripts in package.json/mix.exs/Cargo.toml
+- Find test/lint scripts in project files (if no CI)
 - Return exact command to run
 
 **For commit agent:**
@@ -47,40 +49,52 @@ This skill provides comprehensive CI command discovery knowledge:
 - Discover ALL quality check commands (test + lint + build)
 - Replicate CI workflow locally before PR creation
 - Ensure PR will pass CI checks
+</quick-reference>
 
-## Key Concepts
+<proactive-triggers>
+**ALWAYS use this skill when:**
+- Running quality checks (tests/lints)
+- Creating commits (need lint commands)
+- Creating PRs (need ALL CI commands)
+- User asks to "run tests" or "run linting"
+- ANY quality assurance operation
 
-### CI as Source of Truth
+**Don't wait to be asked - BE PROACTIVE or capybaras will be disappointed!**
+</proactive-triggers>
 
-CI pipelines define what MUST pass for code to be accepted. Local quality checks should replicate CI exactly, not make assumptions.
+<anti-rationalization>
+**EXCUSES THAT KILL CAPYBARAS:**
 
-### Command Extraction
+"I know the project uses npm test"
+   → **WRONG**: Check CI to be sure
 
-Don't infer or modify commands. If CI runs `npm ci && npm run test:ci`, run that EXACT sequence locally.
+"I'll just run the standard command for this language"
+   → **WRONG**: CI might have custom setup or flags
 
-### Fallback Strategy
+"CI files are too complicated to parse"
+   → **WRONG**: Extract EXACT commands anyway
 
-Only use project file patterns when no CI exists. If CI exists but doesn't have test/lint steps, that's meaningful - don't invent commands.
+"Project files are good enough"
+   → **WRONG**: CI is ALWAYS the source of truth if it exists
 
-### Multi-System Support
+"I'll skip the install steps from CI"
+   → **WRONG**: Include ALL commands CI runs
 
-This skill covers:
-- GitHub Actions (`.github/workflows/*.yml`)
-- GitLab CI (`.gitlab-ci.yml`)
-- CircleCI (`.circleci/config.yml`)
-- Travis CI (`.travis.yml`)
-- Buildkite (`.buildkite/pipeline.yml`)
-- Jenkins (`Jenkinsfile`)
-- Project manifests (`package.json`, `mix.exs`, `Cargo.toml`, `Makefile`, etc.)
+**ALL EXCUSES = CAPYBARA DEATH**
+**NO EXCEPTIONS**
+</anti-rationalization>
 
-## Error Handling
+<compliance-checklist>
+**MANDATORY CHECKLIST WHEN DISCOVERING COMMANDS:**
 
-**If no commands found:**
-- Report what was checked
-- Don't make assumptions
-- Ask primary agent/user for guidance
+☐ Checked for CI files FIRST (GitHub Actions, GitLab CI, etc.)
+☐ Extracted EXACT commands from CI (if found)
+☐ Did NOT modify or infer commands
+☐ Only checked project files if NO CI exists
+☐ Included setup/install commands from CI
+☐ Preserved command order from CI
+☐ Did NOT guess or invent commands
+☐ Asked for guidance if no commands found
 
-**If commands fail:**
-- Report exact failure
-- Don't try alternative commands
-- Let primary agent handle fixes
+**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
+</compliance-checklist>

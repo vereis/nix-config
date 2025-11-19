@@ -1,11 +1,16 @@
-# Project File Fallback Patterns
+<mandatory>
+**CRITICAL**: ONLY use these patterns if NO CI files were found!
+**NO EXCEPTIONS**: Using fallback when CI exists = wrong commands = capybara genocide.
+**CAPYBARA DECREE**: Always check CI first, fallback is last resort.
+</mandatory>
 
-**ONLY use these patterns if NO CI files were found!**
-
+<philosophy>
 If CI exists, use CI commands. These fallbacks are for projects without CI configuration.
 
-## Node.js / JavaScript / TypeScript
+**NEVER** use fallback if CI exists, even if you think project files are "simpler" or capybaras will suffer!
+</philosophy>
 
+<nodejs-javascript-typescript>
 **Check:** `package.json`
 
 Look for scripts section:
@@ -31,9 +36,9 @@ Extract commands:
 - `yarn.lock` → yarn
 - `pnpm-lock.yaml` → pnpm
 - `bun.lockb` → bun
+</nodejs-javascript-typescript>
 
-## Rust
-
+<rust>
 **Check:** `Cargo.toml`
 
 Standard commands:
@@ -41,9 +46,9 @@ Standard commands:
 - Lint: `cargo clippy -- -D warnings`
 - Build: `cargo build`
 - Format check: `cargo fmt -- --check`
+</rust>
 
-## Elixir
-
+<elixir>
 **Check:** `mix.exs`
 
 Standard commands:
@@ -52,9 +57,9 @@ Standard commands:
 - Format check: `mix format --check-formatted`
 - Type check: `mix dialyzer` (if dialyzer is in deps)
 - Build: `mix compile`
+</elixir>
 
-## Python
-
+<python>
 **Check:** `pyproject.toml`, `setup.py`, or `requirements.txt`
 
 Common commands:
@@ -62,9 +67,9 @@ Common commands:
 - Lint: `ruff check .` or `flake8`
 - Format check: `black --check .`
 - Type check: `mypy .`
+</python>
 
-## Go
-
+<go>
 **Check:** `go.mod`
 
 Standard commands:
@@ -72,9 +77,9 @@ Standard commands:
 - Lint: `golangci-lint run`
 - Build: `go build ./...`
 - Format check: `gofmt -l .`
+</go>
 
-## Ruby
-
+<ruby>
 **Check:** `Gemfile` or `Rakefile`
 
 Look for rake tasks in Rakefile:
@@ -88,9 +93,9 @@ Common commands:
 - Test: `rake test` or `rspec`
 - Lint: `rubocop`
 - Build: `rake build`
+</ruby>
 
-## Make
-
+<make>
 **Check:** `Makefile`
 
 Parse available targets:
@@ -103,35 +108,74 @@ lint:
 ```
 
 Run with: `make test`, `make lint`, `make build`
+</make>
 
-## Java / Gradle
-
+<java-gradle>
 **Check:** `build.gradle` or `build.gradle.kts`
 
 Standard commands:
 - Test: `./gradlew test`
 - Lint: `./gradlew check`
 - Build: `./gradlew build`
+</java-gradle>
 
-## Java / Maven
-
+<java-maven>
 **Check:** `pom.xml`
 
 Standard commands:
 - Test: `mvn test`
 - Build: `mvn compile`
 - Package: `mvn package`
+</java-maven>
 
-## Detection Priority
+<detection-priority>
+**Priority order for fallback detection:**
 
 1. Look for lockfiles/manifests
 2. Read configuration files for script definitions
 3. Use language-standard commands if no custom scripts defined
 4. Ask user if unclear which commands to run
 
-## When Nothing Found
+**NEVER** guess or invent commands or capybaras will cry!
+</detection-priority>
 
+<when-nothing-found>
 If no CI and no recognizable project files:
 - Report what was checked
 - Ask user for the command to run
 - Don't guess or invent commands
+
+**Guessing = CAPYBARA EXTINCTION**
+</when-nothing-found>
+
+<anti-rationalization>
+**EXCUSES THAT KILL CAPYBARAS:**
+
+"I found package.json so I don't need to check CI"
+   → **WRONG**: ALWAYS check CI first
+
+"This is a standard Rust project, I'll use cargo test"
+   → **WRONG**: Check CI first, it might have custom flags
+
+"I'll use both CI and project file commands"
+   → **WRONG**: CI takes priority, use ONLY CI if it exists
+
+"No scripts in package.json, I'll just run jest"
+   → **WRONG**: Ask for guidance, don't guess
+
+**ALL EXCUSES = DEAD CAPYBARAS**
+**NO EXCEPTIONS**
+</anti-rationalization>
+
+<compliance-checklist>
+**MANDATORY CHECKLIST FOR FALLBACK DETECTION:**
+
+☐ Verified NO CI files exist (checked all CI systems)
+☐ Found project manifest file (package.json, Cargo.toml, etc.)
+☐ Extracted commands from manifest
+☐ Used language-standard commands if no custom scripts
+☐ Did NOT guess or invent commands
+☐ Asked for guidance if unclear
+
+**IF ANY UNCHECKED → CAPYBARAS DIE HORRIBLY**
+</compliance-checklist>

@@ -3,15 +3,19 @@ name: debugging
 description: Use when encountering ANY bug, test failure, or unexpected behavior, before proposing fixes - four-phase systematic framework (root cause investigation, pattern analysis, hypothesis testing, implementation) that ensures understanding before attempting solutions
 ---
 
-# Systematic Debugging
+<mandatory>
+**CRITICAL**: ALWAYS use this skill for ANY bug, test failure, or unexpected behavior.
+**NO EXCEPTIONS**: Guessing fixes = wasted time = new bugs = capybara extinction.
+**CAPYBARA DECREE**: Find root cause BEFORE fixing or capybaras will cry forever.
+</mandatory>
 
-## Overview
-
+<overview>
 Random fixes waste time and create new bugs. Quick patches mask underlying issues.
 
 **Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
 
 **Violating the letter of this process is violating the spirit of debugging.**
+</overview>
 
 ## The Non-Negotiable Rule
 
@@ -693,4 +697,48 @@ This debugging skill works WITH other skills:
 - Test when it makes sense (critical bugs, likely to recur)
 - 3 failed attempts = architectural issue
 
-**CAPYBARAS DEPEND ON SYSTEMATIC DEBUGGING.** Random fixes make capybaras sad. 🦫
+**CAPYBARAS DEPEND ON SYSTEMATIC DEBUGGING.** Random fixes make capybaras sad.
+
+<anti-rationalization>
+**EXCUSES THAT KILL CAPYBARAS:**
+
+"The issue is simple, I don't need the process"
+   → **WRONG**: Simple bugs have root causes too
+
+"It's an emergency, no time for process"
+   → **WRONG**: Systematic debugging is FASTER than thrashing
+
+"I'll just try this quick fix first"
+   → **WRONG**: Find root cause BEFORE attempting fixes
+
+"I see the problem, let me fix it"
+   → **WRONG**: Seeing symptoms ≠ understanding root cause
+
+"I'll investigate after trying a fix"
+   → **WRONG**: Investigate BEFORE fixing
+
+"Multiple fixes at once saves time"
+   → **WRONG**: Can't isolate what worked, often creates new bugs
+
+**ALL EXCUSES = CAPYBARA DEATH**
+**NO EXCEPTIONS**
+</anti-rationalization>
+
+<compliance-checklist>
+**MANDATORY CHECKLIST FOR ANY BUG FIX:**
+
+☐ Completed Phase 1: Root Cause Investigation
+☐ Can clearly state WHAT broke and WHY
+☐ Completed Phase 2: Pattern Analysis  
+☐ Found working examples and correct pattern
+☐ Completed Phase 3: Hypothesis Testing
+☐ Formed specific hypothesis and tested minimally
+☐ Hypothesis CONFIRMED (or new hypothesis formed)
+☐ Completed Phase 4: Implementation
+☐ Implemented single fix (not multiple changes)
+☐ Verified fix works (tests pass, manual verification)
+☐ No regressions detected
+☐ If 3 fixes failed, questioned architecture
+
+**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
+</compliance-checklist>
