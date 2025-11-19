@@ -1,6 +1,7 @@
 ---
 mode: primary
 permission:
+  external_directory: allow
   edit: ask
   bash:
     ls*: allow

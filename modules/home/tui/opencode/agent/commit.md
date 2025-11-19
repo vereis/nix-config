@@ -8,6 +8,7 @@ tools:
   write: false
   edit: false
 permission:
+  external_directory: allow
   bash:
     ls*: allow
     cat*: allow
