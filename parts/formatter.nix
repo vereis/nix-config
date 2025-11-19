@@ -25,6 +25,8 @@
           };
           mdformat = {
             enable = true;
+            includes = [ "*.md" ];
+            excludes = [ "**/opencode/**" ];
             settings = {
               wrap = "no";
             };
