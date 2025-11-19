@@ -25,7 +25,10 @@ jira issue create --body "$(cat /tmp/jira_ticket.md)"
 2. **Creating Tickets**
     - Write ticket body to `/tmp` file
     - Verify content by `cat /tmp/file.md`
-    - Create ticket using `jira issue create --no-input --type ... --project ... --summary "Title of the ticket" --body "$(cat /tmp/file.md)"`
+    - Create ticket using `jira issue create --no-input --type Story --project DI --summary "Title of the ticket" --body "$(cat /tmp/file.md)"`
+    - To capture ticket ID: `TICKET_ID=$(jira issue create --no-input --type Story --project DI --summary "Title" --body "$(cat /tmp/file.md)" 2>&1 | grep -oP 'DI-\d+' | head -1)`
+
+**IMPORTANT:** The `--plain` flag does NOT exist for `jira issue create`. Only use `--plain` with `jira issue view` or `jira issue list`.
 </creating-tickets>
 
 <viewing-tickets>
