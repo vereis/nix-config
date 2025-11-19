@@ -2,6 +2,7 @@
 description: MANDATORY - You MUST ALWAYS use this agent when the user asks to create a pull request. CRITICAL - NEVER create PRs directly in the primary agent using gh pr create. This is NOT optional - delegate ALL PR creation to this agent.
 mode: subagent
 tools:
+  read: true
   write: false
   edit: false
 permission:
@@ -14,6 +15,12 @@ permission:
     head*: allow
     tail*: allow
     tree*: allow
+    echo*: allow
+    wc*: allow
+    file*: allow
+    stat*: allow
+    pwd: allow
+    touch /tmp/*: allow
     git status: allow
     git branch*: allow
     git log*: allow
