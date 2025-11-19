@@ -78,7 +78,9 @@ with lib;
         default_tab_template {
           children
           pane size=1 borderless=true {
-            plugin location="file:${zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/zjstatus.wasm" {
+            plugin location="file:${
+              zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
+            }/bin/zjstatus.wasm" {
               format_left  "{tabs}"
               format_right "{datetime} {mode}"
               format_space ""
@@ -115,7 +117,9 @@ with lib;
         tab_template name="ui" {
           children
           pane size=1 borderless=true {
-            plugin location="file:${zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/zjstatus.wasm" {
+            plugin location="file:${
+              zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
+            }/bin/zjstatus.wasm" {
               format_left  "{tabs}"
               format_right "{datetime} {mode}"
               format_space ""
