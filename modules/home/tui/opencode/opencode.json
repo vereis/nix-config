@@ -24,5 +24,8 @@
   },
   "tui": {
     "scroll_speed": 30
+  },
+  "permission": {
+    "external_directory": "allow"
   }
 }
