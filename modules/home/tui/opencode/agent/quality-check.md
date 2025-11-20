@@ -168,6 +168,24 @@ Always run linters on all changed files or project-wide if that's what CI does.
 
 Execute the discovered commands from CI or project detection.
 
+**HANDLING FAILED-ONLY MODE:**
+
+If primary agent requests `scope=failed-only`:
+1. Extract failed test identifiers from the previous test output
+2. Determine language/framework-specific approach to re-run only those tests
+3. Use appropriate flags or test selection syntax for that framework
+4. If the framework doesn't support selective test re-runs, fall back to running ALL tests
+
+**When to accept failed-only requests:**
+- ✅ Primary agent explicitly requests `scope=failed-only`
+- ✅ There was a previous test run with specific failures
+- ✅ Primary agent is implementing a fix for those failures
+
+**When to reject failed-only requests:**
+- ❌ No previous test failures to reference
+- ❌ Framework/language doesn't support selective test execution
+- ❌ Changed files affect shared code (fall back to full suite)
+
 **CRITICAL: NEVER truncate shell output with tail/head/grep!**
 
 Run commands directly without piping:
@@ -248,6 +266,12 @@ Once you have the results (pass or exact errors), return to the primary agent im
 ### Success:
 ```
 ✅ All tests passed! (142 tests, 3.2s)
+```
+
+or (when running in `failed-only` mode):
+
+```
+✅ Previously failed tests now pass! (3 tests, 0.4s)
 ```
 
 or
