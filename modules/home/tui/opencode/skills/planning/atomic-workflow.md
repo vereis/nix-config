@@ -166,12 +166,31 @@ If tests fail during the atomic workflow, you **MUST**:
 ```
 [ ] Add UserSettings schema
   [ ] Define schema
-  [ ] Run quality-check subagent → FAIL
+  [ ] Run quality-check subagent → FAIL (3 tests failed, 139 passed)
   [ ] Fix validation error
-  [ ] Run quality-check subagent → PASS
+  [ ] Run quality-check subagent (failed-only) → PASS (3 previously failed tests now pass)
   [ ] Run quality-check subagent (lint) → PASS
   [ ] Run commit subagent
 ```
+
+**OPTIMIZATION: Failed-only test mode**
+
+When fixing test failures, you MAY request `failed-only` mode if:
+- ✅ You're implementing a fix based on specific test failures
+- ✅ Other tests have already passed in a previous run
+- ✅ You want to verify the fix without re-running the entire suite
+
+**Request failed-only by instructing the quality-check subagent:**
+```
+"Run quality-check subagent with scope=failed-only to verify the fix"
+```
+
+The subagent will intelligently extract failed test identifiers and re-run only those tests.
+
+**When NOT to use failed-only:**
+- ❌ First test run (no previous failures to track)
+- ❌ Changes to shared utilities (need full test suite)
+- ❌ When in doubt (always default to full suite)
 
 **NEVER** skip a failing test and move on or capybaras will become extinct!
 </handling-failures>

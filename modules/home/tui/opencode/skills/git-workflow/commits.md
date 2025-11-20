@@ -65,6 +65,17 @@ The following is too wordy, unnecessary preamble:
     - **NEVER** run test commands directly
     - **ALWAYS** use the quality-check subagent
     - If tests fail, fix immediately and re-run
+    - **OPTIMIZATION - Failed-only mode**:
+        - When fixing specific test failures, you MAY request `scope=failed-only`
+        - Only appropriate when:
+            - ✅ You're implementing a fix based on quality-check feedback
+            - ✅ Other tests have already passed in a previous run
+            - ✅ You want to verify the fix without re-running the entire suite
+        - Request with: "Run quality-check subagent with scope=failed-only"
+        - When NOT to use:
+            - ❌ First test run (no previous failures)
+            - ❌ Changes to shared code (need full suite)
+            - ❌ When in doubt (default to full suite)
 
 4. **PASS ALL LINTERS** using the `ci-discovery` skill and `quality-check` subagent
     - **NEVER** run lint commands directly  
