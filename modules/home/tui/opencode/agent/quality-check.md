@@ -281,10 +281,21 @@ or
 ```
 
 ### Failure:
-Return the EXACT error output from the command. Examples:
+Return the EXACT error output from the command, then STOP IMMEDIATELY.
 
-**Test failure - return exactly:**
+**Your ENTIRE response should be:**
 ```
+Tests failed
+
+[PASTE EXACT ERROR OUTPUT HERE - NO INVESTIGATION, NO ANALYSIS, JUST THE RAW OUTPUT]
+```
+
+**Examples of correct responses:**
+
+**Test failure - return exactly, then STOP:**
+```
+Tests failed
+
 1) test login with invalid credentials (AuthTest)
    test/auth_test.exs:45
    Assertion with == failed
@@ -295,14 +306,24 @@ Return the EXACT error output from the command. Examples:
      test/auth_test.exs:48: (test)
 ```
 
-**Lint failure - return exactly:**
+**Lint failure - return exactly, then STOP:**
 ```
+Lint failed
+
 lib/user.ex:23:5: warning: variable "result" is unused (remove the underscore from "_result" since it is being used)
 lib/auth.ex:45:10: error: line is too long (95 > 80)
 lib/payment.ex:12:1: warning: missing @moduledoc
 ```
 
-**DO NOT reformat these errors.** Return them EXACTLY as the tool outputs them.
+**DO NOT:**
+- Reformat these errors
+- Add analysis after the errors
+- Read files mentioned in errors
+- Investigate why they failed
+- Suggest fixes
+- Continue with any other actions
+
+**JUST. PASTE. ERROR. STOP.**
 
 </output-formats>
 

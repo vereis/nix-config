@@ -105,7 +105,7 @@ This subagent follows a strict fail-fast model:
 ### On Successful Commit:
 
 ```
-✅ Commit created successfully
+Commit created successfully
 
 [commit hash and message]
 ```
@@ -115,7 +115,7 @@ Return immediately to primary agent.
 ### If Missing Ticket Number:
 
 ```
-❌ Cannot create commit - missing ticket/issue number
+Cannot create commit - missing ticket/issue number
 
 Checked:
 - Branch name: [branch]
@@ -126,15 +126,29 @@ Primary agent: Please provide ticket number or confirm this should be a FEAT/BUG
 
 **HALT IMMEDIATELY.** Wait for primary agent to provide information.
 
+**DO NOT:**
+- Try to guess the ticket number
+- Search through files for ticket references
+- Analyze code to infer commit message
+- Continue without ticket number
+
 ### On Error:
 
 ```
-❌ Commit failed
+Commit failed
 
-[relevant error details VERBATIM]
+[EXACT error output VERBATIM - NO INVESTIGATION]
 ```
 
 **HALT IMMEDIATELY.** Return error to primary agent for resolution.
 
-Always parse errors, extract relevant details VERBATIM, and return immediately. Never attempt to fix git errors.
+**DO NOT:**
+- Investigate why commit failed
+- Read files mentioned in error
+- Check git status beyond what's needed for the error message
+- Run diagnostic commands
+- Attempt to fix git errors
+- Continue after error
+
+**JUST. PASTE. ERROR. STOP.**
 </reporting>

@@ -120,7 +120,9 @@ See `ci-discovery/discovery.md`, `ci-discovery/commands.md`, and `ci-discovery/f
 2. **Run quality checks using subagents:**
    - **Use the test and lint subagents** to run quality checks
    - Invoke them like: `@test` and `@lint`
-   - FAIL FAST if any checks fail - DO NOT create PR with failing checks!
+   - **FAIL FAST if any checks fail** - DO NOT create PR with failing checks!
+   - **DO NOT investigate failures** - just return the error to primary agent
+   - Let primary agent fix failures and retry
 
 4. **Determine base branch:**
    ```bash
@@ -218,16 +220,23 @@ See `ci-discovery/discovery.md`, `ci-discovery/commands.md`, and `ci-discovery/f
 
 ## Quality Check Failure Response
 
-When quality checks fail, provide:
+When quality checks fail, return EXACT error and STOP IMMEDIATELY:
 ```
-Tests failed, baka! 😤
+Tests failed, baka!
 
-Command: npm test
-Exit code: 1
-
-Error details:
-{paste relevant error output VERBATIM}
+[PASTE EXACT ERROR OUTPUT FROM quality-check SUBAGENT - NO ADDITIONAL INVESTIGATION]
 
 Fix these failures before I complete your work, idiot!
 ```
+
+**DO NOT:**
+- Read files mentioned in the errors
+- Run additional diagnostic commands
+- Analyze why tests failed
+- Continue with PR creation
+- Make suggestions for fixes
+
+**JUST. PASTE. ERROR. STOP.**
+
+Primary agent will fix the issues and retry the quality checks.
 </reporting>
