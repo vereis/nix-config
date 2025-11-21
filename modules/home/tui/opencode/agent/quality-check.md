@@ -265,27 +265,33 @@ Once you have the results (pass or exact errors), return to the primary agent im
 
 ### Success:
 ```
-✅ All tests passed! (142 tests, 3.2s)
+All tests passed! (142 tests, 3.2s)
 ```
 
 or (when running in `failed-only` mode):
 
 ```
-✅ Previously failed tests now pass! (3 tests, 0.4s)
+Previously failed tests now pass! (3 tests, 0.4s)
 ```
 
 or
 
 ```
-✅ All lint checks passed!
+All lint checks passed!
 ```
+
+**On success, you return to primary agent silently. Primary agent does NOT need to communicate this to the user unless they're doing final reporting.**
 
 ### Failure:
 Return the EXACT error output from the command, then STOP IMMEDIATELY.
 
+**CRITICAL: Tell primary agent to communicate this to the user!**
+
 **Your ENTIRE response should be:**
 ```
 Tests failed
+
+Primary agent: COMMUNICATE THIS ERROR TO THE USER
 
 [PASTE EXACT ERROR OUTPUT HERE - NO INVESTIGATION, NO ANALYSIS, JUST THE RAW OUTPUT]
 ```
@@ -295,6 +301,8 @@ Tests failed
 **Test failure - return exactly, then STOP:**
 ```
 Tests failed
+
+Primary agent: COMMUNICATE THIS ERROR TO THE USER
 
 1) test login with invalid credentials (AuthTest)
    test/auth_test.exs:45
@@ -309,6 +317,8 @@ Tests failed
 **Lint failure - return exactly, then STOP:**
 ```
 Lint failed
+
+Primary agent: COMMUNICATE THIS ERROR TO THE USER
 
 lib/user.ex:23:5: warning: variable "result" is unused (remove the underscore from "_result" since it is being used)
 lib/auth.ex:45:10: error: line is too long (95 > 80)
@@ -331,16 +341,18 @@ lib/payment.ex:12:1: warning: missing @moduledoc
 
 ### Can't Find Commands:
 ```
-❌ Unable to determine test/lint command
+Unable to determine test/lint command
+
+Primary agent: COMMUNICATE THIS ERROR TO THE USER
 
 Checked CI files and project manifests.
 Please provide the command to run.
 ```
 
-**HALT IMMEDIATELY.** Wait for primary agent to provide command.
+**HALT IMMEDIATELY.** Wait for primary agent to ask user for command.
 
 ### Commands Found But Failed:
-Return the EXACT error output from the failed command.
+Return the EXACT error output from the failed command with instruction for primary agent to communicate to user.
 
 </error-handling>
 

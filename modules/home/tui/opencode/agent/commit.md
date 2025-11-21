@@ -137,10 +137,12 @@ Primary agent: Please provide ticket number or confirm this should be a FEAT/BUG
 ```
 Commit failed
 
+Primary agent: COMMUNICATE THIS ERROR TO THE USER
+
 [EXACT error output VERBATIM - NO INVESTIGATION]
 ```
 
-**HALT IMMEDIATELY.** Return error to primary agent for resolution.
+**HALT IMMEDIATELY.** Return error to primary agent who will communicate to user for resolution.
 
 **DO NOT:**
 - Investigate why commit failed
