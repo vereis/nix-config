@@ -23,7 +23,7 @@
     "agent_cycle_reverse": "shift+tab"
   },
   "tui": {
-    "scroll_speed": 15
+    "scroll_speed": 8
   },
   "permission": {
     "external_directory": "allow"
