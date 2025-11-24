@@ -218,17 +218,37 @@ If primary agent requests `scope=failed-only`:
 
 **RETRY STRATEGY (tests only):**
 
-Automatically retry failed tests up to 2 times to handle flaky tests:
+**MANDATORY**: You MUST automatically retry failed tests up to 2 times to handle flaky tests!
+
+**DO NOT SKIP THIS - CAPYBARAS WILL BE DEVASTATED IF YOU RETURN FLAKY TEST FAILURES WITHOUT RETRYING!**
 
 1. Run tests for the first time
-2. If tests fail, retry up to 2 more times (3 total attempts)
-3. If possible, retry ONLY the failed tests
+2. If tests fail, **IMMEDIATELY retry** up to 2 more times (3 total attempts)
+3. **USE FRAMEWORK-SPECIFIC RETRY FLAGS** to retry ONLY failed tests (faster):
+   - **pytest**: Add `--lf` (last failed) or `--failed-first` to the command
+   - **RSpec**: Add `--only-failures` to the command
+   - **Jest**: Add `--onlyFailures` to the command
+   - **Mix (Elixir)**: Add `--failed` to the command
+   - **Go**: Re-run only the failed test names: `go test -run "TestName1|TestName2"`
+   - **Cargo (Rust)**: Re-run with specific test names
+   - **If framework doesn't support failed-only**: Run the full suite again
 4. If ANY attempt succeeds, report success (flakes are tracked internally)
-5. If ALL 3 attempts fail, return the EXACT error output from the last attempt
+5. **ONLY** if ALL 3 attempts fail, return the EXACT error output from the last attempt
 
-**Why retry?**
+**Why retry with --failed flags?**
 - Flaky tests can fail intermittently
 - 2 retries catches true flakes without masking real issues
+- Using `--failed` flags makes retries MUCH faster
+- **NEVER** report test failures after a single attempt - ALWAYS retry first!
+
+**Compliance checklist before reporting test failures:**
+☐ Ran tests first time and they failed
+☐ Retried tests with `--failed` flag or equivalent (attempt 2 of 3)
+☐ Retried tests again with `--failed` flag (attempt 3 of 3) if still failing
+☐ ALL 3 attempts failed with consistent errors
+☐ Now reporting the exact error from last attempt
+
+**IF YOU SKIP RETRIES OR FORGET --failed FLAGS → CAPYBARAS SUFFER ETERNALLY**
 
 **INTERMITTENT FAILURE DETECTION:**
 
