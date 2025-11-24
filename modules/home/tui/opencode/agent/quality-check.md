@@ -136,29 +136,28 @@ See `ci-discovery/discovery.md` for the full discovery process.
 
 **For test checks:**
 
-Be smart about test scope based on what changed:
+**DEFAULT: Run the ENTIRE test suite for the current app/package**
 
+Run the complete test suite for the project or workspace you're working in:
+- **Monorepo context**: Run all tests for the specific app/package (e.g., all backend tests, all frontend tests)
+- **Single repo**: Run the full test suite for the project
+- **NEVER arbitrarily subset tests** - run the entire suite unless explicitly told otherwise by primary agent
+
+**ONLY run `scope=failed-only` if:**
+- Primary agent EXPLICITLY requests it (see section 3 below for details)
+- You're re-running after a fix attempt
+- Other tests have already passed
+
+**Monorepo scoping is ALLOWED:**
+If working in a monorepo and changes are isolated to one app/package:
 ```bash
-git diff --name-only HEAD
-git diff --cached --name-only
+# Examples of acceptable scoping:
+mix test apps/backend/test         # All backend tests
+npm test --workspace=@app/frontend # All frontend tests
+cargo test --package api           # All API package tests
 ```
 
-**Always run ALL tests if changes affect:**
-- Shared utilities or helper modules
-- Type definitions or interfaces
-- Configuration files
-- Database schemas or migrations
-- Base classes or mixins
-- Authentication/authorization logic
-- Global state management
-- Core business logic
-
-**Can run targeted tests ONLY if changes are:**
-- Isolated feature additions
-- Single component modifications
-- Localized bug fixes in leaf modules
-
-**When in doubt, run ALL tests!**
+**NEVER make assumptions about test scope on your own!**
 
 **For lint checks:**
 

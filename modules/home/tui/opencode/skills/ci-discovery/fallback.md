@@ -19,15 +19,21 @@ Look for scripts section:
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
+    "lint:custom": "./scripts/custom-lint.sh",
+    "format:check": "prettier --check .",
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   }
 }
 ```
 
-Extract commands:
+Extract commands (COMPREHENSIVE - find ALL lint-related scripts):
 - Test: `npm test` (or `yarn test`, `pnpm test`, `bun test` depending on lockfile)
-- Lint: `npm run lint`
+- Lint commands (find ALL that match these patterns):
+  - `lint`, `lint:*` - Standard linting
+  - `format`, `format:check`, `prettier:check` - Format checking
+  - `style`, `style:check` - Style checking
+  - Any script containing `eslint`, `tslint`, `prettier`, `stylelint`
 - Build: `npm run build`
 - Typecheck: `npm run typecheck`
 
@@ -53,9 +59,12 @@ Standard commands:
 
 Standard commands:
 - Test: `mix test`
-- Lint: `mix credo` (if credo is in deps)
-- Format check: `mix format --check-formatted`
-- Type check: `mix dialyzer` (if dialyzer is in deps)
+- Lint commands (check ALL of these):
+  - `mix credo` (if credo is in deps)
+  - `mix format --check-formatted` (format checking)
+  - `mix compile --warnings-as-errors` (warnings as errors)
+  - `mix dialyzer` (if dialyzer is in deps)
+  - Check for custom mix tasks in `lib/mix/tasks/`
 - Build: `mix compile`
 </elixir>
 
@@ -64,9 +73,13 @@ Standard commands:
 
 Common commands:
 - Test: `pytest` or `python -m pytest`
-- Lint: `ruff check .` or `flake8`
-- Format check: `black --check .`
-- Type check: `mypy .`
+- Lint commands (check ALL of these):
+  - `ruff check .` or `flake8` (linting)
+  - `black --check .` (format checking)
+  - `isort --check-only .` (import sorting)
+  - `pylint` (comprehensive linting)
+  - `mypy .` (type checking)
+  - `bandit -r .` (security linting)
 </python>
 
 <go>
