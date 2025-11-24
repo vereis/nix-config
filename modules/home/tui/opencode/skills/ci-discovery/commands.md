@@ -12,9 +12,19 @@ Once you've found CI files, extract the EXACT commands they run. Don't modify or
 **Look for these command types:**
 
 - **Test commands**: `npm test`, `mix test`, `cargo test`, `pytest`, `go test`, `make test`
-- **Lint commands**: `npm run lint`, `eslint`, `mix format --check-formatted`, `cargo clippy`, `ruff check`
+- **Lint commands** (COMPREHENSIVE - find ALL of these):
+  - Standard linters: `npm run lint`, `eslint`, `mix format --check-formatted`, `cargo clippy`, `ruff check`
+  - Format checkers: `prettier --check`, `black --check`, `cargo fmt -- --check`, `mix format --check-formatted`
+  - Custom lint scripts: `npm run lint:custom`, `make lint`, `./scripts/lint.sh`
+  - Database validations: `mix ecto.validate`, `bundle exec rake db:schema:validate`, custom schema checks
+  - Warnings-as-errors flags: `--warnings-as-errors`, `-D warnings`, `--strict`, `--pedantic`
+  - Style checkers: `rubocop`, `pylint`, `flake8`, `credo`, `golangci-lint`
+  - Security linters: `npm audit`, `cargo audit`, `bundle audit`, `safety check`
+  - Documentation linters: `cargo doc`, `mix docs`, `yard --fail-on-warning`
 - **Build commands**: `npm run build`, `mix compile`, `cargo build`, `make build`
-- **Typecheck commands**: `tsc --noEmit`, `mypy`, `dialyzer`
+- **Typecheck commands**: `tsc --noEmit`, `mypy`, `dialyzer`, `flow check`
+
+**CRITICAL for lint commands**: Find ALL lint-related checks in CI, not just the obvious ones! Many projects run multiple linting steps with different purposes.
 </command-types>
 
 <github-actions>

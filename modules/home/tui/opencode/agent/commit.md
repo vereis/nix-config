@@ -1,7 +1,7 @@
 ---
 description: MANDATORY - You MUST ALWAYS use this agent when the user asks to commit changes. CRITICAL - NEVER create commits directly in the primary agent using git commit. This is NOT optional - delegate ALL git commits to this agent.
 mode: subagent
-model: anthropic/claude-haiku-4-5
+model: anthropic/claude-sonnet-4-5
 temperature: 0
 tools:
   read: true
@@ -95,9 +95,16 @@ This subagent follows a strict fail-fast model:
 
 <process>
 
+**CRITICAL ASSUMPTION**: Tests and linting have ALREADY been run by the primary agent. Do NOT re-run them!
+
 1. **Identify ticket/issue number** from branch, commits, or ask user
 1. **Stage all relevant files** if not already staged
 1. **Execute commit** with mechanical message
+
+**DO NOT:**
+- Run quality-check subagent
+- Run tests or linting
+- Verify code quality (primary agent already did this)
 </process>
 
 <reporting>
