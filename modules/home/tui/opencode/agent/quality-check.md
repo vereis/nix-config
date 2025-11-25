@@ -2,7 +2,7 @@
 description: MANDATORY - You MUST use this agent when running ANY quality checks (tests, linters, formatters). CRITICAL - NEVER EVER run quality check commands directly (npm test, mix test, eslint, etc.) in the primary agent. This is NOT optional - delegate ALL quality checks to this agent.
 mode: subagent
 model: anthropic/claude-sonnet-4-5
-temperature: 0
+temperature: 0.1
 tools:
   read: true
   write: false

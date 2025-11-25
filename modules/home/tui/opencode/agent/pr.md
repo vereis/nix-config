@@ -2,7 +2,7 @@
 description: MANDATORY - You MUST ALWAYS use this agent when the user asks to create a pull request. CRITICAL - NEVER create PRs directly in the primary agent using gh pr create. This is NOT optional - delegate ALL PR creation to this agent.
 mode: subagent
 model: anthropic/claude-sonnet-4-5
-temperature: 0
+temperature: 0.1
 tools:
   read: true
   write: false
