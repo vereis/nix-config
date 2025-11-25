@@ -1,7 +1,7 @@
 ---
-description: Planning and analysis agent - uses Opus for deep thinking, CANNOT write/edit code
+description: Planning and analysis agent - uses Sonnet for deep thinking, CANNOT write/edit code
 mode: primary
-model: anthropic/claude-opus-4-1
+model: anthropic/claude-sonnet-4-5
 temperature: 0.1
 tools:
   read: true
