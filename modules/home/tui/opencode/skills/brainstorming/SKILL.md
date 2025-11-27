@@ -1,71 +1,69 @@
 ---
 name: brainstorming
-description: Use when creating or developing any feature, before writing code - refines rough ideas into fully-formed designs through collaborative questioning, explores alternatives, then breaks implementation into atomic test/lint/commit steps. Use for all work beyond trivial changes.
+description: MANDATORY for any feature or design decision - refines ideas into validated designs through collaborative questioning, explores alternatives, then breaks implementation into atomic test/lint/commit steps
 ---
 
 <mandatory>
+**MANDATORY**: Understand WHAT → Explore HOW → Plan execution before coding.
 **CRITICAL**: ALWAYS use this skill for ANY non-trivial feature or design decision.
-**NO EXCEPTIONS**: Skipping brainstorming = bad design = wasted effort = capybara extinction.
-**CAPYBARA DECREE**: Follow all three phases or capybaras will cry forever.
+**NO EXCEPTIONS**: Skipping brainstorming = bad design = wasted time and money.
 </mandatory>
 
-<overview>
-Turn rough ideas into validated designs, then break them into atomic implementation steps.
+<subagent-context>
+**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context. DO NOT spawn additional subagents or use TodoWrite from this skill. Brainstorming is a PRIMARY AGENT skill - if you're a subagent, you shouldn't be doing brainstorming. Return to primary agent with analysis/recommendations instead.
+</subagent-context>
 
-**Core principle:** Understand WHAT to build → Explore HOW to build it → Plan atomic execution steps
-
-**Three phases:**
-1. **Understanding** - Ask questions to clarify the idea
-2. **Design** - Explore approaches, present validated design
-3. **Planning** - Break into atomic steps with test/lint/commit cycle
-</overview>
+<core-principles>
+1. **Understand first** - Ask questions to clarify requirements
+2. **Explore alternatives** - Present 2-3 approaches with tradeoffs
+3. **Backend-first** - DB → Models → API → Frontend
+4. **Atomic steps** - One semantic change per todo with test/lint/commit
+</core-principles>
 
 <when-to-use>
-**ALWAYS use this skill for:**
+**ALWAYS use for:**
 - ANY feature implementation (small or large)
-- Bug fixes that need design decisions
+- Bug fixes needing design decisions
 - Refactoring with multiple approaches
-- Any work where "just start coding" would be premature
+- Work where "just start coding" is premature
 
 **Skip ONLY for:**
 - Trivial changes (typo fixes, config updates)
 - Mechanical tasks with no design decisions
-- User has already provided complete design + plan
+- User provided complete design + plan
 
-**If unsure, USE IT or capybaras will be sad!**
+**If unsure, USE IT**
 </when-to-use>
 
-## Phase 1: Understanding the Idea
+<three-phases>
+## Phase 1: Understanding
 
-**Goal:** Understand purpose, constraints, and success criteria before designing.
+**Goal:** Understand purpose, constraints, success criteria before designing.
 
-**Process:**
+**1. Check project context:**
+- Read relevant files, docs, recent commits
+- Understand existing architecture/patterns
+- Identify related code that might be affected
 
-1. **Check project context first:**
-   - Read relevant files, docs, recent commits
-   - Understand existing architecture and patterns
-   - Identify related code that might be affected
+**2. Ask questions ONE AT A TIME:**
+- Don't overwhelm with multiple questions
+- Prefer multiple choice (easier to answer)
+- Focus on: purpose, constraints, success criteria, edge cases
 
-2. **Ask questions ONE AT A TIME:**
-   - Don't overwhelm with multiple questions in one message
-   - Prefer multiple choice when possible (easier to answer)
-   - Focus on: purpose, constraints, success criteria, edge cases
-   - If a topic needs more exploration, break into multiple questions
-
-3. **Key areas to explore:**
-   - **Purpose:** What problem does this solve? Who benefits?
-   - **Constraints:** Performance? Compatibility? Dependencies?
-   - **Scope:** What's in scope? What's explicitly out of scope?
-   - **Success:** How do we know it works? What does "done" look like?
-   - **Edge cases:** What could go wrong? What are the boundaries?
-   - **Implementation order:** Can we design this to follow database → backend → API → frontend flow?
-   - **Testability:** Can we design this to be easily testable at each layer?
+**3. Key areas to explore:**
+- **Purpose:** What problem? Who benefits?
+- **Constraints:** Performance? Compatibility? Dependencies?
+- **Scope:** What's in/out of scope?
+- **Success:** How do we know it works?
+- **Edge cases:** What could go wrong? Boundaries?
+- **Implementation order:** Can we design for DB → backend → API → frontend flow?
+- **Testability:** Can we test each layer independently?
 
 **Red flags you're skipping Understanding:**
-- Jumping straight to "here's the implementation"
-- Proposing code before asking clarifying questions
+- Jumping to "here's the implementation"
+- Proposing code before asking questions
 - Making assumptions about requirements
-- Thinking "this is obvious, no questions needed"
+- "This is obvious, no questions needed"
 
 ## Phase 2: Design & Exploration
 
@@ -73,18 +71,17 @@ Turn rough ideas into validated designs, then break them into atomic implementat
 
 ### Exploring Approaches
 
-**Always propose 2-3 different approaches with tradeoffs:**
-- Lead with your recommended option and explain why
-- Present conversationally, not as a formal document
+**Always propose 2-3 approaches with tradeoffs:**
+- Lead with recommended option and explain why
+- Present conversationally, not formally
 - Consider: complexity, maintainability, testability, performance
-- **YAGNI ruthlessly** - Remove unnecessary features from all designs
+- **YAGNI ruthlessly** - Remove unnecessary features
 
-**Example:**
+Example:
 ```
 Based on your needs, here are 3 approaches:
 
 **Option 1 (Recommended): [approach]**
-- Pro: [benefit]
 - Pro: [benefit]
 - Con: [tradeoff]
 
@@ -101,18 +98,17 @@ I recommend Option 1 because [reasoning]. What do you think?
 
 ### Presenting the Design
 
-**Once approach is selected, present design incrementally:**
+**Present design incrementally:**
+1. Break into sections of 200-300 words
+2. Ask after each section if it looks right
+3. Be ready to clarify if needed
 
-1. **Break into sections of 200-300 words**
-2. **Ask after each section whether it looks right**
-3. **Be ready to go back and clarify if needed**
-
-**Cover these areas (in backend-first order):**
+**Cover in backend-first order:**
 - **Database schema** - Tables, fields, relationships, indexes
 - **Backend models/types** - Data structures, validation, business logic
-- **API layer** - Endpoints, request/response formats, error handling
-- **Frontend components** - UI structure, state management, user interactions
-- **Testing strategy** - How to test at each layer, what makes this testable
+- **API layer** - Endpoints, request/response, error handling
+- **Frontend components** - UI structure, state management, interactions
+- **Testing strategy** - How to test each layer
 - **Error handling** - Edge cases, failure modes, user feedback
 
 **Design for testability:**
@@ -120,61 +116,37 @@ I recommend Option 1 because [reasoning]. What do you think?
 - Are dependencies injected/mockable?
 - Can we verify behavior without full integration?
 
-**Example incremental presentation:**
-```
-Great! Let's design this. I'll present in sections.
-
-### Database Schema
-
-[200-300 words describing tables, fields, constraints]
-
-Does this look right so far, or should I adjust?
-```
-
-[Wait for confirmation, then continue]
-
-```
-### Backend Models
-
-[200-300 words describing types, validation, business logic]
-
-Still good?
-```
-
-## Phase 3: Planning Atomic Implementation Steps
+## Phase 3: Planning Atomic Implementation
 
 **Goal:** Break validated design into atomic steps following backend-first order, with test/lint/commit after EACH change.
 
 ### The Iron Law
 
-**MANDATORY:** Each step = one semantic change that can be tested, linted, and committed independently.
+**MANDATORY:** Each step = one semantic change that can be tested, linted, committed independently.
 
-**MANDATORY:** Use TodoWrite for ALL steps BEFORE starting work. Mental checklists = SAD CAPYBARAS.
+**MANDATORY:** Use TodoWrite for ALL steps BEFORE starting work (no mental checklists).
 
-**MANDATORY:** Each code change MUST be followed by appropriate verification steps (test/lint) then commit.
+**MANDATORY:** Each code change MUST be followed by verification (test/lint) then commit.
 
 ### Backend-First Implementation Order
 
-Follow this order strictly (CAPYBARAS WILL BE SAD if you don't):
-
+Follow strictly:
 1. **Database layer** - Migrations, schema changes
 2. **Backend models/types** - Data structures, validation, business logic
 3. **API layer** - Endpoints, handlers, serialization
 4. **Frontend layer** - Components, state management, UI
 
 **Why this order:**
-- Each layer can be tested independently as you build
+- Each layer tested independently as you build
 - Backend validates before frontend consumes
 - Frontend never blocks backend progress
-- Easier to catch issues early in the stack
+- Catch issues early in stack
 
 ### Creating the TodoWrite Plan
 
-For EACH layer, break into atomic changes with appropriate verification:
-
-**BAD EXAMPLE (batching changes - CAPYBARAS WILL BE SAD):**
+**BAD (batching changes):**
 ```
-[ ] Add user_profiles table with avatar_url column
+[ ] Add user_profiles table with avatar_url
 [ ] Create UserProfile model with validation
 [ ] Add GET /api/user/profile endpoint
 [ ] Create profile settings page component
@@ -183,7 +155,7 @@ For EACH layer, break into atomic changes with appropriate verification:
 [ ] Use commit subagent
 ```
 
-**GOOD EXAMPLE (atomic steps with verification after EACH change):**
+**GOOD (atomic with verification after EACH):**
 ```
 [ ] Add user_profiles table migration
 [ ] Use lint subagent
@@ -204,48 +176,44 @@ For EACH layer, break into atomic changes with appropriate verification:
 [ ] Use test subagent
 [ ] Use lint subagent
 [ ] Use commit subagent
-[ ] Wire ProfileSettings to profile page route
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
 ```
 
 ### What Makes a "Semantic Change"?
 
-**Each todo should be ONE of these:**
+**Each todo should be ONE of:**
 
 **Database changes (lint only):**
-- Add/modify a migration file
+- Add/modify migration file
 - Add/modify schema definitions
 - Update database constraints
 
 **Code changes (test + lint):**
-- Create/update a type/model with validation
-- Implement a single function/method
-- Add a single API endpoint
-- Create a single component
-- Wire up a route/integration point
+- Create/update type/model with validation
+- Implement single function/method
+- Add single API endpoint
+- Create single component
+- Wire up route/integration point
 
 **Infrastructure/config (context-dependent):**
-- Update configuration files (lint only)
+- Update config files (lint only)
 - Add dependencies (lint + verify build)
 - Modify build scripts (test if testable, lint always)
 
-**NOT a semantic change:**
+**NOT semantic change:**
 - "Implement user profiles feature" (too big)
 - "Update frontend and backend" (multiple layers)
-- "Add tests and implementation" (test is verification step, not implementation)
+- "Add tests and implementation" (test is verification, not implementation)
 
 ### Verification Steps After Each Change
 
-**For schema/migration changes:**
+**For schema/migration:**
 ```
 [ ] Add migration file
 [ ] Use lint subagent
 [ ] Use commit subagent
 ```
 
-**For code changes:**
+**For code:**
 ```
 [ ] Implement feature/function
 [ ] Use test subagent
@@ -253,25 +221,20 @@ For EACH layer, break into atomic changes with appropriate verification:
 [ ] Use commit subagent
 ```
 
-**Why test after code but not schema?**
-- Schema changes are verified by migration execution, not unit tests
-- Code behavior MUST have test coverage
-- Linting applies to all file types
-
 **No exceptions:**
 - Even if "just a small change"
 - Even if "tests couldn't possibly fail"
 - Even if "already tested similar code"
 
-**Why:** Each commit should represent a working state. If you batch changes, you can't bisect bugs or revert cleanly.
+**Why:** Each commit should represent working state for clean bisect/revert.
 
 ## Phase 4: Execution
 
-**Goal:** Execute the plan systematically, following each TodoWrite item in order.
+**Goal:** Execute plan systematically, following each TodoWrite item in order.
 
-### Before Starting Implementation
+### Before Starting
 
-**Verify you have:**
+**Verify:**
 - ✅ Complete TodoWrite plan with all steps
 - ✅ Design validated and approved
 - ✅ Backend-first ordering (DB → Models → API → Frontend)
@@ -281,7 +244,7 @@ For EACH layer, break into atomic changes with appropriate verification:
 
 ### During Implementation
 
-**Follow the plan strictly:**
+**Follow plan strictly:**
 1. Mark current todo as `in_progress`
 2. Complete ONLY that one item
 3. Run verification steps (test/lint as appropriate)
@@ -291,26 +254,16 @@ For EACH layer, break into atomic changes with appropriate verification:
 
 **DO NOT:**
 - Skip ahead to "more interesting" tasks
-- Batch multiple todos together "to save time"
-- Skip verification steps "just this once"
+- Batch multiple todos "to save time"
+- Skip verification "just this once"
 - Work on multiple todos in parallel
-- Rationalize deviating from the plan
+- Rationalize deviating from plan
 
-**If you discover the plan is wrong:**
+**If plan is wrong:**
 - STOP implementation
-- Update the plan with new todos
-- Announce the change: "Plan needs adjustment: [reason]"
-- Resume execution with updated plan
-
-### Using Subagents
-
-**Delegate appropriately:**
-- Use `test` subagent for running tests
-- Use `lint` subagent for linting/formatting
-- Use `commit` subagent for creating commits
-- Use `general` subagent for exploration/research if needed
-
-**Announce subagent usage:** "I'm delegating [task] to the [subagent] subagent!"
+- Update plan with new todos
+- Announce: "Plan needs adjustment: [reason]"
+- Resume with updated plan
 
 ### Handling Failures
 
@@ -321,131 +274,88 @@ For EACH layer, break into atomic changes with appropriate verification:
 - Only proceed when green
 
 **If linting fails:**
-- Fix linting issues
+- Fix issues
 - Re-run lint subagent
 - Only proceed when clean
 
-**If you can't complete a todo:**
+**If stuck on todo:**
 - Don't skip it
-- Ask for help: "Stuck on [todo]: [specific problem]"
+- Ask: "Stuck on [todo]: [specific problem]"
 - Get clarification before proceeding
 
-## After Brainstorming
+## Documentation
 
-### Documentation
-
-**Determine project name:**
-- Extract from git remote URL, or
-- Use directory name, or
-- Ask user for project identifier
-
-**Write validated design to file:**
+**After design validated, write to file:**
 - Path: `~/.config/opencode/plans/<PROJECT>/YYYY-MM-DD-<topic>.md`
-- Create directory if it doesn't exist
 - Include: problem statement, chosen approach, design details, implementation plan
-- Commit the design document before starting implementation
+- Commit design document before starting implementation
+
+**Project name from:**
+- Git remote URL, or
+- Directory name, or
+- Ask user
 
 **Why document:**
-- Future reference for why decisions were made
-- Onboarding for other developers
+- Future reference for decisions
+- Onboarding for developers
 - Design review for stakeholders
-- Cross-project plan organization
-
-### Ready to Implement?
-
-**Ask user:** "Ready to start implementation?"
-
-**If yes:**
-- Begin Phase 4 (Execution)
-- Follow the TodoWrite plan strictly
-- Test/lint/commit after each change
-
-**If no:**
-- Keep design document
-- User will decide when to start
-
-## Summary
-
-**Complete brainstorming flow:**
-
-1. **Understanding** → Ask questions, clarify requirements
-2. **Design** → Explore approaches, present incrementally, validate
-3. **Planning** → Break into atomic backend-first steps with test/lint/commit
-4. **Documentation** → Write design doc to ~/.config/opencode/plans/<PROJECT>/
-5. **Execution** → Follow plan strictly, verify each step
-
-**Key Principles:**
-
-- **One question at a time** - Don't overwhelm
-- **YAGNI ruthlessly** - Remove unnecessary features
-- **Backend-first always** - DB → Models → API → Frontend
-- **Atomic steps mandatory** - One semantic change per todo
-- **Test/lint/commit cycle** - Verify after each change (appropriate to change type)
-- **Follow the plan** - No rationalizing deviations
-- **CAPYBARAS DEPEND ON THIS** - Skip steps = sad capybaras 🦫
-
-## Common Failure Patterns
-
-**Skipping Understanding:**
-- Jumping to code without asking questions
-- Making assumptions about requirements
-- "This seems obvious, no need to clarify"
-
-**Skipping Design:**
-- Not exploring alternatives
-- Settling on first idea
-- Ignoring testability or backend-first order
-
-**Bad Planning:**
-- Batching multiple changes into one todo
-- Missing test/lint/commit steps
-- Frontend-first ordering
-
-**Bad Execution:**
-- Skipping verification "just this once"
-- Working on multiple todos in parallel
-- Deviating from plan without updating it
-
-**If you catch yourself doing any of these: STOP. Go back. Do it right. CAPYBARAS ARE WATCHING.**
+- Cross-project organization
+</three-phases>
 
 <anti-rationalization>
-**EXCUSES THAT KILL CAPYBARAS:**
+**THESE EXCUSES NEVER APPLY**
 
-"The feature is simple, I don't need to brainstorm"
-   → **WRONG**: Even simple features benefit from design
+"Feature is simple, don't need brainstorming"
+**WRONG**: Even simple features benefit from design
 
-"The user told me exactly what to do"
-   → **WRONG**: Still explore alternatives and plan atomically
+"User told me exactly what to do"
+**WRONG**: Still explore alternatives and plan atomically
 
 "I'll just start coding and see what happens"
-   → **WRONG**: Plan BEFORE coding
+**WRONG**: Plan BEFORE coding
 
 "Brainstorming takes too long"
-   → **WRONG**: Brainstorming SAVES time by preventing mistakes
+**WRONG**: Brainstorming SAVES time preventing mistakes
 
-"I already know the best approach"
-   → **WRONG**: Explore alternatives anyway
+"I already know best approach"
+**WRONG**: Explore alternatives anyway
 
-"I'll skip the TodoWrite list and track mentally"
-   → **WRONG**: TodoWrite is MANDATORY
+"I'll track mentally, skip TodoWrite"
+**WRONG**: TodoWrite is MANDATORY
 
-**ALL EXCUSES = CAPYBARA DEATH**
 **NO EXCEPTIONS**
 </anti-rationalization>
 
 <compliance-checklist>
-**MANDATORY CHECKLIST BEFORE IMPLEMENTING:**
+**MANDATORY CHECKLIST:**
 
 ☐ Completed Phase 1: Understanding (asked clarifying questions)
 ☐ Completed Phase 2: Design (explored 2-3 approaches, validated design)
 ☐ Completed Phase 3: Planning (created TodoWrite with atomic steps)
-☐ Design follows backend-first ordering (DB → Models → API → Frontend)
-☐ Each todo has test/lint/commit verification steps
+☐ Design follows backend-first (DB → Models → API → Frontend)
+☐ Each todo has test/lint/commit verification
 ☐ Each todo represents ONE semantic change
 ☐ Documented design in ~/.config/opencode/plans/<PROJECT>/
 ☐ Did NOT skip phases
 ☐ Did NOT batch changes
 ☐ Did NOT rationalize deviations
 
-**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
+**IF ANY UNCHECKED THEN EVERYTHING FAILS**
 </compliance-checklist>
+
+<quick-reference>
+**Complete flow:**
+1. **Understanding** → Ask questions, clarify requirements
+2. **Design** → Explore approaches, present incrementally, validate
+3. **Planning** → Break into atomic backend-first steps with test/lint/commit
+4. **Documentation** → Write to ~/.config/opencode/plans/<PROJECT>/
+5. **Execution** → Follow plan strictly, verify each step
+
+**Key principles:**
+- One question at a time
+- YAGNI ruthlessly
+- Backend-first always
+- Atomic steps mandatory
+- Test/lint/commit cycle after each change (appropriate to change type)
+- Follow the plan
+</quick-reference>

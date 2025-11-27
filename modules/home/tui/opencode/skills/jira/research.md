@@ -1,4 +1,10 @@
-# JIRA Research Workflow
+# JIRA Research Workflows
+
+<mandatory>
+**MANDATORY**: Research existing context before creating/updating tickets when relevant.
+**CRITICAL**: Don't over-research - only gather what's needed for the ticket.
+**NO EXCEPTIONS**: Finding proper actors, patterns, and context improves ticket quality.
+</mandatory>
 
 ## When to Research
 
@@ -12,8 +18,6 @@ Research existing context when:
 
 **Skip research if:** User provides completely new requirements with no existing context.
 
----
-
 ## Research Goals
 
 1. **Understand current implementation** before designing ticket
@@ -22,112 +26,48 @@ Research existing context when:
 4. **Discover relationships** between tickets/features
 5. **Gather context** from related PRs, commits, or discussions
 
----
-
 ## Viewing JIRA Tickets
 
-### View Single Ticket
-
 ```bash
-# View ticket with all details
+# View single ticket
 jira issue view DI-1234
+jira issue view DI-1234 --plain  # Easier parsing
 
-# Plain output (easier to parse)
-jira issue view DI-1234 --plain
-```
-
-### Extract Specific Information
-
-```bash
-# Check status
+# Extract specific information
 jira issue view DI-1234 --plain | grep "Status:"
-
-# Find epic/parent relationships
 jira issue view DI-1234 --plain | grep -E "(Epic|Parent):"
-
-# Get assignee
 jira issue view DI-1234 --plain | grep "Assignee:"
-
-# Check type
 jira issue view DI-1234 --plain | grep "Type:"
-```
 
-### View Related Tickets
-
-```bash
-# If ticket mentions other tickets
-jira issue view DI-1234
-# Look for "Related to DI-5678" or similar
-
-# Then view those tickets
-jira issue view DI-5678
-```
-
-### List Project Tickets
-
-```bash
-# List all tickets in project
+# List tickets
 jira issue list --project DI
-
-# Filter by status
 jira issue list --project DI --status "To Do"
-
-# Filter by assignee
 jira issue list --project DI --assignee username
-
-# Recent tickets
 jira issue list --project DI --created-after "-30d"
 ```
 
----
-
 ## Viewing GitHub PRs and Issues
-
-### View Pull Requests
 
 ```bash
 # View specific PR
 gh pr view 123
 
-# View PR for a ticket (if mentioned in JIRA)
-# Check JIRA ticket for PR links, then:
-gh pr view 123
-
 # List recent PRs
 gh pr list --limit 20
-
-# Search PRs by title
 gh pr list --search "medication draft"
-```
 
-### View Issues
-
-```bash
 # View specific issue
 gh issue view 456
 
 # List recent issues
 gh issue list --limit 20
-
-# Search issues
 gh issue list --search "medication sync"
-```
 
-### View Repository Info
-
-```bash
 # Get repo details
 gh repo view
-
-# View recent activity
-gh repo view --web
 ```
 
----
-
 ## Searching Codebase
-
-### Find Patterns
 
 ```bash
 # Search for function/module names
@@ -136,45 +76,16 @@ rg "prescribe_medication" --type elixir
 # Find configuration
 rg "MEDICATION_STATUSES" --type elixir
 
-# Search for specific patterns
+# Search for patterns
 rg "def draft\?" --type elixir
+rg -i "medication draft" --type elixir  # Case-insensitive
 
-# Case-insensitive search
-rg -i "medication draft" --type elixir
-```
-
-### Find Files
-
-```bash
-# Find files by name
+# Find files
 find . -name "*medication*.ex"
-
-# Find files in specific directory
 find ./lib -name "*.ex" | grep medication
 ```
 
-### View File Contents
-
-```bash
-# View specific file
-cat lib/app/medications.ex
-
-# View with line numbers
-cat -n lib/app/medications.ex
-
-# View specific lines
-head -n 50 lib/app/medications.ex
-tail -n 30 lib/app/medications.ex
-
-# View section of file
-sed -n '100,150p' lib/app/medications.ex
-```
-
----
-
 ## Finding Defaults and Constants
-
-### Search Configuration Files
 
 ```bash
 # Check config files
@@ -188,24 +99,14 @@ cat priv/repo/seeds.exs | grep -i "permission"
 # Find constants
 rg "DEFAULT_.*STATUS" --type elixir
 rg "@default" --type elixir
-```
 
-### Example: Finding Actors
-
-```bash
-# Search for user roles in seeds
+# Example: Finding actors
 cat priv/repo/seeds.exs | grep -A 5 "roles"
-
-# Search for permission definitions
 rg "can_prescribe" --type elixir
 rg "permission" --type elixir | head -20
 ```
 
----
-
 ## Git History Research
-
-### Find Related Commits
 
 ```bash
 # Search commit messages
@@ -219,31 +120,23 @@ git log --oneline -- lib/app/medications.ex
 
 # View file at specific commit
 git show abc123:lib/app/medications.ex
-```
 
-### Find Recent Changes
-
-```bash
-# Recent commits in project
+# Recent commits
 git log --oneline -20
-
-# Recent commits affecting specific files
 git log --oneline -10 -- lib/app/medications.ex
 
 # Who changed this line?
 git blame lib/app/medications.ex | grep "draft"
 ```
 
----
-
 ## Research Workflow Examples
 
 ### Example 1: Creating Similar Ticket
 
-User says: "Create a ticket similar to DI-1234 but for lab results"
+User: "Create a ticket similar to DI-1234 but for lab results"
 
 ```bash
-# 1. View the reference ticket
+# 1. View reference ticket
 jira issue view DI-1234
 
 # 2. Check if there's a PR linked
@@ -264,7 +157,7 @@ cat config/config.exs | grep lab_result
 
 ### Example 2: Reviewing Existing Ticket
 
-User says: "Review DI-5678 and improve it"
+User: "Review DI-5678 and improve it"
 
 ```bash
 # 1. View current ticket
@@ -288,7 +181,7 @@ rg "def prescribe" --type elixir
 
 ### Example 3: Understanding Feature Context
 
-User says: "Add medication draft status, check how orders handle drafts"
+User: "Add medication draft status, check how orders handle drafts"
 
 ```bash
 # 1. Search for existing draft implementations
@@ -309,7 +202,7 @@ cat priv/repo/seeds.exs | grep -i status
 
 ### Example 4: Finding Related PRs
 
-User mentions: "Follow the pattern from the recent invoice refactor"
+User: "Follow the pattern from the recent invoice refactor"
 
 ```bash
 # 1. Search recent PRs
@@ -328,8 +221,6 @@ gh pr diff 789
 # (Look in PR description for ticket references)
 jira issue view DI-9999
 ```
-
----
 
 ## Documenting Research Findings
 
@@ -357,8 +248,6 @@ Research findings:
 EOF
 )"
 ```
-
----
 
 ## Research Checklist
 

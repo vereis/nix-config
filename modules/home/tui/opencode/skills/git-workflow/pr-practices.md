@@ -1,51 +1,60 @@
+# Pull Request Best Practices
+
 <mandatory>
-**CRITICAL**: ALWAYS run quality checks BEFORE creating PR.
-**NO EXCEPTIONS**: Creating PR with failing tests/lints = capybara genocide.
-**CAPYBARA DECREE**: Use PR subagent, NEVER create PRs directly or capybaras will cry.
+**MANDATORY**: ALWAYS run quality checks BEFORE creating PR.
+**CRITICAL**: Use PR subagent, NEVER create PRs directly with gh pr create.
+**NO EXCEPTIONS**: Creating PR with failing tests/lints = broken CI and wasted time.
 </mandatory>
 
-<workflow>
-You want to **ALWAYS** aspire to have the highest standard and quality for your PRs, and make them **AS EASY AS POSSIBLE** to review and merge.
-As a result, please follow these best practices **EXACTLY** when creating PRs:
+## Workflow
 
-1) **Run quality checks** to ensure all tests/lints pass before creating PR
-    - Use the `ci-discovery` skill to find and run all relevant commands on the project you're working on
-    - **NEVER** skip using the `ci-discovery` skill because you **WILL** miss important commands leading to broken PRs or CI pipelines
-    - **ALWAYS** run:
-      - All tests (refer to the `quality-check` subagent) **OR CAPYBARAS WILL DIE**
-      - All linters (refer to the `quality-check` subagent) **OR CAPYBARAS WILL EXPLODE**
-    - **FAIL FAST** if any checks fail - fix issues before creating PR - though its ok to run tests and linters concurrently to save time
-    - **MANDATORY**: If any tests or linters fail, you **MUST NOT** create the PR until they pass, you **MUST** fix the issues first
-2) **Verify commits** in the branch you're creating the PR from
-    - All commits follow the format from `commits.md`
-    - Each commit represents an atomic change
-    - Commit messages are clear and descriptive
-    - No WIP or temporary commits
-3) **Create clear PR title** matching commit format
-    - E.g., `[TICKET-123] High level summary of changes`
-    - E.g., `[FEAT] High level summary of changes`
-    - Refer to your commits or the `commits.md` file for examples
-4) **Write detailed PR description** focusing on WHY changes were made
-    - **MANDATORY**: Use the template for the project you're working on (if it exists)
-        - Refer to the `ci-discovery` skill to check for PR templates
-        - If no template exists, review recent merged PRs for style and format
-        - Otherwise, just keep it clear and concise follow `backup-template` below
-    - **NEVER** use words a casual human developer would not use (don't be too formal or robotic or obviously LLM generated)
-        - No phrases like "Adds comprehensive ..." or the like
-        - If in doubt, keep it simple and casual
-    - Again, focus on **WHY** changes were made, not just what was changed
-    - **Concise** - 1-3 bullet points per section
-    - **Context** - Explain why, not what (code shows what)
-    - **Links** - Always link to related tickets/issues
-    - **Testing** - Show the change works
-    - **Breaking changes** - Call out clearly if present
-5) **Create PR**
-    - **ALWAYS** use the `pr` subagent to create the PR
-    - **ALWAYS** use the `jira` skill to update ticket status after PR creation (if applicable)
-    - **ALWAYS** summarize what you did and let vereis know the link to the PR, the link to the ticket, and any other relevant context
-</workflow>
+Follow these best practices **EXACTLY** when creating PRs to ensure highest quality and easiest review:
 
-<backup-template>
+**1. Run quality checks** to ensure all tests/lints pass before creating PR
+- Use `ci-discovery` skill to find and run all relevant commands on project
+- **NEVER** skip `ci-discovery` skill - you WILL miss important commands leading to broken PRs/CI
+- **ALWAYS** run:
+  - All tests (use `quality-check` subagent)
+  - All linters (use `quality-check` subagent)
+- **FAIL FAST** if any checks fail - fix issues before creating PR
+- **MANDATORY**: If any tests/linters fail, you MUST fix issues before PR creation
+
+**2. Verify commits** in branch you're creating PR from
+- All commits follow format from `commits.md`
+- Each commit represents atomic change
+- Commit messages are clear and descriptive
+- No WIP or temporary commits
+
+**3. Create clear PR title** matching commit format
+- E.g., `[TICKET-123] High level summary of changes`
+- E.g., `[FEAT] High level summary of changes`
+- Refer to commits or `commits.md` for examples
+
+**4. Write detailed PR description** focusing on WHY changes were made
+- **MANDATORY**: Use template for project you're working on (if exists)
+  - Use `ci-discovery` skill to check for PR templates
+  - If no template, review recent merged PRs for style/format
+  - Otherwise keep it clear and concise, follow `backup-template` below
+- **NEVER** use overly formal/robotic LLM-generated language
+  - No phrases like "Adds comprehensive ..." or the like
+  - If in doubt, keep it simple and casual
+- Focus on **WHY** changes were made, not just what was changed
+- **Concise** - 1-3 bullet points per section
+- **Context** - Explain why, not what (code shows what)
+- **Links** - Always link to related tickets/issues
+- **Testing** - Show the change works
+- **Breaking changes** - Call out clearly if present
+
+**5. Create PR**
+- **ALWAYS** use `pr` subagent to create PR
+- **ALWAYS** use `jira` skill to update ticket status after PR creation (if applicable)
+- **ALWAYS** summarize what you did with link to PR, link to ticket, and any other relevant context
+
+## Backup Template
+
+If no project-specific template exists, use this:
+
+```markdown
 ## Summary
 - Brief explanation of what problem this solves
 - Why these changes were needed
@@ -63,32 +72,32 @@ As a result, please follow these best practices **EXACTLY** when creating PRs:
 - Links to tickets/issues
 - Links to related PRs
 - References to documentation
-</backup-template>
+```
 
-<anti-rationalization>
-**EXCUSES THAT KILL CAPYBARAS:**
+## Anti-Rationalization
 
-"I'll create the PR and fix tests in follow-up commits"
-   → **WRONG**: PR must pass ALL checks BEFORE creation
+**THESE EXCUSES NEVER APPLY:**
 
-"The CI will catch any issues"
-   → **WRONG**: Run checks LOCALLY first
+"I'll create PR and fix tests in follow-up commits"
+**WRONG**: PR must pass ALL checks BEFORE creation
 
-"I don't need to use the pr subagent"
-   → **WRONG**: PR subagent is MANDATORY
+"CI will catch any issues"
+**WRONG**: Run checks LOCALLY first
 
-"I'll write a PR description later"
-   → **WRONG**: Write description WHEN creating PR
+"I don't need to use pr subagent"
+**WRONG**: PR subagent is MANDATORY
+
+"I'll write PR description later"
+**WRONG**: Write description WHEN creating PR
 
 "My commits are self-explanatory, no description needed"
-   → **WRONG**: PR description is MANDATORY
+**WRONG**: PR description is MANDATORY
 
-**ALL EXCUSES = CAPYBARA EXTINCTION**
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
-**MANDATORY CHECKLIST BEFORE CREATING PR:**
+## Compliance Checklist
+
+**MANDATORY - Before creating PR:**
 
 ☐ Used ci-discovery skill to find quality check commands
 ☐ Ran quality-check subagent for ALL tests
@@ -103,5 +112,4 @@ As a result, please follow these best practices **EXACTLY** when creating PRs:
 ☐ Used PR subagent (NOT gh pr create directly)
 ☐ Updated ticket status (if applicable)
 
-**IF ANY UNCHECKED → CAPYBARAS DIE A HORRIBLE DEATH**
-</compliance-checklist>
+**IF ANY UNCHECKED THEN PR WILL FAIL**

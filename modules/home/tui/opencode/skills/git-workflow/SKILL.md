@@ -1,46 +1,42 @@
 ---
 name: git-workflow
-description: MANDATORY for creating branches, commits, or pull requests. Defines commit message formats, branching conventions, and PR best practices. ALWAYS consult this skill before ANY mutating git operation. OTHERWISE CAPYBARAS WILL DIE.
+description: MANDATORY for creating branches, commits, or pull requests - defines commit message formats, branching conventions, and PR best practices. ALWAYS consult this skill before ANY mutating git operation.
 ---
 
 <mandatory>
-**CRITICAL**: ALWAYS consult this skill before ANY git operation (branch, commit, PR).
-**NO EXCEPTIONS**: Skipping this skill = broken workflow = capybara extinction.
-**CAPYBARA DECREE**: Use quality-check/commit/pr subagents, NEVER run git commands directly.
+**MANDATORY**: ALWAYS consult this skill before ANY git operation (branch, commit, PR).
+**CRITICAL**: Use quality-check/commit/pr subagents, NEVER run git commands directly.
+**NO EXCEPTIONS**: Skipping this skill = broken workflow = wasted time and broken CI.
 </mandatory>
 
+<subagent-context>
+**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context. DO NOT spawn additional subagents from this skill. Follow the git workflow process and return results to the primary agent who will handle any necessary subagent delegation.
+</subagent-context>
+
 <core-principles>
-- **Atomic commits** - Each commit represents a single logical change
-- **Clear messages** - Commit messages explain purpose, not implementation
-- **Consistent format** - Use standardized prefixes and structure
-- **Test before commit** - All commits MUST pass tests
-- **Lint before commit** - All commits MUST pass linting
-- **Subagent delegation** - ALWAYS use quality-check/commit/pr subagents
+1. **Atomic commits** - Each commit represents single logical change
+2. **Clear messages** - Commit messages explain purpose, not implementation
+3. **Consistent format** - Use standardized prefixes and structure
+4. **Test before commit** - All commits MUST pass tests
+5. **Lint before commit** - All commits MUST pass linting
+6. **Subagent delegation** - ALWAYS use quality-check/commit/pr subagents
 </core-principles>
 
 <structure>
-This skill provides comprehensive git workflow knowledge:
+This skill provides git workflow knowledge across focused files:
 
-- **`commits.md`** - Commit message formats, rules, workflow, and anti-rationalization
-- **`branching.md`** - Branch naming conventions, creation workflow, and enforcement
-- **`pr-practices.md`** - Pull request creation, quality checks, and templates
+- **`branching.md`** - Branch naming conventions, creation workflow
+- **`commits.md`** - Commit message formats, rules, workflow
+- **`pr-practices.md`** - Pull request creation, quality checks, templates
 
-**PROACTIVELY** consult these files BEFORE any git operation or capybaras will go extinct!
+**Reference these files based on your task:**
+- Starting work → Read `branching.md`
+- Making commits → Read `commits.md`
+- Creating PRs → Read `pr-practices.md`
 </structure>
 
-<proactive-triggers>
-**ALWAYS use this skill when:**
-- Creating a new branch
-- Making any commit
-- Creating a pull request
-- User mentions git operations
-- Starting any coding task (need to branch first!)
-
-**Don't wait for "use git-workflow" - BE PROACTIVE or capybaras will be disappointed!**
-</proactive-triggers>
-
 <workflow-summary>
-**Quick Reference (MANDATORY):**
+**Quick Reference:**
 
 **Before ANY coding:**
 1. Consult `branching.md` - Create appropriately named branch
@@ -60,29 +56,28 @@ This skill provides comprehensive git workflow knowledge:
 </workflow-summary>
 
 <anti-rationalization>
-**EXCUSES THAT KILL CAPYBARAS:**
+**THESE EXCUSES NEVER APPLY**
 
-"I know the git workflow, I don't need to consult the skill"
-   → **WRONG**: ALWAYS consult to ensure compliance
+"I know the git workflow, don't need to consult the skill"
+**WRONG**: ALWAYS consult to ensure compliance
 
-"This is a quick fix, I'll skip the quality checks"
-   → **WRONG**: EVERY commit needs tests/lint
+"This is a quick fix, I'll skip quality checks"
+**WRONG**: EVERY commit needs tests/lint
 
 "I can run git commands faster directly"
-   → **WRONG**: Subagents are MANDATORY
+**WRONG**: Subagents are MANDATORY
 
-"The branch name doesn't matter"
-   → **WRONG**: Consistent naming is REQUIRED
+"Branch name doesn't matter"
+**WRONG**: Consistent naming is REQUIRED
 
 "I'll clean up commits later"
-   → **WRONG**: Make clean commits from the start
+**WRONG**: Make clean commits from the start
 
-**ALL EXCUSES = CAPYBARA DEATH**
-**NO EXCEPTIONS EVER**
+**NO EXCEPTIONS**
 </anti-rationalization>
 
 <compliance-checklist>
-**MANDATORY CHECKLIST FOR ANY GIT OPERATION:**
+**MANDATORY CHECKLIST:**
 
 ☐ Consulted relevant git-workflow file (branching/commits/pr-practices)
 ☐ Created branch with correct naming (if starting work)
@@ -93,5 +88,5 @@ This skill provides comprehensive git workflow knowledge:
 ☐ Did NOT run git/gh commands directly
 ☐ Followed atomic workflow pattern
 
-**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
+**IF ANY UNCHECKED THEN EVERYTHING FAILS**
 </compliance-checklist>
