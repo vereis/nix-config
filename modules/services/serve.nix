@@ -66,6 +66,11 @@ with lib;
               default = false;
               description = "Allow large file uploads (100MB limit)";
             };
+            maxUploadSize = mkOption {
+              type = types.str;
+              default = "100M";
+              description = "Maximum upload size (e.g., 100M, 1G, 2G)";
+            };
             websocketSupport = mkOption {
               type = types.bool;
               default = false;
@@ -163,17 +168,22 @@ with lib;
         configFile = "/etc/ddclient.conf";
       };
 
-    users.users.ddclient = mkIf (lib.filterAttrs (
-      name: proxy: proxy.ddns != null && proxy.ddns.enable
-    ) config.modules.serve.sites != {}) {
-      isSystemUser = true;
-      group = "ddclient";
-      home = "/var/lib/ddclient";
-    };
+    users.users.ddclient =
+      mkIf
+        (
+          lib.filterAttrs (name: proxy: proxy.ddns != null && proxy.ddns.enable) config.modules.serve.sites
+          != { }
+        )
+        {
+          isSystemUser = true;
+          group = "ddclient";
+          home = "/var/lib/ddclient";
+        };
 
-    users.groups.ddclient = mkIf (lib.filterAttrs (
-      name: proxy: proxy.ddns != null && proxy.ddns.enable
-    ) config.modules.serve.sites != {}) {};
+    users.groups.ddclient = mkIf (
+      lib.filterAttrs (name: proxy: proxy.ddns != null && proxy.ddns.enable) config.modules.serve.sites
+      != { }
+    ) { };
 
     services.nginx = {
       enable = true;
@@ -211,7 +221,7 @@ with lib;
 
           uploadConfig = lib.optionalString siteConfig.largeUploads ''
             # Large upload support
-            client_max_body_size 100M;
+            client_max_body_size ${siteConfig.maxUploadSize};
           '';
 
           websocketConfig = lib.optionalString siteConfig.websocketSupport ''
