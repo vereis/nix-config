@@ -26,7 +26,7 @@
         scan = 60;
         e2d = true;
         nohash = "\.iso$";
-        daw = true;
+        nsort = true; # Natural sort: file2.txt comes before file10.txt
       };
     };
   };
@@ -51,7 +51,9 @@
 
       "files.vereis.com" = {
         port = 3210;
-        ssl = false;
+        ssl = true;
+        largeUploads = true;
+        maxUploadSize = "2G";
         ddns = {
           enable = true;
           protocol = "cloudflare";
