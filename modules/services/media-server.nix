@@ -42,7 +42,6 @@ with lib;
       user = config.modules.media-server.user;
       group = "media";
       dataDir = "/var/lib/plex";
-      extraGroups = [ "media" ];
     };
 
     systemd.tmpfiles.rules = [
