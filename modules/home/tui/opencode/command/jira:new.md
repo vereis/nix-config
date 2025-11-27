@@ -91,7 +91,7 @@ Ensure all necessary details are collected, if not, GOTO Step 2.
 "Ready to create this ticket in JIRA? (yes/no)" - wait for confirmation before proceeding.
 
 ### Step 7: Create Ticket
-Follow CLI patterns from `cli-usage.md` (CRITICAL: /tmp file pattern!). If linking, use patterns from `linking.md`.
+Follow CLI patterns from `cli-usage.md` (CRITICAL: /tmp file pattern!). Linking patterns are also in `cli-usage.md`.
 
 ### Step 8: Confirm Creation
 Report ticket URL and remind user to clear context before next ticket.

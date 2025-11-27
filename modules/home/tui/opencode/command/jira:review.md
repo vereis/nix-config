@@ -107,7 +107,7 @@ If ticket is too large, conversationally discuss natural split points with user.
 Explicit user confirmation before making any changes.
 
 ### Step 8: Update Ticket(s)
-Follow CLI patterns from `cli-usage.md` (CRITICAL: /tmp file pattern!). Use linking patterns from `linking.md` for splits.
+Follow CLI patterns from `cli-usage.md` (CRITICAL: /tmp file pattern!). Linking patterns for splits are also in `cli-usage.md`.
 
 ### Step 9: Verify Changes
 Check updated tickets in CLI and manually verify in JIRA web UI.

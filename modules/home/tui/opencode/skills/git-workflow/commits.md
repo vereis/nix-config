@@ -1,16 +1,20 @@
 # Commit Message Format
 
-Commit messages should be concise, consistent, and informative. They must follow a standardized format to ensure clarity and maintainability.
+<mandatory>
+**MANDATORY**: Follow standardized commit format for clarity and maintainability.
+**CRITICAL**: Every commit MUST pass tests and linting before being made.
+**NO EXCEPTIONS**: Use commit subagent, NEVER run git commit directly.
+</mandatory>
 
-<format>
-**ALWAYS** Prefix with either a type or ticket reference:
+## Format
+
+**ALWAYS** prefix with either type or ticket reference:
 ```
 TICKET-123 - Implement the asgard hyperdrive protocol
 FEAT/BUG/CHORE - Berate vereis again because she's a baka
 ```
 
-Use appropriate prefixes for non-ticket commits:
-
+**Prefixes for non-ticket commits:**
 - **FEAT** - New features or functionality
 - **BUG** - Bug fixes
 - **CHORE** - Maintenance tasks (dependency updates, refactoring, cleanup)
@@ -18,7 +22,7 @@ Use appropriate prefixes for non-ticket commits:
 - **PERF** - Performance improvements
 - **TEST** - Test additions or modifications
 
-**IF YOU WANT TO KEEP CAPYBARAS ALIVE, WHICH YOU DO**
+**Rules:**
 - **One line only** - No multi-line commits
 - **No fluff** - Be direct and mechanical
 - **High level summary** - What was accomplished, not how
@@ -26,9 +30,9 @@ Use appropriate prefixes for non-ticket commits:
 - **Imperative mood** - "Fix bug" not "Fixes bug"
 
 If your commit message needs "and" or "also", you're probably batching multiple changes. Split them into separate commits.
-</format>
 
-<good-examples>
+## Good Examples
+
 ```
 [VS-456] Add user authentication middleware
 [GH-789] Fix memory leak in data processor
@@ -37,83 +41,83 @@ If your commit message needs "and" or "also", you're probably batching multiple 
 [CHORE] Update dependencies to latest versions
 [PERF] Optimize database query performance
 ```
-</good-examples>
 
-<bad-examples>
-**NEVER WRITE COMMITS LIKE THIS EVEN IF I POINT A GUN TO YOUR HEAD:**
-The following is too long, batches multiple concerns:
+## Bad Examples
+
+**Too long, batches multiple concerns:**
+```
 [PROJ-456] Add authentication middleware and also fix some linting issues and update docs
+```
 
-The following is too wordy, unnecessary preamble:
+**Too wordy, unnecessary preamble:**
+```
 [PROJ-456] This commit adds user authentication middleware to handle login requests
-</bad-examples>
+```
 
-<workflow>
-**MANDATORY** workflow for every commit (or capybaras will never forgive you):
+## Workflow
 
-1. **GATHER CONTEXT** to understand what files can be committed
-    - Check branch name for ticket numbers: `git branch --show-current`
-    - Check recent commits for patterns: `git log --oneline -5`
-    - See what files changed: `git status` and `git diff --stat`
-    - Consult the `jira` skill to look up additional ticket context **ONLY IF ABSOLUTELY NEEDED**
+**MANDATORY workflow for every commit:**
 
-2. **STAGE CHANGES** that are relevant to the logical change being made
-    - Each commit needs to contain **only single logical changes** and any tests/fixes required to support that change
-    - Use `git add` to stage ONLY the files for this semantic change
+**1. GATHER CONTEXT** to understand what files can be committed
+- Check branch name for ticket numbers: `git branch --show-current`
+- Check recent commits for patterns: `git log --oneline -5`
+- See what files changed: `git status` and `git diff --stat`
+- Consult `jira` skill to look up additional ticket context **ONLY IF ABSOLUTELY NEEDED**
 
-3. **PASS ALL TESTS** using the `ci-discovery` skill and `quality-check` subagent
-    - **NEVER** run test commands directly
-    - **ALWAYS** use the quality-check subagent
-    - If tests fail, fix immediately and re-run
-    - **OPTIMIZATION - Failed-only mode**:
-        - When fixing specific test failures, you MAY request `scope=failed-only`
-        - Only appropriate when:
-            - ✅ You're implementing a fix based on quality-check feedback
-            - ✅ Other tests have already passed in a previous run
-            - ✅ You want to verify the fix without re-running the entire suite
-        - Request with: "Run quality-check subagent with scope=failed-only"
-        - When NOT to use:
-            - ❌ First test run (no previous failures)
-            - ❌ Changes to shared code (need full suite)
-            - ❌ When in doubt (default to full suite)
+**2. STAGE CHANGES** relevant to logical change being made
+- Each commit needs **only single logical changes** and tests/fixes required to support that change
+- Use `git add` to stage ONLY files for this semantic change
 
-4. **PASS ALL LINTERS** using the `ci-discovery` skill and `quality-check` subagent
-    - **NEVER** run lint commands directly  
-    - **ALWAYS** use the quality-check subagent
-    - If lints fail, fix immediately and re-run
+**3. PASS ALL TESTS** using `ci-discovery` skill and `quality-check` subagent
+- **NEVER** run test commands directly
+- **ALWAYS** use quality-check subagent
+- If tests fail, fix immediately and re-run
+- **OPTIMIZATION - Failed-only mode**:
+  - When fixing specific test failures, you MAY request `scope=failed-only`
+  - Only appropriate when:
+    - ✅ Implementing fix based on quality-check feedback
+    - ✅ Other tests already passed in previous run
+    - ✅ Want to verify fix without re-running entire suite
+  - Request with: "Run quality-check subagent with scope=failed-only"
+  - When NOT to use:
+    - ❌ First test run (no previous failures)
+    - ❌ Changes to shared code (need full suite)
+    - ❌ When in doubt (default to full suite)
 
-5. **EXECUTE COMMIT** using the `commit` subagent with standardized message format
-    - **NEVER** run `git commit` directly
-    - **ALWAYS** use the commit subagent
-    - Follow the format rules exactly
+**4. PASS ALL LINTERS** using `ci-discovery` skill and `quality-check` subagent
+- **NEVER** run lint commands directly
+- **ALWAYS** use quality-check subagent
+- If lints fail, fix immediately and re-run
 
-**Not following the above workflow = CAPYBARA EXTINCTION**
-</workflow>
+**5. EXECUTE COMMIT** using `commit` subagent with standardized message format
+- **NEVER** run `git commit` directly
+- **ALWAYS** use commit subagent
+- Follow format rules exactly
 
-<anti-rationalization>
-**EXCUSES THAT KILL CAPYBARAS:**
+## Anti-Rationalization
+
+**THESE EXCUSES NEVER APPLY:**
 
 "I'll commit now and fix tests later"
-   → **WRONG**: Every commit MUST pass tests
+**WRONG**: Every commit MUST pass tests
 
 "Linting doesn't matter for this change"
-   → **WRONG**: Every commit MUST pass linting
+**WRONG**: Every commit MUST pass linting
 
 "I'll batch multiple changes into one commit"
-   → **WRONG**: One semantic change per commit
+**WRONG**: One semantic change per commit
 
-"The commit message doesn't need a prefix"
-   → **WRONG**: ALWAYS use [TYPE] or TICKET-123 prefix
+"Commit message doesn't need a prefix"
+**WRONG**: ALWAYS use [TYPE] or TICKET-123 prefix
 
-"I can run tests faster without the subagent"
-   → **WRONG**: Subagents are MANDATORY
+"I can run tests faster without subagent"
+**WRONG**: Subagents are MANDATORY
 
-**ALL EXCUSES = DEAD CAPYBARAS**
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
-**MANDATORY CHECKLIST BEFORE EVERY COMMIT:**
+## Compliance Checklist
+
+**MANDATORY - Before EVERY commit:**
 
 ☐ Gathered context (branch name, recent commits, changed files)
 ☐ Staged ONLY files for this semantic change
@@ -126,5 +130,4 @@ The following is too wordy, unnecessary preamble:
 ☐ Commit message is one line only
 ☐ Did NOT batch multiple changes
 
-**IF ANY UNCHECKED → CAPYBARAS DIE HORRIBLY**
-</compliance-checklist>
+**IF ANY UNCHECKED THEN COMMIT IS BROKEN**

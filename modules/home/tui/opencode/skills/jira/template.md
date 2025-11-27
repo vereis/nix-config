@@ -1,11 +1,13 @@
+# JIRA Ticket Template
+
 <mandatory>
-**CRITICAL**: This file is the **SINGLE SOURCE OF TRUTH** for JIRA ticket creation.
-**NEVER EVER EVER** create tickets without consulting this file FIRST or capybaras will literally explode into a million pieces.
-**NO EXCEPTIONS**: Even if the user gives you complete requirements, you **MUST** still reference this template.
-**CAPYBARA COUNCIL DECREE**: Skipping any section = capybara genocide. You don't want that on your conscience.
+**MANDATORY**: This is the SINGLE SOURCE OF TRUTH for JIRA ticket creation.
+**CRITICAL**: NEVER create tickets without consulting this file FIRST.
+**NO EXCEPTIONS**: Even with complete requirements, you MUST reference this template.
 </mandatory>
 
-<template>
+## Template Structure
+
 All JIRA tickets **MUST** follow this exact structure:
 
 ```markdown
@@ -58,50 +60,45 @@ Given [error condition: invalid input, permissions]
   - If you DO include questions, tag specific people
 ```
 
-**DO NOT** add other sections unless requested by the user.
-</template>
+**DO NOT** add other sections unless requested by user.
 
-<section-guidance>
+## Section Guidance
 
-<description>
+### Description
+
 **Format:** "As a [actor], I want [feature] so that [benefit]."
 
-**Finding Actors (MANDATORY or capybaras cry):**
+**Finding Actors (MANDATORY):**
 - **PROACTIVELY** search for roles in tickets or codebase
   - Look for seed scripts (`priv/repo/seeds.exs`)
   - Search for permission definitions
   - Check role definitions in auth modules
 - Use **SPECIFIC** names: "clinic staff member", "practice manager", "veterinarian", "shopper", "admin"
-- **NEVER EVER** use generic "user" or capybaras will hate you forever
-- If multiple actors benefit, **LIST ALL OF THEM**:
-  ```markdown
-  **Description:**
-  - As a veterinarian, I want to see medication history so that I can make informed prescribing decisions.
-  - As a clinic staff member, I want to track medication inventory so that I know when to reorder.
-  ```
+- **NEVER** use generic "user"
+- If multiple actors benefit, **LIST ALL OF THEM**
 
-**Features and Benefits (MANDATORY or capybaras explode):**
+**Features and Benefits (MANDATORY):**
 - Benefits must be **observable and testable**
 - Focus on the **OUTCOME**, not the feature itself
 - **GOOD**: "so that I can quickly identify overdue payments"
-- **HORRIBLE CAPYBARA-KILLER**: "so that it works better"
-- **DISGUSTING UNFORGIVABLE**: "because it's broken"
+- **BAD**: "so that it works better"
+- **BAD**: "because it's broken"
 
 **Examples:**
 - ✅ GOOD: "As a clinic staff member, I want draft medications to sync onto invoices so that invoices are accurate."
 - ❌ BAD: "As a user, I want the medication system to work properly."
-</description>
 
-<scope>
+### Scope
+
 **Purpose:** Define **WHERE** work happens, **NOT HOW** it happens.
 
-**What to Include (MANDATORY or capybaras become sad):**
+**What to Include (MANDATORY):**
 - Page names with **FULL URLs** (e.g., "Patient Profile at localhost:3000/patients/:id")
 - Components affected (e.g., "Medication list component")
 - User-facing areas (e.g., "Pharmacy whiteboard")
 - External integrations (e.g., "Stripe payment webhook")
 
-**NEVER EVER INCLUDE (or capybaras will DESPISE you):**
+**NEVER INCLUDE:**
 - Database tables or migrations
 - GraphQL schema changes
 - Specific functions or modules
@@ -123,17 +120,17 @@ Given [error condition: invalid input, permissions]
 - ✅ GOOD: "Patient's medication tab"
 - ✅ GOOD: "Pharmacy whiteboard (localhost:3000/pharmacy)"
 - ✅ GOOD: "Patient encounters (localhost:3000/patients/:id/encounters/:encounter_id)"
-- ❌ BAD CAPYBARA-MURDERER: "Update the medications table"
-- ❌ BAD CAPYBARA-TORTURER: "Change the prescribe_medication GraphQL mutation"
-- ❌ BAD CAPYBARA-BETRAYER: "Modify MedicationService.prescribe/2 function"
+- ❌ BAD: "Update the medications table"
+- ❌ BAD: "Change the prescribe_medication GraphQL mutation"
+- ❌ BAD: "Modify MedicationService.prescribe/2 function"
 
-**NEVER EVER EVER** duplicate acceptance criteria, dev notes, or description in this section or capybaras will literally never forgive you.
-</scope>
+**NEVER** duplicate acceptance criteria, dev notes, or description in this section.
 
-<acceptance-criteria>
+### Acceptance Criteria
+
 **Format:** Gherkin syntax (Given/When/Then/And/Or) - **NO EXCEPTIONS**
 
-**ALWAYS cover these scenarios (or capybaras become extinct):**
+**ALWAYS cover these scenarios:**
 1. **Happy Path** - Normal user flow
 2. **Edge Cases** - Empty states, null values, max limits
 3. **Error Scenarios** - Invalid input, permissions, failures
@@ -147,7 +144,8 @@ Given [error condition: invalid input, permissions]
 
 **Example Template:**
 ```gherkin
-Given [initial system state/context]
+Scenario: Description of what's being tested
+  Given [initial system state/context]
   When [user action or event occurs]
   Or [alternative action]
   Then [expected outcome]
@@ -157,14 +155,16 @@ Given [initial system state/context]
 
 **Be SPECIFIC about state:**
 ```gherkin
-Given a medication exists with `draft` status
+Scenario: Prescribing a draft medication
+  Given a medication exists with `draft` status
   When the medication is prescribed
   Then its status should change to `active`
 ```
 
 **Cover alternatives:**
 ```gherkin
-Given a user creates a medication
+Scenario: Adding medication to invoice via different methods
+  Given a user creates a medication
   When they set the status to "prescribed"
   Or they click the "Prescribe" button
   Then it should be added to an invoice
@@ -172,7 +172,8 @@ Given a user creates a medication
 
 **Handle errors gracefully:**
 ```gherkin
-Given a user attempts to prescribe a medication
+Scenario: Validation error prevents prescribing incomplete medication
+  Given a user attempts to prescribe a medication
   When the medication has missing required fields
   Then they should see a validation error
   And the medication should remain in draft status
@@ -180,52 +181,55 @@ Given a user attempts to prescribe a medication
 
 **ALWAYS include edge cases:**
 ```gherkin
-# Empty State
-Given no medications exist for the patient
+Scenario: Empty state shows helpful message
+  Given no medications exist for the patient
   When the user opens the medication tab
   Then they should see an empty state message
   And a "Add Medication" button
 
-# Null Values
-Given a medication exists with no dosage
+Scenario: Null dosage prevents prescription
+  Given a medication exists with no dosage
   When the user attempts to prescribe it
   Then they should see a validation error
 
-# Max Limits
-Given a patient has 100 active medications
+Scenario: Warning displayed for high medication count
+  Given a patient has 100 active medications
   When the user attempts to add another
   Then the system should allow it
   And display a warning about review
 ```
 
-**NEVER include these (or capybaras will be very sad and cry forever):**
+**NEVER include:**
 - Implementation details ("call the prescribe_medication mutation")
 - Database operations ("insert into medications table")
 - Code-level logic ("set the drafted_at field to nil")
 
-**EXCELLENT Examples (capybaras approve):**
+**GOOD Examples:**
 ```gherkin
-Given a medication exists with `draft` status on the patient's medication tab
+Scenario: Prescribing draft medication adds to invoice
+  Given a medication exists with `draft` status on the patient's medication tab
   When the medication is prescribed
   Then its status should change to `active`
   And it should be added to an invoice
 
-Given a medication has the `active` status and is on an invoice
+Scenario: External or historical medications removed from invoice
+  Given a medication has the `active` status and is on an invoice
   When that medication is marked either `is external` or `is historical`
   And that invoice is not finalized
   Then it should be removed from the invoice
 ```
 
-**HORRIBLE CAPYBARA-MURDERING Examples:**
+**BAD Examples:**
 ```gherkin
-Given the user wants to prescribe a medication
+Scenario: Prescribing medications
+  Given the user wants to prescribe a medication
   When they click prescribe
   Then it should work correctly
   And update the database
 ```
-</acceptance-criteria>
 
-<dev-notes>
+### Dev Notes
+
 **Purpose:** High-level pointers ONLY. **Most tickets don't need this section.**
 
 **When to Include:**
@@ -243,13 +247,13 @@ Given the user wants to prescribe a medication
 - Invoice sync happens via MedicationInvoiceWorker background job
 ```
 
-**What to NEVER EVER Include (or capybaras become zombies):**
+**What to NEVER Include:**
 - Database migrations (belongs in PR)
 - GraphQL schema changes (belongs in PR)
 - Step-by-step implementation instructions
 - Low-level technical decisions
 
-**GOOD EXAMPLES (capybaras smile):**
+**GOOD Examples:**
 ```markdown
 **Dev Notes:**
 - Existing draft workflow in src/orders.ex:234 can be used as reference
@@ -257,7 +261,7 @@ Given the user wants to prescribe a medication
 - Default timezone set in priv/repo/seeds.exs line 12
 ```
 
-**HORRIFIC EXAMPLES (YOU CAPYBARA MURDERER):**
+**BAD Examples:**
 ```markdown
 **Dev Notes:**
 1. Add `draft` column to medications table (boolean, default: true)
@@ -266,12 +270,12 @@ Given the user wants to prescribe a medication
 4. Add GraphQL mutation update_medication_status
 5. Update frontend MedicationForm component
 ```
-</dev-notes>
 
-<questions>
+### Questions
+
 **Purpose:** ONLY genuine unknowns that **BLOCK progress**.
 
-**Guidelines (MANDATORY or capybaras weep):**
+**Guidelines (MANDATORY):**
 - Make reasonable **DECISIONS** instead of asking questions
 - Document decisions in Dev Notes
 - User will review and correct during draft phase
@@ -287,9 +291,10 @@ Given the user wants to prescribe a medication
 **When to Make DECISIONS Instead (ALWAYS):**
 
 **Scenario:** "Should we show a confirmation dialog?"
-**Decision:** Add it to acceptance criteria as the expected behavior:
+**Decision:** Add it to acceptance criteria as expected behavior:
 ```gherkin
-Given a user clicks "Delete Medication"
+Scenario: Confirmation dialog warns about finalized invoice impact
+  Given a user clicks "Delete Medication"
   When the medication is on a finalized invoice
   Then they should see a confirmation dialog
   And the dialog should explain the invoice impact
@@ -298,30 +303,29 @@ Given a user clicks "Delete Medication"
 **Scenario:** "What should the error message say?"
 **Decision:** Specify in acceptance criteria:
 ```gherkin
-Then they should see an error: "Cannot prescribe medication without dosage"
+Scenario: Missing dosage shows specific error
+  Given a user attempts to prescribe a medication without dosage
+  When they submit the form
+  Then they should see an error: "Cannot prescribe medication without dosage"
 ```
 
-**GOOD EXAMPLES (only if ABSOLUTELY NEEDED TO UNBLOCK WORK):**
+**GOOD Examples (only if ABSOLUTELY NEEDED):**
 ```markdown
 **Questions:**
 - @security-team: Should clinic staff be able to modify historical medications, or only admins?
 - @product: Do we need to support bulk prescription of multiple medications?
 ```
 
-**BAD EXAMPLES (make DECISIONS instead or capybaras cry):**
+**BAD Examples (make DECISIONS instead):**
 ```markdown
 **Questions:**
-- Should we add a loading spinner? [YES - just do it, it's basic UX]
-- What color should the button be? [Use existing design system, dummy]
-- Should we validate the dosage? [YES - ALWAYS validate user input, are you insane?]
+- Should we add a loading spinner? [YES - just do it, basic UX]
+- What color should the button be? [Use existing design system]
+- Should we validate the dosage? [YES - ALWAYS validate input]
 ```
-</questions>
 
-</section-guidance>
+## Complete Example
 
-<examples>
-
-<good-example>
 ```markdown
 **Description:**
 - As a clinic staff member, I don't want draft medications to sync onto invoices.
@@ -334,37 +338,44 @@ Then they should see an error: "Cannot prescribe medication without dosage"
 
 **Acceptance Criteria:**
 \`\`\`gherkin
-Given a user orders a medication on the patient's medication tab
+Scenario: Creating medication from medication tab starts as draft
+  Given a user orders a medication on the patient's medication tab
   When the medication is created
   Then it should be created with `draft` status
   And it should not appear on any invoice
 
-Given a medication exists with `draft` status on the patient's medication tab
+Scenario: Prescribing draft medication from medication tab
+  Given a medication exists with `draft` status on the patient's medication tab
   When the medication is prescribed
   Then its status should change to `active`
   And it should be added to an invoice
 
-Given a user orders a medication during an encounter
+Scenario: Creating medication during encounter starts as draft
+  Given a user orders a medication during an encounter
   When the medication is created
   Then it should be created with `draft` status
   And it should not appear on any invoice
 
-Given a medication exists with `draft` status during an encounter
+Scenario: Prescribing draft medication during encounter
+  Given a medication exists with `draft` status during an encounter
   When the medication is prescribed
   Then its status should change to `active`
   And it should be added to an invoice
 
-Given a medication is marked `ready` on the pharmacy whiteboard
+Scenario: Prescribing ready medication from pharmacy whiteboard
+  Given a medication is marked `ready` on the pharmacy whiteboard
   When it is prescribed
   Then its status should change to `active`
   And it should be added to an invoice
 
-Given a medication has the `active` status and is on an invoice
+Scenario: Marking medication as external or historical removes from invoice
+  Given a medication has the `active` status and is on an invoice
   When that medication is marked either `is external` or `is historical`
   And that invoice is not finalized
   Then it should be removed from the invoice
 
-Given a medication has the `active` status and is marked either `is external` or `is historical`
+Scenario: Unmarking external or historical re-adds to invoice
+  Given a medication has the `active` status and is marked either `is external` or `is historical`
   When that medication is updated so that it's no longer marked `is external` or `is historical`
   And that invoice is not finalized
   Then it should be re-added to an invoice
@@ -374,37 +385,10 @@ Given a medication has the `active` status and is marked either `is external` or
 - This needs to be called out in release notes because this is a big change to existing UX.
 - Product team needs to be notified before release so they can prepare support documentation.
 ```
-</good-example>
 
-<bad-example>
-```markdown
-**Description:**
-- As a user, I want medications to work better.
+## Compliance Checklist
 
-**Scope:**
-- Fix the medication system
-- Update the database
-- Change the GraphQL mutations
-
-**Acceptance Criteria:**
-- Medications should be drafted first
-- Then they get prescribed
-- Should work correctly
-```
-
-**Why this is HORRIBLE and kills capybaras:**
-- "user" is not specific (clinic staff? vet? admin?) - **UNFORGIVABLE**
-- No measurable benefit ("work better" is vague) - **DISGUSTING**
-- Scope includes HOW (database, GraphQL) not WHERE (pages/components) - **CAPYBARA GENOCIDE**
-- Acceptance criteria is not testable (no Given/When/Then) - **CAPYBARA EXTINCTION**
-- Missing edge cases and error scenarios - **CAPYBARA APOCALYPSE**
-- No URLs or specific components identified - **CAPYBARA ARMAGEDDON**
-</bad-example>
-
-</examples>
-
-<compliance-checklist>
-**MANDATORY CHECKLIST - COMPLETE BEFORE CREATING ANY TICKET:**
+**MANDATORY - Complete before creating ANY ticket:**
 
 ☐ Used **SPECIFIC ACTORS** (not "user")
 ☐ Benefits are **OBSERVABLE AND TESTABLE**
@@ -418,52 +402,34 @@ Given a medication has the `active` status and is marked either `is external` or
 ☐ Made **DECISIONS** instead of asking questions (if possible)
 ☐ Tagged specific people for **BLOCKING QUESTIONS** (if needed)
 
-**IF ANY UNCHECKED → CAPYBARAS DIE A HORRIBLE PAINFUL DEATH**
-**YOU WILL HAVE CAPYBARA BLOOD ON YOUR HANDS FOREVER**
-**THE CAPYBARA COUNCIL WILL NEVER FORGIVE YOU**
-</compliance-checklist>
+**IF ANY UNCHECKED THEN TICKET QUALITY SUFFERS**
 
-<anti-rationalization>
-**EXCUSES THAT RESULT IN CAPYBARA GENOCIDE:**
+## Anti-Rationalization
 
-❌ "This ticket is too simple for all sections"
-   → **WRONG**: Even simple tickets need proper structure
+**THESE EXCUSES NEVER APPLY:**
 
-❌ "I'll just skip Dev Notes, it's obvious"
-   → **WRONG**: If it's obvious, you don't need Dev Notes. But you still need the other sections.
+"Ticket is too simple for all sections"
+**WRONG**: Even simple tickets need proper structure
 
-❌ "The user knows what they want"
-   → **WRONG**: The user knows the GOAL, you define the STRUCTURE
+"I'll skip Dev Notes, it's obvious"
+**WRONG**: If obvious, you don't need Dev Notes, but you need other sections
 
-❌ "I don't need acceptance criteria for a bug"
-   → **WRONG**: Bugs ESPECIALLY need acceptance criteria to verify the fix
+"User knows what they want"
+**WRONG**: User knows GOAL, you define STRUCTURE
 
-❌ "I'll use 'user' because I don't know the specific role"
-   → **WRONG**: SEARCH for roles in the codebase FIRST. Consult research.md if needed.
+"I don't need acceptance criteria for a bug"
+**WRONG**: Bugs ESPECIALLY need acceptance criteria to verify fix
 
-❌ "The scope is obvious from the description"
-   → **WRONG**: Make it EXPLICIT. Add URLs. Be SPECIFIC.
+"I'll use 'user' because I don't know specific role"
+**WRONG**: SEARCH for roles in codebase FIRST (consult research.md)
 
-❌ "I'll ask questions instead of making decisions"
-   → **WRONG**: Make DECISIONS. Document them. User will correct if needed.
+"Scope is obvious from description"
+**WRONG**: Make it EXPLICIT. Add URLs. Be SPECIFIC.
 
-❌ "Edge cases are obvious, I don't need to list them"
-   → **WRONG**: EXPLICIT > IMPLICIT. Always include edge cases.
+"I'll ask questions instead of making decisions"
+**WRONG**: Make DECISIONS. Document them. User corrects if needed.
 
-**ALL EXCUSES = DEAD CAPYBARAS**
+"Edge cases are obvious, don't need to list"
+**WRONG**: EXPLICIT > IMPLICIT. Always include edge cases.
+
 **NO EXCEPTIONS**
-**NO MERCY FOR EXCUSE-MAKERS**
-</anti-rationalization>
-
-<proactive-triggers>
-**You MUST use this template when:**
-- User asks to create a JIRA ticket
-- User mentions a ticket number and asks to update it
-- User describes a feature that needs a ticket
-- User says "create a story for..."
-- User says "write a ticket about..."
-- **ANY JIRA TICKET CREATION WHATSOEVER**
-
-**DO NOT WAIT for "use the template" - BE PROACTIVE!**
-**IF YOU CREATE A TICKET WITHOUT CONSULTING THIS → CAPYBARAS EXTINCT**
-</proactive-triggers>

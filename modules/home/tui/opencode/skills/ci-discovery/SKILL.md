@@ -1,100 +1,133 @@
 ---
 name: ci-discovery
-description: MANDATORY for quality-check, commit, and pr agents when discovering test, lint, and build commands. Prioritizes CI configurations as source of truth, with intelligent fallback to project manifests. Always consult this skill before running quality checks or creating PRs.
+description: MANDATORY for discovering test, lint, and build commands. Prioritizes CI configurations as source of truth, with intelligent fallback to project manifests. Always consult this skill before running quality checks, build commands, or creating PRs.
 ---
 
 <mandatory>
+**MANDATORY**: CI files are source of truth for a system, NEVER invent commands or guess what to run.
 **CRITICAL**: ALWAYS use this skill to discover CI/quality check commands.
-**NO EXCEPTIONS**: Guessing commands = broken CI = capybara extinction.
-**CAPYBARA DECREE**: CI files are source of truth, NEVER invent commands or capybaras will cry.
+**NO EXCEPTIONS**: Guessing commands = broken CI = wasted time and money.
 </mandatory>
 
+<subagent-context>
+**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context. DO NOT spawn additional subagents from this skill. Simply follow the discovery process and return results to the primary agent.
+</subagent-context>
+
 <core-principles>
-- **CI pipelines are the source of truth** - What CI runs is what must pass
-- **Exact command replication** - Use the EXACT commands from CI, don't infer or modify
-- **Intelligent fallback** - Only use project files if no CI exists
-- **Multi-command support** - Extract all relevant commands (test, lint, build, typecheck)
-- **Cross-platform awareness** - Handle different CI systems and project structures
-- **NEVER guess** - If no commands found, ask for guidance
+1. **CI pipelines are the source of truth** - What CI runs is what must pass
+2. **Exact command replication** - Use the EXACT commands from CI, don't infer or modify
+3. **Intelligent fallback** - Only use project files if NO CI exists
+4. **Never guess** - If no commands found, ask for guidance
 </core-principles>
 
-<structure>
-This skill provides comprehensive CI command discovery knowledge:
+<discovery-process>
+**STEP 1: Check CI Files FIRST**
 
-- **`discovery.md`** - How to discover CI files and project manifests
-- **`commands.md`** - How to extract specific commands from CI configurations
-- **`fallback.md`** - Project file patterns when no CI exists
+Search for CI configurations. These usually live in the root of a repository so if not found there, check parent directories as you may be in a monorepo.
 
-**PROACTIVELY** consult these files when discovering commands or capybaras will suffer!
-</structure>
+- **GitHub Actions**: `.github/workflows/*.{yml,yaml}`
+- **GitLab CI**: `.gitlab-ci.yml`
+- **CircleCI**: `.circleci/config.yml`
+- **Travis CI**: `.travis.yml`
+- **Buildkite**: `.buildkite/pipeline.yml`
+- **Jenkins**: `Jenkinsfile`
 
-<quick-reference>
-**Discovery Process (MANDATORY):**
+**STEP 2: Extract EXACT Commands from CI**
 
-1. Check CI pipeline files FIRST (`.github/workflows/*.yml`, `.gitlab-ci.yml`, etc.)
-2. Extract EXACT commands from CI configurations
-3. Only fallback to project files if NO CI exists
-4. Return structured command list for requested check types
+Look for these command types in CI jobs/steps:
 
-**For quality-check agent:**
-- Discover test/lint commands from CI
-- Find test/lint scripts in project files (if no CI)
-- Return exact command to run
+**Test commands:**
+- `npm test`, `mix test`, `cargo test`, `pytest`, `go test`, `make test`
 
-**For commit agent:**
-- Verify quality checks exist before committing
-- Discover lint/format commands
+**Lint commands (COMPREHENSIVE - find ALL):**
+- Standard linters: `eslint`, `mix format --check-formatted`, `cargo clippy`, `ruff check`
+- Format checkers: `prettier --check`, `black --check`, `cargo fmt -- --check`
+- Style checkers: `rubocop`, `pylint`, `flake8`, `credo`, `golangci-lint`
+- Security linters: `npm audit`, `cargo audit`, `bundle audit`
+- Custom scripts: `npm run lint:custom`, `./scripts/lint.sh`
+- Database validations: `mix ecto.validate`, schema checks
+- Warnings-as-errors: `--warnings-as-errors`, `-D warnings`, `--strict`
 
-**For pr agent:**
-- Discover ALL quality check commands (test + lint + build)
-- Replicate CI workflow locally before PR creation
-- Ensure PR will pass CI checks
-</quick-reference>
+**Build commands:**
+- `npm run build`, `mix compile`, `cargo build`, `make build`, `tsc`
 
-<proactive-triggers>
-**ALWAYS use this skill when:**
-- Running quality checks (tests/lints)
-- Creating commits (need lint commands)
-- Creating PRs (need ALL CI commands)
-- User asks to "run tests" or "run linting"
-- ANY quality assurance operation
+**Typecheck commands:**
+- `tsc --noEmit`, `mypy`, `dialyzer`, `flow check`
 
-**Don't wait to be asked - BE PROACTIVE or capybaras will be disappointed!**
-</proactive-triggers>
+**Database Linting/Checks:**
+- `sqlfluff lint`, `pg_format --check`, `dbt test`, `mix excellent_migrations.*`
+
+**Extraction rules:**
+1. Preserve order - Run commands in same order as CI
+2. Include setup - If CI runs `npm ci` before `npm test`, include both
+3. Combine with && - Chain commands that CI runs sequentially
+4. Use exact syntax - `npm test` vs `npm run test` matters, match CI exactly
+5. Ignore non-quality steps - Skip deploy, notify, artifact upload
+6. Handle conditionals - If CI has `if` conditions, include commands only if they would run in normal flow
+7. Make sure to capture ALL relevant commands - missing one can lead to failures, this extends to custom scripts and checks
+
+**Example** - Look for `jobs.<job_id>.steps[].run`:
+```yaml
+jobs:
+  test:
+    steps:
+      - run: npm ci
+      - run: npm test
+      - run: ./scripts/report-coverage.sh
+      - run: npm run build
+      - run: ./scripts/custom-check.sh
+      - run: echo "Done"
+```
+Extract: `npm ci && npm test && npm run build && ./scripts/custom-check.sh`
+
+If you see a build step with `--warnings-as-errors`, then ensure that is also run in the correct order as that acts as a linting circuit breaker.
+
+**If CI found, STOP HERE. Use ONLY CI commands. Do NOT check project files.**
+
+**STEP 3: Fallback to Project Files (ONLY if NO CI)**
+
+**ONLY use this if NO CI files were found!**
+
+1. Detect package manager from lockfile (prefer `pnpm-lock.yaml` > `yarn.lock` > `package-lock.json`) or manifest (`mix.exs`, `Cargo.toml`, etc.):
+2. Find ALL scripts matching: `test`, `lint*`, `format*`, `style*`, `typecheck`, `build`
+
+**If nothing found:**
+- Report what was checked
+- Ask user for the command to run
+- **NEVER** guess or invent commands
+</discovery-process>
 
 <anti-rationalization>
-**EXCUSES THAT KILL CAPYBARAS:**
+**THESE EXCUSES NEVER APPLY**
 
 "I know the project uses npm test"
-   → **WRONG**: Check CI to be sure
-
-"I'll just run the standard command for this language"
-   → **WRONG**: CI might have custom setup or flags
+**WRONG**: Check CI to be sure
 
 "CI files are too complicated to parse"
-   → **WRONG**: Extract EXACT commands anyway
+**WRONG**: Extract EXACT commands anyway
 
 "Project files are good enough"
-   → **WRONG**: CI is ALWAYS the source of truth if it exists
+**WRONG**: CI is ALWAYS source of truth if it exists
 
-"I'll skip the install steps from CI"
-   → **WRONG**: Include ALL commands CI runs
+"I found package.json so I don't need to check CI"
+**WRONG**: ALWAYS check CI FIRST
 
-**ALL EXCUSES = CAPYBARA DEATH**
+"I'll simplify the command"
+**WRONG**: Use EXACT command from CI
+
 **NO EXCEPTIONS**
 </anti-rationalization>
 
 <compliance-checklist>
-**MANDATORY CHECKLIST WHEN DISCOVERING COMMANDS:**
+**MANDATORY CHECKLIST:**
 
-☐ Checked for CI files FIRST (GitHub Actions, GitLab CI, etc.)
-☐ Extracted EXACT commands from CI (if found)
-☐ Did NOT modify or infer commands
-☐ Only checked project files if NO CI exists
-☐ Included setup/install commands from CI
+☐ Checked for CI configuration (.github/workflows/*.yml, ../.github/workflows/*.yml, .gitlab-ci.yml, etc...)
+☐ If CI found, extracted EXACT commands
+☐ If CI found, did NOT check project files
 ☐ Preserved command order from CI
-☐ Did NOT guess or invent commands
-☐ Asked for guidance if no commands found
+☐ Included setup/install commands
+☐ Only checked project files if NO CI exists
+☐ Did NOT modify, guess, or invent commands
 
-**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
+**IF ANY UNCHECKED THEN EVERYTHING FAILS AT PR TIME**
 </compliance-checklist>

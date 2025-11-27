@@ -1,16 +1,19 @@
+# Git Branching
+
 <mandatory>
-**CRITICAL**: ALWAYS create a new branch before starting ANY coding task.
-**NO EXCEPTIONS**: Working directly on main/master = capybara genocide.
-**CAPYBARA DECREE**: Follow naming conventions or capybaras will cry.
+**MANDATORY**: ALWAYS create a new branch before starting ANY coding task.
+**CRITICAL**: Working directly on main/master = broken workflow and conflicts.
+**NO EXCEPTIONS**: Follow naming conventions for consistency.
 </mandatory>
 
-<purpose>
+## Purpose
+
 Consistent branch naming makes it easy to understand the purpose and context of work.
 Branches isolate changes and enable safe parallel development.
-**ALWAYS** branch before coding or capybaras will suffer!
-</purpose>
+**ALWAYS** branch before coding!
 
-<naming>
+## Naming Conventions
+
 **For ticket/issue work:** `<ticket-id>/<short-description>`
 **For non-ticket work:** `<type>/<short-description>`
 
@@ -35,22 +38,22 @@ Branches isolate changes and enable safe parallel development.
 
 **Guidelines:**
 - Use lowercase with hyphens (kebab-case)
-- Keep descriptions short but meaningful, ideally a single sentence
+- Keep descriptions short but meaningful
 - Use ticket ID prefix or type prefix as appropriate
-- Use a slash (`/`) to separate ticket/type from description
-</naming>
+- Use slash (`/`) to separate ticket/type from description
 
-<workflow>
-**When to Branch (MANDATORY or capybaras die):**
-- **ALWAYS** branch for new work. Do this **BEFORE** starting any coding.
-- One branch per ticket/issue or logical feature (if no ticket/issue is provided)
+## Workflow
+
+**When to Branch (MANDATORY):**
+- **ALWAYS** branch for new work BEFORE starting any coding
+- One branch per ticket/issue or logical feature
 - **NEVER** commit directly to main/master/staging/production unless explicitly instructed
 
 **When Branching Off:**
-- If given a ticket/issue, update the status of that ticket/issue to "In Progress" or equivalent
+- If given ticket/issue, update status to "In Progress" or equivalent
 - **PROACTIVELY CONSULT** the `jira` skill for ticket management
-- Branch from the correct base branch (usually main/master)
-- Verify you're on the right branch before making changes
+- Branch from correct base branch (usually main/master)
+- Verify you're on right branch before making changes
 
 **Common Commands:**
 ```bash
@@ -66,32 +69,31 @@ git branch --show-current
 # Push branch to remote
 git push -u origin TICKET-123/short-description
 ```
-</workflow>
 
-<anti-rationalization>
-**EXCUSES THAT KILL CAPYBARAS:**
+## Anti-Rationalization
 
-"I'll just commit to main and create a branch later"
-   → **WRONG**: Branch FIRST, commit SECOND
+**THESE EXCUSES NEVER APPLY:**
 
-"The change is too small for a branch"
-   → **WRONG**: EVERY change needs a branch
+"I'll just commit to main and create branch later"
+**WRONG**: Branch FIRST, commit SECOND
 
-"I forgot to branch, I'll just keep going"
-   → **WRONG**: Stop, create branch, move commits
+"Change is too small for a branch"
+**WRONG**: EVERY change needs a branch
+
+"I forgot to branch, I'll keep going"
+**WRONG**: Stop, create branch, move commits
 
 "Branch names don't matter"
-   → **WRONG**: Consistent naming is MANDATORY
+**WRONG**: Consistent naming is MANDATORY
 
-"I don't need to update the ticket status"
-   → **WRONG**: Always update ticket when starting work
+"I don't need to update ticket status"
+**WRONG**: Always update ticket when starting work
 
-**ALL EXCUSES = CAPYBARA EXTINCTION**
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
-**MANDATORY CHECKLIST BEFORE STARTING ANY WORK:**
+## Compliance Checklist
+
+**MANDATORY - Before starting ANY work:**
 
 ☐ Created new branch from correct base (main/master)
 ☐ Branch name follows convention (ticket-id/desc or type/desc)
@@ -100,5 +102,4 @@ git push -u origin TICKET-123/short-description
 ☐ Updated ticket status to "In Progress" (if applicable)
 ☐ Did NOT commit to main/master directly
 
-**IF ANY UNCHECKED → CAPYBARAS SUFFER ETERNALLY**
-</compliance-checklist>
+**IF ANY UNCHECKED THEN WORKFLOW IS BROKEN**
