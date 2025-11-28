@@ -10,7 +10,7 @@ description: MANDATORY for any feature or design decision - refines ideas into v
 </mandatory>
 
 <subagent-context>
-**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context. DO NOT spawn additional subagents or use TodoWrite from this skill. Brainstorming is a PRIMARY AGENT skill - if you're a subagent, you shouldn't be doing brainstorming. Return to primary agent with analysis/recommendations instead.
+**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents or use TodoWrite from this skill. Instead, follow the brainstorming process directly and return your analysis/recommendations to the primary agent.
 </subagent-context>
 
 <core-principles>

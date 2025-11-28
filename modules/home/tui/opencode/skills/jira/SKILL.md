@@ -10,7 +10,7 @@ description: MANDATORY for ANY JIRA-related tasks - provides comprehensive JIRA 
 </mandatory>
 
 <subagent-context>
-**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context. DO NOT spawn additional subagents from this skill. JIRA operations are typically PRIMARY AGENT skills. Return to primary agent with recommendations instead.
+**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents from this skill. Instead, execute JIRA operations directly and return recommendations to the primary agent.
 </subagent-context>
 
 <structure>
