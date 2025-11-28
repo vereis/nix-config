@@ -99,6 +99,24 @@
           "Origin" = "http://127.0.0.1:32400";
         };
       };
+
+      "jellyfin.vereis.com" = {
+        port = 8096;
+        ssl = true;
+        streaming = true;
+        realIpForwarding = true;
+        gzipCompression = true;
+        largeUploads = true;
+        websocketSupport = true;
+        sslOptimization = true;
+        ddns = {
+          enable = true;
+          protocol = "cloudflare";
+          login = "token";
+          password = secrets.cloudflare.ddclient;
+          zone = "vereis.com";
+        };
+      };
     };
   };
 
@@ -142,5 +160,7 @@
     openFirewall = true;
     mediaPath = "/storage/media";
     enableHardwareAcceleration = true;
+    plex.enable = true;
+    jellyfin.enable = true;
   };
 }
