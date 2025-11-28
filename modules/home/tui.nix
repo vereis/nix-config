@@ -38,6 +38,7 @@ with lib;
     home.packages =
       with pkgs;
       [
+        aria2
         btop
         cacert
         cargo
