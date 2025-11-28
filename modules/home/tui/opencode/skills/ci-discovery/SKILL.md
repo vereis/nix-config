@@ -10,7 +10,7 @@ description: MANDATORY for discovering test, lint, and build commands. Prioritiz
 </mandatory>
 
 <subagent-context>
-**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context. DO NOT spawn additional subagents from this skill. Simply follow the discovery process and return results to the primary agent.
+**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents from this skill. Instead, follow the discovery process directly and return results to the primary agent.
 </subagent-context>
 
 <core-principles>

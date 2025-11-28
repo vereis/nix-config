@@ -10,7 +10,7 @@ description: MANDATORY for creating branches, commits, or pull requests - define
 </mandatory>
 
 <subagent-context>
-**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context. DO NOT spawn additional subagents from this skill. Follow the git workflow process and return results to the primary agent who will handle any necessary subagent delegation.
+**IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents from this skill. Instead, follow the git workflow process directly and return results to the primary agent who will handle any necessary subagent delegation.
 </subagent-context>
 
 <core-principles>
