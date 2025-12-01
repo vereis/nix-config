@@ -11,26 +11,6 @@
 
   modules.tailscale.enable = true;
 
-  modules.copyparty.enable = true;
-  modules.copyparty.accounts.vereis.password = secrets.copyparty.vereis;
-  modules.copyparty.accounts.turtz.password = secrets.copyparty.turtz;
-  modules.copyparty.volumes = {
-    "/" = {
-      path = "/storage";
-      access = {
-        rwmd = [ "turtz" ];
-        A = [ "vereis" ];
-      };
-      flags = {
-        fk = 4;
-        scan = 60;
-        e2d = true;
-        nohash = "\.iso$";
-        nsort = true; # Natural sort: file2.txt comes before file10.txt
-      };
-    };
-  };
-
   modules.serve = {
     enable = true;
     openFirewall = true;
@@ -65,6 +45,7 @@
 
       "plex.vereis.com" = {
         port = 32400;
+        ssl = true;
         streaming = true;
         realIpForwarding = true;
         gzipCompression = true;
@@ -162,5 +143,27 @@
     enableHardwareAcceleration = true;
     plex.enable = true;
     jellyfin.enable = true;
+  };
+
+  modules.copyparty = {
+    enable = true;
+    accounts.vereis.password = secrets.copyparty.vereis;
+    accounts.turtz.password = secrets.copyparty.turtz;
+    volumes = {
+      "/" = {
+        path = "/storage";
+        access = {
+          rwmd = [ "turtz" ];
+          A = [ "vereis" ];
+        };
+        flags = {
+          fk = 4;
+          scan = 60;
+          e2d = true;
+          nohash = "\.iso$";
+          nsort = true; # Natural sort: file2.txt comes before file10.txt
+        };
+      };
+    };
   };
 }
