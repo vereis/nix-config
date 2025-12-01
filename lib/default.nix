@@ -17,7 +17,30 @@ let
     email = "me@vereis.com";
   };
 
-  secrets = builtins.fromJSON (builtins.readFile ../secrets/secrets.json);
+  secrets =
+    let
+      secretsFile = ../secrets/secrets.json;
+      # Check if secrets file is readable (not encrypted or missing)
+      secretsContent = builtins.tryEval (builtins.readFile secretsFile);
+    in
+    if secretsContent.success then
+      builtins.fromJSON secretsContent.value
+    else
+      # Provide dummy secrets for CI or when git-crypt is not unlocked
+      {
+        cloudflare.ddclient = "dummy-cloudflare-token";
+        minecraft.minnacraft = {
+          rcon = {
+            password = "dummy-rcon-password";
+            port = 25575;
+          };
+        };
+        copyparty = {
+          vereis = "dummy-vereis-password";
+          turtz = "dummy-turtz-password";
+        };
+        vetspire.gitEmail = "dummy@example.com";
+      };
 
   mkSpecialArgs =
     system:
