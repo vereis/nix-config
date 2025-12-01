@@ -82,39 +82,4 @@
   };
 
   hardware.nvidia.open = false;
-    services.systemd-suspend.enable = false;
-    sleep.extraConfig = ''
-    AllowSuspend=no
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernate=no
-  '';
-
-  networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [
-    22
-    80
-    443
-    24800
-    51413
-  ];
-  networking.firewall.allowedUDPPorts = [
-    22
-    80
-    443
-    24800
-    51413
-  ];
-
-  services.xserver.dpi = 100;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia.open = false;
-
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
-    };
-  };
 }
