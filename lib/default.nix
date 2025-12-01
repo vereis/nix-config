@@ -18,15 +18,9 @@ let
   };
 
   secrets =
-    let
-      secretsFile = ../secrets/secrets.json;
-      # Check if secrets file is readable (not encrypted or missing)
-      secretsContent = builtins.tryEval (builtins.readFile secretsFile);
-    in
-    if secretsContent.success then
-      builtins.fromJSON secretsContent.value
-    else
-      # Provide dummy secrets for CI or when git-crypt is not unlocked
+    # Use dummy secrets in CI (when git-crypt is not unlocked)
+    # Set NIX_CONFIG_USE_DUMMY_SECRETS=1 environment variable to use dummy secrets
+    if (builtins.getEnv "NIX_CONFIG_USE_DUMMY_SECRETS") == "1" then
       {
         cloudflare.ddclient = "dummy-cloudflare-token";
         minecraft.minnacraft = {
@@ -40,7 +34,9 @@ let
           turtz = "dummy-turtz-password";
         };
         vetspire.gitEmail = "dummy@example.com";
-      };
+      }
+    else
+      builtins.fromJSON (builtins.readFile ../secrets/secrets.json);
 
   mkSpecialArgs =
     system:
