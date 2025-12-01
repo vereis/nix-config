@@ -17,34 +17,7 @@ let
     email = "me@vereis.com";
   };
 
-  secrets =
-    # Use dummy secrets in CI (when git-crypt is not unlocked)
-    # Set NIX_CONFIG_USE_DUMMY_SECRETS=1 environment variable to use dummy secrets
-    if (builtins.getEnv "NIX_CONFIG_USE_DUMMY_SECRETS") == "1" then
-      {
-        anthropic.apiKey = "sk-ant-dummy-key";
-        cloudflare.ddclient = "dummy-cloudflare-token";
-        minecraft.minnacraft = {
-          rcon = {
-            password = "dummy-rcon-password";
-            port = 25575;
-          };
-        };
-        copyparty = {
-          vereis = "dummy-vereis-password";
-          turtz = "dummy-turtz-password";
-        };
-        vetspire = {
-          gitEmail = "dummy@example.com";
-          jiraApiKey = "dummy-jira-key";
-        };
-        gemini-cli = {
-          googleCloudProject = "dummy-project";
-          apiKey = "dummy-gemini-key";
-        };
-      }
-    else
-      builtins.fromJSON (builtins.readFile ../secrets/secrets.json);
+  secrets = builtins.fromJSON (builtins.readFile ../secrets/secrets.json);
 
   mkSpecialArgs =
     system:

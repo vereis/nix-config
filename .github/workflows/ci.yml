@@ -74,6 +74,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Unlock git-crypt secrets
+        run: |
+          echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > /tmp/git-crypt-key
+          git-crypt unlock /tmp/git-crypt-key
+          rm /tmp/git-crypt-key
+
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v14
 
@@ -82,17 +88,13 @@ jobs:
 
       - name: Build NixOS configuration for ${{ matrix.host }}
         if: matrix.system != 'aarch64-darwin'
-        env:
-          NIX_CONFIG_USE_DUMMY_SECRETS: "1"
         run: |
-          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --show-trace --impure
+          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --show-trace
 
       - name: Build Darwin configuration for ${{ matrix.host }}
         if: matrix.system == 'aarch64-darwin'
-        env:
-          NIX_CONFIG_USE_DUMMY_SECRETS: "1"
         run: |
-          nix build .#darwinConfigurations.${{ matrix.host }}.system --show-trace --impure
+          nix build .#darwinConfigurations.${{ matrix.host }}.system --show-trace
 
   check:
     name: Flake Check
@@ -101,6 +103,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Unlock git-crypt secrets
+        run: |
+          echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > /tmp/git-crypt-key
+          git-crypt unlock /tmp/git-crypt-key
+          rm /tmp/git-crypt-key
+
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v14
 
@@ -108,7 +116,5 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@v8
 
       - name: Run flake check
-        env:
-          NIX_CONFIG_USE_DUMMY_SECRETS: "1"
         run: |
-          nix flake check --show-trace --all-systems --impure
+          nix flake check --show-trace --all-systems
