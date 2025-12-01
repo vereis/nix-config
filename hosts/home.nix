@@ -12,6 +12,7 @@
     {
       username = "${username}";
       stateVersion = "23.05";
+      enableNixpkgsReleaseCheck = false;
       file.".config/nixpkgs/config.nix" = {
         text = ''
           { allowUnfree = true; }
