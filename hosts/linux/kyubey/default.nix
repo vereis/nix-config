@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   username,
   ...
 }:
@@ -11,33 +10,80 @@
     ./services.nix
   ];
 
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "storage" ];
-  services.zfs.autoScrub.enable = true;
-  services.zfs.trim.enable = true;
+  boot = {
+    supportedFilesystems = [ "zfs" ];
+    zfs.extraPools = [ "storage" ];
+    loader = {
+      systemd-boot.enable = true;
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot/efi";
+      };
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     vulkan-loader
     vulkan-tools
   ];
 
-  networking.hostId = "8453be09";
-  networking.hostName = "kyubey";
-  networking.networkmanager.enable = true;
+  networking = {
+    hostId = "8453be09";
+    hostName = "kyubey";
+    networkmanager.enable = true;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        22
+        80
+        443
+        24800
+        51413
+      ];
+      allowedUDPPorts = [
+        22
+        80
+        443
+        24800
+        51413
+      ];
+    };
+  };
 
-  services.getty.autologinUser = username;
+  services = {
+    zfs = {
+      autoScrub.enable = true;
+      trim.enable = true;
+    };
+    getty.autologinUser = username;
+    xserver = {
+      dpi = 100;
+      videoDrivers = [ "nvidia" ];
+    };
+    desktopManager.gnome.extraGSettingsOverrides = ''
+      [org.gnome.desktop.session]
+      idle-delay=uint32 0
+    '';
+  };
 
-  # Disable Sleep in Gnome
-  services.desktopManager.gnome.extraGSettingsOverrides = ''
-    [org.gnome.desktop.session]
-    idle-delay=uint32 0
-  '';
+  systemd = {
+    targets = {
+      suspend.enable = false;
+      hibernate.enable = false;
+      hybrid-sleep.enable = false;
+    };
+    services.systemd-suspend.enable = false;
+    sleep.extraConfig = ''
+      AllowSuspend=no
+      AllowHibernation=no
+      AllowHybridSleep=no
+      AllowSuspendThenHibernate=no
+    '';
+  };
 
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
-  systemd.services.systemd-suspend.enable = false;
-  systemd.sleep.extraConfig = ''
+  hardware.nvidia.open = false;
+    services.systemd-suspend.enable = false;
+    sleep.extraConfig = ''
     AllowSuspend=no
     AllowHibernation=no
     AllowHybridSleep=no

@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  secrets,
   ...
 }:
 
@@ -133,7 +132,7 @@ with lib;
     environment.etc."ddclient.conf" =
       let
         enabledDomains = lib.filterAttrs (
-          name: proxy: proxy.ddns != null && proxy.ddns.enable
+          _name: proxy: proxy.ddns != null && proxy.ddns.enable
         ) config.modules.serve.sites;
         hasEnabledDomains = enabledDomains != { };
       in
@@ -158,7 +157,7 @@ with lib;
     services.ddclient =
       let
         enabledDomains = lib.filterAttrs (
-          name: proxy: proxy.ddns != null && proxy.ddns.enable
+          _name: proxy: proxy.ddns != null && proxy.ddns.enable
         ) config.modules.serve.sites;
         hasEnabledDomains = enabledDomains != { };
       in
@@ -171,7 +170,7 @@ with lib;
     users.users.ddclient =
       mkIf
         (
-          lib.filterAttrs (name: proxy: proxy.ddns != null && proxy.ddns.enable) config.modules.serve.sites
+          lib.filterAttrs (_name: proxy: proxy.ddns != null && proxy.ddns.enable) config.modules.serve.sites
           != { }
         )
         {
@@ -181,7 +180,7 @@ with lib;
         };
 
     users.groups.ddclient = mkIf (
-      lib.filterAttrs (name: proxy: proxy.ddns != null && proxy.ddns.enable) config.modules.serve.sites
+      lib.filterAttrs (_name: proxy: proxy.ddns != null && proxy.ddns.enable) config.modules.serve.sites
       != { }
     ) { };
 
@@ -190,7 +189,7 @@ with lib;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
       virtualHosts = builtins.mapAttrs (
-        host: siteConfig:
+        _host: siteConfig:
         let
           streamingConfig = lib.optionalString siteConfig.streaming ''
             # Streaming optimizations

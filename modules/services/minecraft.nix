@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  nix-minecraft,
   ...
 }:
 
@@ -99,7 +98,7 @@ with lib;
       eula = true;
       inherit (config.modules.minecraft) openFirewall;
 
-      servers = mapAttrs (name: serverConfig: {
+      servers = mapAttrs (_name: serverConfig: {
         inherit (serverConfig) enable;
         inherit (serverConfig) autoStart;
         inherit (config.modules.minecraft) openFirewall;

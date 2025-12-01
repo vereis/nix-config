@@ -48,39 +48,43 @@ with lib;
   };
 
   config = mkIf config.modules.media-server.enable {
-    users.groups.media = { };
-
-    services.plex = mkIf config.modules.media-server.plex.enable {
-      enable = true;
-      openFirewall = config.modules.media-server.openFirewall;
-      user = config.modules.media-server.plex.user;
-      group = "media";
-      dataDir = "/var/lib/plex";
-    };
-
-    services.jellyfin = mkIf config.modules.media-server.jellyfin.enable {
-      enable = true;
-      openFirewall = config.modules.media-server.openFirewall;
-      group = "media";
-      dataDir = "/var/lib/jellyfin";
-    };
-
-    users.users.jellyfin = mkIf config.modules.media-server.jellyfin.enable {
-      extraGroups = mkIf config.modules.media-server.enableHardwareAcceleration [
-        "video"
-        "render"
-      ];
-    };
-
-    users.users.plex =
-      mkIf
-        (config.modules.media-server.plex.enable && config.modules.media-server.enableHardwareAcceleration)
-        {
-          extraGroups = [
+    users = {
+      groups.media = { };
+      users = {
+        jellyfin = mkIf config.modules.media-server.jellyfin.enable {
+          extraGroups = mkIf config.modules.media-server.enableHardwareAcceleration [
             "video"
             "render"
           ];
         };
+        plex =
+          mkIf
+            (config.modules.media-server.plex.enable && config.modules.media-server.enableHardwareAcceleration)
+            {
+              extraGroups = [
+                "video"
+                "render"
+              ];
+            };
+      };
+    };
+
+    services = {
+      plex = mkIf config.modules.media-server.plex.enable {
+        enable = true;
+        inherit (config.modules.media-server) openFirewall;
+        inherit (config.modules.media-server.plex) user;
+        group = "media";
+        dataDir = "/var/lib/plex";
+      };
+
+      jellyfin = mkIf config.modules.media-server.jellyfin.enable {
+        enable = true;
+        inherit (config.modules.media-server) openFirewall;
+        group = "media";
+        dataDir = "/var/lib/jellyfin";
+      };
+    };
 
     hardware.graphics = mkIf config.modules.media-server.enableHardwareAcceleration {
       enable = true;

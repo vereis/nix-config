@@ -35,52 +35,97 @@ with lib;
   };
 
   config = mkIf config.modules.tui.enable {
-    home.packages =
-      with pkgs;
-      [
-        aria2
-        btop
-        cacert
-        cargo
-        delta
-        fd
-        ffmpeg
-        gcc
-        gh
-        git
-        httpie
-        jq
-        killall
-        lsof
-        nerdfetch
-        openssh
-        openssl
-        pciutils
-        ripgrep
-        rsync
-        tree
-        unzip
-        wget
-        zip
-        zsh
-        gnumake
-        git-crypt
-        lf
-        socat
-        # Dependencies for lf previewer
-        poppler-utils # provides pdftotext
-        highlight
-        unrar
-        p7zip # provides 7z
-      ]
-      ++ config.modules.tui.extraPackages;
-    programs.direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      enableBashIntegration = true;
+    home = {
+      packages =
+        with pkgs;
+        [
+          aria2
+          btop
+          cacert
+          cargo
+          delta
+          fd
+          ffmpeg
+          gcc
+          gh
+          git
+          httpie
+          jq
+          killall
+          lsof
+          nerdfetch
+          openssh
+          openssl
+          pciutils
+          ripgrep
+          rsync
+          tree
+          unzip
+          wget
+          zip
+          zsh
+          gnumake
+          git-crypt
+          lf
+          socat
+          # Dependencies for lf previewer
+          poppler-utils # provides pdftotext
+          highlight
+          unrar
+          p7zip # provides 7z
+        ]
+        ++ config.modules.tui.extraPackages;
+
+      file = lib.mkMerge [
+        {
+          ".p10k.zsh" = {
+            executable = true;
+            source = ./tui/zsh/.p10k.zsh;
+          };
+          ".local/bin/git/ssh-migrate.sh" = {
+            executable = true;
+            source = ./tui/git/migrate-ssh.sh;
+          };
+          ".local/bin/npiperelay.exe" = {
+            executable = true;
+            source = ../../bin/npiperelay.exe;
+          };
+          ".config/nvim/lua/" = {
+            recursive = true;
+            source = ./tui/neovim/lua;
+          };
+          ".gitconfig" = {
+            executable = false;
+            text = builtins.replaceStrings [ "EMAIL_PLACEHOLDER" "USER_PLACEHOLDER" ] [ email user ] (
+              builtins.readFile ./tui/git/.gitconfig
+            );
+          };
+          ".gitconfig-vetspire" = {
+            executable = false;
+            text = builtins.replaceStrings [ "VETSPIRE_EMAIL_PLACEHOLDER" ] [ secrets.vetspire.gitEmail ] (
+              builtins.readFile ./tui/git/.gitconfig-vetspire
+            );
+          };
+        }
+        config.modules.tui.extraFiles
+      ];
+
+      sessionVariables = {
+        FZF_DEFAULT_COMMAND = "rg --files";
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      }
+      // config.modules.tui.extraSessionVariables;
     };
 
-    programs.zsh = {
+    programs = {
+      direnv = {
+        enable = true;
+        enableZshIntegration = true;
+        enableBashIntegration = true;
+      };
+
+      zsh = {
       enable = true;
 
       autocd = true;
@@ -153,83 +198,43 @@ with lib;
           contentBefore
           contentAfter
         ];
-    };
+      };
 
-    home.file = lib.mkMerge [
-      {
-        ".p10k.zsh" = {
-          executable = true;
-          source = ./tui/zsh/.p10k.zsh;
-        };
-        ".local/bin/git/ssh-migrate.sh" = {
-          executable = true;
-          source = ./tui/git/migrate-ssh.sh;
-        };
-        ".local/bin/npiperelay.exe" = {
-          executable = true;
-          source = ../../bin/npiperelay.exe;
-        };
-        ".config/nvim/lua/" = {
-          recursive = true;
-          source = ./tui/neovim/lua;
-        };
-        ".gitconfig" = {
-          executable = false;
-          text = builtins.replaceStrings [ "EMAIL_PLACEHOLDER" "USER_PLACEHOLDER" ] [ email user ] (
-            builtins.readFile ./tui/git/.gitconfig
-          );
-        };
-        ".gitconfig-vetspire" = {
-          executable = false;
-          text = builtins.replaceStrings [ "VETSPIRE_EMAIL_PLACEHOLDER" ] [ secrets.vetspire.gitEmail ] (
-            builtins.readFile ./tui/git/.gitconfig-vetspire
-          );
-        };
-      }
-      config.modules.tui.extraFiles
-    ];
-
-    programs.fzf = {
+      fzf = {
       enable = true;
       enableZshIntegration = true;
       enableBashIntegration = true;
     };
 
-    programs.neovim = {
-      enable = true;
+    programs.      neovim = {
+        enable = true;
 
-      withNodeJs = true;
-      withPython3 = true;
+        withNodeJs = true;
+        withPython3 = true;
 
-      extraConfig = ''
-        lua require('config')
-      '';
-    };
+        extraConfig = ''
+          lua require('config')
+        '';
+      };
 
-    programs.lf = {
-      enable = true;
-      previewer.source = pkgs.writeShellScriptBin "lf-preview" ''
-        #!/bin/sh
+      lf = {
+        enable = true;
+        previewer.source = pkgs.writeShellScriptBin "lf-preview" ''
+          #!/bin/sh
 
-        case "$1" in
-          *.tar*) tar tf "$1";;
-          *.zip) unzip -l "$1";;
-          *.rar) unrar l "$1";;
-          *.7z) 7z l "$1";;
-          *.pdf) pdftotext "$1" -;;
-          *) highlight -O ansi "$1" || cat "$1";;
-        esac
-      '';
-      settings = {
-        cursorpreviewfmt = "";
+          case "$1" in
+            *.tar*) tar tf "$1";;
+            *.zip) unzip -l "$1";;
+            *.rar) unrar l "$1";;
+            *.7z) 7z l "$1";;
+            *.pdf) pdftotext "$1" -;;
+            *) highlight -O ansi "$1" || cat "$1";;
+          esac
+        '';
+        settings = {
+          cursorpreviewfmt = "";
+        };
       };
     };
-
-    home.sessionVariables = {
-      FZF_DEFAULT_COMMAND = "rg --files";
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-    }
-    // config.modules.tui.extraSessionVariables;
   };
 }
