@@ -22,6 +22,7 @@
           prettier = {
             enable = true;
             includes = [ "*.json" ];
+            excludes = [ "secrets/**" ];
           };
           mdformat = {
             enable = true;
