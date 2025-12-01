@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  format:
+    name: Check Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v14
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
+      - name: Check formatting
+        run: |
+          nix fmt -- --fail-on-change
+
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v14
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
+      - name: Run deadnix
+        run: |
+          nix develop --command deadnix --fail .
+
+      - name: Run statix
+        run: |
+          nix develop --command statix check .
+
+  build:
+    name: Build System Configurations
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux x86_64 hosts
+          - host: kyubey
+            os: ubuntu-latest
+            system: x86_64-linux
+          - host: madoka
+            os: ubuntu-latest
+            system: x86_64-linux
+
+          # Linux aarch64 hosts (cross-compile on x86_64)
+          - host: homura
+            os: ubuntu-latest
+            system: aarch64-linux
+
+          # Darwin aarch64 hosts
+          - host: iroha
+            os: macos-14
+            system: aarch64-darwin
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v14
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
+      - name: Build NixOS configuration for ${{ matrix.host }}
+        if: matrix.system != 'aarch64-darwin'
+        run: |
+          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --show-trace
+
+      - name: Build Darwin configuration for ${{ matrix.host }}
+        if: matrix.system == 'aarch64-darwin'
+        run: |
+          nix build .#darwinConfigurations.${{ matrix.host }}.system --show-trace
+
+  check:
+    name: Flake Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v14
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
+      - name: Run flake check
+        run: |
+          nix flake check --show-trace --all-systems
