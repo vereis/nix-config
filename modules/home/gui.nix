@@ -26,22 +26,24 @@ with lib;
       description = "Scale factor for HiDPI displays.";
     };
 
-    font.name = mkOption {
-      type = types.str;
-      default = "Tamzen";
-      description = "Primary font name for GUI applications.";
-    };
+    font = {
+      name = mkOption {
+        type = types.str;
+        default = "Tamzen";
+        description = "Primary font name for GUI applications.";
+      };
 
-    font.secondary = mkOption {
-      type = types.str;
-      default = "Fantasque Sans Mono";
-      description = "Secondary font name for GUI applications (used for font switching).";
-    };
+      secondary = mkOption {
+        type = types.str;
+        default = "Fantasque Sans Mono";
+        description = "Secondary font name for GUI applications (used for font switching).";
+      };
 
-    font.size = mkOption {
-      type = types.int;
-      default = 11;
-      description = "Default font size for GUI applications.";
+      size = mkOption {
+        type = types.int;
+        default = 11;
+        description = "Default font size for GUI applications.";
+      };
     };
 
     extraPackages = mkOption {
@@ -58,40 +60,98 @@ with lib;
   };
 
   config = mkIf config.modules.gui.enable {
-    home.packages =
-      with pkgs;
-      [
-        hyprland
-        hypridle
-        hyprlock
-        hyprpaper
-        wezterm
-        pavucontrol
-        tamzen
-        wl-clipboard
-        wl-clipboard-x11
-        tofi
-        mako
-        libnotify
-        jq
-        grim
-        slurp
-        wf-recorder
-        fantasque-sans-mono
-        (qutebrowser.override { enableWideVine = true; })
-      ]
-      ++ config.modules.gui.extraPackages
-      ++ builtins.attrValues (
-        builtins.mapAttrs (
-          name: path: (writeShellScriptBin name (builtins.readFile path))
-        ) config.modules.gui.customScripts
-      );
+    home = {
+      packages =
+        with pkgs;
+        [
+          hyprland
+          hypridle
+          hyprlock
+          hyprpaper
+          wezterm
+          pavucontrol
+          tamzen
+          wl-clipboard
+          wl-clipboard-x11
+          tofi
+          mako
+          libnotify
+          jq
+          grim
+          slurp
+          wf-recorder
+          fantasque-sans-mono
+          (qutebrowser.override { enableWideVine = true; })
+        ]
+        ++ config.modules.gui.extraPackages
+        ++ builtins.attrValues (
+          builtins.mapAttrs (
+            name: path: (writeShellScriptBin name (builtins.readFile path))
+          ) config.modules.gui.customScripts
+        );
 
-    home.pointerCursor = {
-      gtk.enable = true;
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Classic";
-      size = 16;
+      pointerCursor = {
+        gtk.enable = true;
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Classic";
+        size = 16;
+      };
+
+      sessionVariables = {
+        NIXOS_OZONE_WL = "1";
+        ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+        QT_QPA_PLATFORM = "wayland";
+        SDL_VIDEODRIVER = "wayland";
+        MOZ_ENABLE_WAYLAND = "1";
+        BROWSER = "qutebrowser";
+        DEFAULT_BROWSER = "qutebrowser";
+      };
+
+      file = {
+        ".config/mako/config" = {
+          text = ''
+            sort=-time
+            layer=overlay
+            height=128
+            width=412
+            margin=16
+            outer-margin=24
+            padding=24
+            border-size=2
+            border-radius=0
+            icons=0
+            default-timeout=10000
+            actions=true
+            anchor=bottom-right
+            background-color=#060606
+            font=${config.modules.gui.font.name} ${toString (config.modules.gui.font.size + 1)}
+            border-color=#524f67
+
+            [urgency=low]
+            border-color=#31748f
+
+            [urgency=normal]
+            border-color=#524f67
+
+            [urgency=high]
+            border-color=#eb6f92
+
+            [category=custom]
+            border-color=#9ccfd8
+            anchor=top-right
+          '';
+        };
+
+        ".local/bin/hyprland/toggle-floating" = {
+          executable = true;
+          source = ./gui/toggle-floating;
+        };
+
+        ".local/bin/hyprland/screenrecord" = {
+          executable = true;
+          source = ./gui/screenrecord;
+        };
+      };
     };
 
     gtk = {
@@ -112,278 +172,235 @@ with lib;
       ];
     };
 
-    programs.tofi = {
-      enable = true;
-      settings = {
-        width = "100%";
-        height = "100%";
-        border-width = 0;
-        outline-width = 0;
-        padding-left = "45%";
-        padding-top = "45%";
-        result-spacing = 2;
-        num-results = 10;
-        font = "${config.modules.gui.font.name}";
-        font-size = config.modules.gui.font.size + 1;
-        matching-algorithm = "fuzzy";
-        background-color = "#000A";
-        text-color = "#e0def4";
-        selection-color = "#f6c177";
+    programs = {
+      tofi = {
+        enable = true;
+        settings = {
+          width = "100%";
+          height = "100%";
+          border-width = 0;
+          outline-width = 0;
+          padding-left = "45%";
+          padding-top = "45%";
+          result-spacing = 2;
+          num-results = 10;
+          font = "${config.modules.gui.font.name}";
+          font-size = config.modules.gui.font.size + 1;
+          matching-algorithm = "fuzzy";
+          background-color = "#000A";
+          text-color = "#e0def4";
+          selection-color = "#f6c177";
+        };
       };
-    };
 
-    # TODO: port to home-manager config when available
-    home.file.".config/mako/config" = {
-      text = ''
-        sort=-time
-        layer=overlay
-        height=128
-        width=412
-        margin=16
-        outer-margin=24
-        padding=24
-        border-size=2
-        border-radius=0
-        icons=0
-        default-timeout=10000
-        actions=true
-        anchor=bottom-right
-        background-color=#060606
-        font=${config.modules.gui.font.name} ${toString (config.modules.gui.font.size + 1)}
-        border-color=#524f67
+      qutebrowser = {
+        enable = true;
+        package = pkgs.qutebrowser.override { enableWideVine = true; };
+        enableDefaultBindings = true;
+        settings = {
+          colors = {
+            tabs = {
+              bar.bg = "#060606";
+              even = {
+                bg = "#060606";
+                fg = "#908caa";
+              };
+              odd = {
+                bg = "#060606";
+                fg = "#908caa";
+              };
+              selected = {
+                even = {
+                  bg = "#0f0f0f";
+                  fg = "#e0def4";
+                };
+                odd = {
+                  bg = "#0f0f0f";
+                  fg = "#e0def4";
+                };
+              };
+            };
 
-        [urgency=low]
-        border-color=#31748f
+            statusbar = {
+              normal.bg = "#060606";
+              normal.fg = "#908caa";
+              passthrough.bg = "#d7827e";
+              insert.bg = "#060606";
+              private.bg = "#907aa9";
+              url = {
+                fg = "#e0def4";
+                error.fg = "#eb6f92";
+                hover.fg = "#c4a7e7";
+                success.http.fg = "#e0def4";
+                success.https.fg = "#31748f";
+                warn.fg = "#f6c177";
+              };
+            };
 
-        [urgency=normal]
-        border-color=#524f67
+            completion = {
+              fg = "#908caa";
+              even.bg = "#060606";
+              odd.bg = "#060606";
+              match.fg = "#f6c177";
 
-        [urgency=high]
-        border-color=#eb6f92
+              category = {
+                bg = "#060606";
+                fg = "#9ccfd8";
+                border = {
+                  top = "#060606";
+                  bottom = "#060606";
+                };
+              };
 
-        [category=custom]
-        border-color=#9ccfd8
-        anchor=top-right
-      '';
-    };
+              item.selected = {
+                bg = "#0f0f0f";
+                fg = "#e0def4";
+                match.fg = "#f6c177";
 
-    programs.qutebrowser = {
-      enable = true;
-      package = pkgs.qutebrowser.override { enableWideVine = true; };
-      enableDefaultBindings = true;
-      settings = {
-        colors = {
-          tabs = {
-            bar.bg = "#060606";
-            even.bg = "#060606";
-            odd.bg = "#060606";
-            even.fg = "#908caa";
-            odd.fg = "#908caa";
-            selected.even.bg = "#0f0f0f";
-            selected.odd.bg = "#0f0f0f";
-            selected.even.fg = "#e0def4";
-            selected.odd.fg = "#e0def4";
+                border = {
+                  top = "#0f0f0f";
+                  bottom = "#0f0f0f";
+                };
+              };
+
+              scrollbar = {
+                bg = "#21202e";
+                fg = "#524f67";
+              };
+            };
           };
 
-          statusbar = {
-            normal.bg = "#060606";
-            normal.fg = "#908caa";
-            passthrough.bg = "#d7827e";
-            insert.bg = "#060606";
-            private.bg = "#907aa9";
-            url = {
-              fg = "#e0def4";
-              error.fg = "#eb6f92";
-              hover.fg = "#c4a7e7";
-              success.http.fg = "#e0def4";
-              success.https.fg = "#31748f";
-              warn.fg = "#f6c177";
-            };
+          tabs = {
+            favicons.show = "never";
+            position = "left";
+            width = 256;
+            indicator.width = 0;
+          };
+
+          fonts = {
+            default_family = config.modules.gui.font.name;
+            default_size = "${toString (config.modules.gui.font.size + 1)}pt";
+          };
+
+          content = {
+            pdfjs = true; # Just view PDFs instead of downloading them first
+            notifications.enabled = false;
+            javascript.clipboard = "access";
           };
 
           completion = {
-            fg = "#908caa";
-            even.bg = "#060606";
-            odd.bg = "#060606";
-            match.fg = "#f6c177";
+            use_best_match = true;
+            shrink = true;
+          };
 
-            category = {
-              bg = "#060606";
-              fg = "#9ccfd8";
-              border = {
-                top = "#060606";
-                bottom = "#060606";
-              };
-            };
+          downloads = {
+            remove_finished = 10000;
+            position = "bottom";
 
-            item.selected = {
-              bg = "#0f0f0f";
-              fg = "#e0def4";
-              match.fg = "#f6c177";
-
-              border = {
-                top = "#0f0f0f";
-                bottom = "#0f0f0f";
-              };
-            };
-
-            scrollbar = {
-              bg = "#21202e";
-              fg = "#524f67";
+            location = {
+              prompt = false;
+              suggestion = "filename";
+              directory = "~/downloads";
             };
           };
+
+          editor.command = [
+            "wezterm"
+            "-e"
+            "nvim"
+            "{file}"
+          ];
         };
-
-        tabs = {
-          favicons.show = "never";
-          position = "left";
-          width = 256;
-          indicator.width = 0;
-        };
-
-        fonts = {
-          default_family = config.modules.gui.font.name;
-          default_size = "${toString (config.modules.gui.font.size + 1)}pt";
-        };
-
-        content = {
-          pdfjs = true; # Just view PDFs instead of downloading them first
-          notifications.enabled = false;
-          javascript.clipboard = "access";
-        };
-
-        completion = {
-          use_best_match = true;
-          shrink = true;
-        };
-
-        downloads = {
-          remove_finished = 10000;
-          position = "bottom";
-
-          location = {
-            prompt = false;
-            suggestion = "filename";
-            directory = "~/downloads";
-          };
-        };
-
-        editor.command = [
-          "wezterm"
-          "-e"
-          "nvim"
-          "{file}"
-        ];
+        extraConfig = ''
+          c.tabs.padding = {'top': 15, 'bottom': 16, 'left': 16, 'right': 16}
+          c.statusbar.padding = {'top': 15, 'bottom': 16, 'left': 16, 'right': 16}
+          c.url.start_pages = "https://kagi.com/"
+          c.url.searchengines = {
+            'DEFAULT': 'https://kagi.com/search?q={}',
+            '!a': 'https://www.amazon.co.uk/s?k={}',
+            '!ex': 'https://hexdocs.pm/elixir/search.html?q={}',
+            '!oban': 'https://hexdocs.pm/oban/search.html?q={}',
+            '!ecto': 'https://hexdocs.pm/ecto/search.html?q={}',
+            '!gh': 'https://github.com/search?o=desc&q={}&s=stars',
+            '!gist': 'https://gist.github.com/search?q={}',
+            '!g': 'https://www.google.com/search?q={}',
+            '!gi': 'https://www.google.com/search?tbm=isch&q={}&tbs=imgo:1',
+            '!gm': 'https://www.google.com/maps/search/{}',
+            '!r': 'https://www.reddit.com/search?q={}',
+            '!w': 'https://en.wikipedia.org/wiki/{}',
+            '!yt': 'https://www.youtube.com/results?search_query={}'
+          }
+        '';
       };
-      extraConfig = ''
-        c.tabs.padding = {'top': 15, 'bottom': 16, 'left': 16, 'right': 16}
-        c.statusbar.padding = {'top': 15, 'bottom': 16, 'left': 16, 'right': 16}
-        c.url.start_pages = "https://kagi.com/"
-        c.url.searchengines = {
-          'DEFAULT': 'https://kagi.com/search?q={}',
-          '!a': 'https://www.amazon.co.uk/s?k={}',
-          '!ex': 'https://hexdocs.pm/elixir/search.html?q={}',
-          '!oban': 'https://hexdocs.pm/oban/search.html?q={}',
-          '!ecto': 'https://hexdocs.pm/ecto/search.html?q={}',
-          '!gh': 'https://github.com/search?o=desc&q={}&s=stars',
-          '!gist': 'https://gist.github.com/search?q={}',
-          '!g': 'https://www.google.com/search?q={}',
-          '!gi': 'https://www.google.com/search?tbm=isch&q={}&tbs=imgo:1',
-          '!gm': 'https://www.google.com/maps/search/{}',
-          '!r': 'https://www.reddit.com/search?q={}',
-          '!w': 'https://en.wikipedia.org/wiki/{}',
-          '!yt': 'https://www.youtube.com/results?search_query={}'
-        }
-      '';
-    };
 
-    home.sessionVariables = {
-      NIXOS_OZONE_WL = "1";
-      ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-      QT_QPA_PLATFORM = "wayland";
-      SDL_VIDEODRIVER = "wayland";
-      MOZ_ENABLE_WAYLAND = "1";
-      BROWSER = "qutebrowser";
-      DEFAULT_BROWSER = "qutebrowser";
-    };
+      wezterm = {
+        enable = true;
+        enableBashIntegration = true;
+        enableZshIntegration = true;
+        extraConfig = ''
+          local wezterm = require('wezterm')
+          local act = wezterm.action
 
-    home.file.".local/bin/hyprland/toggle-floating" = {
-      executable = true;
-      source = ./gui/toggle-floating;
-    };
+          local deshou = wezterm.color.get_builtin_schemes()['rose-pine'];
+          deshou.background = '#060606';
 
-    home.file.".local/bin/hyprland/screenrecord" = {
-      executable = true;
-      source = ./gui/screenrecord;
-    };
+          local function toggle_font(window, pane)
+            local overrides = window:get_config_overrides() or {}
 
-    programs.wezterm = {
-      enable = true;
-      enableBashIntegration = true;
-      enableZshIntegration = true;
-      extraConfig = ''
-        local wezterm = require('wezterm')
-        local act = wezterm.action
+            -- Track current font state using a custom key
+            local is_secondary_font = overrides.font_is_secondary or false
+            local new_font
 
-        local deshou = wezterm.color.get_builtin_schemes()['rose-pine'];
-        deshou.background = '#060606';
+            if is_secondary_font then
+              new_font = wezterm.font_with_fallback({'${config.modules.gui.font.name}', 'Material Icons'})
+              overrides.font_is_secondary = false
+            else
+              new_font = wezterm.font_with_fallback({'${config.modules.gui.font.secondary}', 'Material Icons'})
+              overrides.font_is_secondary = true
+            end
 
-        local function toggle_font(window, pane)
-          local overrides = window:get_config_overrides() or {}
-
-          -- Track current font state using a custom key
-          local is_secondary_font = overrides.font_is_secondary or false
-          local new_font
-
-          if is_secondary_font then
-            new_font = wezterm.font_with_fallback({'${config.modules.gui.font.name}', 'Material Icons'})
-            overrides.font_is_secondary = false
-          else
-            new_font = wezterm.font_with_fallback({'${config.modules.gui.font.secondary}', 'Material Icons'})
-            overrides.font_is_secondary = true
+            overrides.font = new_font
+            window:set_config_overrides(overrides)
           end
 
-          overrides.font = new_font
-          window:set_config_overrides(overrides)
-        end
+          local config = {
+            enable_tab_bar = false;
+            enable_scroll_bar = false;
+            default_cursor_style = 'BlinkingBlock';
+            animation_fps = 1;
+            cursor_blink_ease_in = 'Constant';
+            cursor_blink_ease_out = 'Constant';
+            allow_square_glyphs_to_overflow_width = 'Never';
+            font = wezterm.font_with_fallback({
+              '${config.modules.gui.font.name}',
+              'Material Icons'
+            });
 
-        local config = {
-          enable_tab_bar = false;
-          enable_scroll_bar = false;
-          default_cursor_style = 'BlinkingBlock';
-          animation_fps = 1;
-          cursor_blink_ease_in = 'Constant';
-          cursor_blink_ease_out = 'Constant';
-          allow_square_glyphs_to_overflow_width = 'Never';
-          font = wezterm.font_with_fallback({
-            '${config.modules.gui.font.name}',
-            'Material Icons'
-          });
+            window_padding = {
+              left = 32;
+              right = 32;
+              top = 32;
+              bottom = 32;
+            };
 
-          window_padding = {
-            left = 32;
-            right = 32;
-            top = 32;
-            bottom = 32;
-          };
+            color_schemes = {
+              ['deshou'] = deshou
+            };
 
-          color_schemes = {
-            ['deshou'] = deshou
-          };
+            color_scheme = 'deshou';
 
-          color_scheme = 'deshou';
+            keys = {
+              {
+                key = 'f',
+                mods = 'CTRL|SHIFT',
+                action = wezterm.action_callback(toggle_font),
+              },
+            };
+          }
 
-          keys = {
-            {
-              key = 'f',
-              mods = 'CTRL|SHIFT',
-              action = wezterm.action_callback(toggle_font),
-            },
-          };
-        }
-
-        return config
-      '';
+          return config
+        '';
+      };
     };
 
     services.hyprpaper = {
