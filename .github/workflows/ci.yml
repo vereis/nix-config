@@ -85,14 +85,14 @@ jobs:
         env:
           NIX_CONFIG_USE_DUMMY_SECRETS: "1"
         run: |
-          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --show-trace
+          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --show-trace --impure
 
       - name: Build Darwin configuration for ${{ matrix.host }}
         if: matrix.system == 'aarch64-darwin'
         env:
           NIX_CONFIG_USE_DUMMY_SECRETS: "1"
         run: |
-          nix build .#darwinConfigurations.${{ matrix.host }}.system --show-trace
+          nix build .#darwinConfigurations.${{ matrix.host }}.system --show-trace --impure
 
   check:
     name: Flake Check
@@ -111,4 +111,4 @@ jobs:
         env:
           NIX_CONFIG_USE_DUMMY_SECRETS: "1"
         run: |
-          nix flake check --show-trace --all-systems
+          nix flake check --show-trace --all-systems --impure

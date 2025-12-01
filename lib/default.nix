@@ -22,6 +22,7 @@ let
     # Set NIX_CONFIG_USE_DUMMY_SECRETS=1 environment variable to use dummy secrets
     if (builtins.getEnv "NIX_CONFIG_USE_DUMMY_SECRETS") == "1" then
       {
+        anthropic.apiKey = "sk-ant-dummy-key";
         cloudflare.ddclient = "dummy-cloudflare-token";
         minecraft.minnacraft = {
           rcon = {
@@ -33,7 +34,14 @@ let
           vereis = "dummy-vereis-password";
           turtz = "dummy-turtz-password";
         };
-        vetspire.gitEmail = "dummy@example.com";
+        vetspire = {
+          gitEmail = "dummy@example.com";
+          jiraApiKey = "dummy-jira-key";
+        };
+        gemini-cli = {
+          googleCloudProject = "dummy-project";
+          apiKey = "dummy-gemini-key";
+        };
       }
     else
       builtins.fromJSON (builtins.readFile ../secrets/secrets.json);
