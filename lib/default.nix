@@ -44,20 +44,22 @@ let
       system,
     }:
     {
-      home-manager.useGlobalPkgs = true;
-      home-manager.useUserPackages = true;
-      home-manager.extraSpecialArgs = userConfig // {
-        inherit inputs secrets;
-        inherit (inputs) zjstatus;
-        nixpkgs-stable = import nixpkgs-stable {
-          inherit system;
-          config.allowUnfree = true;
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        extraSpecialArgs = userConfig // {
+          inherit inputs secrets;
+          inherit (inputs) zjstatus;
+          nixpkgs-stable = import nixpkgs-stable {
+            inherit system;
+            config.allowUnfree = true;
+          };
         };
+        users.${userConfig.user}.imports = [
+          (import ../hosts/home.nix)
+          (import ../hosts/${platform}/${hostname}/home.nix)
+        ];
       };
-      home-manager.users.${userConfig.user}.imports = [
-        (import ../hosts/home.nix)
-        (import ../hosts/${platform}/${hostname}/home.nix)
-      ];
     };
 
   platformModules = {

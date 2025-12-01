@@ -1,16 +1,4 @@
-{
-  self,
-  config,
-  lib,
-  pkgs,
-  system,
-  inputs,
-  zjstatus,
-  username,
-  homebrew,
-  home-manager,
-  ...
-}:
+_:
 
 {
   homebrew = {
