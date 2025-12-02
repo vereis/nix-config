@@ -3,8 +3,18 @@ name: CI
 on:
   push:
     branches: [master, main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'README.md'
+      - 'TODO.md'
   pull_request:
     branches: [master, main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'README.md'
+      - 'TODO.md'
 
 jobs:
   format:
@@ -46,8 +56,9 @@ jobs:
           nix develop --command statix check .
 
   build:
-    name: Build System Configurations
+    name: Check System Configurations
     runs-on: ${{ matrix.os }}
+    needs: [format, lint, check]
     strategy:
       fail-fast: false
       matrix:
@@ -94,15 +105,15 @@ jobs:
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v8
 
-      - name: Build NixOS configuration for ${{ matrix.host }}
+      - name: Check NixOS configuration for ${{ matrix.host }}
         if: matrix.system != 'aarch64-darwin'
         run: |
-          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --show-trace
+          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --dry-run --show-trace
 
-      - name: Build Darwin configuration for ${{ matrix.host }}
+      - name: Check Darwin configuration for ${{ matrix.host }}
         if: matrix.system == 'aarch64-darwin'
         run: |
-          nix build .#darwinConfigurations.${{ matrix.host }}.system --show-trace
+          nix build .#darwinConfigurations.${{ matrix.host }}.system --dry-run --show-trace
 
   check:
     name: Flake Check
