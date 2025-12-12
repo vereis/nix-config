@@ -2,7 +2,9 @@
 {
   flake = {
     overlays = {
-      default = import ../overlays/opencode.nix inputs;
+      default = inputs.nixpkgs.lib.composeExtensions (import ../overlays/opencode.nix inputs) (
+        import ../overlays/slack.nix inputs
+      );
     };
   };
 }
