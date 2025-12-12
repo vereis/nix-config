@@ -1,0 +1,135 @@
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+
+with lib;
+{
+  options.modules.services.desktop.gnome = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable GNOME desktop environment with sane defaults (Wayland, bloat removed).";
+    };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = "Additional GNOME apps to include beyond the essential defaults (nautilus).";
+    };
+
+    extraGSettings = mkOption {
+      type = types.attrs;
+      default = { };
+      description = "Additional GSettings overrides as Nix attribute set.";
+      example = literalExpression ''
+        {
+          "org.gnome.desktop.session" = {
+            idle-delay = "uint32 0";
+          };
+        }
+      '';
+    };
+
+    altDrag = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable Alt+drag to move and resize windows.";
+    };
+  };
+
+  config = mkIf config.modules.services.desktop.gnome.enable {
+    assertions = [
+      {
+        assertion =
+          config.services.desktopManager.gnome.enable -> config.services.displayManager.gdm.wayland;
+        message = "GNOME 49+ only supports Wayland. GDM Wayland must be enabled.";
+      }
+    ];
+
+    services = {
+      xserver.enable = true;
+
+      displayManager.gdm = {
+        enable = true;
+        wayland = true;
+      };
+
+      desktopManager.gnome = {
+        enable = true;
+      };
+
+      gnome = {
+        core-os-services.enable = true;
+        core-shell.enable = true;
+        core-apps.enable = false;
+        games.enable = false;
+        core-developer-tools.enable = false;
+      };
+    };
+
+    # Use dconf system databases instead of GSettings overrides
+    # This makes settings survive 'dconf reset' by providing system-level defaults
+    programs.dconf = {
+      enable = true;
+      profiles.user.databases = [
+        {
+          settings = {
+            "org/gnome/desktop/interface" = {
+              cursor-theme = "Bibata-Modern-Classic";
+            };
+            "org/gnome/desktop/wm/preferences" = {
+              button-layout = "appmenu:minimize,maximize,close";
+              mouse-button-modifier =
+                if config.modules.services.desktop.gnome.altDrag then "<Alt>" else "disabled";
+              resize-with-right-button = config.modules.services.desktop.gnome.altDrag;
+            };
+          }
+          // (
+            let
+              # Convert extraGSettings from flat schema.key format to nested format
+              convertSettings =
+                attrs:
+                lib.foldl' (
+                  acc: schema:
+                  acc
+                  // {
+                    ${lib.replaceStrings [ "." ] [ "/" ] schema} = attrs.${schema};
+                  }
+                ) { } (lib.attrNames attrs);
+            in
+            if config.modules.services.desktop.gnome.extraGSettings != { } then
+              convertSettings config.modules.services.desktop.gnome.extraGSettings
+            else
+              { }
+          );
+        }
+      ];
+    };
+
+    environment = {
+      systemPackages =
+        with pkgs;
+        [
+          adwaita-icon-theme
+          nautilus
+          gnome-calculator
+          gnome-system-monitor
+          bibata-cursors
+        ]
+        ++ config.modules.services.desktop.gnome.extraPackages;
+
+      gnome.excludePackages = with pkgs; [
+        gnome-tour
+        gnome-user-docs
+        yelp
+      ];
+
+      variables = {
+        NIXOS_OZONE_WL = "1";
+      };
+    };
+  };
+}
