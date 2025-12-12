@@ -26,7 +26,6 @@
   };
 
   services = {
-    getty.autologinUser = username;
     printing.enable = true;
   };
 }

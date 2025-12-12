@@ -3,14 +3,15 @@
 {
   imports = [
     ../../../modules/services/tailscale.nix
-    ../../../modules/services/gnome.nix
-    ../../../modules/services/graphics.nix
+    ../../../modules/services/desktop
   ];
 
   modules = {
     tailscale.enable = true;
 
     services.desktop = {
+      autoLogin = true;
+      
       gnome = {
         enable = true;
         altDrag = true;
@@ -21,7 +22,9 @@
           };
         };
       };
+      
       graphics.enable = true;
+      steam.enable = true;
     };
   };
 }

@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  username,
   ...
 }:
 
@@ -35,8 +36,8 @@ with lib;
 
     altDrag = mkOption {
       type = types.bool;
-      default = true;
-      description = "Enable Alt+drag to move and resize windows.";
+      default = config.modules.services.desktop.altDrag;
+      description = "Enable Alt+drag to move and resize windows (inherits from desktop.altDrag, can override).";
     };
   };
 
@@ -52,9 +53,15 @@ with lib;
     services = {
       xserver.enable = true;
 
-      displayManager.gdm = {
-        enable = true;
-        wayland = true;
+      displayManager = {
+        gdm = {
+          enable = true;
+          wayland = true;
+        };
+        autoLogin = mkIf config.modules.services.desktop.autoLogin {
+          enable = true;
+          user = username;
+        };
       };
 
       desktopManager.gnome = {
