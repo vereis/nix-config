@@ -1,6 +1,6 @@
 ---
 mode: primary
-model: anthropic/claude-sonnet-4-5
+model: anthropic/claude-opus-4-5-20251101
 temperature: 0.1
 tools:
   read: true
