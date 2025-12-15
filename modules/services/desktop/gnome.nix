@@ -93,6 +93,26 @@ with lib;
                 if config.modules.services.desktop.gnome.altDrag then "<Alt>" else "disabled";
               resize-with-right-button = config.modules.services.desktop.gnome.altDrag;
             };
+            
+            # Custom keybindings for screenshots and screen recording
+            "org/gnome/settings-daemon/plugins/media-keys" = {
+              custom-keybindings = [
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kooha/"
+              ];
+            };
+            
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot" = {
+              name = "Flameshot Screenshot";
+              command = "flameshot gui";
+              binding = "<Control><Alt>s";
+            };
+            
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kooha" = {
+              name = "Kooha Screen Recording";
+              command = "kooha";
+              binding = "<Control><Alt>r";
+            };
           }
           // (
             let

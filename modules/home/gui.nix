@@ -45,6 +45,8 @@ with lib;
         [
           inter
           maple-mono.NF
+          flameshot  # Screenshot tool
+          kooha      # Screen recorder
         ]
         ++ config.modules.gui.extraPackages;
 
