@@ -78,6 +78,20 @@ with lib;
         
         # Enable clickable links
         link-url = true;
+        
+        # Enable image protocols (Kitty image protocol)
+        image-storage-limit = 320000000;
+        
+        # Copy on select
+        copy-on-select = true;
+        
+        # Mouse behavior
+        mouse-hide-while-typing = true;
+        
+        # Clipboard settings
+        clipboard-read = "ask";
+        clipboard-write = "allow";
+        clipboard-paste-protection = true;
       };
     };
 
