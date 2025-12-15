@@ -3,26 +3,27 @@ name: git-workflow
 description: MANDATORY for creating branches, commits, or pull requests - defines commit message formats, branching conventions, and PR best practices. ALWAYS consult this skill before ANY mutating git operation.
 ---
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: ALWAYS consult this skill before ANY git operation (branch, commit, PR).
-**CRITICAL**: Use quality-check/commit/pr subagents, NEVER run git commands directly.
+**CRITICAL**: Use /code:check/commit/pr commands, NEVER run git commands directly.
 **NO EXCEPTIONS**: Skipping this skill = broken workflow = wasted time and broken CI.
-</mandatory>
 
-<subagent-context>
+## Subagent Context
+
 **IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents from this skill. Instead, follow the git workflow process directly and return results to the primary agent who will handle any necessary subagent delegation.
-</subagent-context>
 
-<core-principles>
+## Core Principles
+
 1. **Atomic commits** - Each commit represents single logical change
 2. **Clear messages** - Commit messages explain purpose, not implementation
 3. **Consistent format** - Use standardized prefixes and structure
 4. **Test before commit** - All commits MUST pass tests
 5. **Lint before commit** - All commits MUST pass linting
-6. **Subagent delegation** - ALWAYS use quality-check/commit/pr subagents
-</core-principles>
+6. **Subagent delegation** - ALWAYS use /code:check/commit/pr commands
 
-<structure>
+## Structure
+
 This skill provides git workflow knowledge across focused files:
 
 - **`branching.md`** - Branch naming conventions, creation workflow
@@ -33,9 +34,9 @@ This skill provides git workflow knowledge across focused files:
 - Starting work → Read `branching.md`
 - Making commits → Read `commits.md`
 - Creating PRs → Read `pr-practices.md`
-</structure>
 
-<workflow-summary>
+## Workflow Summary
+
 **Quick Reference:**
 
 **Before ANY coding:**
@@ -44,18 +45,18 @@ This skill provides git workflow knowledge across focused files:
 
 **Before EVERY commit:**
 1. Consult `commits.md` - Understand format and workflow
-2. Run quality-check subagent (tests)
-3. Run quality-check subagent (lint)
-4. Use commit subagent (NEVER git commit directly)
+2. Run `/code:check` (tests)
+3. Run `/code:check` (lint)
+4. Use `/code:commit` (NEVER git commit directly)
 
 **Before creating PR:**
 1. Consult `pr-practices.md` - Understand requirements
-2. Run ALL quality checks via ci-discovery skill
+2. Run ALL quality checks via discovery skill. Read `$HOME/.config/opencode/skills/discovery/ci.md` for CI command discovery
 3. Verify all commits follow format
-4. Use pr subagent (NEVER gh pr create directly)
-</workflow-summary>
+4. Use `/code:pr` (NEVER gh pr create directly)
 
-<anti-rationalization>
+## Anti-Rationalization
+
 **THESE EXCUSES NEVER APPLY**
 
 "I know the git workflow, don't need to consult the skill"
@@ -74,19 +75,18 @@ This skill provides git workflow knowledge across focused files:
 **WRONG**: Make clean commits from the start
 
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
+## Compliance Checklist
+
 **MANDATORY CHECKLIST:**
 
 ☐ Consulted relevant git-workflow file (branching/commits/pr-practices)
 ☐ Created branch with correct naming (if starting work)
-☐ Ran quality-check subagent for tests (if committing)
-☐ Ran quality-check subagent for lint (if committing)
-☐ Used commit subagent (if committing)
-☐ Used pr subagent (if creating PR)
+☐ Ran /code:check for tests (if committing)
+☐ Ran /code:check for lint (if committing)
+☐ Used /code:commit (if committing)
+☐ Used /code:pr (if creating PR)
 ☐ Did NOT run git/gh commands directly
 ☐ Followed atomic workflow pattern
 
 **IF ANY UNCHECKED THEN EVERYTHING FAILS**
-</compliance-checklist>

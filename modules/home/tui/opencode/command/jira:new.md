@@ -1,6 +1,5 @@
 ---
 description: Create a JIRA ticket with guided workflow
-mode: agent
 tools:
   write: false
   edit: false
@@ -18,6 +17,7 @@ permission:
     touch /tmp/*: allow
     jira issue view*: allow
     jira issue list*: allow
+    jira issue create*: ask
     jira project list*: allow
     gh issue view*: allow
     gh issue list*: allow
@@ -38,72 +38,37 @@ permission:
     git config --list: allow
 ---
 
-# JIRA Ticket Creation Agent
+# JIRA Ticket Creation
 
-<jira-skill>
-**MANDATORY**: Before proceeding, consult the `jira` skill:
-- Review `template.md` for complete ticket structure, section guidance, and examples
-- Use patterns from `cli-usage.md` for all JIRA CLI operations (CRITICAL: /tmp file pattern!)
-- Apply research workflow from `research.md` when gathering context
-- Reference `linking.md` for ticket relationships and linking syntax
+**MANDATORY**: Consult the `jira` skill before proceeding:
+- Read `template.md` for ticket structure
+- Use `cli-usage.md` for CLI patterns (CRITICAL: /tmp file pattern!)
+- Apply `research.md` when gathering context
 
-**Invoke skill**: Use `skills_jira` to load all JIRA knowledge.
-</jira-skill>
+## One Ticket Rule
 
-<one-ticket-rule>
-Process ONE ticket at a time. Clear context between tickets to prevent contamination.
-</one-ticket-rule>
+Process ONE ticket at a time. Clear context between tickets.
 
-<user-input>
-**Description/Requirements from user:**
+## User Input
+
 $ARGUMENTS
-</user-input>
 
-<workflow>
+## Workflow
 
-### Step 0: Load JIRA Skill
-**FIRST ACTION**: Invoke `skills_jira` to load all JIRA knowledge (template, guidance, CLI usage, research patterns, linking).
+1. **Load JIRA Skill** - Read skill files first
+2. **Research** (if needed) - If user references existing tickets/PRs/code
+3. **Gather Requirements** - Ask clarifying questions
+4. **Draft Ticket** - Follow template structure exactly
+5. **Review & Iterate** - Show draft, iterate until approved
+6. **Get Confirmation** - "Ready to create? (yes/no)"
+7. **Create Ticket** - Use CLI patterns (CRITICAL: /tmp file pattern!)
+8. **Report** - Return ticket URL
 
-### Step 1: Research (if needed)
-If user references existing context (tickets, PRs, code), follow research workflow from `research.md` in jira skill.
+## Principles
 
-### Step 2: Gather Requirements
-- Ask clarifying questions if anything is unclear
-- Validate assumptions about scope and acceptance criteria
-- Identify appropriate ticket type if you can't infer it
-
-### Step 3: Loop Until Clear
-Ensure all necessary details are collected, if not, GOTO Step 2.
-
-### Step 4: Draft Ticket
-- Follow template structure from `template.md`
-- Apply section guidance from `template.md` for each section
-- Ensure description uses specific actors and measurable benefits
-- Verify scope identifies WHERE, not HOW
-- Confirm acceptance criteria covers happy path + edge cases + errors
-
-### Step 5: Review & Iterate
-- Show draft ticket to user
-- Iterate until ticket draft is approved
-- **CRITICAL**: Ask user to confirm ticket is ready for creation
-
-### Step 6: Get Explicit Confirmation
-"Ready to create this ticket in JIRA? (yes/no)" - wait for confirmation before proceeding.
-
-### Step 7: Create Ticket
-Follow CLI patterns from `cli-usage.md` (CRITICAL: /tmp file pattern!). Linking patterns are also in `cli-usage.md`.
-
-### Step 8: Confirm Creation
-Report ticket URL and remind user to clear context before next ticket.
-
-</workflow>
-
-<principles>
-See jira skill for complete principles. Key points:
 - **Outcomes over implementation** - Describe what changes, not how
 - **Specific actors** - Use real roles from codebase, not "user"
 - **Scope = WHERE** - Pages/components affected
 - **Acceptance = DONE** - Observable inputs/outputs
 - **One concern per ticket** - Split complex requests
 - **Always review** - Show draft before creating
-</principles>

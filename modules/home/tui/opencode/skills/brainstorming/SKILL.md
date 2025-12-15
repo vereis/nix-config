@@ -3,24 +3,25 @@ name: brainstorming
 description: MANDATORY for any feature or design decision - refines ideas into validated designs through collaborative questioning, explores alternatives, then breaks implementation into atomic test/lint/commit steps
 ---
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: Understand WHAT → Explore HOW → Plan execution before coding.
 **CRITICAL**: ALWAYS use this skill for ANY non-trivial feature or design decision.
 **NO EXCEPTIONS**: Skipping brainstorming = bad design = wasted time and money.
-</mandatory>
 
-<subagent-context>
+## Subagent Context
+
 **IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents or use TodoWrite from this skill. Instead, follow the brainstorming process directly and return your analysis/recommendations to the primary agent.
-</subagent-context>
 
-<core-principles>
+## Core Principles
+
 1. **Understand first** - Ask questions to clarify requirements
 2. **Explore alternatives** - Present 2-3 approaches with tradeoffs
 3. **Backend-first** - DB → Models → API → Frontend
 4. **Atomic steps** - One semantic change per todo with test/lint/commit
-</core-principles>
 
-<when-to-use>
+## When to Use
+
 **ALWAYS use for:**
 - ANY feature implementation (small or large)
 - Bug fixes needing design decisions
@@ -33,9 +34,8 @@ description: MANDATORY for any feature or design decision - refines ideas into v
 - User provided complete design + plan
 
 **If unsure, USE IT**
-</when-to-use>
 
-<three-phases>
+## Three Phases
 ## Phase 1: Understanding
 
 **Goal:** Understand purpose, constraints, success criteria before designing.
@@ -150,9 +150,9 @@ Follow strictly:
 [ ] Create UserProfile model with validation
 [ ] Add GET /api/user/profile endpoint
 [ ] Create profile settings page component
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
+[ ] Use /code:check
+[ ] Use /code:check (lint)
+[ ] Use /code:commit
 ```
 
 **GOOD (atomic with verification after EACH):**
@@ -161,21 +161,21 @@ Follow strictly:
 [ ] Use lint subagent
 [ ] Use commit subagent
 [ ] Create UserProfile type with validation
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
+[ ] Use /code:check
+[ ] Use /code:check (lint)
+[ ] Use /code:commit
 [ ] Implement get_user_profile/1 function
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
+[ ] Use /code:check
+[ ] Use /code:check (lint)
+[ ] Use /code:commit
 [ ] Add GET /api/user/profile endpoint
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
+[ ] Use /code:check
+[ ] Use /code:check (lint)
+[ ] Use /code:commit
 [ ] Create ProfileSettings component
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
+[ ] Use /code:check
+[ ] Use /code:check (lint)
+[ ] Use /code:commit
 ```
 
 ### What Makes a "Semantic Change"?
@@ -216,9 +216,9 @@ Follow strictly:
 **For code:**
 ```
 [ ] Implement feature/function
-[ ] Use test subagent
-[ ] Use lint subagent
-[ ] Use commit subagent
+[ ] Use /code:check
+[ ] Use /code:check (lint)
+[ ] Use /code:commit
 ```
 
 **No exceptions:**
@@ -248,7 +248,7 @@ Follow strictly:
 1. Mark current todo as `in_progress`
 2. Complete ONLY that one item
 3. Run verification steps (test/lint as appropriate)
-4. Use commit subagent
+4. Use /code:commit
 5. Mark todo as `completed`
 6. Move to next item
 
@@ -300,9 +300,8 @@ Follow strictly:
 - Onboarding for developers
 - Design review for stakeholders
 - Cross-project organization
-</three-phases>
 
-<anti-rationalization>
+## Anti-Rationalization
 **THESE EXCUSES NEVER APPLY**
 
 "Feature is simple, don't need brainstorming"
@@ -324,9 +323,8 @@ Follow strictly:
 **WRONG**: TodoWrite is MANDATORY
 
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
+## Compliance Checklist
 **MANDATORY CHECKLIST:**
 
 ☐ Completed Phase 1: Understanding (asked clarifying questions)
@@ -341,9 +339,8 @@ Follow strictly:
 ☐ Did NOT rationalize deviations
 
 **IF ANY UNCHECKED THEN EVERYTHING FAILS**
-</compliance-checklist>
 
-<quick-reference>
+## Quick Reference
 **Complete flow:**
 1. **Understanding** → Ask questions, clarify requirements
 2. **Design** → Explore approaches, present incrementally, validate
@@ -358,4 +355,3 @@ Follow strictly:
 - Atomic steps mandatory
 - Test/lint/commit cycle after each change (appropriate to change type)
 - Follow the plan
-</quick-reference>

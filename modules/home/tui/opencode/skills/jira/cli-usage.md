@@ -1,10 +1,10 @@
 # JIRA CLI Usage and Linking Patterns
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: Follow these workflows for JIRA ticket operations.
 **CRITICAL**: Always write ticket bodies to `/tmp` files first, then use `$(cat /tmp/file.md)`.
 **NO EXCEPTIONS**: The `jira` CLI has quirks that MUST be followed to avoid failures.
-</mandatory>
 
 ## Critical CLI Quirks
 
@@ -121,7 +121,8 @@ jira issue comment add DI-1234 --no-input \
 
 ## Ticket Linking
 
-<linking-relationships>
+### Linking Relationships
+
 **Relationship Types:**
 
 | Type | Description | Example Use Case |
@@ -156,9 +157,9 @@ jira issue comment add DI-1234 --no-input \
 - Original ticket was too large
 - Split into smaller deliverable pieces
 - Maintains history and context
-</linking-relationships>
 
-<linking-syntax>
+### Linking Syntax
+
 **CLI Syntax:**
 
 ```bash
@@ -189,9 +190,9 @@ jira issue link DI-1234 DI-5678 "Work item split"
 ```bash
 jira issue link DI-1234 DI-5678 "Work item split" || jira issue link DI-1234 DI-5678 "Relates"
 ```
-</linking-syntax>
 
-<linking-workflow>
+### Linking Workflow
+
 **ALWAYS follow this workflow when linking:**
 
 1. Link to related tickets
@@ -208,7 +209,6 @@ jira issue view DI-1234
 # - Blocks: DI-5678
 # - Relates to: DI-9999
 ```
-</linking-workflow>
 
 ## Splitting Tickets
 

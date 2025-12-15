@@ -1,10 +1,10 @@
 # JIRA Ticket Template
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: This is the SINGLE SOURCE OF TRUTH for JIRA ticket creation.
 **CRITICAL**: NEVER create tickets without consulting this file FIRST.
 **NO EXCEPTIONS**: Even with complete requirements, you MUST reference this template.
-</mandatory>
 
 ## Template Structure
 

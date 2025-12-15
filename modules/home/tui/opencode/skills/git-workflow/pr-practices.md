@@ -1,21 +1,21 @@
 # Pull Request Best Practices
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: ALWAYS run quality checks BEFORE creating PR.
-**CRITICAL**: Use PR subagent, NEVER create PRs directly with gh pr create.
+**CRITICAL**: Use `/code:pr`, NEVER create PRs directly with gh pr create.
 **NO EXCEPTIONS**: Creating PR with failing tests/lints = broken CI and wasted time.
-</mandatory>
 
 ## Workflow
 
 Follow these best practices **EXACTLY** when creating PRs to ensure highest quality and easiest review:
 
 **1. Run quality checks** to ensure all tests/lints pass before creating PR
-- Use `ci-discovery` skill to find and run all relevant commands on project
-- **NEVER** skip `ci-discovery` skill - you WILL miss important commands leading to broken PRs/CI
+- Use `discovery` skill to find and run all relevant commands on project. Read `$HOME/.config/opencode/skills/discovery/ci.md` for CI command discovery
+- **NEVER** skip `discovery` skill - you WILL miss important commands leading to broken PRs/CI
 - **ALWAYS** run:
-  - All tests (use `quality-check` subagent)
-  - All linters (use `quality-check` subagent)
+  - All tests (use `/code:check`)
+  - All linters (use `/code:check`)
 - **FAIL FAST** if any checks fail - fix issues before creating PR
 - **MANDATORY**: If any tests/linters fail, you MUST fix issues before PR creation
 
@@ -32,7 +32,7 @@ Follow these best practices **EXACTLY** when creating PRs to ensure highest qual
 
 **4. Write detailed PR description** focusing on WHY changes were made
 - **MANDATORY**: Use template for project you're working on (if exists)
-  - Use `ci-discovery` skill to check for PR templates
+  - Use `discovery` skill to check for PR templates
   - If no template, review recent merged PRs for style/format
   - Otherwise keep it clear and concise, follow `backup-template` below
 - **NEVER** use overly formal/robotic LLM-generated language
@@ -46,7 +46,7 @@ Follow these best practices **EXACTLY** when creating PRs to ensure highest qual
 - **Breaking changes** - Call out clearly if present
 
 **5. Create PR**
-- **ALWAYS** use `pr` subagent to create PR
+- **ALWAYS** use `/code:pr` to create PR
 - **ALWAYS** use `jira` skill to update ticket status after PR creation (if applicable)
 - **ALWAYS** summarize what you did with link to PR, link to ticket, and any other relevant context
 
@@ -84,8 +84,8 @@ If no project-specific template exists, use this:
 "CI will catch any issues"
 **WRONG**: Run checks LOCALLY first
 
-"I don't need to use pr subagent"
-**WRONG**: PR subagent is MANDATORY
+"I don't need to use /code:pr"
+**WRONG**: /code:pr is MANDATORY
 
 "I'll write PR description later"
 **WRONG**: Write description WHEN creating PR
@@ -99,17 +99,17 @@ If no project-specific template exists, use this:
 
 **MANDATORY - Before creating PR:**
 
-☐ Used ci-discovery skill to find quality check commands
-☐ Ran quality-check subagent for ALL tests
+☐ Used discovery skill to find quality check commands
+☐ Ran /code:check for ALL tests
 ☐ ALL tests PASSED (fixed if failed)
-☐ Ran quality-check subagent for ALL linters
+☐ Ran /code:check for ALL linters
 ☐ ALL linters PASSED (fixed if failed)
 ☐ Verified all commits follow format from commits.md
 ☐ Each commit is atomic (one semantic change)
 ☐ No WIP or temporary commits
 ☐ PR title follows commit message format
 ☐ PR description explains WHY (not just what)
-☐ Used PR subagent (NOT gh pr create directly)
+☐ Used /code:pr (NOT gh pr create directly)
 ☐ Updated ticket status (if applicable)
 
 **IF ANY UNCHECKED THEN PR WILL FAIL**

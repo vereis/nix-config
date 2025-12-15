@@ -1,10 +1,10 @@
 # Commit Message Format
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: Follow standardized commit format for clarity and maintainability.
 **CRITICAL**: Every commit MUST pass tests and linting before being made.
-**NO EXCEPTIONS**: Use commit subagent, NEVER run git commit directly.
-</mandatory>
+**NO EXCEPTIONS**: Use `/code:commit`, NEVER run git commit directly.
 
 ## Format
 
@@ -68,30 +68,30 @@ If your commit message needs "and" or "also", you're probably batching multiple 
 - Each commit needs **only single logical changes** and tests/fixes required to support that change
 - Use `git add` to stage ONLY files for this semantic change
 
-**3. PASS ALL TESTS** using `ci-discovery` skill and `quality-check` subagent
+**3. PASS ALL TESTS** using `discovery` skill and `/code:check`
 - **NEVER** run test commands directly
-- **ALWAYS** use quality-check subagent
+- **ALWAYS** use `/code:check`
 - If tests fail, fix immediately and re-run
 - **OPTIMIZATION - Failed-only mode**:
   - When fixing specific test failures, you MAY request `scope=failed-only`
   - Only appropriate when:
-    - ✅ Implementing fix based on quality-check feedback
+    - ✅ Implementing fix based on /code:check feedback
     - ✅ Other tests already passed in previous run
     - ✅ Want to verify fix without re-running entire suite
-  - Request with: "Run quality-check subagent with scope=failed-only"
+  - Request with: "Run /code:check with scope=failed-only"
   - When NOT to use:
     - ❌ First test run (no previous failures)
     - ❌ Changes to shared code (need full suite)
     - ❌ When in doubt (default to full suite)
 
-**4. PASS ALL LINTERS** using `ci-discovery` skill and `quality-check` subagent
+**4. PASS ALL LINTERS** using `discovery` skill and `/code:check`
 - **NEVER** run lint commands directly
-- **ALWAYS** use quality-check subagent
+- **ALWAYS** use `/code:check`
 - If lints fail, fix immediately and re-run
 
-**5. EXECUTE COMMIT** using `commit` subagent with standardized message format
+**5. EXECUTE COMMIT** using `/code:commit` with standardized message format
 - **NEVER** run `git commit` directly
-- **ALWAYS** use commit subagent
+- **ALWAYS** use `/code:commit`
 - Follow format rules exactly
 
 ## Anti-Rationalization
@@ -110,8 +110,8 @@ If your commit message needs "and" or "also", you're probably batching multiple 
 "Commit message doesn't need a prefix"
 **WRONG**: ALWAYS use [TYPE] or TICKET-123 prefix
 
-"I can run tests faster without subagent"
-**WRONG**: Subagents are MANDATORY
+"I can run tests faster without /code:check"
+**WRONG**: /code:check is MANDATORY
 
 **NO EXCEPTIONS**
 
@@ -121,11 +121,11 @@ If your commit message needs "and" or "also", you're probably batching multiple 
 
 ☐ Gathered context (branch name, recent commits, changed files)
 ☐ Staged ONLY files for this semantic change
-☐ Ran quality-check subagent for tests
+☐ Ran /code:check for tests
 ☐ Tests PASSED (fixed if failed)
-☐ Ran quality-check subagent for linting
+☐ Ran /code:check for linting
 ☐ Linting PASSED (fixed if failed)
-☐ Using commit subagent (NOT git commit directly)
+☐ Using /code:commit (NOT git commit directly)
 ☐ Commit message follows format (prefix + concise summary)
 ☐ Commit message is one line only
 ☐ Did NOT batch multiple changes
