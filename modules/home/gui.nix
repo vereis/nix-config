@@ -75,6 +75,9 @@ with lib;
         cursor-style = "block";
         cursor-style-blink = true;
         shell-integration-features = "no-cursor";
+        
+        # Enable clickable links
+        link-url = true;
       };
     };
 
