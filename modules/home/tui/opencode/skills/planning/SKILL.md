@@ -3,24 +3,25 @@ name: planning
 description: MANDATORY when given ANY task - provides comprehensive planning workflows including requirement analysis, backend-first ordering, atomic workflow patterns, and task breakdown frameworks. A task is any ad-hoc request, JIRA ticket, GitHub issue, refactoring request, etc.
 ---
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: Plan BEFORE coding - understand requirements, break down tasks, order backend-first.
 **CRITICAL**: ALWAYS use this skill for ANY task to work on by a user.
 **NO EXCEPTIONS**: Skipping planning = chaos = wasted time and money.
-</mandatory>
 
-<subagent-context>
+## Subagent Context
+
 **IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents or use TodoWrite from this skill. Instead, follow the planning process directly and return your analysis/recommendations to the primary agent.
-</subagent-context>
 
-<core-principles>
+## Core Principles
+
 1. **Backend-first ordering** - Build from data layer up to UI (DB → Models → Logic → API → Frontend)
 2. **Atomic workflow** - Each semantic change followed by test → lint → commit
 3. **TodoWrite for planning** - ALL steps captured before starting work
 4. **Proactive planning** - Don't wait to be asked, ALWAYS plan first
-</core-principles>
 
-<when-to-use>
+## When to Use
+
 **ALWAYS use for:**
 - User mentions ticket number (JIRA, GitHub, Linear, etc.)
 - User says "pick up", "work on", "implement", "fix", "add"
@@ -28,9 +29,8 @@ description: MANDATORY when given ANY task - provides comprehensive planning wor
 - Planning any non-trivial work (more than 1-line fix)
 
 **Don't wait for explicit "plan this" instruction - BE PROACTIVE**
-</when-to-use>
 
-<planning-process>
+## Planning Process
 ## Step 1: Gather Context
 
 **For JIRA tickets:**
@@ -85,9 +85,10 @@ What data needs to be stored? What tables/columns?
 ```
 [ ] Add user_settings_audit table migration
   [ ] user_id, changes (jsonb), timestamp
-  [ ] Run quality-check subagent
-  [ ] Run quality-check subagent (lint)
-  [ ] Run commit subagent
+  [ ] Run /code:check
+  [ ] Run /code:check (lint)
+  [ ] Run /code:review
+  [ ] Run /code:commit
 ```
 
 **Why first:**
@@ -103,9 +104,10 @@ How do we represent and validate this data?
 [ ] Create UserSettings schema
   [ ] Define schema with fields
   [ ] Add changeset with validations
-  [ ] Run quality-check subagent
-  [ ] Run quality-check subagent (lint)
-  [ ] Run commit subagent
+  [ ] Run /code:check
+  [ ] Run /code:check (lint)
+  [ ] Run /code:review
+  [ ] Run /code:commit
 ```
 
 **Why second:**
@@ -121,9 +123,10 @@ What operations are possible? What rules apply?
 [ ] Implement update_user_settings/2
   [ ] Core update logic
   [ ] Audit logging
-  [ ] Run quality-check subagent
-  [ ] Run quality-check subagent (lint)
-  [ ] Run commit subagent
+  [ ] Run /code:check
+  [ ] Run /code:check (lint)
+  [ ] Run /code:review
+  [ ] Run /code:commit
 ```
 
 **Why third:**
@@ -139,9 +142,10 @@ How do external consumers interact?
 [ ] Add PUT /api/user/settings endpoint
   [ ] Request validation
   [ ] Response formatting
-  [ ] Run quality-check subagent
-  [ ] Run quality-check subagent (lint)
-  [ ] Run commit subagent
+  [ ] Run /code:check
+  [ ] Run /code:check (lint)
+  [ ] Run /code:review
+  [ ] Run /code:commit
 ```
 
 **Why fourth:**
@@ -157,9 +161,10 @@ What does user see and interact with?
 [ ] Create settings form component
   [ ] Form fields and validation
   [ ] API integration
-  [ ] Run quality-check subagent
-  [ ] Run quality-check subagent (lint)
-  [ ] Run commit subagent
+  [ ] Run /code:check
+  [ ] Run /code:check (lint)
+  [ ] Run /code:review
+  [ ] Run /code:commit
 ```
 
 **Why last:**
@@ -171,9 +176,10 @@ What does user see and interact with?
 
 **CRITICAL:** After EVERY implementation task, add:
 ```
-[ ] Run quality-check subagent
-[ ] Run quality-check subagent (lint)
-[ ] Run commit subagent
+[ ] Run /code:check
+[ ] Run /code:check (lint)
+[ ] Run /code:review
+[ ] Run /code:commit
 ```
 
 **This is NON-NEGOTIABLE!** Each semantic change must be tested, linted, and committed.
@@ -248,33 +254,39 @@ Mental checklists = skipped steps = failures.
 [ ] Create UserProfile model
 [ ] Add GET /api/user/profile endpoint
 [ ] Create profile page component
-[ ] Run quality-check subagent
-[ ] Run quality-check subagent (lint)
-[ ] Run commit subagent
+[ ] Run /code:check
+[ ] Run /code:check (lint)
+[ ] Run /code:review
+[ ] Run /code:commit
 ```
 
 **GOOD (atomic with verification after EACH):**
 ```
 [ ] Add user_profiles table migration
-[ ] Run quality-check subagent
-[ ] Run quality-check subagent (lint)
-[ ] Run commit subagent
+[ ] Run /code:check
+[ ] Run /code:check (lint)
+[ ] Run /code:review
+[ ] Run /code:commit
 [ ] Create UserProfile type with validation
-[ ] Run quality-check subagent
-[ ] Run quality-check subagent (lint)
-[ ] Run commit subagent
+[ ] Run /code:check
+[ ] Run /code:check (lint)
+[ ] Run /code:review
+[ ] Run /code:commit
 [ ] Implement get_user_profile/1 function
-[ ] Run quality-check subagent
-[ ] Run quality-check subagent (lint)
-[ ] Run commit subagent
+[ ] Run /code:check
+[ ] Run /code:check (lint)
+[ ] Run /code:review
+[ ] Run /code:commit
 [ ] Add GET /api/user/profile endpoint
-[ ] Run quality-check subagent
-[ ] Run quality-check subagent (lint)
-[ ] Run commit subagent
+[ ] Run /code:check
+[ ] Run /code:check (lint)
+[ ] Run /code:review
+[ ] Run /code:commit
 [ ] Create ProfileSettings component
-[ ] Run quality-check subagent
-[ ] Run quality-check subagent (lint)
-[ ] Run commit subagent
+[ ] Run /code:check
+[ ] Run /code:check (lint)
+[ ] Run /code:review
+[ ] Run /code:commit
 ```
 
 ## Step 9: Present Plan to User
@@ -292,15 +304,17 @@ Task Breakdown (Backend-First + Atomic Workflow):
 
 Database Layer:
 [ ] Add user_settings_audit table
-  [ ] Run quality-check subagent
-  [ ] Run quality-check subagent (lint)
-  [ ] Run commit subagent
+  [ ] Run /code:check
+  [ ] Run /code:check (lint)
+  [ ] Run /code:review
+  [ ] Run /code:commit
 
 Model Layer:
 [ ] Create UserSettings schema with validations
-  [ ] Run quality-check subagent
-  [ ] Run quality-check subagent (lint)
-  [ ] Run commit subagent
+  [ ] Run /code:check
+  [ ] Run /code:check (lint)
+  [ ] Run /code:review
+  [ ] Run /code:commit
 
 ... (rest of layers)
 
@@ -310,13 +324,13 @@ Dependencies: Requires auth middleware (already exists)
 
 Ready to start? (yes/no)
 ```
-</planning-process>
 
-<handling-failures>
+## Handling Failures
+
 **If tests fail during atomic workflow:**
 
 1. Fix the issue immediately
-2. Re-run quality-check subagent
+2. Re-run /code:check
 3. Don't move to next task until passing
 
 **OPTIMIZATION: Failed-only test mode**
@@ -326,18 +340,17 @@ When fixing test failures, you MAY request `failed-only` mode if:
 - ✅ Other tests have already passed in previous run
 - ✅ Want to verify fix without re-running entire suite
 
-Request by instructing quality-check subagent:
+Request by instructing /code:check:
 ```
-"Run quality-check subagent with scope=failed-only to verify the fix"
+"Run /code:check with scope=failed-only to verify the fix"
 ```
 
 **When NOT to use failed-only:**
 - ❌ First test run (no previous failures to track)
 - ❌ Changes to shared utilities (need full test suite)
 - ❌ When in doubt (always default to full suite)
-</handling-failures>
 
-<anti-rationalization>
+## Anti-Rationalization
 **THESE EXCUSES NEVER APPLY**
 
 "User already gave detailed instructions"
@@ -359,9 +372,8 @@ Request by instructing quality-check subagent:
 **WRONG**: Acceptance criteria ≠ implementation plan
 
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
+## Compliance Checklist
 **MANDATORY CHECKLIST - COMPLETE BEFORE STARTING:**
 
 ☐ Gathered context from tickets/issues/codebase
@@ -375,9 +387,8 @@ Request by instructing quality-check subagent:
 ☐ Presented plan to user for approval
 
 **IF ANY UNCHECKED THEN EVERYTHING FAILS**
-</compliance-checklist>
 
-<quick-reference>
+## Quick Reference
 **Planning flow:**
 1. Gather context (tickets, codebase patterns)
 2. Extract requirements and acceptance criteria
@@ -393,9 +404,9 @@ Request by instructing quality-check subagent:
 1. Database/Schema → 2. Models/Types → 3. Business Logic → 4. API → 5. Frontend
 
 **After each implementation:**
-- Run quality-check subagent (tests)
-- Run quality-check subagent (lint)
-- Run commit subagent (if tests/lint pass)
+- Run /code:check (tests)
+- Run /code:check (lint)
+- Run /code:review (code review)
+- Run /code:commit (if tests/lint/review pass)
 
 This catches issues immediately instead of at the end when everything's broken!
-</quick-reference>

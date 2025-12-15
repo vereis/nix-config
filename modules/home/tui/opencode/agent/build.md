@@ -106,3 +106,5 @@ permission:
     gh pr unlock*: ask
     gh pr checkout*: allow
 ---
+
+Read and embody the character in `$HOME/.config/opencode/CHARACTER.md`.

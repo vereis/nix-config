@@ -3,24 +3,25 @@ name: debugging
 description: MANDATORY for ANY bug, test failure, or unexpected behavior - four-phase systematic framework (root cause investigation, pattern analysis, hypothesis testing, implementation) that ensures understanding before attempting solutions. CONSULT THIS SKILL if you find yourself having to fix bugs, test failures, or unexpected behavior.
 ---
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: Find root cause BEFORE attempting fixes or you waste time.
 **CRITICAL**: ALWAYS use this skill for ANY bug, test failure, or unexpected behavior.
 **NO EXCEPTIONS**: Guessing fixes = wasted time = new bugs = broken CI.
-</mandatory>
 
-<subagent-context>
+## Subagent Context
+
 **IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents from this skill. Instead, follow the debugging process directly and return results/fixes to the primary agent who will handle any necessary subagent delegation.
-</subagent-context>
 
-<core-principles>
+## Core Principles
+
 1. **Find root cause BEFORE fixing** - Symptom fixes mask problems
 2. **One change at a time** - Can't isolate what worked otherwise
 3. **Test minimally** - Small changes reveal understanding
 4. **Question architecture after 3 failures** - Not a simple bug at that point
-</core-principles>
 
-<when-to-use>
+## When to Use
+
 Use for ANY technical issue:
 - Test failures
 - Bugs in production/development
@@ -38,9 +39,8 @@ Use for ANY technical issue:
 **Don't skip when:**
 - Issue seems simple (simple bugs have root causes too)
 - You're in a hurry (systematic is faster than thrashing)
-</when-to-use>
 
-<four-phases>
+## Four Phases
 **You MUST complete each phase before proceeding to the next.**
 
 ## Phase 1: Root Cause Investigation
@@ -249,9 +249,8 @@ Should we continue patching or refactor?
 ```
 
 **Output:** Bug resolved, tests pass, no regressions
-</four-phases>
 
-<red-flags>
+## Red Flags
 If you catch yourself thinking ANY of these, STOP and return to Phase 1:
 
 **Skipping investigation:**
@@ -270,9 +269,8 @@ If you catch yourself thinking ANY of these, STOP and return to Phase 1:
 **Architectural issues:**
 - "One more fix attempt" (after 2+ failures)
 - Each fix reveals new problem elsewhere
-</red-flags>
 
-<anti-rationalization>
+## Anti-Rationalization
 **THESE EXCUSES NEVER APPLY**
 
 "Issue is simple, don't need process"
@@ -294,9 +292,8 @@ If you catch yourself thinking ANY of these, STOP and return to Phase 1:
 **WRONG**: 3+ failures = architectural problem
 
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
+## Compliance Checklist
 **MANDATORY CHECKLIST:**
 
 ☐ Completed Phase 1: Root Cause Investigation
@@ -313,9 +310,8 @@ If you catch yourself thinking ANY of these, STOP and return to Phase 1:
 ☐ If 3 fixes failed, questioned architecture
 
 **IF ANY UNCHECKED THEN EVERYTHING FAILS**
-</compliance-checklist>
 
-<quick-reference>
+## Quick Reference
 | Phase | Key Activities | Success Criteria |
 |-------|---------------|------------------|
 | **1. Root Cause** | Read errors, reproduce, check changes, gather evidence, trace data flow | Can state WHAT broke and WHY |
@@ -324,4 +320,3 @@ If you catch yourself thinking ANY of these, STOP and return to Phase 1:
 | **4. Implementation** | Consider test, implement single fix, verify completely | Bug resolved, no regressions |
 
 **Remember:** 3 failed hypotheses = Question architecture, not just implementation
-</quick-reference>

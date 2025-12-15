@@ -1,26 +1,27 @@
 ---
-name: ci-discovery
-description: MANDATORY for discovering test, lint, and build commands. Prioritizes CI configurations as source of truth, with intelligent fallback to project manifests. Always consult this skill before running quality checks, build commands, or creating PRs.
+name: discovery/ci
+description: Discovers test, lint, and build commands from CI configurations. Prioritizes CI as source of truth with intelligent fallback to project manifests.
 ---
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: CI files are source of truth for a system, NEVER invent commands or guess what to run.
 **CRITICAL**: ALWAYS use this skill to discover CI/quality check commands.
 **NO EXCEPTIONS**: Guessing commands = broken CI = wasted time and money.
-</mandatory>
 
-<subagent-context>
+## Subagent Context
+
 **IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents from this skill. Instead, follow the discovery process directly and return results to the primary agent.
-</subagent-context>
 
-<core-principles>
+## Core Principles
+
 1. **CI pipelines are the source of truth** - What CI runs is what must pass
 2. **Exact command replication** - Use the EXACT commands from CI, don't infer or modify
 3. **Intelligent fallback** - Only use project files if NO CI exists
 4. **Never guess** - If no commands found, ask for guidance
-</core-principles>
 
-<discovery-process>
+## Discovery Process
+
 **STEP 1: Check CI Files FIRST**
 
 Search for CI configurations. These usually live in the root of a repository so if not found there, check parent directories as you may be in a monorepo.
@@ -95,9 +96,9 @@ If you see a build step with `--warnings-as-errors`, then ensure that is also ru
 - Report what was checked
 - Ask user for the command to run
 - **NEVER** guess or invent commands
-</discovery-process>
 
-<anti-rationalization>
+## Anti-Rationalization
+
 **THESE EXCUSES NEVER APPLY**
 
 "I know the project uses npm test"
@@ -116,9 +117,9 @@ If you see a build step with `--warnings-as-errors`, then ensure that is also ru
 **WRONG**: Use EXACT command from CI
 
 **NO EXCEPTIONS**
-</anti-rationalization>
 
-<compliance-checklist>
+## Compliance Checklist
+
 **MANDATORY CHECKLIST:**
 
 ☐ Checked for CI configuration (.github/workflows/*.yml, ../.github/workflows/*.yml, .gitlab-ci.yml, etc...)
@@ -130,4 +131,3 @@ If you see a build step with `--warnings-as-errors`, then ensure that is also ru
 ☐ Did NOT modify, guess, or invent commands
 
 **IF ANY UNCHECKED THEN EVERYTHING FAILS AT PR TIME**
-</compliance-checklist>

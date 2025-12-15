@@ -3,17 +3,18 @@ name: jira
 description: MANDATORY for ANY JIRA-related tasks - provides comprehensive JIRA workflows including ticket creation, CLI usage, linking patterns, and research workflows. Consult this skill PROACTIVELY before creating, reviewing, or working with JIRA tickets.
 ---
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: ALWAYS consult this skill before ANY JIRA operation.
 **CRITICAL**: ALWAYS read `template.md` FIRST when creating/reviewing tickets.
 **NO EXCEPTIONS**: Skipping proper structure = wasted time and poor ticket quality.
-</mandatory>
 
-<subagent-context>
+## Subagent Context
+
 **IF YOU ARE A SUBAGENT**: You are already executing within a subagent context and spawning additional subagents will not work. Do not attempt to spawn subagents from this skill. Instead, execute JIRA operations directly and return recommendations to the primary agent.
-</subagent-context>
 
-<structure>
+## Structure
+
 This skill provides JIRA knowledge across focused files:
 
 - **`template.md`** - SINGLE SOURCE OF TRUTH for ticket structure, sections, examples, compliance
@@ -24,9 +25,9 @@ This skill provides JIRA knowledge across focused files:
 - Creating/reviewing tickets → Read `template.md`
 - Using JIRA CLI or linking tickets → Read `cli-usage.md`
 - Finding context/patterns → Read `research.md`
-</structure>
 
-<quick-reference>
+## Quick Reference
+
 **Creating Tickets:**
 1. **ALWAYS** read `template.md` FIRST (NO EXCEPTIONS)
 2. Research existing context if needed (`research.md`)
@@ -43,9 +44,9 @@ This skill provides JIRA knowledge across focused files:
 - All CLI operations → `cli-usage.md`
 - Linking tickets → `cli-usage.md`
 - Finding code patterns → `research.md`
-</quick-reference>
 
-<anti-rationalization>
+## Anti-Rationalization
+
 **THESE EXCUSES NEVER APPLY**
 
 "I know the ticket format already"
@@ -58,4 +59,3 @@ This skill provides JIRA knowledge across focused files:
 **WRONG**: Requirements are WHAT, template is HOW
 
 **NO EXCEPTIONS**
-</anti-rationalization>

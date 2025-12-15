@@ -1,10 +1,10 @@
 # Git Branching
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: ALWAYS create a new branch before starting ANY coding task.
 **CRITICAL**: Working directly on main/master = broken workflow and conflicts.
 **NO EXCEPTIONS**: Follow naming conventions for consistency.
-</mandatory>
 
 ## Purpose
 

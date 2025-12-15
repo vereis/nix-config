@@ -1,10 +1,10 @@
 # JIRA Research Workflows
 
-<mandatory>
+## Mandatory
+
 **MANDATORY**: Research existing context before creating/updating tickets when relevant.
 **CRITICAL**: Don't over-research - only gather what's needed for the ticket.
 **NO EXCEPTIONS**: Finding proper actors, patterns, and context improves ticket quality.
-</mandatory>
 
 ## When to Research
 
