@@ -1,5 +1,8 @@
 # Nix Configuration
 
+[![Run in Smithery](https://smithery.ai/badge/skills/vereis)](https://smithery.ai/skills?ns=vereis&utm_source=github&utm_medium=badge)
+
+
 This is my personal Nix configuration for Windows (WSL), Linux (NixOS), and macOS (nix-darwin).
 
 It uses **flake-parts** to help with organization and modularity (especially for multi-platform support):
