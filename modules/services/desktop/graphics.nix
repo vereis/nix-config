@@ -74,7 +74,35 @@ in
       sessionVariables = {
         LIBVA_DRIVER_NAME = "nvidia";
         __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+        GBM_BACKEND = "nvidia-drm";
+        WLR_NO_HARDWARE_CURSORS = "1";
       };
+
+      # NVIDIA application profile to fix high VRAM usage in niri
+      # See: https://github.com/YaLTeR/niri/wiki/Nvidia#high-vram-usage-fix
+      etc."nvidia/nvidia-application-profiles-rc.d/50-limit-free-buffer-pool-in-wayland-compositors.json".text =
+        builtins.toJSON {
+          rules = [
+            {
+              pattern = {
+                feature = "procname";
+                matches = "niri";
+              };
+              profile = "Limit Free Buffer Pool On Wayland Compositors";
+            }
+          ];
+          profiles = [
+            {
+              name = "Limit Free Buffer Pool On Wayland Compositors";
+              settings = [
+                {
+                  key = "GLVidHeapReuseRatio";
+                  value = 0;
+                }
+              ];
+            }
+          ];
+        };
     };
   };
 }
