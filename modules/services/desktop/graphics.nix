@@ -5,7 +5,10 @@
   ...
 }:
 
-with lib;
+let
+  inherit (lib) mkOption mkIf types;
+  cfg = config.modules.services.desktop.graphics;
+in
 {
   options.modules.services.desktop.graphics = {
     enable = mkOption {
@@ -23,7 +26,7 @@ with lib;
     };
   };
 
-  config = mkIf config.modules.services.desktop.graphics.enable {
+  config = mkIf cfg.enable {
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
@@ -32,7 +35,7 @@ with lib;
     hardware.nvidia = {
       modesetting.enable = true;
       open = false;
-      powerManagement.enable = config.modules.services.desktop.graphics.nvidia.powerManagement;
+      powerManagement.enable = cfg.nvidia.powerManagement;
       powerManagement.finegrained = false;
       nvidiaPersistenced = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -61,15 +64,17 @@ with lib;
       '';
     };
 
-    environment.systemPackages = with pkgs; [
-      vulkan-loader
-      vulkan-tools
-      nvidia-vaapi-driver
-    ];
+    environment = {
+      systemPackages = with pkgs; [
+        vulkan-loader
+        vulkan-tools
+        nvidia-vaapi-driver
+      ];
 
-    environment.sessionVariables = {
-      LIBVA_DRIVER_NAME = "nvidia";
-      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      sessionVariables = {
+        LIBVA_DRIVER_NAME = "nvidia";
+        __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      };
     };
   };
 }

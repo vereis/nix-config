@@ -6,7 +6,17 @@
   ...
 }:
 
-with lib;
+let
+  inherit (lib)
+    mkOption
+    mkIf
+    types
+    literalExpression
+    foldl'
+    replaceStrings
+    attrNames
+    ;
+in
 {
   options.modules.services.desktop.gnome = {
     enable = mkOption {
@@ -93,7 +103,7 @@ with lib;
                 if config.modules.services.desktop.gnome.altDrag then "<Alt>" else "disabled";
               resize-with-right-button = config.modules.services.desktop.gnome.altDrag;
             };
-            
+
             # Custom keybindings for screenshots and screen recording
             "org/gnome/settings-daemon/plugins/media-keys" = {
               custom-keybindings = [
@@ -101,13 +111,13 @@ with lib;
                 "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kooha/"
               ];
             };
-            
+
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot" = {
               name = "Flameshot Screenshot";
               command = "flameshot gui";
               binding = "<Control><Alt>s";
             };
-            
+
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kooha" = {
               name = "Kooha Screen Recording";
               command = "kooha";
@@ -119,13 +129,13 @@ with lib;
               # Convert extraGSettings from flat schema.key format to nested format
               convertSettings =
                 attrs:
-                lib.foldl' (
+                foldl' (
                   acc: schema:
                   acc
                   // {
-                    ${lib.replaceStrings [ "." ] [ "/" ] schema} = attrs.${schema};
+                    ${replaceStrings [ "." ] [ "/" ] schema} = attrs.${schema};
                   }
-                ) { } (lib.attrNames attrs);
+                ) { } (attrNames attrs);
             in
             if config.modules.services.desktop.gnome.extraGSettings != { } then
               convertSettings config.modules.services.desktop.gnome.extraGSettings
