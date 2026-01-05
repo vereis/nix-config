@@ -5,8 +5,13 @@
   ...
 }:
 
-with lib;
 let
+  inherit (lib)
+    mkOption
+    mkIf
+    types
+    optionals
+    ;
   isWayland = config.services.displayManager.gdm.wayland or false;
 in
 {
@@ -36,7 +41,7 @@ in
       gamescopeSession.enable = isWayland;
       remotePlay.openFirewall = config.modules.services.desktop.steam.remotePlay;
       dedicatedServer.openFirewall = false;
-      
+
       extraCompatPackages = with pkgs; [
         proton-ge-bin
       ];
@@ -55,8 +60,7 @@ in
       };
     };
 
-    environment.systemPackages = with pkgs;
-      optionals isWayland [ gamescope ];
+    environment.systemPackages = with pkgs; optionals isWayland [ gamescope ];
 
     hardware.steam-hardware.enable = true;
   };
