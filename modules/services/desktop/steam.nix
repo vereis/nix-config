@@ -12,6 +12,7 @@ let
     types
     optionals
     ;
+  cfg = config.modules.services.desktop.steam;
   isWayland = config.services.displayManager.gdm.wayland or false;
 in
 {
@@ -35,11 +36,11 @@ in
     };
   };
 
-  config = mkIf config.modules.services.desktop.steam.enable {
+  config = mkIf cfg.enable {
     programs.steam = {
       enable = true;
       gamescopeSession.enable = isWayland;
-      remotePlay.openFirewall = config.modules.services.desktop.steam.remotePlay;
+      remotePlay.openFirewall = cfg.remotePlay;
       dedicatedServer.openFirewall = false;
 
       extraCompatPackages = with pkgs; [
@@ -47,7 +48,7 @@ in
       ];
     };
 
-    programs.gamemode = mkIf config.modules.services.desktop.steam.gamemode {
+    programs.gamemode = mkIf cfg.gamemode {
       enable = true;
       settings = {
         general = {
@@ -63,5 +64,24 @@ in
     environment.systemPackages = with pkgs; optionals isWayland [ gamescope ];
 
     hardware.steam-hardware.enable = true;
+
+    # NOTE: Custom desktop entry to fix Steam not launching from Walker on first try
+    home-manager.sharedModules = [
+      {
+        xdg.desktopEntries.steam = {
+          name = "Steam";
+          comment = "Application for managing and playing games on Steam";
+          exec = ''bash -c "steam steam://open/games || steam"'';
+          icon = "steam";
+          terminal = false;
+          type = "Application";
+          categories = [
+            "Network"
+            "FileTransfer"
+            "Game"
+          ];
+        };
+      }
+    ];
   };
 }
