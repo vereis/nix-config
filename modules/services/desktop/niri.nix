@@ -180,21 +180,31 @@ in
     environment.systemPackages =
       with pkgs;
       [
+        # Power Management
         swayidle
         sway-audio-idle-inhibit
+        
+        # Screen Recording
         grim
         slurp
         wf-recorder
+        
+        # Clipboard & Input
         wl-clipboard
         wtype
+        
+        # Wallpaper
         swaybg
         swww
+        
+        # Applications
         nautilus
         bibata-cursors
         xwayland-satellite
         ghostty
         libnotify
-
+        
+        # Audio & Brightness
         wireplumber
         brightnessctl
       ]
