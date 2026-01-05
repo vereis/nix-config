@@ -87,6 +87,15 @@ let
 
   walkerItemLayout = builtins.readFile ./niri/walker/item.xml;
 
+  wallpaperScript = pkgs.writeShellScript "wallpaper" (
+    builtins.readFile (
+      pkgs.replaceVars ./scripts/wallpaper.sh {
+        swww = "${pkgs.swww}/bin/swww";
+        swaybg = "${pkgs.swaybg}/bin/swaybg";
+      }
+    )
+  );
+
   walkerThemeCss =
     builtins.replaceStrings
       [
@@ -231,7 +240,7 @@ in
             inherit (cfg) outputs;
 
             spawn-at-startup = [
-              # Import environment variables into systemd user session for apps launched via dbus/Walker
+              # HACK: Import environment variables into systemd user session for apps launched via dbus/Walker
               {
                 command = [
                   "sh"
@@ -255,34 +264,12 @@ in
                   "systemctl suspend"
                 ];
               }
-              # NOTE: We use BOTH swww and swaybg intentionally:
+              # HACK: We use BOTH swww and swaybg intentionally:
               # - swww: displays the regular wallpaper on workspaces (namespace: swww-daemon)
               # - swaybg: displays the blurred wallpaper in the overview backdrop (namespace: wallpaper)
               # The layer-rule below places only "wallpaper" namespace surfaces in the backdrop,
               # so swww shows on workspaces while swaybg shows behind the overview.
-              {
-                command = [
-                  "sh"
-                  "-c"
-                  ''
-                    swww-daemon
-                    for f in "$HOME"/.wallpaper.*; do
-                      [ -e "$f" ] && swww img "$f" --resize crop && break
-                    done
-                  ''
-                ];
-              }
-              {
-                command = [
-                  "sh"
-                  "-c"
-                  ''
-                    for f in "$HOME"/.wallpaper-blur.* "$HOME"/.wallpaper.*; do
-                      [ -e "$f" ] && exec swaybg -i "$f" -m fill
-                    done
-                  ''
-                ];
-              }
+              { command = [ "${wallpaperScript}" ]; }
             ];
 
             prefer-no-csd = true;
