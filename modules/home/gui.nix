@@ -6,7 +6,9 @@
   ...
 }:
 
-with lib;
+let
+  inherit (lib) mkOption mkIf types;
+in
 {
   imports = [
     inputs.zen-browser.homeModules.twilight
@@ -77,19 +79,19 @@ with lib;
         cursor-style = "block";
         cursor-style-blink = true;
         shell-integration-features = "no-cursor";
-        
+
         # Enable clickable links
         link-url = true;
-        
+
         # Enable image protocols (Kitty image protocol)
         image-storage-limit = 320000000;
-        
+
         # Copy on select
         copy-on-select = true;
-        
+
         # Mouse behavior
         mouse-hide-while-typing = true;
-        
+
         # Clipboard settings
         clipboard-read = "ask";
         clipboard-write = "allow";

@@ -6,7 +6,9 @@
   ...
 }:
 
-with lib;
+let
+  inherit (lib) mkOption mkIf types;
+in
 {
   options.modules.services.desktop = {
     autoLogin = mkOption {
