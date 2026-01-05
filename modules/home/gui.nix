@@ -6,7 +6,9 @@
   ...
 }:
 
-with lib;
+let
+  inherit (lib) mkOption mkIf types;
+in
 {
   imports = [
     inputs.zen-browser.homeModules.twilight

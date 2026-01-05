@@ -1,12 +1,19 @@
 {
-  pkgs,
   lib,
   config,
   username,
   ...
 }:
 
-with lib;
+let
+  inherit (lib)
+    mkOption
+    mkIf
+    mkMerge
+    types
+    listToAttrs
+    ;
+in
 {
   options.modules.docker = {
     enable = mkOption {

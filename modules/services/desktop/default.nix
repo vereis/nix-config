@@ -1,12 +1,13 @@
 {
-  pkgs,
   lib,
   config,
   username,
   ...
 }:
 
-with lib;
+let
+  inherit (lib) mkOption mkIf types;
+in
 {
   options.modules.services.desktop = {
     autoLogin = mkOption {
@@ -15,11 +16,8 @@ with lib;
       description = "Enable autologin for both TTY and display manager (uses username from config)";
     };
 
-    altDrag = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable Alt+drag to move/resize windows (inherited by desktop environments)";
-    };
+    # NOTE: altDrag is not applicable to niri - niri uses Mod+drag for move/resize by default.
+    # This option is kept for potential future use with other desktop environments.
   };
 
   config = mkIf config.modules.services.desktop.autoLogin {
@@ -31,5 +29,6 @@ with lib;
     ./gnome.nix
     ./graphics.nix
     ./steam.nix
+    ./niri.nix
   ];
 }
