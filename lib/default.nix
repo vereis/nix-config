@@ -68,6 +68,7 @@ let
       ../hosts/linux/${hostname}
       inputs.copyparty.nixosModules.default
       inputs.nix-minecraft.nixosModules.minecraft-servers
+      inputs.niri.nixosModules.niri
       {
         imports = [ inputs.nix-minecraft.nixosModules.minecraft-servers ];
         nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
