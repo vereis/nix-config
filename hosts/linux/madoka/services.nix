@@ -18,14 +18,15 @@
     services.desktop = {
       autoLogin = true;
 
-      gnome = {
+      niri = {
         enable = true;
-        altDrag = true;
-        extraGSettings = {
-          "org.gnome.desktop.session" = {
-            # Disable idle timeout (prevents screen from auto-dimming/locking)
-            idle-delay = "uint32 0";
+        outputs."DP-2" = {
+          mode = {
+            width = 3840;
+            height = 2160;
+            refresh = 143.982;
           };
+          scale = 1.0;
         };
       };
 

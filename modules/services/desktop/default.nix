@@ -31,6 +31,7 @@ in
   imports = [
     ./gnome.nix
     ./graphics.nix
+    ./niri.nix
     ./steam.nix
   ];
 }
