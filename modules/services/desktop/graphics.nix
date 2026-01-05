@@ -27,6 +27,22 @@ in
   };
 
   config = mkIf cfg.enable {
+    # NOTE: Enable nix-ld for FHS-wrapped apps (like OnlyOffice) to find system libraries
+    programs.nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        libGL
+        libGLU
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXrandr
+        xorg.libXi
+        xorg.libXext
+        xorg.libXrender
+        xorg.libXfixes
+      ];
+    };
+
     hardware.graphics = {
       enable = true;
       enable32Bit = true;
