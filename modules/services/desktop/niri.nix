@@ -473,6 +473,8 @@ in
                 opacity = appearance.unfocusedOpacity;
                 draw-border-with-background = true;
               }
+              # NOTE: Multiple adjacent ghostty columns make it hard to differentiate where one window
+              # begins/ends, so we add a subtle border to help distinguish between terminals
               {
                 matches = [ { app-id = "^com\\.mitchellh\\.ghostty$"; } ];
                 border = {
