@@ -19,7 +19,6 @@ let
 
   # TODO: Consolidate colors into a shared theme module that works for both
   # home-manager and NixOS configurations (similar to how niri.nix is structured)
-  # Color palette (Rose Pine inspired)
   colors = {
     accent = {
       blue = "#7DD3FC";
@@ -38,28 +37,24 @@ let
     };
   };
 
-  # Typography
   fonts = {
     mono = "Maple Mono NF";
     size = 12;
   };
 
-  # Timing constants
   timing = {
-    monitorOffSec = 300; # 5 minutes
-    suspendSec = 600; # 10 minutes
-    notificationMs = 30000; # 30 seconds
-    animationSpeed = 0.6; # 40% faster than default
+    monitorOffSec = 300;
+    suspendSec = 600;
+    notificationMs = 30000;
+    animationSpeed = 0.6;
   };
 
-  # Window appearance
   appearance = {
     unfocusedOpacity = 0.8;
     borderWidth = 1;
     walkerWidth = 1200;
   };
 
-  # Shared gradient for active borders
   activeGradient = {
     from = colors.accent.blue;
     to = colors.accent.pink;
@@ -67,7 +62,6 @@ let
     relative-to = "workspace-view";
   };
 
-  # Screenshot script with substituted paths
   screenshotScript = pkgs.writeShellScript "screenshot" (
     builtins.readFile (
       pkgs.replaceVars ./scripts/screenshot.sh {
@@ -79,7 +73,6 @@ let
     )
   );
 
-  # Screen recording script with substituted paths
   recordScript = pkgs.writeShellScript "record" (
     builtins.readFile (
       pkgs.replaceVars ./scripts/record.sh {
@@ -92,10 +85,8 @@ let
     )
   );
 
-  # Walker item layout from external file
   walkerItemLayout = builtins.readFile ./niri/walker/item.xml;
 
-  # Walker theme CSS with variable substitution
   walkerThemeCss =
     builtins.replaceStrings
       [
