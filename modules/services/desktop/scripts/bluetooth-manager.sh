@@ -36,13 +36,26 @@ while true; do
         clear
         # Scan and capture new devices
         tmpfile=$(mktemp)
-        timeout 10 @bluetoothctl@ scan on 2>&1 | grep -E "^\[NEW\] Device" | sed 's/\[NEW\] Device //' > "$tmpfile" &
+        
+        # Run bluetoothctl interactively and capture device discoveries
+        (
+            sleep 10
+            echo "quit"
+        ) | @bluetoothctl@ scan on 2>&1 | \
+            sed 's/\x1b\[[0-9;]*m//g' | \
+            grep "Device" | \
+            grep -v "Controller\|Media\|^hci" | \
+            awk '{if ($2 ~ /^[0-9A-F:]+$/) print $2, substr($0, index($0,$3))}' | \
+            sort -u > "$tmpfile" &
         
         # Show spinner for 10 seconds
         @gum@ spin --spinner dot --title "Scanning for devices..." -- sleep 10
         
-        # Stop scanning
+        # Make sure scan is stopped
         @bluetoothctl@ scan off >/dev/null 2>&1
+        
+        # Wait a moment for file to be written
+        sleep 1
         
         # Show discovered devices
         clear
