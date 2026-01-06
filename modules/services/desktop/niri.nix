@@ -96,7 +96,7 @@ let
     )
   );
 
-  bluetoothManagerScript = pkgs.writeShellScript "bt" (
+  bluetoothManagerScript = pkgs.writeShellScriptBin "bt" (
     builtins.readFile (
       pkgs.replaceVars ./scripts/bt {
         bluetoothctl = "${pkgs.bluez}/bin/bluetoothctl";
@@ -213,6 +213,7 @@ in
         ghostty
         libnotify
         gum # Used by bluetooth-manager TUI
+        bluetoothManagerScript # bt command for bluetooth management
 
         # Audio & Brightness
         wireplumber
