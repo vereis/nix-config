@@ -49,8 +49,14 @@ while true; do
             sleep 1
         fi
     else
-        # Extract MAC address from selection
-        mac=$(echo "$choice" | grep -oP '\([0-9A-F:]+\)' | tr -d '()')
+        # Extract MAC address from selection (between parentheses)
+        mac=$(echo "$choice" | sed -n 's/.*(\([0-9A-F:]*\)).*/\1/p')
+        
+        if [ -z "$mac" ]; then
+            @gum@ style --foreground 196 "Error: Could not extract MAC address"
+            sleep 1
+            continue
+        fi
         
         if echo "$choice" | grep -q "CONNECTED"; then
             action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
@@ -58,7 +64,7 @@ while true; do
                 "Back")
             
             # Skip if user pressed Escape or Back
-            if [ "$action" = "Disconnect" ]; then
+            if [ -n "$action" ] && [ "$action" = "Disconnect" ]; then
                 @bluetoothctl@ disconnect "$mac"
                 @gum@ style --foreground 212 "Device disconnected!"
                 sleep 1
@@ -70,14 +76,16 @@ while true; do
                 "Back")
             
             # Skip if user pressed Escape or Back
-            if [ "$action" = "Connect" ]; then
-                @gum@ spin --spinner dot --title "Connecting..." -- @bluetoothctl@ connect "$mac"
-                @gum@ style --foreground 212 "Device connected!"
-                sleep 1
-            elif [ "$action" = "Remove device" ]; then
-                @bluetoothctl@ remove "$mac"
-                @gum@ style --foreground 212 "Device removed!"
-                sleep 1
+            if [ -n "$action" ]; then
+                if [ "$action" = "Connect" ]; then
+                    @gum@ spin --spinner dot --title "Connecting..." -- @bluetoothctl@ connect "$mac"
+                    @gum@ style --foreground 212 "Device connected!"
+                    sleep 1
+                elif [ "$action" = "Remove device" ]; then
+                    @bluetoothctl@ remove "$mac"
+                    @gum@ style --foreground 212 "Device removed!"
+                    sleep 1
+                fi
             fi
         fi
     fi
