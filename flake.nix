@@ -31,7 +31,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     elephant = {
-      url = "github:abenz1267/elephant";
+      url = "github:abenz1267/elephant/946019db9183593af2c14d56924000d519e1f8d4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     walker = {
