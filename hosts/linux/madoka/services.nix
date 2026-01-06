@@ -32,6 +32,7 @@
 
       graphics.enable = true;
       steam.enable = true;
+      bluetooth.enable = true;
     };
   };
 }
