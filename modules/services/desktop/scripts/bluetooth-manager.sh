@@ -35,17 +35,19 @@ while true; do
     elif [ "$choice" = "Scan for new devices" ]; then
         clear
         
-        # Scan for devices using bluetoothctl interactively
+        # Scan for devices using bluetoothctl interactively with spinner
         tmpfile=$(mktemp)
-        (
-            echo "scan on"
-            sleep 10
-            echo "devices"
-            echo "quit"
-        ) | @bluetoothctl@ 2>&1 | \
-            sed 's/\x1b\[[0-9;]*m//g' | \
-            grep "^Device " | \
-            tail -20 > "$tmpfile"
+        @gum@ spin --spinner dot --title "Scanning for bluetooth devices..." -- sh -c '
+            (
+                echo "scan on"
+                sleep 10
+                echo "devices"
+                echo "quit"
+            ) | @bluetoothctl@ 2>&1 | \
+                sed "s/\x1b\[[0-9;]*m//g" | \
+                grep "^Device " | \
+                tail -20 > "'"$tmpfile"'"
+        '
         
         clear
         if [ -s "$tmpfile" ]; then
