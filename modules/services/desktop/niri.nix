@@ -364,6 +364,7 @@ in
               "Mod+B".action.spawn = "zen";
               "Mod+Shift+E".action.quit = { };
               "Mod+Q".action.close-window = { };
+              "Mod+Escape".action.close-window = { };
               "Mod+Shift+Q".action.spawn = [
                 "sh"
                 "-c"
@@ -510,6 +511,7 @@ in
                 default-column-width = {
                   proportion = 0.4;
                 };
+                focus-on-open = true;
               }
               {
                 matches = [ { is-floating = true; } ];
