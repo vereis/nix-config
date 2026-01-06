@@ -10,15 +10,7 @@ COLOR_SUCCESS=212
 COLOR_MUTED=241
 COLOR_ERROR=196
 
-# Use XDG_RUNTIME_DIR for temp files (secure, user-private)
-RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
-SCAN_RESULTS="$RUNTIME_DIR/bluetooth-scan-results"
-
-# Cleanup function for signal handling
-cleanup() {
-  rm -f "$SCAN_RESULTS"
-}
-trap cleanup EXIT
+# No temp files needed - bluetoothctl maintains device list internally
 
 # Helper: Extract MAC address from formatted device string
 extract_mac() {
@@ -79,41 +71,16 @@ while true; do
     clear
 
     # Scan for devices using bluetoothctl interactively with spinner
+    # After scanning, we'll just return to the main menu which will show all devices
     @gum@ spin --spinner dot --title "Scanning for bluetooth devices..." -- sh -c '
             (
                 echo "scan on"
                 sleep 10
-                echo "devices"
                 echo "quit"
-            ) | @bluetoothctl@ 2>&1 | \
-                sed "s/\x1b\[[0-9;]*m//g" | \
-                grep "^Device " | \
-                tail -20 > "'"$SCAN_RESULTS"'"
+            ) | @bluetoothctl@ >/dev/null 2>&1
         '
 
-    clear
-    if [ -s "$SCAN_RESULTS" ]; then
-      # Format devices to match main menu style: ✗ Name (MAC)
-      formatted_devices=$(cat "$SCAN_RESULTS" | while read -r line; do
-        mac=$(echo "$line" | awk '{print $2}')
-        name=$(echo "$line" | cut -d' ' -f3-)
-        echo "$(@gum@ style --foreground "$COLOR_MUTED" "✗") $name ($mac)"
-      done)
-
-      selected=$(echo "$formatted_devices" | @gum@ choose --header "Bluetooth Manager - Found devices (Press ESC to go back)")
-      if [ -n "$selected" ]; then
-        mac=$(echo "$selected" | extract_mac)
-        name=$(echo "$selected" | extract_device_name)
-        clear
-        if @gum@ spin --spinner dot --title "Pairing with $name" -- sh -c "@bluetoothctl@ pair '$mac' >/dev/null 2>&1 && @bluetoothctl@ trust '$mac' >/dev/null 2>&1"; then
-          show_success "Paired with $name"
-        else
-          show_error "Failed to pair with $name"
-        fi
-      fi
-    else
-      show_error "No devices found"
-    fi
+    # Return to main menu - devices list will be refreshed automatically
     continue
   else
     # Extract MAC address from selection (between parentheses)
