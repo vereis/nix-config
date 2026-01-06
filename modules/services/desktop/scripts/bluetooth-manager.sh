@@ -24,14 +24,14 @@ while true; do
         devices+=("$device")
     done < <(get_devices)
     
-    choice=$(@gum@ choose --header "Bluetooth Manager (Press ESC or q to close)" \
+    choice=$(@gum@ choose --header "Bluetooth Manager (Press ESC to close)" \
         "Scan for devices" \
         "Pair new device" \
         "${devices[@]}" \
         "Exit")
     
-    # Exit if user pressed Escape (empty choice), typed 'q', or selected Exit
-    if [ -z "$choice" ] || [ "$choice" = "Exit" ] || [ "$choice" = "q" ]; then
+    # Exit if user pressed Escape (empty choice) or selected Exit
+    if [ -z "$choice" ] || [ "$choice" = "Exit" ]; then
         break
     elif [ "$choice" = "Scan for devices" ]; then
         clear
@@ -72,9 +72,10 @@ while true; do
             
             # Skip if user pressed Escape or Back
             if [ -n "$action" ] && [ "$action" = "Disconnect" ]; then
-                # Extract device name without status markers, MAC, and status
-                device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*) *\[.*\]//')
-                @bluetoothctl@ disconnect "$mac" >/dev/null 2>&1
+                # Extract device name without status markers and MAC
+                device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
+                clear
+                @gum@ spin --spinner dot --title "Attempting to disconnect from $device_name" -- @bluetoothctl@ disconnect "$mac" >/dev/null 2>&1
                 clear
                 @gum@ style --foreground 212 "Disconnected from $device_name"
                 sleep 2
@@ -88,14 +89,17 @@ while true; do
             # Skip if user pressed Escape or Back
             if [ -n "$action" ]; then
                 if [ "$action" = "Connect" ]; then
-                    # Extract device name without status markers, MAC, and status
-                    device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*) *\[.*\]//')
-                    @bluetoothctl@ connect "$mac" >/dev/null 2>&1
+                    # Extract device name without status markers and MAC
+                    device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
+                    clear
+                    @gum@ spin --spinner dot --title "Attempting to connect to $device_name" -- @bluetoothctl@ connect "$mac" >/dev/null 2>&1
                     clear
                     @gum@ style --foreground 212 "Connected to $device_name"
                     sleep 2
                 elif [ "$action" = "Remove device" ]; then
-                    @bluetoothctl@ remove "$mac" >/dev/null 2>&1
+                    device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
+                    clear
+                    @gum@ spin --spinner dot --title "Removing $device_name" -- @bluetoothctl@ remove "$mac" >/dev/null 2>&1
                     clear
                     @gum@ style --foreground 212 "Device removed!"
                     sleep 2
