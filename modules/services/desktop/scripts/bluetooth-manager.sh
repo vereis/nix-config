@@ -51,7 +51,7 @@ while true; do
         
         clear
         if [ -s "$tmpfile" ]; then
-            selected=$(cat "$tmpfile" | sed 's/^Device //' | @gum@ choose --header "Found devices - Select to pair (ESC to cancel)")
+            selected=$(cat "$tmpfile" | sed 's/^Device //' | @gum@ choose --header "Bluetooth Manager - Found devices (Press ESC to go back)")
             if [ -n "$selected" ]; then
                 mac=$(echo "$selected" | awk '{print $1}')
                 name=$(echo "$selected" | cut -d' ' -f2-)
