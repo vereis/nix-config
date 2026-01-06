@@ -32,11 +32,11 @@ while true; do
         break
     elif [ "$choice" = "Scan for devices" ]; then
         @gum@ spin --spinner dot --title "Scanning for devices..." -- sleep 5 &
-        @bluetoothctl@ scan on &
+        @bluetoothctl@ scan on 2>&1 | grep -v "SetDiscoveryFilter" &
         SCAN_PID=$!
         sleep 5
         kill $SCAN_PID 2>/dev/null
-        @bluetoothctl@ scan off
+        @bluetoothctl@ scan off 2>&1 | grep -v "Failed to stop discovery" >/dev/null
     elif [ "$choice" = "Pair new device" ]; then
         # Show discovered devices
         devices=$(@bluetoothctl@ devices | @gum@ choose --header "Select device to pair (ESC to cancel)")
@@ -78,11 +78,13 @@ while true; do
             # Skip if user pressed Escape or Back
             if [ -n "$action" ]; then
                 if [ "$action" = "Connect" ]; then
-                    @gum@ spin --spinner dot --title "Connecting..." -- @bluetoothctl@ connect "$mac"
-                    @gum@ style --foreground 212 "Device connected!"
+                    # Extract device name without MAC
+                    device_name=$(echo "$choice" | sed 's/ *([^)]*) *\[.*\]//')
+                    @gum@ spin --spinner dot --title "Connecting..." -- @bluetoothctl@ connect "$mac" 2>&1 | grep -v "SetDiscoveryFilter" >/dev/null
+                    @gum@ style --foreground 212 "Connected to $device_name"
                     sleep 1
                 elif [ "$action" = "Remove device" ]; then
-                    @bluetoothctl@ remove "$mac"
+                    @bluetoothctl@ remove "$mac" 2>&1 >/dev/null
                     @gum@ style --foreground 212 "Device removed!"
                     sleep 1
                 fi
