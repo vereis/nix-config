@@ -13,13 +13,14 @@ get_devices() {
 
 # Main menu
 while true; do
-    choice=$(@gum@ choose --header "Bluetooth Manager" \
+    choice=$(@gum@ choose --header "Bluetooth Manager (Press ESC to close)" \
         "Scan for devices" \
         "Pair new device" \
         $(get_devices) \
         "Exit")
     
-    if [ "$choice" = "Exit" ]; then
+    # Exit if user pressed Escape (empty choice) or selected Exit
+    if [ -z "$choice" ] || [ "$choice" = "Exit" ]; then
         break
     elif [ "$choice" = "Scan for devices" ]; then
         @gum@ spin --spinner dot --title "Scanning for devices..." -- sleep 5 &
@@ -30,7 +31,8 @@ while true; do
         @bluetoothctl@ scan off
     elif [ "$choice" = "Pair new device" ]; then
         # Show discovered devices
-        devices=$(@bluetoothctl@ devices | @gum@ choose --header "Select device to pair")
+        devices=$(@bluetoothctl@ devices | @gum@ choose --header "Select device to pair (ESC to cancel)")
+        # Skip if user pressed Escape
         if [ -n "$devices" ]; then
             mac=$(echo "$devices" | awk '{print $2}')
             @gum@ spin --spinner dot --title "Pairing with device..." -- @bluetoothctl@ pair "$mac"
@@ -43,21 +45,23 @@ while true; do
         mac=$(echo "$choice" | grep -oP '\([0-9A-F:]+\)' | tr -d '()')
         
         if echo "$choice" | grep -q "CONNECTED"; then
-            action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1)" \
+            action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
                 "Disconnect" \
                 "Back")
             
+            # Skip if user pressed Escape or Back
             if [ "$action" = "Disconnect" ]; then
                 @bluetoothctl@ disconnect "$mac"
                 @gum@ style --foreground 212 "Device disconnected!"
                 sleep 1
             fi
         else
-            action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1)" \
+            action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
                 "Connect" \
                 "Remove device" \
                 "Back")
             
+            # Skip if user pressed Escape or Back
             if [ "$action" = "Connect" ]; then
                 @gum@ spin --spinner dot --title "Connecting..." -- @bluetoothctl@ connect "$mac"
                 @gum@ style --foreground 212 "Device connected!"

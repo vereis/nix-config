@@ -511,7 +511,6 @@ in
                 default-column-width = {
                   proportion = 0.4;
                 };
-                focus-on-open = true;
               }
               {
                 matches = [ { is-floating = true; } ];
