@@ -515,6 +515,7 @@ in
               search.placeholder = "Search...";
               hide_action_hints = true;
               hide_quick_activation = true;
+              providers = "desktopapplications,calc,websearch,bluetooth";
             };
             themes.niri = {
               layouts = {
