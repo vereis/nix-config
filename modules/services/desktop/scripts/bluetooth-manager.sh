@@ -6,9 +6,9 @@ get_devices() {
         mac=$(echo "$line" | awk '{print $2}')
         name=$(echo "$line" | cut -d' ' -f3-)
         if @bluetoothctl@ info "$mac" | grep -q "Connected: yes"; then
-            echo "✓ $name ($mac) [CONNECTED]"
+            echo "$(@gum@ style --foreground 212 "✓") $name ($mac)"
         else
-            echo "✗ $name ($mac) [DISCONNECTED]"
+            echo "$(@gum@ style --foreground 241 "✗") $name ($mac)"
         fi
     done
 }
@@ -64,7 +64,8 @@ while true; do
             continue
         fi
         
-        if echo "$choice" | grep -q "\[CONNECTED\]"; then
+        # Check if device is connected by looking for the green tick
+        if echo "$choice" | grep -q "✓"; then
             action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
                 "Disconnect" \
                 "Back")
