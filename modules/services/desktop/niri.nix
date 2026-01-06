@@ -207,6 +207,7 @@ in
         # Audio & Brightness
         wireplumber
         brightnessctl
+        pavucontrol
       ]
       ++ cfg.extraPackages;
 
