@@ -38,6 +38,9 @@ in
 
     services.blueman.enable = true;
 
-    environment.systemPackages = with pkgs; [ bluez ];
+    environment.systemPackages = with pkgs; [
+      bluez # Bluetooth protocol stack
+      gum # Required by bluetooth-manager TUI script
+    ];
   };
 }
