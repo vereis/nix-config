@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Bluetooth Manager TUI - manage bluetooth devices with gum
+# Bluetooth Manager TUI
 # Dependencies: bluetoothctl, gum
-# Usage: bluetooth-manager.sh
-# shellcheck disable=SC2016  # Template variables are replaced by Nix pkgs.replaceVars
+# Usage: bt
 
 set -euo pipefail
 

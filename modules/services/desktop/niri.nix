@@ -96,9 +96,9 @@ let
     )
   );
 
-  bluetoothManagerScript = pkgs.writeShellScript "bluetooth-manager" (
+  bluetoothManagerScript = pkgs.writeShellScript "bt" (
     builtins.readFile (
-      pkgs.replaceVars ./scripts/bluetooth-manager.sh {
+      pkgs.replaceVars ./scripts/bt {
         bluetoothctl = "${pkgs.bluez}/bin/bluetoothctl";
         gum = "${pkgs.gum}/bin/gum";
       }
@@ -254,9 +254,6 @@ in
                   }
                 ];
               };
-              bluetooth.settings = {
-                prefix = "bt";
-              };
             };
           };
 
@@ -357,14 +354,13 @@ in
               ];
               "Mod+Shift+B".action.spawn = [
                 "ghostty"
-                "--title=Bluetooth Manager"
+                "--title=Bluetooth"
                 "-e"
                 "${bluetoothManagerScript}"
               ];
               "Mod+B".action.spawn = "zen";
               "Mod+Shift+E".action.quit = { };
               "Mod+Q".action.close-window = { };
-              "Mod+Escape".action.close-window = { };
               "Mod+Shift+Q".action.spawn = [
                 "sh"
                 "-c"
@@ -506,7 +502,7 @@ in
                 };
               }
               {
-                matches = [ { title = "^Bluetooth Manager$"; } ];
+                matches = [ { title = "^Bluetooth$"; } ];
                 open-floating = true;
                 default-column-width = {
                   proportion = 0.4;

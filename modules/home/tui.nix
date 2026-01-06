@@ -90,6 +90,10 @@ with lib;
             executable = true;
             source = ../../bin/npiperelay.exe;
           };
+          ".local/bin/bt" = {
+            executable = true;
+            source = ../services/desktop/scripts/bt;
+          };
           ".config/nvim/lua/" = {
             recursive = true;
             source = ./tui/neovim/lua;
