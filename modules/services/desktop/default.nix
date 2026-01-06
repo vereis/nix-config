@@ -29,6 +29,7 @@ in
   };
 
   imports = [
+    ./bluetooth.nix
     ./gnome.nix
     ./graphics.nix
     ./niri.nix
