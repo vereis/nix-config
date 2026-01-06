@@ -51,10 +51,18 @@ while true; do
         
         clear
         if [ -s "$tmpfile" ]; then
-            selected=$(cat "$tmpfile" | sed 's/^Device //' | @gum@ choose --header "Bluetooth Manager - Found devices (Press ESC to go back)")
+            # Format devices to match main menu style: ✗ Name (MAC)
+            formatted_devices=$(cat "$tmpfile" | while read -r line; do
+                mac=$(echo "$line" | awk '{print $2}')
+                name=$(echo "$line" | cut -d' ' -f3-)
+                echo "$(@gum@ style --foreground 241 "✗") $name ($mac)"
+            done)
+            
+            selected=$(echo "$formatted_devices" | @gum@ choose --header "Bluetooth Manager - Found devices (Press ESC to go back)")
             if [ -n "$selected" ]; then
-                mac=$(echo "$selected" | awk '{print $1}')
-                name=$(echo "$selected" | cut -d' ' -f2-)
+                # Extract MAC from formatted string (between parentheses)
+                mac=$(echo "$selected" | sed -n 's/.*(\([0-9A-F:]*\)).*/\1/p')
+                name=$(echo "$selected" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
                 clear
                 if @gum@ spin --spinner dot --title "Pairing with $name" -- sh -c "@bluetoothctl@ pair '$mac' >/dev/null 2>&1 && @bluetoothctl@ trust '$mac' >/dev/null 2>&1"; then
                     clear
