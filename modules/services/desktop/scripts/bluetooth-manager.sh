@@ -2,7 +2,9 @@
 
 # Get list of bluetooth devices with their status
 get_devices() {
-    @bluetoothctl@ devices | while read -r _ mac name; do
+    @bluetoothctl@ devices | while read -r line; do
+        mac=$(echo "$line" | awk '{print $2}')
+        name=$(echo "$line" | cut -d' ' -f3-)
         if @bluetoothctl@ info "$mac" | grep -q "Connected: yes"; then
             echo "🔵 $name ($mac) [CONNECTED]"
         else
