@@ -15,10 +15,16 @@ get_devices() {
 
 # Main menu
 while true; do
+    # Build device list array
+    devices=()
+    while IFS= read -r device; do
+        devices+=("$device")
+    done < <(get_devices)
+    
     choice=$(@gum@ choose --header "Bluetooth Manager (Press ESC to close)" \
         "Scan for devices" \
         "Pair new device" \
-        $(get_devices) \
+        "${devices[@]}" \
         "Exit")
     
     # Exit if user pressed Escape (empty choice) or selected Exit
