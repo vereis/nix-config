@@ -345,6 +345,13 @@ in
                 "--provider"
                 "symbols"
               ];
+              "Mod+Shift+B".action.spawn = [
+                "walker"
+                "--width"
+                (toString appearance.walkerWidth)
+                "--provider"
+                "bluetooth"
+              ];
               "Mod+B".action.spawn = "zen";
               "Mod+Shift+E".action.quit = { };
               "Mod+Q".action.close-window = { };
@@ -515,12 +522,6 @@ in
               search.placeholder = "Search...";
               hide_action_hints = true;
               hide_quick_activation = true;
-              providers = [
-                "desktopapplications"
-                "calc"
-                "websearch"
-                "bluetooth"
-              ];
             };
             themes.niri = {
               layouts = {
