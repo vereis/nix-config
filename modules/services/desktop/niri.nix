@@ -243,6 +243,9 @@ in
                   }
                 ];
               };
+              bluetooth.settings = {
+                prefix = "bt";
+              };
             };
           };
 
