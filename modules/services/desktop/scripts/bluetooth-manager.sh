@@ -24,14 +24,14 @@ while true; do
         devices+=("$device")
     done < <(get_devices)
     
-    choice=$(@gum@ choose --header "Bluetooth Manager (Press ESC to close)" \
+    choice=$(@gum@ choose --header "Bluetooth Manager (Press ESC or q to close)" \
         "Scan for devices" \
         "Pair new device" \
         "${devices[@]}" \
         "Exit")
     
-    # Exit if user pressed Escape (empty choice) or selected Exit
-    if [ -z "$choice" ] || [ "$choice" = "Exit" ]; then
+    # Exit if user pressed Escape (empty choice), typed 'q', or selected Exit
+    if [ -z "$choice" ] || [ "$choice" = "Exit" ] || [ "$choice" = "q" ]; then
         break
     elif [ "$choice" = "Scan for devices" ]; then
         clear
