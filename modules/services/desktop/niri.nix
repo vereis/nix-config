@@ -96,6 +96,15 @@ let
     )
   );
 
+  bluetoothManagerScript = pkgs.writeShellScript "bluetooth-manager" (
+    builtins.readFile (
+      pkgs.replaceVars ./scripts/bluetooth-manager.sh {
+        bluetoothctl = "${pkgs.bluez}/bin/bluetoothctl";
+        gum = "${pkgs.gum}/bin/gum";
+      }
+    )
+  );
+
   walkerThemeCss =
     builtins.replaceStrings
       [
@@ -203,6 +212,7 @@ in
         xwayland-satellite
         ghostty
         libnotify
+        gum
 
         # Audio & Brightness
         wireplumber
@@ -346,11 +356,10 @@ in
                 "symbols"
               ];
               "Mod+Shift+B".action.spawn = [
-                "walker"
-                "--width"
-                (toString appearance.walkerWidth)
-                "--provider"
-                "bluetooth"
+                "ghostty"
+                "--title=Bluetooth Manager"
+                "-e"
+                "${bluetoothManagerScript}"
               ];
               "Mod+B".action.spawn = "zen";
               "Mod+Shift+E".action.quit = { };
@@ -493,6 +502,13 @@ in
                   width = appearance.borderWidth;
                   active.color = colors.bg.secondary;
                   inactive.color = colors.bg.secondary;
+                };
+              }
+              {
+                matches = [ { title = "^Bluetooth Manager$"; } ];
+                open-floating = true;
+                default-column-width = {
+                  proportion = 0.4;
                 };
               }
               {
