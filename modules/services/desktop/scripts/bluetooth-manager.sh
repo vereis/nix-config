@@ -75,10 +75,15 @@ while true; do
                 # Extract device name without status markers and MAC
                 device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
                 clear
-                @gum@ spin --spinner dot --title "Attempting to disconnect from $device_name" -- sh -c "@bluetoothctl@ disconnect '$mac' >/dev/null 2>&1"
-                clear
-                @gum@ style --foreground 212 "Disconnected from $device_name"
-                sleep 2
+                if @gum@ spin --spinner dot --title "Attempting to disconnect from $device_name" -- sh -c "@bluetoothctl@ disconnect '$mac' >/dev/null 2>&1"; then
+                    clear
+                    @gum@ style --foreground 212 "Disconnected from $device_name"
+                    sleep 2
+                else
+                    clear
+                    @gum@ style --foreground 196 "Failed to disconnect from $device_name"
+                    sleep 2
+                fi
             fi
         else
             action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
@@ -92,17 +97,27 @@ while true; do
                     # Extract device name without status markers and MAC
                     device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
                     clear
-                    @gum@ spin --spinner dot --title "Attempting to connect to $device_name" -- sh -c "@bluetoothctl@ connect '$mac' >/dev/null 2>&1"
-                    clear
-                    @gum@ style --foreground 212 "Connected to $device_name"
-                    sleep 2
+                    if @gum@ spin --spinner dot --title "Attempting to connect to $device_name" -- sh -c "@bluetoothctl@ connect '$mac' >/dev/null 2>&1"; then
+                        clear
+                        @gum@ style --foreground 212 "Connected to $device_name"
+                        sleep 2
+                    else
+                        clear
+                        @gum@ style --foreground 196 "Failed to connect to $device_name"
+                        sleep 2
+                    fi
                 elif [ "$action" = "Remove device" ]; then
                     device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
                     clear
-                    @gum@ spin --spinner dot --title "Removing $device_name" -- sh -c "@bluetoothctl@ remove '$mac' >/dev/null 2>&1"
-                    clear
-                    @gum@ style --foreground 212 "Device removed!"
-                    sleep 2
+                    if @gum@ spin --spinner dot --title "Removing $device_name" -- sh -c "@bluetoothctl@ remove '$mac' >/dev/null 2>&1"; then
+                        clear
+                        @gum@ style --foreground 212 "Device removed!"
+                        sleep 2
+                    else
+                        clear
+                        @gum@ style --foreground 196 "Failed to remove device"
+                        sleep 2
+                    fi
                 fi
             fi
         fi
