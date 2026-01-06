@@ -45,9 +45,9 @@ while true; do
         kill $SCAN_PID 2>/dev/null
         @bluetoothctl@ scan off >/dev/null 2>&1
         
-        # Show discovered devices and pair
+        # Show all discovered devices (bluetoothctl devices shows all known devices)
         clear
-        devices=$(@bluetoothctl@ devices Paired=no 2>/dev/null | @gum@ choose --header "Select device to pair (ESC to cancel)")
+        devices=$(@bluetoothctl@ devices 2>/dev/null | @gum@ choose --header "Select device to pair (ESC to cancel)")
         if [ -n "$devices" ]; then
             mac=$(echo "$devices" | awk '{print $2}')
             name=$(echo "$devices" | cut -d' ' -f3-)
