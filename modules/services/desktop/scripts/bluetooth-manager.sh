@@ -34,35 +34,40 @@ while true; do
         break
     elif [ "$choice" = "Scan for new devices" ]; then
         clear
-        # Start scanning
-        @bluetoothctl@ scan on >/dev/null 2>&1 &
-        SCAN_PID=$!
+        # Scan and capture new devices
+        tmpfile=$(mktemp)
+        timeout 10 @bluetoothctl@ scan on 2>&1 | grep -E "^\[NEW\] Device" | sed 's/\[NEW\] Device //' > "$tmpfile" &
         
         # Show spinner for 10 seconds
         @gum@ spin --spinner dot --title "Scanning for devices..." -- sleep 10
         
         # Stop scanning
-        kill $SCAN_PID 2>/dev/null
         @bluetoothctl@ scan off >/dev/null 2>&1
         
-        # Show all discovered devices (bluetoothctl devices shows all known devices)
+        # Show discovered devices
         clear
-        devices=$(@bluetoothctl@ devices 2>/dev/null | @gum@ choose --header "Select device to pair (ESC to cancel)")
-        if [ -n "$devices" ]; then
-            mac=$(echo "$devices" | awk '{print $2}')
-            name=$(echo "$devices" | cut -d' ' -f3-)
-            clear
-            if @gum@ spin --spinner dot --title "Pairing with $name" -- sh -c "@bluetoothctl@ pair '$mac' >/dev/null 2>&1 && @bluetoothctl@ trust '$mac' >/dev/null 2>&1"; then
+        if [ -s "$tmpfile" ]; then
+            selected=$(cat "$tmpfile" | @gum@ choose --header "Found devices - Select to pair (ESC to cancel)")
+            if [ -n "$selected" ]; then
+                mac=$(echo "$selected" | awk '{print $1}')
+                name=$(echo "$selected" | cut -d' ' -f2-)
                 clear
-                @gum@ style --foreground 212 "Paired with $name"
-                sleep 1
-                break
-            else
-                clear
-                @gum@ style --foreground 196 "Failed to pair with $name"
-                sleep 1
+                if @gum@ spin --spinner dot --title "Pairing with $name" -- sh -c "@bluetoothctl@ pair '$mac' >/dev/null 2>&1 && @bluetoothctl@ trust '$mac' >/dev/null 2>&1"; then
+                    clear
+                    @gum@ style --foreground 212 "Paired with $name"
+                    sleep 1
+                else
+                    clear
+                    @gum@ style --foreground 196 "Failed to pair with $name"
+                    sleep 1
+                fi
             fi
+        else
+            @gum@ style --foreground 196 "No new devices found"
+            sleep 1
         fi
+        rm -f "$tmpfile"
+        continue
     else
         # Extract MAC address from selection (between parentheses)
         mac=$(echo "$choice" | sed -n 's/.*(\([0-9A-F:]*\)).*/\1/p')
@@ -73,29 +78,54 @@ while true; do
             continue
         fi
         
-        # Check if device is connected by looking for the green tick
-        if echo "$choice" | grep -q "✓"; then
-            action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
-                "Disconnect" \
-                "Back")
-            
-            # Skip if user pressed Escape or Back
-            if [ -n "$action" ] && [ "$action" = "Disconnect" ]; then
-                # Extract device name without status markers and MAC
-                device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
-                clear
-                if @gum@ spin --spinner dot --title "Attempting to disconnect from $device_name" -- sh -c "@bluetoothctl@ disconnect '$mac' >/dev/null 2>&1"; then
+        # Check if device is paired first
+        if @bluetoothctl@ info "$mac" | grep -q "Paired: yes"; then
+            # Device is paired, check if connected
+            if echo "$choice" | grep -q "✓"; then
+                action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
+                    "Disconnect" \
+                    "Back")
+                
+                # Skip if user pressed Escape or Back
+                if [ -n "$action" ] && [ "$action" = "Disconnect" ]; then
+                    # Extract device name without status markers and MAC
+                    device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
                     clear
-                    @gum@ style --foreground 212 "Disconnected from $device_name"
-                    sleep 1
-                    break
-                else
-                    clear
-                    @gum@ style --foreground 196 "Failed to disconnect from $device_name"
-                    sleep 1
+                    if @gum@ spin --spinner dot --title "Attempting to disconnect from $device_name" -- sh -c "@bluetoothctl@ disconnect '$mac' >/dev/null 2>&1"; then
+                        clear
+                        @gum@ style --foreground 212 "Disconnected from $device_name"
+                        sleep 1
+                        break
+                    else
+                        clear
+                        @gum@ style --foreground 196 "Failed to disconnect from $device_name"
+                        sleep 1
+                    fi
                 fi
+            else
+                action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
+                    "Connect" \
+                    "Remove device" \
+                    "Back")
             fi
         else
+            # Device is not paired, offer to pair it
+            device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
+            clear
+            if @gum@ spin --spinner dot --title "Pairing with $device_name" -- sh -c "@bluetoothctl@ pair '$mac' >/dev/null 2>&1 && @bluetoothctl@ trust '$mac' >/dev/null 2>&1"; then
+                clear
+                @gum@ style --foreground 212 "Paired with $device_name"
+                sleep 1
+            else
+                clear
+                @gum@ style --foreground 196 "Failed to pair with $device_name"
+                sleep 1
+            fi
+            continue
+        fi
+        
+        # Handle paired device actions
+        if echo "$choice" | grep -q "✗"; then
             action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
                 "Connect" \
                 "Remove device" \
