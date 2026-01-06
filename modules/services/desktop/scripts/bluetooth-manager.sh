@@ -33,54 +33,9 @@ while true; do
     if [ -z "$choice" ] || [ "$choice" = "Exit" ]; then
         break
     elif [ "$choice" = "Scan for new devices" ]; then
-        clear
-        # Scan and capture new devices
-        tmpfile=$(mktemp)
-        
-        # Run bluetoothctl interactively and capture device discoveries
-        (
-            sleep 10
-            echo "quit"
-        ) | @bluetoothctl@ scan on 2>&1 | \
-            sed 's/\x1b\[[0-9;]*m//g' | \
-            grep "Device" | \
-            grep -v "Controller\|Media\|^hci" | \
-            awk '{if ($2 ~ /^[0-9A-F:]+$/) print $2, substr($0, index($0,$3))}' | \
-            sort -u > "$tmpfile" &
-        
-        # Show spinner for 10 seconds
-        @gum@ spin --spinner dot --title "Scanning for devices..." -- sleep 10
-        
-        # Make sure scan is stopped
-        @bluetoothctl@ scan off >/dev/null 2>&1
-        
-        # Wait a moment for file to be written
-        sleep 1
-        
-        # Show discovered devices
-        clear
-        if [ -s "$tmpfile" ]; then
-            selected=$(cat "$tmpfile" | @gum@ choose --header "Found devices - Select to pair (ESC to cancel)")
-            if [ -n "$selected" ]; then
-                mac=$(echo "$selected" | awk '{print $1}')
-                name=$(echo "$selected" | cut -d' ' -f2-)
-                clear
-                if @gum@ spin --spinner dot --title "Pairing with $name" -- sh -c "@bluetoothctl@ pair '$mac' >/dev/null 2>&1 && @bluetoothctl@ trust '$mac' >/dev/null 2>&1"; then
-                    clear
-                    @gum@ style --foreground 212 "Paired with $name"
-                    sleep 1
-                else
-                    clear
-                    @gum@ style --foreground 196 "Failed to pair with $name"
-                    sleep 1
-                fi
-            fi
-        else
-            @gum@ style --foreground 196 "No new devices found"
-            sleep 1
-        fi
-        rm -f "$tmpfile"
-        continue
+        # Just open Blueman for scanning and pairing - it's better suited for this
+        blueman-manager >/dev/null 2>&1 &
+        break
     else
         # Extract MAC address from selection (between parentheses)
         mac=$(echo "$choice" | sed -n 's/.*(\([0-9A-F:]*\)).*/\1/p')
