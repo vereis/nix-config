@@ -14,7 +14,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable Bluetooth support with Blueman GUI manager.";
+      description = "Enable Bluetooth support with Blueman GUI and TUI manager.";
     };
 
     powerOnBoot = mkOption {

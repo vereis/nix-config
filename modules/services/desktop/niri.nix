@@ -212,7 +212,7 @@ in
         xwayland-satellite
         ghostty
         libnotify
-        gum
+        gum # Used by bluetooth-manager TUI
 
         # Audio & Brightness
         wireplumber
