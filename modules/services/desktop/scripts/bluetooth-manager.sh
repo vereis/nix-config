@@ -58,7 +58,7 @@ while true; do
             continue
         fi
         
-        if echo "$choice" | grep -q "CONNECTED"; then
+        if echo "$choice" | grep -q "\[CONNECTED\]"; then
             action=$(@gum@ choose --header "Device: $(echo "$choice" | cut -d'(' -f1) (ESC to cancel)" \
                 "Disconnect" \
                 "Back")
