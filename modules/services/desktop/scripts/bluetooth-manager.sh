@@ -25,34 +25,43 @@ while true; do
     done < <(get_devices)
     
     choice=$(@gum@ choose --header "Bluetooth Manager (Press ESC to close)" \
-        "Scan for devices" \
-        "Pair new device" \
+        "Scan for new devices" \
         "${devices[@]}" \
         "Exit")
     
     # Exit if user pressed Escape (empty choice) or selected Exit
     if [ -z "$choice" ] || [ "$choice" = "Exit" ]; then
         break
-    elif [ "$choice" = "Scan for devices" ]; then
+    elif [ "$choice" = "Scan for new devices" ]; then
         clear
-        @gum@ spin --spinner dot --title "Scanning for devices..." -- sleep 5 &
+        # Start scanning
         @bluetoothctl@ scan on >/dev/null 2>&1 &
         SCAN_PID=$!
-        sleep 5
+        
+        # Show spinner for 10 seconds
+        @gum@ spin --spinner dot --title "Scanning for devices..." -- sleep 10
+        
+        # Stop scanning
         kill $SCAN_PID 2>/dev/null
         @bluetoothctl@ scan off >/dev/null 2>&1
-    elif [ "$choice" = "Pair new device" ]; then
+        
+        # Show discovered devices and pair
         clear
-        # Show discovered devices
-        devices=$(@bluetoothctl@ devices | @gum@ choose --header "Select device to pair (ESC to cancel)")
-        # Skip if user pressed Escape
+        devices=$(@bluetoothctl@ devices Paired=no 2>/dev/null | @gum@ choose --header "Select device to pair (ESC to cancel)")
         if [ -n "$devices" ]; then
             mac=$(echo "$devices" | awk '{print $2}')
-            @bluetoothctl@ pair "$mac" >/dev/null 2>&1
-            @bluetoothctl@ trust "$mac" >/dev/null 2>&1
+            name=$(echo "$devices" | cut -d' ' -f3-)
             clear
-            @gum@ style --foreground 212 "Device paired successfully!"
-            sleep 2
+            if @gum@ spin --spinner dot --title "Pairing with $name" -- sh -c "@bluetoothctl@ pair '$mac' >/dev/null 2>&1 && @bluetoothctl@ trust '$mac' >/dev/null 2>&1"; then
+                clear
+                @gum@ style --foreground 212 "Paired with $name"
+                sleep 1
+                break
+            else
+                clear
+                @gum@ style --foreground 196 "Failed to pair with $name"
+                sleep 1
+            fi
         fi
     else
         # Extract MAC address from selection (between parentheses)
@@ -78,11 +87,12 @@ while true; do
                 if @gum@ spin --spinner dot --title "Attempting to disconnect from $device_name" -- sh -c "@bluetoothctl@ disconnect '$mac' >/dev/null 2>&1"; then
                     clear
                     @gum@ style --foreground 212 "Disconnected from $device_name"
-                    sleep 2
+                    sleep 1
+                    break
                 else
                     clear
                     @gum@ style --foreground 196 "Failed to disconnect from $device_name"
-                    sleep 2
+                    sleep 1
                 fi
             fi
         else
@@ -100,11 +110,12 @@ while true; do
                     if @gum@ spin --spinner dot --title "Attempting to connect to $device_name" -- sh -c "@bluetoothctl@ connect '$mac' >/dev/null 2>&1"; then
                         clear
                         @gum@ style --foreground 212 "Connected to $device_name"
-                        sleep 2
+                        sleep 1
+                        break
                     else
                         clear
                         @gum@ style --foreground 196 "Failed to connect to $device_name"
-                        sleep 2
+                        sleep 1
                     fi
                 elif [ "$action" = "Remove device" ]; then
                     device_name=$(echo "$choice" | sed 's/^[✓✗]* *//' | sed 's/ *([^)]*).*$//')
@@ -112,11 +123,12 @@ while true; do
                     if @gum@ spin --spinner dot --title "Removing $device_name" -- sh -c "@bluetoothctl@ remove '$mac' >/dev/null 2>&1"; then
                         clear
                         @gum@ style --foreground 212 "Device removed!"
-                        sleep 2
+                        sleep 1
+                        break
                     else
                         clear
                         @gum@ style --foreground 196 "Failed to remove device"
-                        sleep 2
+                        sleep 1
                     fi
                 fi
             fi
