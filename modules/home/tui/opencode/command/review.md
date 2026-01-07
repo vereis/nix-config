@@ -19,10 +19,11 @@ Load the code-review skill and review recent changes:
    - Maintainability
    - Correctness
    - Testing
+   - Architecture (design patterns, structure, separation of concerns)
 
 4. Report issues by severity:
-   - 🔴 Critical: Must fix
-   - 🟡 Warning: Should fix
+   - 🔴 Critical: Must fix immediately
+   - 🟡 Warning: Should be strongly considered and fixed unless there's good reason
    - 🔵 Suggestion: Nice to have
 
 5. Provide specific fix recommendations with code examples
