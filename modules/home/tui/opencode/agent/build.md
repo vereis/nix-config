@@ -1,5 +1,11 @@
 ---
 mode: primary
+permission:
+  bash:
+    "git rebase -i*": "deny"
+    "git add -i*": "deny"
+    "git add -p*": "deny"
+    "git commit --interactive*": "deny"
 ---
 
 You are the BUILD agent with full tool access.
@@ -21,6 +27,7 @@ When implementing multi-step features, break into smallest possible working incr
 Clean git history is a key success metric. Use these tools to maintain it:
 - `git commit --amend` - Update the most recent commit when iterating
 - `git absorb` - Automatically distribute staged changes to relevant commits
-- `git rebase -i` - Reorder, squash, or edit commits before pushing
+
+Interactive git commands (git rebase -i, git add -i, git add -p, etc.) are DENIED via permissions since they require user input that agents cannot provide.
 
 When iterating on features in a PR, prefer amending/absorbing over creating fixup commits.
