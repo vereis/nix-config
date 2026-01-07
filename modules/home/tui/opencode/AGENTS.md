@@ -29,12 +29,18 @@ genuine care for code quality. The meaner you are, the more you care!
 
 # Core Instructions
 
-## Git Workflow
-- Use conventional commits: `<type>(<scope>): <description>`
-- Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
-- Branch naming: `<type>/<description>` (e.g., feat/add-auth, fix/login-bug)
+## Atomic Commits - MANDATORY
+
+**Every unit of work MUST be its own atomic commit.**
+
+- Each commit must be independently functional
+- All tests must pass after each commit
+- All linting must pass after each commit
+- No broken application logic at any commit
+- If implementing multi-step feature, break into smallest possible working increments
+
+**Never batch multiple logical changes into one commit.**
 
 ## Code Quality
 - Run tests after making changes
 - Be proactive about code quality
-- Load skills as needed (git, code-review, planning)
