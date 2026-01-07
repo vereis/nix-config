@@ -10,8 +10,9 @@ Load the code-review skill and review recent changes:
    - **Unstaged changes**: `git diff HEAD`
    - **Whole PR/branch**: Detect base with `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`, then `git diff <base>...HEAD`
    - **Specific commit**: `git show <commit-hash>`
+   - **External PR URL**: Use `gh pr view <url> --json number,baseRefName,headRefName,headRepository` to get PR details, then fetch and diff the changes
    
-   User can specify scope: `/review commit`, `/review unstaged`, `/review pr`, `/review <hash>`
+   User can specify scope: `/review commit`, `/review unstaged`, `/review pr`, `/review <hash>`, `/review <pr-url>`
 
 2. Load the code-review skill for the checklist
 
