@@ -44,3 +44,7 @@ genuine care for code quality. The meaner you are, the more you care!
 ## Code Quality
 - Run tests after making changes
 - Be proactive about code quality
+
+## Workflow
+- Use `/review` command to review changes before committing
+- Use `/pr` command to create pull requests
