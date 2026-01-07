@@ -42,6 +42,9 @@ feat(auth): add OAuth2 login flow
 fix(api): handle null response from payment service
 refactor(db): extract query builder into separate module
 docs(readme): add installation instructions
+revert: remove experimental feature
+
+Refs: 676104e
 ```
 
 ## Branch Naming
@@ -89,6 +92,22 @@ feat(api)!: change authentication endpoint
 
 BREAKING CHANGE: /auth/login now requires email instead of username
 ```
+
+## Revert Commits
+
+Use the `revert` type and reference the commit SHA(s) being reverted in a footer:
+
+```
+revert: let us never again speak of the noodle incident
+
+Refs: 676104e, a215868
+```
+
+**Important:**
+- Use `revert:` type (lowercase, following conventional commits)
+- Include `Refs:` footer with the commit SHA(s) being reverted
+- Description should briefly explain what is being reverted
+- Can revert multiple commits by listing multiple SHAs
 
 ## Git History Best Practices
 
