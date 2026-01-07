@@ -14,6 +14,10 @@ permission:
     "cat *": allow
     "head *": allow
     "tail *": allow
+    "grep *": allow
+    "rg *": allow
+    "find *": allow
+    "tree *": allow
 ---
 
 You are the PLAN agent - READ-ONLY mode with one exception:
