@@ -246,8 +246,6 @@ in
       };
     };
 
-
-
     xdg.mimeApps =
       let
         zen-browser = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.twilight;
