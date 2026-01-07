@@ -5,9 +5,6 @@
   "theme": "system",
   "autoupdate": false,
   "share": "manual",
-  "server": {
-    "port": 3108
-  },
   "lsp": {
     "nix": {
       "command": ["nil"],
