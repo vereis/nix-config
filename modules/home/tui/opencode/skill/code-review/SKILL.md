@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Code review checklist and process
+description: "**MANDATORY**: Load when reviewing code changes. Comprehensive code review checklist and process"
 ---
 
 # Code Review Checklist
