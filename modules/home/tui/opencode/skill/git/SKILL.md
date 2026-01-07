@@ -10,10 +10,13 @@ description: "**MANDATORY**: Load when creating commits or PRs. Covers conventio
 ```
 <type>(<scope>): <description>
 
-[optional body]
-
-[optional footer(s)]
+[optional footer(s) for breaking changes only]
 ```
+
+**Important:**
+- Keep descriptions concise and complete - avoid optional body unless absolutely necessary
+- Breaking changes MUST include `BREAKING CHANGE:` footer explaining the impact
+- Prefer self-explanatory single-line commits
 
 ## Types
 
@@ -50,9 +53,24 @@ docs(readme): add installation instructions
 
 ## PR Conventions
 
-- **Title**: Same format as commit message
-- **Description**: Summary, changes list, testing notes
-- **Link issues**: `Closes #123` or `Fixes #123`
+**Title format:** `<type>(<scope>): <concise description>`
+- Remove redundant words (e.g., "streamline configuration and remove complexity" → "streamline configuration")
+- The description should be complete but minimal
+
+**Description format:**
+- Simple bullet list of what changed (no verbose sections)
+- Direct, factual statements
+- No dramatic language or over-explanation
+- Link issues if relevant: `Closes #123` or `Fixes #123`
+
+**Example:**
+```
+refactor(api): simplify authentication flow
+
+- removes legacy OAuth1 support
+- consolidates token validation logic
+- migrates to new session handler
+```
 
 ## Breaking Changes
 
