@@ -6,7 +6,8 @@ agent: general
 Load the code-review skill and review recent changes:
 
 1. Determine what to review:
-   - If on a feature branch: `git diff main...HEAD`
+   - Detect base branch: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
+   - If on a feature branch: `git diff <base>...HEAD` (use detected base branch)
    - If recent commit: `git diff HEAD~1`
    - Ask user if unclear
 
