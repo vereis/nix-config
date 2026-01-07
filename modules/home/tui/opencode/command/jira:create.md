@@ -21,23 +21,28 @@ Create a JIRA ticket with proper structure:
 6. Get explicit confirmation: "Ready to create? (yes/no)"
 7. Create ticket using jira CLI (follow cli-usage.md patterns):
    ```bash
-   # Write ticket body to /tmp first (MANDATORY)
-   cat > /tmp/jira_ticket.md <<'EOF'
+   # Create .opencode/tickets directory if needed
+   mkdir -p .opencode/tickets
+   
+   # Write ticket body to temp file
+   cat > .opencode/tickets/draft.md <<'EOF'
    [Ticket content]
    EOF
    
-   # Create ticket
-   jira issue create --no-input \
+   # Create ticket and capture ID
+   TICKET_ID=$(jira issue create --no-input \
      --type Story \
      --project DI \
      --summary "Title" \
-     --body "$(cat /tmp/jira_ticket.md)"
+     --body "$(cat .opencode/tickets/draft.md)" 2>&1 | grep -oP 'DI-\d+' | head -1)
+   
+   # Rename to final ticket ID
+   mv .opencode/tickets/draft.md ".opencode/tickets/${TICKET_ID}.md"
    ```
-8. Return ticket URL
+8. Return ticket URL and local path
 
 **Principles:**
 - **Outcomes over implementation** - Describe what changes, not how
 - **Specific actors** - Use real roles from codebase (not generic "user")
 - **One ticket at a time** - Process sequentially, clear context between tickets
 - **Always review** - Show draft before creating
-- **Mandatory /tmp pattern** - JIRA CLI requires file-based input for multi-line content
