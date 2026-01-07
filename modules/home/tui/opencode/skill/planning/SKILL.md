@@ -33,9 +33,11 @@ description: "**MANDATORY**: Load when planning complex features or refactorings
 - Choose best option
 
 ### 4. Break Down
-- Create atomic implementation steps
+- Create atomic implementation steps that map to atomic commits
+- Each step must be independently functional (tests pass, linting passes, no broken logic)
 - Order by dependencies (backend-first)
 - Each step should be testable
+- Note: During implementation, additional atomic commits may be discovered that weren't in the original plan
 
 ### 5. Document
 - Save plan to `.opencode/plans/YYYY-MM-DD-<topic>.md`
@@ -70,6 +72,9 @@ Description of the chosen approach and why.
 - Alternative N: Why not chosen
 
 ## Implementation Steps
+Each step should map to an atomic commit (tests pass, linting passes, independently functional).
+Note: Additional steps may be discovered during implementation.
+
 1. [ ] Step 1
 2. [ ] Step 2
 3. [ ] Step 3
