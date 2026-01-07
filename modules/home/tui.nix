@@ -107,6 +107,10 @@ with lib;
               builtins.readFile ./tui/git/.gitconfig-vetspire
             );
           };
+          ".gitignore_global" = {
+            executable = false;
+            source = ./tui/git/.gitignore_global;
+          };
         }
         config.modules.tui.extraFiles
       ];
