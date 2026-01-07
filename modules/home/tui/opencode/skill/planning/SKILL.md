@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Planning process for complex tasks
+description: "**MANDATORY**: Load when planning complex features or refactorings. Planning process for complex tasks"
 ---
 
 # Planning Process

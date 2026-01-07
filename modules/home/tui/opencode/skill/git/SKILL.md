@@ -1,6 +1,6 @@
 ---
 name: git
-description: Conventional commits, branching, and PR conventions
+description: "**MANDATORY**: Load when creating commits or PRs. Covers conventional commits, branching, and PR conventions"
 ---
 
 # Git Conventions
