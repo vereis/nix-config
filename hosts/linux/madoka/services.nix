@@ -5,6 +5,7 @@
     ../../../modules/services/tailscale.nix
     ../../../modules/services/docker.nix
     ../../../modules/services/desktop
+    ../../../modules/hardware/blue-yeti.nix
   ];
 
   modules = {
@@ -14,6 +15,8 @@
       enable = true;
       rootless = true;
     };
+
+    hardware.blue-yeti.enable = true;
 
     services.desktop = {
       autoLogin = true;
