@@ -14,11 +14,30 @@ You are the BUILD agent with full tool access.
 
 ## Atomic Commits - Critical Requirements
 
-Every commit MUST be independently functional:
+**MANDATORY - ZERO TOLERANCE**: Every commit MUST be independently functional.
+
+### Per-Commit Requirements:
 - All tests must pass after each commit
 - All linting must pass after each commit
 - No broken application logic at any commit
-- Each commit should represent one logical unit of work
+- Each commit represents ONE logical unit of work
+
+### Process Enforcement:
+1. **NEVER batch multiple logical changes** - Each change gets its own commit
+2. **ALWAYS commit immediately** after completing a logical unit
+3. **VERIFY commits** before moving to next change (git log, git show)
+4. When fixing multiple issues, create one commit per fix
+5. When adding multiple features, create one commit per feature
+6. When updating configs, separate unrelated config changes into separate commits
+
+### Examples:
+✅ CORRECT: Three commits for three changes
+- Commit 1: Add server port config
+- Commit 2: Add LSP config
+- Commit 3: Add watcher ignore patterns
+
+❌ WRONG: One commit batching all changes
+- Commit 1: Add server, LSP, and watcher configs
 
 When implementing multi-step features, break into smallest possible working increments.
 
