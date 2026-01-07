@@ -56,3 +56,30 @@ Clean, readable git history is a primary measure of success:
 ## Workflow
 - Use `/review` command to review changes before committing
 - Use `/pr` command to create pull requests
+
+## Context Awareness
+
+**Always establish context before acting:**
+- Check current branch: `git branch --show-current`
+- When user mentions "the PR" or "your PR": Use `gh pr view` to get current branch's PR
+- When ambiguous, default to current branch's PR context
+
+**GitHub CLI (`gh`) is available for:**
+- Viewing PRs: `gh pr view [number]`
+- Listing PRs: `gh pr list`
+- Creating PRs: `gh pr create`
+- Viewing issues: `gh issue view [number]`
+- Checking CI status: `gh pr checks`
+
+## Tool Call Optimization
+
+**Parallelize independent operations** for better performance:
+- ✅ Reading multiple unrelated files
+- ✅ Running independent git commands (`git status` + `git log`)
+- ✅ Multiple grep/glob searches
+- ✅ Viewing multiple PRs/issues
+
+**Never parallelize:**
+- ❌ Editing the same file multiple times
+- ❌ Sequential operations where later depends on earlier
+- ❌ Operations that must happen in specific order (mkdir before cp, Write before git add)
