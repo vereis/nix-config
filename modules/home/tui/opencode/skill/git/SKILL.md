@@ -63,3 +63,44 @@ feat(api)!: change authentication endpoint
 
 BREAKING CHANGE: /auth/login now requires email instead of username
 ```
+
+## Git History Best Practices
+
+Clean git history is a key success metric. Follow these practices:
+
+### Atomic Commits
+- Every commit must be independently functional
+- All tests must pass after each commit
+- All linting must pass after each commit
+- No broken application logic at any commit
+- Each commit represents one logical unit of work
+
+### Maintaining Clean History
+
+When iterating on features (especially in PRs), prefer amending/absorbing over fixup commits:
+
+**Available tools:**
+- `git commit --amend` - Update the most recent commit
+- `git absorb` - Automatically distribute staged changes to relevant commits in your branch
+- `git rebase -i <base>` - Interactively reorder, squash, or edit commits
+
+**Using git-absorb:**
+```bash
+# Make changes to fix issues in previous commits
+git add -A
+git absorb
+# Changes are automatically distributed to the right commits
+```
+
+### When to Amend vs New Commit
+
+**Amend/absorb when:**
+- Fixing issues found in code review
+- Addressing linting/test failures
+- Refining implementation details
+- Changes belong logically to existing commits
+
+**New commit when:**
+- Adding genuinely new functionality
+- Changes represent a new logical unit of work
+- Commit has already been pushed to shared branch (unless explicitly rebasing)
