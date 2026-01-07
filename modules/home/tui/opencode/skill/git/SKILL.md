@@ -46,6 +46,11 @@ docs(readme): add installation instructions
 
 ## Branch Naming
 
+**With JIRA ticket:**
+- `TICKET-123/feat-description` - Feature with ticket
+- `TICKET-456/fix-description` - Bug fix with ticket
+
+**Without JIRA ticket:**
 - `feat/<description>` - New features
 - `fix/<description>` - Bug fixes
 - `refactor/<description>` - Refactoring
