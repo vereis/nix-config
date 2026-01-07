@@ -45,17 +45,20 @@ Review and update an existing JIRA ticket:
 8. Get explicit approval: "Approve these changes? (yes/no)"
 9. Update ticket using jira CLI (follow cli-usage.md patterns):
    ```bash
-   # Write updated content to /tmp first (MANDATORY)
-   cat > /tmp/jira_update.md <<'EOF'
+   # Create .opencode/tickets directory if needed
+   mkdir -p .opencode/tickets
+   
+   # Write updated content to local file
+   cat > .opencode/tickets/TICKET-ID.md <<'EOF'
    [Updated content]
    EOF
    
    # Verify content
-   cat /tmp/jira_update.md
+   cat .opencode/tickets/TICKET-ID.md
    
    # Update ticket
    jira issue edit TICKET-ID --no-input \
-     --body "$(cat /tmp/jira_update.md)"
+     --body "$(cat .opencode/tickets/TICKET-ID.md)"
    ```
 10. Add comment explaining changes:
     ```bash
@@ -73,4 +76,3 @@ Review and update an existing JIRA ticket:
 - **Get approval** - Show complete preview before updating
 - **Add comments** - Always explain what changed and why
 - **One ticket at a time** - Process sequentially
-- **Mandatory /tmp pattern** - JIRA CLI requires file-based input for multi-line content
