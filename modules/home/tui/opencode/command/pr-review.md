@@ -34,20 +34,44 @@ Review an external PR with optional GitHub comment posting:
    - Severity (Critical/Warning/Suggestion)
    - Description and fix recommendation
 
-6. Present ALL proposed comments to user for approval:
-   ```
-   Found 3 issues to comment on:
+6. Present ALL proposed comments to user for approval with context:
    
-   1. [Critical] file.js:42
-      "Potential SQL injection vulnerability..."
+   Show high-level summary first:
+   ```
+   PR Review Summary for #123: "Add user authentication"
+   - 5 files changed (+234, -12 lines)
+   - Found 3 issues: 1 critical, 1 warning, 1 suggestion
+   ```
+   
+   Then show each comment with code excerpt:
+   ```
+   1. [Critical] src/auth.js:42
+      Code:
+      > const query = "SELECT * FROM users WHERE id = " + userId;
+      
+      Comment:
+      "Potential SQL injection vulnerability. Use parameterized queries instead:
+      const query = "SELECT * FROM users WHERE id = ?";
+      db.query(query, [userId]);"
    
    2. [Warning] utils.py:15
-      "This function could benefit from..."
+      Code:
+      > def process_data(items):
+      >     return [expensive_operation(x) for x in items]
+      
+      Comment:
+      "This function processes all items in memory. For large datasets, consider 
+      using a generator or batch processing to reduce memory footprint."
    
    3. [Suggestion] README.md:10
-      "Consider adding..."
+      Code:
+      > ## Installation
+      > Run npm install
+      
+      Comment:
+      "Consider adding version requirements: Node.js 18+ required."
    
-   Approve posting these comments? (yes/no)
+   Approve posting these 3 comments? (yes/no)
    ```
 
 7. **WAIT for explicit user approval** before posting
@@ -64,6 +88,8 @@ Review an external PR with optional GitHub comment posting:
 
 **Important:**
 - NEVER post comments without explicit approval
-- Show the full comment text in the preview
+- Show high-level PR context (title, file count, line changes)
+- Include minimal code excerpts (1-3 lines) for each comment
+- Show the full comment text that will be posted
 - Only use commits that exist in the PR (use headRefOid from step 2)
 - For multi-line comments, add `-F start_line=X -f start_side="RIGHT"`
