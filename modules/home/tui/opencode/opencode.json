@@ -5,8 +5,6 @@
   "theme": "system",
   "autoupdate": false,
   "share": "manual",
-  "instructions": ["AGENTS.md"],
-  "plugin": ["opencode-skills"],
   "keybinds": {
     "leader": "ctrl+x",
     "app_exit": "ctrl+c,<leader>q",
