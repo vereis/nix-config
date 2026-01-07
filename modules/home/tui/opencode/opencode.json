@@ -5,6 +5,9 @@
   "theme": "system",
   "autoupdate": false,
   "share": "manual",
+  "server": {
+    "port": 3108
+  },
   "keybinds": {
     "leader": "ctrl+x",
     "app_exit": "ctrl+c,<leader>q",
