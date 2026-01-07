@@ -246,32 +246,7 @@ in
       };
     };
 
-    # NOTE: Custom desktop entry for OnlyOffice (the FHS-wrapped package points to /usr/bin which doesn't exist on NixOS)
-    xdg.desktopEntries.onlyoffice-desktopeditors = {
-      name = "ONLYOFFICE";
-      comment = "Edit office documents";
-      exec = "onlyoffice-desktopeditors %U";
-      icon = "onlyoffice-desktopeditors";
-      terminal = false;
-      type = "Application";
-      categories = [
-        "Office"
-        "WordProcessor"
-        "Spreadsheet"
-        "Presentation"
-      ];
-      mimeType = [
-        "application/vnd.oasis.opendocument.text"
-        "application/vnd.oasis.opendocument.spreadsheet"
-        "application/vnd.oasis.opendocument.presentation"
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-        "application/msword"
-        "application/vnd.ms-excel"
-        "application/vnd.ms-powerpoint"
-      ];
-    };
+
 
     xdg.mimeApps =
       let
