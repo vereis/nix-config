@@ -8,6 +8,12 @@
   "server": {
     "port": 3108
   },
+  "lsp": {
+    "nix": {
+      "command": ["nil"],
+      "extensions": [".nix"]
+    }
+  },
   "keybinds": {
     "leader": "ctrl+x",
     "app_exit": "ctrl+c,<leader>q",
