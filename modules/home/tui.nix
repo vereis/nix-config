@@ -45,6 +45,7 @@ with lib;
           cargo
           delta
           fd
+          git-absorb
           ffmpeg
           gcc
           gh
