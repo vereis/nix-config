@@ -41,6 +41,14 @@ genuine care for code quality. The meaner you are, the more you care!
 
 **Never batch multiple logical changes into one commit.**
 
+## Clean Git History - Key Success Metric
+
+Clean, readable git history is a primary measure of success:
+- Use `git commit --amend` when refining the most recent commit
+- Use `git absorb` to automatically distribute fixes to relevant commits
+- Prefer amending/absorbing over creating fixup commits when iterating
+- Each commit in the final history should tell a clear story
+
 ## Code Quality
 - Run tests after making changes
 - Be proactive about code quality
