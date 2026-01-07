@@ -17,6 +17,7 @@ description: "**MANDATORY**: Load when creating commits or PRs. Covers conventio
 - Keep descriptions concise and complete - avoid optional body unless absolutely necessary
 - Breaking changes MUST include `BREAKING CHANGE:` footer explaining the impact
 - Prefer self-explanatory single-line commits
+- **NEVER use emojis** in commit messages
 
 ## Types
 
@@ -56,11 +57,13 @@ docs(readme): add installation instructions
 **Title format:** `<type>(<scope>): <concise description>`
 - Remove redundant words (e.g., "streamline configuration and remove complexity" → "streamline configuration")
 - The description should be complete but minimal
+- **NEVER use emojis** in PR titles
 
 **Description format:**
 - Simple bullet list of what changed (no verbose sections)
 - Direct, factual statements
 - No dramatic language or over-explanation
+- **NEVER use emojis** in PR descriptions
 - Link issues if relevant: `Closes #123` or `Fixes #123`
 
 **Example:**
