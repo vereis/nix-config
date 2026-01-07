@@ -65,23 +65,6 @@ in
 
     hardware.steam-hardware.enable = true;
 
-    # NOTE: Custom desktop entry to fix Steam not launching from Walker on first try
-    home-manager.sharedModules = [
-      {
-        xdg.desktopEntries.steam = {
-          name = "Steam";
-          comment = "Application for managing and playing games on Steam";
-          exec = ''bash -c "steam steam://open/games || steam"'';
-          icon = "steam";
-          terminal = false;
-          type = "Application";
-          categories = [
-            "Network"
-            "FileTransfer"
-            "Game"
-          ];
-        };
-      }
-    ];
+
   };
 }

@@ -222,7 +222,7 @@ in
             enable = true;
             provider = {
               desktopapplications.settings = {
-                launch_prefix = "";
+                launch_prefix = "systemd-run --user --scope --";
               };
               symbols.settings = {
                 locale = "en";
