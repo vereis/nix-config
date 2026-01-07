@@ -1,5 +1,6 @@
 ---
 description: Create a pull request with conventional commit format
+agent: general
 ---
 
 Create a PR for the current branch:
