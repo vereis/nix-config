@@ -64,7 +64,5 @@ in
     environment.systemPackages = with pkgs; optionals isWayland [ gamescope ];
 
     hardware.steam-hardware.enable = true;
-
-
   };
 }
