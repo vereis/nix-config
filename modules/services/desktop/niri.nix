@@ -324,7 +324,7 @@ in
                 active.gradient = activeGradient;
                 inactive.color = colors.bg.secondary;
               };
-              shadow.enable = false;
+              shadow.enable = true;
             };
 
             binds = {
