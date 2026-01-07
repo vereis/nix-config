@@ -5,11 +5,13 @@ agent: general
 
 Load the code-review skill and review recent changes:
 
-1. Determine what to review:
-   - Detect base branch: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
-   - If on a feature branch: `git diff <base>...HEAD` (use detected base branch)
-   - If recent commit: `git diff HEAD~1`
-   - Ask user if unclear
+1. Determine what to review (ask user if unclear):
+   - **Most recent commit**: `git show HEAD` (default if no argument)
+   - **Unstaged changes**: `git diff HEAD`
+   - **Whole PR/branch**: Detect base with `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`, then `git diff <base>...HEAD`
+   - **Specific commit**: `git show <commit-hash>`
+   
+   User can specify scope: `/review commit`, `/review unstaged`, `/review pr`, `/review <hash>`
 
 2. Load the code-review skill for the checklist
 
