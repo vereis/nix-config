@@ -158,29 +158,38 @@ This prevents regressions from happening in the future.
 
 ## 6. Present Findings for Approval
 
-Show high-level summary first:
+Show high-level summary first (severity labels are fine here for the user's benefit):
 ```
 PR Review Summary for #123: "Add user authentication"
 - 5 files changed (+234, -12 lines)
 - Linked: DI-1234 (User auth epic), #99 (Security requirements)
-- Found 3 new issues: 1 critical, 1 warning, 1 suggestion
+- Found 3 issues to comment on
 - Filtered 2 issues already raised by @reviewer
 ```
 
-Then show each proposed comment with code excerpt (use severity internally for ordering, but don't include labels in the actual comment):
+Then show each proposed comment with code excerpt.
+
+**Important guidelines for comments:**
+- **No severity labels** in the comment text itself (no "Critical", "Warning", "Suggestion")
+- **No line numbers** in the comment text - it looks robotic. Reference functions/variables by name instead
+- **Encode severity through tone and emphasis:**
+  - Critical issues: Direct, urgent language ("This needs to be fixed", "This is a security risk")
+  - Warnings: Questioning but firm ("I don't think this is right", "This could cause problems")
+  - Suggestions: Soft, optional ("Would it make sense to...", "If it isn't too much trouble...")
+
 ```
-1. src/auth.js:42 (Critical)
+1. src/auth.js - SQL query construction
    Code:
    > const query = "SELECT * FROM users WHERE id = " + userId;
    
    Comment:
-   "This looks like it could be vulnerable to SQL injection. Could we use parameterized queries instead?
+   "This is a security risk - it's vulnerable to SQL injection. We need to use parameterized queries here.
    
    Something like:
    const query = "SELECT * FROM users WHERE id = ?";
    db.query(query, [userId]);"
 
-2. utils.py:15 (Warning)
+2. utils.py - process_data function
    Code:
    > def process_data(items):
    >     return [expensive_operation(x) for x in items]
@@ -189,6 +198,13 @@ Then show each proposed comment with code excerpt (use severity internally for o
    "This processes all items in memory at once. For large datasets, that could be a problem.
    
    Would it make sense to use a generator or batch processing here?"
+
+3. config.ts - timeout value
+   Code:
+   > const TIMEOUT = 30000;
+   
+   Comment:
+   "Minor thing - would it be worth extracting this to an env var or config file? Totally fine either way."
 
 Approve posting these comments? (yes/no/select)
 ```
@@ -219,3 +235,21 @@ For multi-line comments, add `-F start_line=X -f start_side="RIGHT"`
 **Important:**
 - Only use commits that exist in the PR (use headRefOid from step 2)
 - Show confirmation of posted comments with links
+
+## 8. Optionally Approve the PR
+
+If the user requests approval (e.g., "approve it", "lgtm", "approve the PR"):
+
+```bash
+gh pr review <pr-identifier> --approve --body "<message>"
+```
+
+**Message should sound natural, not robotic.** Write something contextual to the PR. Examples for inspiration (don't use verbatim):
+- "Nice work on the auth refactor!"
+- "This is a solid improvement to the test coverage"
+- "Clean implementation, thanks for addressing the feedback"
+- "LGTM - the edge case handling looks good now"
+
+Keep it brief and genuine. Match the tone to the PR - a small fix doesn't need effusive praise.
+
+**Only approve when explicitly requested by the user.** Never auto-approve.
