@@ -1,6 +1,6 @@
 ---
 description: Review someone else's PR and optionally post inline comments
-agent: general
+agent: build
 ---
 
 Review an external PR with optional GitHub comment posting.
@@ -15,7 +15,7 @@ Parse the provided identifier (URL, number, or description):
 - **Description**: Use `gh pr list` to search and match description
 - If no identifier provided, ask the user for one
 
-## 2. Fetch PR Details & Context
+## 2. Fetch PR Details & Diff
 
 Get PR metadata:
 ```bash
@@ -27,36 +27,49 @@ Get the diff:
 gh pr diff <pr-identifier>
 ```
 
-**Extract linked issues from PR body:**
-- GitHub issues: `#123`, `org/repo#123`, full GitHub URLs
-- JIRA tickets: Pattern `[A-Z]+-\d+` (e.g., `DI-1234`)
+## 3. Use Subagents for Research (Parallel)
 
-**Read linked context:**
-- GitHub issues: `gh issue view <number>`
-- JIRA tickets: Try `jira issue view TICKET-ID --plain` (may not be available)
+Use subagents to gather context in parallel - this is **research only**, not the actual review:
 
-**Check existing feedback:**
-- Note concerns already raised in PR comments/reviews to avoid duplicating feedback
+**Subagent 1 - Linked Issues:**
+- Extract GitHub issues from PR body: `#123`, `org/repo#123`, full URLs
+- Extract JIRA tickets: Pattern `[A-Z]+-\d+` (e.g., `DI-1234`)
+- Fetch each: `gh issue view <number>` for GitHub, `jira issue view TICKET-ID --plain` for JIRA
+- Return summaries of requirements/context from linked issues
 
-## 3. Run Reviews in Parallel
+**Subagent 2 - Existing Feedback:**
+- Analyze existing PR comments and reviews
+- Return list of concerns already raised (to avoid duplicating)
 
-Use subagents to run code review and refactoring analysis in parallel:
+**Subagent 3 - Best Practices Research:**
+- Based on the languages/frameworks in the diff, research relevant best practices
+- Load refactoring skill for language-specific guidance (e.g., `elixir.md` for Elixir code)
+- Return relevant patterns and anti-patterns to watch for
 
-**Subagent 1 - Code Review:**
+## 4. Primary Agent: Perform the Review
+
+**The primary agent does the actual review work**, using context from subagents.
+
+**Skip generated files** - don't review files we have little control over:
+- `*.gen.ts`, `*.gen.js`, `*.generated.*`
+- `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
+- `*.min.js`, `*.min.css`
+- Files in `node_modules/`, `vendor/`, `dist/`, `build/`
+- GraphQL generated files (`*.graphql.ts`, `*_gen.go`, etc.)
+- Proto generated files (`*.pb.go`, `*.pb.ex`, etc.)
+- Migration files (often auto-generated or rarely worth commenting on)
+
+Load skills:
 - Load the code-review skill
-- Analyze against: Security, Performance, Maintainability, Correctness, Testing, Architecture
-
-**Subagent 2 - Refactoring:**
 - Load the refactoring skill
-- Analyze against: Dead code, inlining opportunities, over-abstraction, comment quality, test coverage
 
-## 4. Consolidate Findings
-
-Merge results from both subagents, deduplicating overlapping concerns.
+Analyze the diff against:
+- **Code Review**: Security, Performance, Maintainability, Correctness, Testing, Architecture
+- **Refactoring**: Dead code, inlining opportunities, over-abstraction, comment quality, test coverage
 
 **Filter out:**
-- Issues already raised in existing PR comments/reviews
-- Concerns that are explicitly addressed by linked tickets (e.g., "TODO: will fix in DI-5678")
+- Issues already raised in existing PR comments/reviews (from subagent 2)
+- Concerns explicitly addressed by linked tickets (e.g., "TODO: will fix in DI-5678")
 
 ## 5. Write Comments in User's Voice
 

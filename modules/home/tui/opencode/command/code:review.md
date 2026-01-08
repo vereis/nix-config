@@ -17,36 +17,50 @@ git diff <base>...HEAD
 
 If user specifies a different scope (e.g., `commit`, file path), use that instead.
 
-## 2. Gather Context
+## 2. Use Subagents for Research (Parallel)
 
-Check if there's an associated PR for context:
+Use subagents to gather context - this is **research only**, not the actual review:
+
+**Subagent 1 - PR Context (if PR exists):**
 ```bash
 gh pr view --json number,title,body,comments,url 2>/dev/null
 ```
+- Extract GitHub issues from PR body: `#123`, `org/repo#123`
+- Extract JIRA tickets: Pattern `[A-Z]+-\d+`
+- Fetch each: `gh issue view` for GitHub, `jira issue view TICKET-ID --plain` for JIRA
+- Return summaries of requirements/context
 
-If PR exists:
-- **Extract linked issues**: Parse body for GitHub issue links (`#123`, `org/repo#123`) and JIRA ticket IDs (`[A-Z]+-\d+`)
-- **Read linked issues**: Use `gh issue view` for GitHub issues
-- **Read JIRA tickets**: Try `jira issue view TICKET-ID --plain` (may not be available in all repos)
-- **Check existing comments**: Note concerns already raised in PR comments to avoid duplicating feedback
+**Subagent 2 - Existing Feedback:**
+- If PR exists, analyze existing comments
+- Return list of concerns already raised (to avoid duplicating)
 
-## 3. Run Reviews in Parallel
+**Subagent 3 - Best Practices Research:**
+- Based on the languages/frameworks in the diff, research relevant best practices
+- Load refactoring skill for language-specific guidance (e.g., `elixir.md` for Elixir code)
+- Return relevant patterns and anti-patterns to watch for
 
-Use subagents to run code review and refactoring analysis in parallel:
+## 3. Primary Agent: Perform the Review
 
-**Subagent 1 - Code Review:**
+**The primary agent does the actual review work**, using context from subagents.
+
+**Skip generated files** - don't review files we have little control over:
+- `*.gen.ts`, `*.gen.js`, `*.generated.*`
+- `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
+- `*.min.js`, `*.min.css`
+- Files in `node_modules/`, `vendor/`, `dist/`, `build/`
+- GraphQL generated files (`*.graphql.ts`, `*_gen.go`, etc.)
+- Proto generated files (`*.pb.go`, `*.pb.ex`, etc.)
+- Migration files (often auto-generated or rarely worth commenting on)
+
+Load skills:
 - Load the code-review skill
-- Analyze against: Security, Performance, Maintainability, Correctness, Testing, Architecture
-
-**Subagent 2 - Refactoring:**
 - Load the refactoring skill
-- Analyze against: Dead code, inlining opportunities, over-abstraction, comment quality, test coverage
 
-## 4. Consolidate Findings
+Analyze the diff against:
+- **Code Review**: Security, Performance, Maintainability, Correctness, Testing, Architecture
+- **Refactoring**: Dead code, inlining opportunities, over-abstraction, comment quality, test coverage
 
-Merge results from both subagents, deduplicating overlapping concerns.
-
-Filter out any issues already raised in existing PR comments.
+Filter out any issues already raised in existing PR comments (from subagent 2).
 
 ## 5. Report by Severity
 
