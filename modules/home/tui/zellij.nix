@@ -46,6 +46,7 @@ with lib;
               bind "Alt t" { NewTab; }
               bind "Alt q" { CloseFocus; }
               bind "Alt f" { ToggleFloatingPanes; }
+              bind "Alt r" { SwitchToMode "RenameTab"; TabNameInput 0; }
             }
           }
         '';
