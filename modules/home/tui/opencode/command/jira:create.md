@@ -3,10 +3,12 @@ description: Create a JIRA ticket with guided workflow
 agent: general
 ---
 
-Create a JIRA ticket with proper structure:
+Create a JIRA ticket with proper structure.
+
+**User request:** $ARGUMENTS
 
 1. Load the jira skill to understand ticket structure
-2. Parse user input to understand what ticket to create
+2. Parse user input to understand what ticket to create (if no input provided, ask the user)
 3. Research context (conditional - only if user references existing tickets/PRs/code):
    - If ticket ID mentioned: `jira issue view TICKET-ID`
    - If PR mentioned: `gh pr view PR-NUMBER --json title,body,files`

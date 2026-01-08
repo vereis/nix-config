@@ -3,14 +3,14 @@ description: Review your local code changes for issues
 agent: general
 ---
 
-Load the code-review skill and review your local changes:
+Load the code-review skill and review your local changes.
+
+**Scope (optional):** $ARGUMENTS
 
 1. Determine what to review:
+   - **User-specified scope**: If provided (e.g., `commit`, `branch`, or a file path), use that
    - **Uncommitted changes** (default): `git diff HEAD` if changes exist
    - **Whole branch**: If no uncommitted changes, use `git diff <base>...HEAD`
-   - **Specific scope**: User can specify `/code:review commit`, `/code:review branch`
-   
-   Always prioritize uncommitted changes if they exist.
 
 2. Load the code-review skill for the checklist
 

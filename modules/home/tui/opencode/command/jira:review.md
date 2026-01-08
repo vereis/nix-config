@@ -3,13 +3,16 @@ description: Review and update existing JIRA tickets
 agent: build
 ---
 
-Review and update an existing JIRA ticket:
+Review and update an existing JIRA ticket.
+
+**Ticket identifier:** $ARGUMENTS
 
 1. Load the jira skill to understand ticket structure standards
 2. Parse ticket identifier (handle multiple formats like pr:review):
    - **URL**: Extract ticket ID from URL
    - **Ticket ID/Key**: Use directly (e.g., DI-1234)
    - **Search term**: Use `jira issue list` to find matching ticket
+   - If no identifier provided, ask the user for one
 3. Fetch ticket details:
    ```bash
    jira issue view TICKET-ID --plain

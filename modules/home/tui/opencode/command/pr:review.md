@@ -3,12 +3,15 @@ description: Review someone else's PR and optionally post inline comments
 agent: build
 ---
 
-Review an external PR with optional GitHub comment posting:
+Review an external PR with optional GitHub comment posting.
+
+**PR identifier:** $ARGUMENTS
 
 1. Parse PR identifier (URL, number, or description like "vereis' pr for XYZ"):
    - **URL**: Extract owner/repo/number from URL
    - **Number**: Use current repo with provided number
    - **Description**: Use `gh pr list` to search and match description
+   - If no identifier provided, ask the user for one
    
 2. Fetch PR details:
    ```bash
