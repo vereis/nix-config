@@ -5,6 +5,7 @@
   "theme": "system",
   "autoupdate": false,
   "share": "manual",
+  "plugin": ["opencode-anthropic-auth@0.0.7"],
   "lsp": {
     "nix": {
       "command": ["nil"],
