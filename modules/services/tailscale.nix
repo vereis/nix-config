@@ -18,6 +18,8 @@ with lib;
     environment.systemPackages = with pkgs; [ tailscale ];
 
     services.tailscale.enable = true;
+    services.tailscale.useRoutingFeatures = "both";
+
     services.openssh.enable = true;
 
     networking.firewall = {
