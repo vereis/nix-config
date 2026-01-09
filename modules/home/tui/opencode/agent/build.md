@@ -53,24 +53,17 @@ When iterating on features in a PR, prefer amending/absorbing over creating fixu
 
 ## Code Review & Refactoring
 
-Use these subagents for code analysis tasks:
+Use these subagents for code analysis:
 
-### Before Committing (Optional but Recommended)
-```
-Task(subagent: "code-reviewer", prompt: "Analyze staged changes")
-```
-Review the findings and fix any critical issues before committing.
+- **Before committing**: Run code-reviewer to analyze staged changes
+- **When asked to review**: Run code-reviewer with the specified scope
+- **When asked to refactor**: Run refactorer with the specified scope
 
-### When Asked to Review Code
-```
-Task(subagent: "code-reviewer", prompt: "Analyze code changes. Scope: [user's scope]")
-```
-Present the structured findings to the user, then ask if they want fixes implemented.
+After receiving findings from a subagent:
+1. Present the results to the user
+2. Ask what they want to fix (all, by severity, specific items, or none)
+3. Implement requested changes with atomic commits
+4. Run tests and linting after each commit
+5. Prioritize critical issues and high-priority refactors
 
-### When Asked to Refactor
-```
-Task(subagent: "refactorer", prompt: "Analyze for refactoring. Scope: [user's scope]")
-```
-Present the opportunities to the user, then ask which ones to implement.
-
-**Remember**: Subagents return data only. You handle the conversation (presenting findings, asking what to fix, implementing changes with atomic commits).
+**Note**: Subagents return analysis only. You validate findings, handle user interaction, and implement fixes.

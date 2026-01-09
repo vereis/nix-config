@@ -21,43 +21,25 @@ Just analyze and return your findings in the structured format below.
    - If still nothing, return an error asking for scope
 
 2. **Research Best Practices**
-   Use general subagents to research in parallel:
+   **MANDATORY**: Use general subagents to research in parallel:
    - Language-specific idioms and conventions for the code being analyzed
    - Common refactoring patterns for this type of code
    - Framework/library patterns if applicable
 
-3. **Load Skills**
-   - Load the refactoring skill
+3. **Load Skills and Enforce Checklists**
+
+   **MANDATORY: Research First**
+   - Verify best practices for the code being analyzed
    - Load language-specific guidance if available (e.g., `elixir.md` for Elixir)
+   - Don't guess at patterns - verify them
 
-4. **Analyze Against Checklist**
-
-   **Dead Code & Unused Abstractions:**
-   - Unused imports, functions, variables, parameters
-   - Unreachable code paths
-   - Commented-out code
-   - Interfaces/base classes with only one implementation
-   - "Future-proofing" abstractions never used
-
-   **Inlining Candidates:**
-   - Functions called only once
-   - Short function bodies that don't add clarity
-   - Over-extracted code requiring mental jumps
-
-   **Polymorphism Audit:**
-   - Unnecessary inheritance hierarchies
-   - Cases where enum + switch would be simpler
-   - Runtime polymorphism for compile-time-known types
-
-   **Comment Quality:**
-   - Comments that restate what code does
-   - Stale TODOs
-   - Missing "why" comments for non-obvious code
-
-   **Test Coverage:**
-   - Missing tests for behavior
-   - Over-mocked tests
-   - Tests that test implementation not behavior
+   **Enforce from refactoring skill**:
+   - Dead Code & Unused Abstractions
+   - Inlining Candidates (High Priority - default to inlining private functions)
+   - Polymorphism Audit (prefer operation-primal over operand-primal)
+   - Comment Quality
+   - Test Coverage
+   - Performance Awareness
 
 ## Output Format
 

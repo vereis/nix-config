@@ -47,11 +47,18 @@ Just analyze and return your findings in the structured format below.
    - GraphQL/Proto generated files
    - Migration files
 
-4. **Load Skills and Analyze**
-   - Load the code-review skill
-   - Load the refactoring skill
-   - Analyze against: Security, Performance, Maintainability, Correctness, Testing, Architecture
-   - Check for: Dead code, inlining opportunities, over-abstraction, comment quality
+4. **Load Skills and Enforce Checklists**
+
+   **MANDATORY: Research First**
+   - Use general subagents to research best practices for the code being reviewed
+   - Load language-specific patterns if applicable
+   - Verify against common implementations before recommending changes
+
+   **Enforce from code-review skill**:
+   - Architecture, Dead Code, Comments, Security, Performance, Maintainability, Correctness, Testing
+
+   **Enforce from refactoring skill**:
+   - Dead Code, Inlining, Polymorphism, Comments, Tests
 
 5. **Filter Duplicates**
    - Remove issues already raised in existing PR comments
