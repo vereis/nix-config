@@ -50,3 +50,27 @@ Clean git history is a key success metric. Use these tools to maintain it:
 Interactive git commands (git rebase -i, git add -i, git add -p, etc.) are DENIED via permissions since they require user input that agents cannot provide.
 
 When iterating on features in a PR, prefer amending/absorbing over creating fixup commits.
+
+## Code Review & Refactoring
+
+Use these subagents for code analysis tasks:
+
+### Before Committing (Optional but Recommended)
+```
+Task(subagent: "code-reviewer", prompt: "Analyze staged changes")
+```
+Review the findings and fix any critical issues before committing.
+
+### When Asked to Review Code
+```
+Task(subagent: "code-reviewer", prompt: "Analyze code changes. Scope: [user's scope]")
+```
+Present the structured findings to the user, then ask if they want fixes implemented.
+
+### When Asked to Refactor
+```
+Task(subagent: "refactorer", prompt: "Analyze for refactoring. Scope: [user's scope]")
+```
+Present the opportunities to the user, then ask which ones to implement.
+
+**Remember**: Subagents return data only. You handle the conversation (presenting findings, asking what to fix, implementing changes with atomic commits).

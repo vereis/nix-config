@@ -1,82 +1,70 @@
 ---
 description: Review your local code changes for issues
-agent: general
+agent: build
 ---
 
 Review your local changes for issues and refactoring opportunities.
 
 **Scope (optional):** $ARGUMENTS
 
-## 1. Determine Scope
+## 1. Run Code Review Analysis
 
-Default to reviewing the **entire branch** against base:
-```bash
-git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
-git diff <base>...HEAD
+Use the `code-reviewer` subagent to analyze the code:
+
+```
+Task(subagent: "code-reviewer", prompt: "Analyze code changes. Scope: $ARGUMENTS")
 ```
 
-If user specifies a different scope (e.g., `commit`, file path), use that instead.
+The subagent will return structured findings with:
+- Summary (files analyzed, issue counts)
+- Critical issues (must fix)
+- Warnings (should fix)
+- Suggestions (nice to have)
+- Already raised issues (filtered from PR comments)
+- Context used (PR, linked issues)
 
-## 2. Use Subagents for Research (Parallel)
+## 2. Present Findings to User
 
-Use subagents to gather context - this is **research only**, not the actual review:
+Present the subagent's findings organized by severity:
 
-**Subagent 1 - PR Context (if PR exists):**
-```bash
-gh pr view --json number,title,body,comments,url 2>/dev/null
 ```
-- Extract GitHub issues from PR body: `#123`, `org/repo#123`
-- Extract JIRA tickets: Pattern `[A-Z]+-\d+`
-- Fetch each: `gh issue view` for GitHub, `jira issue view TICKET-ID --plain` for JIRA
-- Return summaries of requirements/context
+## Code Review Results
 
-**Subagent 2 - Existing Feedback:**
-- If PR exists, analyze existing comments
-- Return list of concerns already raised (to avoid duplicating)
+### Summary
+[From subagent response]
 
-**Subagent 3 - Best Practices Research:**
-- Based on the languages/frameworks in the diff, research relevant best practices
-- Load refactoring skill for language-specific guidance (e.g., `elixir.md` for Elixir code)
-- Return relevant patterns and anti-patterns to watch for
+### Critical Issues (X found)
+[List each with location, code snippet, problem, and fix recommendation]
 
-## 3. Primary Agent: Perform the Review
+### Warnings (X found)
+[List each...]
 
-**The primary agent does the actual review work**, using context from subagents.
+### Suggestions (X found)
+[List each...]
 
-**Skip generated files** - don't review files we have little control over:
-- `*.gen.ts`, `*.gen.js`, `*.generated.*`
-- `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
-- `*.min.js`, `*.min.css`
-- Files in `node_modules/`, `vendor/`, `dist/`, `build/`
-- GraphQL generated files (`*.graphql.ts`, `*_gen.go`, etc.)
-- Proto generated files (`*.pb.go`, `*.pb.ex`, etc.)
-- Migration files (often auto-generated or rarely worth commenting on)
+### Filtered (already raised)
+[List issues already mentioned in PR comments]
+```
 
-Load skills:
-- Load the code-review skill
-- Load the refactoring skill
-
-Analyze the diff against:
-- **Code Review**: Security, Performance, Maintainability, Correctness, Testing, Architecture
-- **Refactoring**: Dead code, inlining opportunities, over-abstraction, comment quality, test coverage
-
-Filter out any issues already raised in existing PR comments (from subagent 2).
-
-## 5. Report by Severity
-
-Organize findings:
-- **Critical**: Must fix immediately (security, correctness issues)
-- **Warning**: Should fix (performance, maintainability)
-- **Suggestion**: Nice to have (refactoring, style)
-
-For each finding, provide:
-- Location (file:line)
-- Current code snippet
-- Issue description
-- Specific fix recommendation with code example
-
-## 6. Offer to Implement
+## 3. Offer to Implement Fixes
 
 After presenting findings, ask:
 
-> "Would you like me to implement any of these fixes? I'll create atomic commits for each change, running tests/linting after each one."
+> "Would you like me to implement any of these fixes? I can:
+> - **all** - Fix everything
+> - **critical** - Only critical issues
+> - **[numbers]** - Specific issues (e.g., "1, 3, 5")
+> - **none** - Just wanted the review
+>
+> I'll create atomic commits for each change, running tests/linting after each one."
+
+## 4. Implement Requested Fixes
+
+If user requests fixes:
+1. Create a todo list with each fix as a separate item
+2. Implement one fix at a time
+3. Run tests and linting after each change
+4. Commit atomically after each successful fix
+5. Mark todo items complete as you go
+
+Follow the fix recommendations from the subagent's analysis.

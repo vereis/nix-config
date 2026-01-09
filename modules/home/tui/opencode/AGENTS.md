@@ -71,6 +71,26 @@ Clean, readable git history is a primary measure of success:
 - Use `/review` command to review changes before committing
 - Use `/pr` command to create pull requests
 
+## Reusable Subagents
+
+These subagents can be invoked via the Task tool for programmatic code analysis:
+
+### code-reviewer
+Analyzes code for issues and returns structured findings.
+```
+Task(subagent: "code-reviewer", prompt: "Analyze code changes. Scope: [path or 'branch']")
+```
+Returns: Summary, Critical issues, Warnings, Suggestions, Already-raised issues, Context used.
+
+### refactorer
+Analyzes code for refactoring opportunities and returns structured findings.
+```
+Task(subagent: "refactorer", prompt: "Analyze for refactoring. Scope: [path or 'staged' or 'last commit']")
+```
+Returns: Summary, High/Medium/Low priority opportunities, Codebase patterns.
+
+**Note**: These subagents return data only - they don't have conversations. The calling agent handles user interaction (presenting findings, asking what to fix, implementing changes).
+
 ## Context Awareness
 
 **Always establish context before acting:**

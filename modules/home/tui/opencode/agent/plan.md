@@ -1,6 +1,6 @@
 ---
 mode: primary
-model: anthropic/claude-opus-4-20250514
+model: anthropic/claude-opus-4-5-20251101
 skills: planning
 permission:
   edit:
