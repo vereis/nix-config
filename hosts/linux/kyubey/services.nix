@@ -1,5 +1,11 @@
 { pkgs, secrets, ... }:
 
+let
+  tailscaleOnly = ''
+    allow 100.64.0.0/10;
+    deny all;
+  '';
+in
 {
   imports = [
     ../../../modules/services/tailscale.nix
@@ -99,6 +105,55 @@
             zone = "vereis.com";
           };
         };
+
+        # Tailscale-only *arr stack (HTTP only)
+        "shows.vereis.com" = {
+          port = 8989;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
+        "anime.vereis.com" = {
+          port = 8990;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
+        "movies.vereis.com" = {
+          port = 7878;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
+        "indexers.vereis.com" = {
+          port = 9696;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
+        "music.vereis.com" = {
+          port = 8686;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
+        "subtitles.vereis.com" = {
+          port = 6767;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
+        "requests.vereis.com" = {
+          port = 5055;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
+        "torrents.vereis.com" = {
+          port = 8080;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
       };
     };
 
@@ -144,6 +199,8 @@
       enableHardwareAcceleration = true;
       plex.enable = true;
       jellyfin.enable = true;
+
+      arr.enable = true;
     };
 
     copyparty = {
