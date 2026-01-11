@@ -136,6 +136,9 @@ in
           port = 8989;
           bindAddress = "127.0.0.1";
         };
+        settings.auth = {
+          method = "None";
+        };
       };
 
       radarr = mkIf arrCfg.enable {
@@ -145,6 +148,9 @@ in
         settings.server = {
           port = 7878;
           bindAddress = "127.0.0.1";
+        };
+        settings.auth = {
+          method = "None";
         };
       };
 
@@ -156,6 +162,9 @@ in
           port = 9696;
           bindAddress = "127.0.0.1";
         };
+        settings.auth = {
+          method = "None";
+        };
       };
 
       lidarr = mkIf arrCfg.enable {
@@ -165,6 +174,9 @@ in
         settings.server = {
           port = 8686;
           bindAddress = "127.0.0.1";
+        };
+        settings.auth = {
+          method = "None";
         };
       };
 
@@ -197,6 +209,8 @@ in
             WebUI = {
               Address = "127.0.0.1";
               Password_PBKDF2 = secrets.qbittorrent.webui.passwordPbkdf2;
+              AuthSubnetWhitelist = "127.0.0.1/32";
+              AuthSubnetWhitelistEnabled = true;
             };
           };
         };
