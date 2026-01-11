@@ -104,6 +104,13 @@ in
           home = "/var/lib/sonarr-anime";
           createHome = true;
         };
+
+        radarr-anime = mkIf arrCfg.enable {
+          isSystemUser = true;
+          group = "media";
+          home = "/var/lib/radarr-anime";
+          createHome = true;
+        };
       };
     };
 
@@ -220,6 +227,27 @@ in
       };
     };
 
+    systemd.services.radarr-anime = mkIf arrCfg.enable {
+      description = "Radarr (Anime)";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+
+      environment = {
+        RADARR__SERVER__PORT = "7879";
+        RADARR__SERVER__BINDADDRESS = "127.0.0.1";
+      };
+
+      serviceConfig = {
+        User = "radarr-anime";
+        Group = "media";
+        StateDirectory = "radarr-anime";
+        StateDirectoryMode = "0750";
+        Restart = "on-failure";
+        ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data=/var/lib/radarr-anime";
+      };
+    };
+
     hardware.graphics = mkIf cfg.enableHardwareAcceleration {
       enable = true;
       extraPackages = with pkgs; [
@@ -241,11 +269,13 @@ in
       "Z ${arrCfg.downloadPath} 0775 root media - -"
 
       "d ${arrCfg.downloadPath}/movies 0775 root media - -"
+      "d ${arrCfg.downloadPath}/anime-movies 0775 root media - -"
       "d ${arrCfg.downloadPath}/shows 0775 root media - -"
       "d ${arrCfg.downloadPath}/anime 0775 root media - -"
       "d ${arrCfg.downloadPath}/music 0775 root media - -"
 
       "d ${cfg.mediaPath}/movies 0775 root media - -"
+      "d ${cfg.mediaPath}/anime-movies 0775 root media - -"
       "d ${cfg.mediaPath}/shows 0775 root media - -"
       "d ${cfg.mediaPath}/anime 0775 root media - -"
       "d ${cfg.mediaPath}/music 0775 root media - -"

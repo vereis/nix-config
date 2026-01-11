@@ -125,6 +125,12 @@ in
           extraConfig = tailscaleOnly;
         };
 
+        "anime-movies.vereis.com" = {
+          port = 7879;
+          ssl = false;
+          extraConfig = tailscaleOnly;
+        };
+
         "indexers.vereis.com" = {
           port = 9696;
           ssl = false;
