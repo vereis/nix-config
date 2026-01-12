@@ -42,7 +42,9 @@ Treat warnings with high seriousness.
 ### Verdict
 One of: `BLOCK` | `REQUEST_CHANGES` | `APPROVE_WITH_NITS` | `APPROVE`
 
-### Top risks (max 5)
+### Top risks
+List as many as needed, but keep each item short.
+
 Each item: `[P0|P1|P2|P3] [high|med|low] <issue> — <why it matters> — <what to do>`
 
 ### Findings
