@@ -20,7 +20,6 @@ in
   config = lib.mkIf (config.modules.tui.enable && cfg.enable) {
     modules.tui.extraPackages = [
       pkgs.claude-code
-      pkgs.jq
     ];
 
     # Deploy only the config pieces. Do NOT symlink the entire ~/.claude directory
@@ -47,11 +46,6 @@ in
       "./.claude/commands" = {
         recursive = true;
         source = ./commands;
-      };
-
-      "./.claude/hooks/validate-git-workflow.sh" = {
-        executable = true;
-        source = ./hooks/validate-git-workflow.sh;
       };
 
       # Stable path for editor integrations.
