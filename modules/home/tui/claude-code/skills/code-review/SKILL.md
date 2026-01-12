@@ -5,7 +5,10 @@ description: "**MANDATORY**: Load when reviewing code changes. Comprehensive cod
 
 # Code Review Checklist
 
-**MANDATORY**: Use the general subagent to research common patterns and best practices for similar implementations.
+**MANDATORY**: Research best practices when reviewing non-trivial changes.
+
+- If you are in the main conversation: use Claude Code’s built-in subagents (e.g. Explore) and/or online research as needed.
+- If you are already running as a subagent: do local research with Read/Grep/Glob and cite sources; do not attempt further subagent delegation (subagents can’t spawn subagents).
 
 ## Architecture
 - [ ] Design patterns appropriate for the problem
@@ -13,7 +16,7 @@ description: "**MANDATORY**: Load when reviewing code changes. Comprehensive cod
 - [ ] Component boundaries well-defined
 - [ ] No tight coupling between modules
 - [ ] Follows project architectural conventions
-- [ ] **Research**: Use general subagent to find common patterns for this type of implementation
+- [ ] **Research**: Validate patterns for this type of implementation (local + online as needed)
 
 ## Dead Code Detection
 - [ ] No unused imports or dependencies
@@ -68,11 +71,13 @@ description: "**MANDATORY**: Load when reviewing code changes. Comprehensive cod
 - [ ] Tests are readable and maintainable
 - [ ] No flaky tests
 
-## Report Format
+## Output format
 
-Report issues by severity:
+If the invoking context (agent prompt / command / user) specifies an output format, follow that.
+
+Otherwise, report issues by severity:
 - 🔴 **Critical**: Must fix (bugs, security, data loss)
-- 🟡 **Warning**: Should fix (bad patterns, maintainability)
+- 🟡 **Warning**: Should fix (bad patterns, maintainability). Treat these seriously; we aim to fix warnings by default.
 - 🔵 **Suggestion**: Nice to have (style, minor improvements)
 
 Include specific fix recommendations with code examples.
