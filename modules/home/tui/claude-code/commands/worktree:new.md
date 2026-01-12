@@ -1,6 +1,11 @@
 ---
 description: Create a new git worktree for a task (enforces branch naming)
 argument-hint: <dir> <branch>
+
+# Branch examples
+# - feat/short-kebab
+# - feat/TICKET-123
+# - feat/TICKET-123-short-kebab
 allowed-tools: Bash(git rev-parse:*), Bash(git show-ref:*), Bash(git worktree:*), Bash(realpath:*), Bash(mkdir:*), Bash(test:*), Bash(pwd:*)
 ---
 
