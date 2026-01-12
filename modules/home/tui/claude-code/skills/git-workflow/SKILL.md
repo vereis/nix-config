@@ -45,6 +45,9 @@ Rules:
 
 If we’re already in a git worktree, create a new dedicated worktree for the new task.
 
+Preferred entrypoint:
+- Use the `/worktree:new` command (it creates the worktree in the correct place and handles existing branches).
+
 Steps:
 1) Find the *worktree root repo*:
 - Run `git rev-parse --git-common-dir`.
