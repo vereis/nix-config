@@ -23,12 +23,19 @@ user-invocable: true
 - Treat warnings seriously.
 
 ## When creating a PR
-1. Gather context:
+1. Ensure we are on a properly named branch (see `git` + `git-workflow` skills).
+2. Gather context:
    - `git status`, `git diff`, `git log --oneline`
-2. Ensure branch is pushed (ask before pushing if uncertain).
-3. Draft title/body following the `communication` skill.
-4. Create PR with `gh pr create`.
-5. Return the PR URL.
+3. Ensure branch is pushed (ask before pushing if uncertain).
+4. PR title must follow Conventional Commit format: `<type>(<scope>): <desc>`.
+5. PR description must be minimal and human:
+   - Check for a PR template under `.github/` (if it exists, fill it).
+   - Otherwise use short bullets and short sentences.
+   - Mention key design decisions and any plan changes.
+   - Link ticket if available.
+6. Draft title/body following the `communication` skill.
+7. Create PR with `gh pr create`.
+8. Return the PR URL.
 
 ## When reviewing a PR
 1. Gather context:

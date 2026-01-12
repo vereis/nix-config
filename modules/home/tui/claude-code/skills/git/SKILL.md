@@ -49,16 +49,26 @@ Refs: 676104e
 
 ## Branch Naming
 
-**With JIRA ticket:**
-- `TICKET-123/feat-description` - Feature with ticket
-- `TICKET-456/fix-description` - Bug fix with ticket
+All work must happen on a branch (never on `master`/`main`).
 
-**Without JIRA ticket:**
-- `feat/<description>` - New features
-- `fix/<description>` - Bug fixes
-- `refactor/<description>` - Refactoring
-- `docs/<description>` - Documentation
-- `chore/<description>` - Maintenance
+**With ticket:**
+- `TICKET-123/feat-short-kebab`
+- `TICKET-123/fix-short-kebab`
+- `TICKET-123/refactor-short-kebab`
+
+**Without ticket:**
+- `feat/short-kebab`
+- `fix/short-kebab`
+- `refactor/short-kebab`
+- `docs/short-kebab`
+- `chore/short-kebab`
+
+Rules:
+- keep it minimal
+- lowercase + hyphens only
+- no essays
+
+For worktrees + enforcement, see the `git-workflow` skill.
 
 ## PR Conventions
 
