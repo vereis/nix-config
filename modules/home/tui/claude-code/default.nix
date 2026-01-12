@@ -45,6 +45,13 @@ in
         recursive = true;
         source = ./commands;
       };
+
+      # Stable path for editor integrations.
+      # Claude Code itself may be in the Nix store, but this symlink stays constant.
+      "./.local/bin/claude" = {
+        executable = true;
+        source = "${pkgs.claude-code}/bin/claude";
+      };
     };
   };
 }
