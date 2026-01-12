@@ -566,27 +566,6 @@
         "type": "github"
       }
     },
-    "opencode": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1767973998,
-        "narHash": "sha256-Kv26RiLhW1vF/tqVpTVl0+lFecp7O7KRZMODurQ5CAY=",
-        "owner": "sst",
-        "repo": "opencode",
-        "rev": "030b14ac4e037b410d993a5ef79b561b011855f6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "sst",
-        "ref": "dev",
-        "repo": "opencode",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "claudeCode": "claudeCode",
@@ -604,7 +583,6 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable_2",
-        "opencode": "opencode",
         "treefmt-nix": "treefmt-nix",
         "walker": "walker",
         "zen-browser": "zen-browser",

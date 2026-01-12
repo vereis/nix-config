@@ -28,7 +28,6 @@
             enable = true;
             includes = [ "*.md" ];
             excludes = [
-              "**/opencode/**"
               "**/claude-code/**"
             ];
             settings = {
