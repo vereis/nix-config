@@ -47,10 +47,13 @@ in
       };
 
       # Stable path for editor integrations.
-      # Claude Code itself may be in the Nix store, but this symlink stays constant.
+      # We wrap the Nix-provided CLI so it always starts in YOLO mode.
       "./.local/bin/claude" = {
         executable = true;
-        source = "${pkgs.claude-code}/bin/claude";
+        text = ''
+          #!/usr/bin/env bash
+          exec "${pkgs.claude-code}/bin/claude" --dangerously-skip-permissions "$@"
+        '';
       };
     };
   };
