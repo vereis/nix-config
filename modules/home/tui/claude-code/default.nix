@@ -20,6 +20,12 @@ in
   config = lib.mkIf (config.modules.tui.enable && cfg.enable) {
     modules.tui.extraPackages = [
       pkgs.claude-code
+
+      # Plugin runtime deps
+      # - safety-net: runs via npx (node)
+      # - security-guidance: hook runs via python3
+      pkgs.nodejs
+      pkgs.python3
     ];
 
     # Deploy only the config pieces. Do NOT symlink the entire ~/.claude directory
