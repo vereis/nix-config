@@ -52,9 +52,14 @@ Refs: 676104e
 All work must happen on a branch (never on `master`/`main`).
 
 **With ticket:**
-- `TICKET-123/feat-short-kebab`
-- `TICKET-123/fix-short-kebab`
-- `TICKET-123/refactor-short-kebab`
+- `feat/TICKET-123`
+- `fix/TICKET-123`
+- `refactor/TICKET-123`
+
+Optional (still keep it short):
+- `feat/TICKET-123-short-kebab`
+- `fix/TICKET-123-short-kebab`
+- `refactor/TICKET-123-short-kebab`
 
 **Without ticket:**
 - `feat/short-kebab`
