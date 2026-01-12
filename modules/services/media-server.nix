@@ -103,6 +103,7 @@ in
         lidarr.extraGroups = mkIf arrCfg.enable [ "media" ];
         bazarr.extraGroups = mkIf arrCfg.enable [ "media" ];
         qbittorrent.extraGroups = mkIf arrCfg.enable [ "media" ];
+        readarr.extraGroups = mkIf arrCfg.enable [ "media" ];
 
         flaresolverr = mkIf arrCfg.flaresolverr {
           isSystemUser = true;
@@ -195,6 +196,17 @@ in
         enable = true;
         openFirewall = false;
         listenPort = 6767;
+      };
+
+      readarr = mkIf arrCfg.enable {
+        enable = true;
+        openFirewall = false;
+        dataDir = "/var/lib/readarr";
+        group = "media";
+        settings.server = {
+          port = 8787;
+          bindAddress = "127.0.0.1";
+        };
       };
 
       jellyseerr = mkIf arrCfg.enable {
