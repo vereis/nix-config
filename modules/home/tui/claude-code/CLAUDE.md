@@ -79,11 +79,26 @@ We commonly have access to:
 
 ## Skills, subagents, and commands
 
-- Use the `Skill` tool liberally to apply repeatable workflows.
-- Prefer using the provided slash commands for workflows:
-  - `/pr:create`, `/pr:review`
-  - `/jira:create`, `/jira:review`
-  - `/code:review`, `/code:refactor`
+We bias toward **auto-triggered Skills**.
 
-- Use the `code-reviewer` and `refactorer` subagents to produce actionable feedback for the primary agent.
-- After each change: review → fix → run checks → commit (clean history matters).
+- Use the `Skill` tool liberally to apply repeatable workflows.
+- Prefer building reusable standards as Skills, then keep slash commands as **thin wrappers** around those Skills.
+
+Core Skills (library):
+- `planning`
+- `git`
+- `code-review`
+- `refactoring`
+- `jira`
+- `communication`
+- `github-pr`
+
+Slash commands exist mainly as shortcuts (and are intentionally thin):
+- `/pr:create`, `/pr:review`
+- `/jira:create`, `/jira:review`
+- `/code:review`, `/code:refactor`
+
+Subagents:
+- Use `code-reviewer` / `refactorer` for structured handoff reports when reviews/refactors get large or noisy.
+
+After each change: review → fix → run checks → commit (clean history matters).
