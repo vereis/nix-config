@@ -18,10 +18,7 @@
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     zjstatus.url = "github:dj95/zjstatus";
     copyparty.url = "github:9001/copyparty";
-    opencode = {
-      url = "github:sst/opencode/dev";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
     claudeCode = {
       url = "github:sadjow/claude-code-nix?ref=latest";
       inputs.nixpkgs.follows = "nixpkgs";
