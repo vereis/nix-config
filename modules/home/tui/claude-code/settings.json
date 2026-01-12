@@ -23,5 +23,9 @@
     "safety-net@cc-marketplace": true,
     "security-guidance@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
   }
 }
