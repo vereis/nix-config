@@ -27,8 +27,11 @@ When producing text that other humans will read (PR review comments, PR bodies, 
 - Do not nitpick trivial formatting unless it blocks readability.
 
 ## PR descriptions
-- Keep it factual.
+- Keep it factual and minimal.
+- Short sentences. No marketing fluff.
 - Emphasize "why" and "risk".
+- Call out design decisions and any plan changes.
+- If a PR template exists under `.github/`, fill it.
 - Include validation notes:
   - what you ran
   - what you didn’t run
