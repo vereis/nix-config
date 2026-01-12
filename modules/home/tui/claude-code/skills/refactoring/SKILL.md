@@ -7,13 +7,16 @@ description: "**MANDATORY**: Load when refactoring code. Comprehensive refactori
 
 ## Research First
 
-Before making refactoring recommendations, use the general subagent to research best practices for what the user is trying to do. This is especially important for:
+Before making refactoring recommendations, research best practices for what the user is trying to do. This is especially important for:
 
 - Language-specific idioms and conventions
 - Library/framework patterns the code is using
 - Common refactoring patterns for the type of code being changed
 
-For complex changes spanning multiple concerns, spin up multiple subagents in parallel to research each area independently. Don't guess at best practices - verify them.
+Don't guess at best practices — verify them.
+
+- If you are in the main conversation: use built-in subagents like Explore (and online research) as needed.
+- If you are already running as a subagent: do local research with Read/Grep/Glob and cite sources; do not attempt further subagent delegation (subagents can’t spawn subagents).
 
 ## Language-Specific Guidance
 
@@ -109,9 +112,12 @@ Don't prematurely optimize, but don't prematurely abstract either. Abstractions 
 4. Run tests after each change
 5. Don't mix refactoring with feature changes
 
-## Report Format
+## Output format
 
-Organize findings by impact:
+If the invoking context (agent prompt / command / user) specifies an output format, follow that.
+
+Otherwise, organize findings by impact:
+
 
 - **High**: Dead code, inlining opportunities, unnecessary polymorphism, missing critical tests
 - **Medium**: Comment cleanup, test quality issues, minor over-abstraction
@@ -149,12 +155,18 @@ Example:
 
 ## After Reporting
 
-After presenting all findings, ask the user:
+After presenting all findings, **hand off to the primary agent**:
 
-> "Would you like me to implement these refactors? I’ll do them as atomic commits, running tests/linting after each one."
+- Summarize which refactors are highest impact.
+- Recommend a safe ordering to keep git history clean.
+- State what checks/tests to run after each step.
 
-If the user agrees:
-1. List each refactor as a numbered checklist
-2. Implement one refactor at a time
-3. Run tests and linting after each change
-4. Commit atomically after each successful refactor
+(If you are in the main conversation, you are the primary agent.)
+
+The primary agent should then confirm with the user what to implement.
+
+If implementation is requested:
+1. Implement one refactor at a time
+2. Run tests/linting after each change
+3. Commit atomically after each successful refactor
+4. Use `git absorb` liberally when fixes belong to previous commits
