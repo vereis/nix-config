@@ -1,5 +1,6 @@
 {
   "forceLoginMethod": "claudeai",
+  "model": "sonnet",
   "permissions": {
     "defaultMode": "bypassPermissions",
     "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"]
