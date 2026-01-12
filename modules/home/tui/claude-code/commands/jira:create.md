@@ -1,24 +1,23 @@
 ---
-description: Create a JIRA ticket with guided workflow
+description: Create a JIRA ticket (wrapper around skills)
 argument-hint: [ticket-summary]
+disable-model-invocation: true
 allowed-tools: Bash(jira:*), Bash(mkdir:*), Bash(mv:*), Bash(cat:*), Bash(grep:*), Bash(head:*)
 ---
 
+This is a lightweight wrapper around Skills.
+
+Apply:
+- `jira`
+- `communication`
+
+## Task
+
 Create a JIRA ticket with proper structure.
 
-**User request:** $ARGUMENTS
+User request: $ARGUMENTS
 
-1. Load the jira skill to understand ticket structure
-2. If no input provided, ask the user what ticket to create
-3. Draft ticket:
-   - Outcomes over implementation
-   - Specific actors
-   - Acceptance criteria in Given/When/Then
-4. Present draft to user and iterate
-5. Get explicit confirmation: "Ready to create? (yes/no)"
-6. Create ticket using jira CLI, saving a local copy under `.opencode/tickets/`:
-
-- Ensure directory exists: !`mkdir -p .opencode/tickets`
-
-When creating, capture the ticket ID from the CLI output and rename the draft file to match.
-Return ticket URL and local path.
+- If no summary is provided, ask what ticket to create.
+- Draft ticket content (outcomes over implementation, clear actors, Given/When/Then acceptance criteria).
+- Get explicit confirmation before creating.
+- Create via `jira` CLI.

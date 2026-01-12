@@ -1,35 +1,28 @@
 ---
-description: Review local changes or a specific scope
+description: Code review wrapper (prefer skill auto-trigger)
 argument-hint: [scope]
+disable-model-invocation: true
 allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git symbolic-ref:*), Bash(git branch:*), Read, Grep, Glob
 ---
 
-## Scope
+This is a lightweight wrapper around Skills.
+
+Apply:
+- `code-review`
+- `git` (for clean history guidance)
 
 Requested scope (optional): `$ARGUMENTS`
-
-Interpretation guidance:
-- If scope is empty: review local changes (working tree + this branch).
-- If scope contains `file:line` or a filepath: focus review there and related code.
-- If scope says "this entire branch": review changes vs the default base branch.
 
 ## Context
 
 - Branch: !`git branch --show-current`
+- Base branch (remote default): !`git symbolic-ref --quiet --short refs/remotes/origin/HEAD || true`
 - Status: !`git status`
-
-### Uncommitted / local changes
-
 - Diff (working tree): !`git diff`
-
-### Branch changes (committed)
-
-- Base branch: !`git symbolic-ref --quiet --short refs/remotes/origin/HEAD || true`
-- Commits vs base: !`git log --oneline origin/master..HEAD 2>/dev/null || git log --oneline --max-count=20`
-- Diff vs base: !`git diff origin/master...HEAD 2>/dev/null || true`
+- Diff vs base (best-effort): !`git diff origin/master...HEAD 2>/dev/null || git diff origin/main...HEAD 2>/dev/null || true`
 
 ## Task
 
-Use the `code-reviewer` subagent to review the scope and context above.
+Review the context above with strict quality standards.
 
-Return a concise handoff report for the primary agent.
+- If the review is large/noisy, delegate to the `code-reviewer` subagent and return its handoff.

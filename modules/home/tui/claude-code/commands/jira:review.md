@@ -1,17 +1,21 @@
 ---
-description: Review and update an existing JIRA ticket
+description: Review/update a JIRA ticket (wrapper around skills)
 argument-hint: [ticket-key-or-url]
+disable-model-invocation: true
 allowed-tools: Bash(jira:*), Bash(grep:*), Bash(mkdir:*), Bash(cat:*), Bash(mv:*)
 ---
 
-Review and update an existing JIRA ticket.
+This is a lightweight wrapper around Skills.
 
-**Ticket identifier:** $ARGUMENTS
+Apply:
+- `jira`
+- `communication`
 
-1. Load the jira skill
-2. Fetch ticket details: !`jira issue view $ARGUMENTS --plain`
-3. Warn if ticket status is in-progress/review (do not edit without confirmation)
-4. Draft improvements while preserving all original information
-5. Show current vs proposed body
-6. Get explicit approval before editing
-7. If approved, update via `jira issue edit` and add a comment explaining the changes
+## Task
+
+Review and (optionally) update the JIRA ticket: $ARGUMENTS
+
+- Fetch ticket details.
+- Preserve original info.
+- Show current vs proposed changes.
+- Get explicit approval before editing.
