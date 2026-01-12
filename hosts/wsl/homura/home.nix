@@ -11,15 +11,9 @@
       yt-dlp
       tealdeer
       bsd-finger
-      opencode
       jira-cli-go
     ];
-    extraFiles = {
-      "./.config/opencode/" = {
-        recursive = true;
-        source = ../../../modules/home/tui/opencode;
-      };
-    };
+    extraFiles = { };
     extraSessionVariables = {
       GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
       JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
