@@ -10,7 +10,10 @@
 
 with lib;
 {
-  imports = [ ./tui/zellij.nix ];
+  imports = [
+    ./tui/zellij.nix
+    ./tui/claude-code
+  ];
 
   options.modules.tui = {
     enable = mkOption {

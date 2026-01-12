@@ -1,0 +1,18 @@
+{
+  "forceLoginMethod": "claudeai",
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"]
+  },
+  "extraKnownMarketplaces": {
+    "cc-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "kenryu42/cc-marketplace"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "safety-net@cc-marketplace": true
+  }
+}
