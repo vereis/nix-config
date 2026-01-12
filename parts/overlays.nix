@@ -1,10 +1,15 @@
 { inputs, ... }:
+let
+  lib = inputs.nixpkgs.lib;
+in
 {
   flake = {
     overlays = {
-      default = inputs.nixpkgs.lib.composeExtensions (import ../overlays/opencode.nix inputs) (
-        import ../overlays/slack.nix inputs
-      );
+      default = lib.composeManyExtensions [
+        (import ../overlays/opencode.nix inputs)
+        inputs.claudeCode.overlays.default
+        (import ../overlays/slack.nix inputs)
+      ];
     };
   };
 }
