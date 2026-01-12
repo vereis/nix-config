@@ -70,6 +70,12 @@ in
         default = "/storage/torrents";
         description = "Path to qBittorrent downloads (must be on same filesystem as media for hardlinks)";
       };
+
+      flaresolverr = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable FlareSolverr proxy for bypassing Cloudflare protection on indexers";
+      };
     };
   };
 
@@ -98,6 +104,14 @@ in
         bazarr.extraGroups = mkIf arrCfg.enable [ "media" ];
         qbittorrent.extraGroups = mkIf arrCfg.enable [ "media" ];
 
+        flaresolverr = mkIf arrCfg.flaresolverr {
+          isSystemUser = true;
+          group = "media";
+          extraGroups = [ "docker" ];
+          home = "/var/lib/flaresolverr";
+          createHome = true;
+        };
+
         sonarr-anime = mkIf arrCfg.enable {
           isSystemUser = true;
           group = "media";
@@ -111,6 +125,15 @@ in
           home = "/var/lib/radarr-anime";
           createHome = true;
         };
+      };
+    };
+
+    virtualisation.docker = mkIf arrCfg.flaresolverr {
+      enable = true;
+      autoPrune = {
+        enable = true;
+        dates = "weekly";
+        flags = [ "--all" ];
       };
     };
 
@@ -247,6 +270,30 @@ in
         StateDirectoryMode = "0750";
         Restart = "on-failure";
         ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data=/var/lib/radarr-anime";
+      };
+    };
+
+    systemd.services.flaresolverr = mkIf arrCfg.flaresolverr {
+      description = "FlareSolverr - Proxy server to bypass Cloudflare protection";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" "docker.service" ];
+      wants = [ "network-online.target" ];
+      partOf = [ "docker.service" ];
+
+      environment = {
+        PORT = "8191";
+        LOG_LEVEL = "info";
+        TZ = "UTC";
+      };
+
+      serviceConfig = {
+        User = "flaresolverr";
+        Group = "media";
+        Restart = "on-failure";
+        RestartSec = 10;
+        ExecStart = ''${pkgs.docker}/bin/docker run --rm --name flaresolverr --network host --user 0:0 -e PORT -e LOG_LEVEL -e TZ ghcr.io/flaresolverr/flaresolverr:latest'';
+        ExecStop = "${pkgs.docker}/bin/docker stop flaresolverr || true";
+        ExecStopPost = "${pkgs.docker}/bin/docker rm flaresolverr || true";
       };
     };
 
