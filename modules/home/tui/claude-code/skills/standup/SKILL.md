@@ -31,19 +31,26 @@ Generate a daily standup update in **Markdown**.
 - `git log --since=<window> --no-merges --date=iso --pretty=format:"- %ad %s <%h>"`
 - `git status --porcelain`
 
-### GitHub (reviews + comments)
-Collect PR review activity for the user in the time window:
-- PR reviews (APPROVED / CHANGES_REQUESTED / COMMENTED)
+### GitHub
+Collect in the time window:
+
+- PRs opened by the user
+- PRs merged by the user
+- PR reviews done by the user (APPROVED / CHANGES_REQUESTED / COMMENTED)
 - Review comments (inline review comments)
 - PR conversation comments (issue comments on PRs)
 
-Preferred source: GitHub GraphQL `contributionsCollection(from,to)`.
+Preferred sources:
+- Opened/merged PRs: `gh search prs ...` (simple and stable)
+- Review activity: GitHub GraphQL `contributionsCollection(from,to)`
 
 ### Jira (best effort)
+Prefer **only tickets assigned to the current user**.
+
 Collect Jira activity in the time window:
-- issues created by current user
-- issues with status changed by current user
-- issues updated by current user (proxy for comment activity if comment-specific queries are unavailable)
+- assigned issues created in the window
+- assigned issues with status changed by the user
+- assigned issues updated by the user (proxy for comment activity if comment-specific queries are unavailable)
 
 Use JQL and keep results small.
 
@@ -52,6 +59,8 @@ Use JQL and keep results small.
 - `## Yesterday`
 - `## Today`
 - `## Blockers`
+- `## PRs Opened`
+- `## PRs Merged`
 - `## PR Reviews` (include approvals / change requests / notable review comments)
 - `## Jira`
 - `## Links` (PRs/tickets)
