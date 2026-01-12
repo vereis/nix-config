@@ -1,6 +1,6 @@
 ---
 name: refactoring
-description: "**MANDATORY**: Load when refactoring code. Comprehensive refactoring checklist for cleaner, more maintainable code"
+description: "**MANDATORY**: Apply when refactoring or when asked to improve maintainability. Enforces staged, low-risk refactors and clean commit boundaries."
 ---
 
 # Code Refactoring Checklist

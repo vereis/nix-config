@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "**MANDATORY**: Load when reviewing code changes. Comprehensive code review checklist and process"
+description: "**MANDATORY**: Apply when reviewing code changes, PR diffs, or code-review requests. Enforces quality standards, warning seriousness, and meaningful comments."
 ---
 
 # Code Review Checklist
