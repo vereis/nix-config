@@ -1,3 +1,4 @@
-# OpenCode directories
+# AI Assistant runtime directories
 .opencode/plans/
 .opencode/tickets/
+.claude/plans/
