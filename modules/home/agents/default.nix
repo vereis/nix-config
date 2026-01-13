@@ -93,6 +93,12 @@ with lib; {
         inherit lib;
         inherit (generators) mkCommand;
       };
+
+      # Expose agents definitions
+      modules.agents.agents = import ./definitions/agents.nix {
+        inherit lib;
+        inherit (generators) mkAgent;
+      };
     })
 
     # Assertions
