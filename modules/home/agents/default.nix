@@ -78,7 +78,7 @@ with lib; {
   };
 
   config = mkIf config.modules.agents.enable (mkMerge [
-    # Load generator functions
+    # Load generator functions and definitions
     (let
       generators = import ./lib/generators.nix { inherit lib; };
     in {
@@ -86,6 +86,12 @@ with lib; {
       modules.agents.skills = import ./definitions/skills.nix {
         inherit lib;
         inherit (generators) mkSkill;
+      };
+
+      # Expose commands definitions
+      modules.agents.commands = import ./definitions/commands.nix {
+        inherit lib;
+        inherit (generators) mkCommand;
       };
     })
 
