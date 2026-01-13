@@ -38,8 +38,6 @@ with lib;
           }
 
           keybinds {
-            # Disable tmux mode entry (defaults to Ctrl-b), since it collides with
-            # Claude Code's background task shortcut.
             shared_except "tmux" "locked" {
               unbind "Ctrl b"
             }
