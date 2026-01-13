@@ -29,6 +29,8 @@
             includes = [ "*.md" ];
             excludes = [
               "**/claude-code/**"
+              "**/opencode/**"
+              ".opencode/plans/**"
             ];
             settings = {
               wrap = "no";
