@@ -39,6 +39,9 @@ with lib;
 
   config = mkIf config.modules.tui.enable {
     home = {
+      # Add ~/.local/bin to PATH for user scripts
+      sessionPath = [ "$HOME/.local/bin" ];
+
       packages =
         with pkgs;
         [

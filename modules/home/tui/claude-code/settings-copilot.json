@@ -1,0 +1,46 @@
+{
+  "forceLoginMethod": "claudeai",
+  "model": "sonnet",
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://localhost:4141",
+    "ANTHROPIC_AUTH_TOKEN": "dummy",
+    "ANTHROPIC_MODEL": "claude-sonnet-4.5",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4.5",
+    "ANTHROPIC_SMALL_FAST_MODEL": "claude-3.5-sonnet",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-3.5-sonnet",
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  },
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "WebSearch"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "cc-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "kenryu42/cc-marketplace"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "safety-net@cc-marketplace": true,
+    "security-guidance@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
+}

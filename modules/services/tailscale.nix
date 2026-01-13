@@ -17,10 +17,13 @@ with lib;
   config = mkIf config.modules.tailscale.enable {
     environment.systemPackages = with pkgs; [ tailscale ];
 
-    services.tailscale.enable = true;
-    services.tailscale.useRoutingFeatures = "both";
-
-    services.openssh.enable = true;
+    services = {
+      tailscale = {
+        enable = true;
+        useRoutingFeatures = "both";
+      };
+      openssh.enable = true;
+    };
 
     networking.firewall = {
       trustedInterfaces = [ "tailscale0" ];

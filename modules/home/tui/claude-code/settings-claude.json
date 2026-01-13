@@ -1,6 +1,9 @@
 {
   "forceLoginMethod": "claudeai",
   "model": "sonnet",
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "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"
+  },
   "permissions": {
     "defaultMode": "bypassPermissions",
     "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"]
