@@ -10,12 +10,25 @@ rec {
     version ? "1.0.0",
     content,
     supportingFiles ? []
-  }: {
+  }:
+  let
+    # Skills have identical frontmatter for both Claude Code and OpenCode
+    frontmatter = ''
+      ---
+      name: ${name}
+      description: ${description}
+      version: ${version}
+      ---
+    '';
+
+    markdown = frontmatter + "\n" + content;
+  in
+  {
     inherit name description version content supportingFiles;
 
-    # TODO: Implement in Commit 2
-    toClaude = throw "mkSkill.toClaude not yet implemented";
-    toOpenCode = throw "mkSkill.toOpenCode not yet implemented";
+    # Both tools use the same skill format
+    toClaude = markdown;
+    toOpenCode = markdown;
   };
 
   # Generate a command markdown file from structured config
