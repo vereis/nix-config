@@ -186,6 +186,80 @@ with lib; {
       }
     ))
 
+    # OpenCode deployment
+    (mkIf config.modules.agents.opencode.enable (
+      let
+        generators = import ./lib/generators.nix { inherit lib; };
+
+        # Helper to generate skill directory with SKILL.md and supporting files
+        mkSkillDir = name: skill:
+          pkgs.runCommand "skill-${name}" {} ''
+            mkdir -p $out/${name}
+            cat > $out/${name}/SKILL.md <<'EOF'
+            ${skill.toOpenCode}
+            EOF
+            ${concatMapStringsSep "\n" (file: ''
+              cat > $out/${name}/${file.name} <<'EOF'
+              ${file.content}
+              EOF
+            '') skill.supportingFiles}
+          '';
+
+        # Generate all skill directories
+        skillDirs = mapAttrs mkSkillDir config.modules.agents.skills;
+
+        # Combine all skills into one directory (singular "skill")
+        allSkills = pkgs.runCommand "opencode-skills" {} ''
+          mkdir -p $out
+          ${concatStringsSep "\n" (mapAttrsToList (name: dir: "ln -s ${dir}/${name} $out/${name}") skillDirs)}
+        '';
+
+        # Helper to generate command markdown
+        mkCommandFile = name: command:
+          pkgs.writeText "${name}.md" command.toOpenCode;
+
+        # Generate all commands
+        commandFiles = mapAttrs mkCommandFile config.modules.agents.commands;
+
+        # Helper to generate agent markdown
+        mkAgentFile = name: agent:
+          pkgs.writeText "${name}.md" agent.toOpenCode;
+
+        # Generate all agents
+        agentFiles = mapAttrs mkAgentFile config.modules.agents.agents;
+
+        # Settings merged with extraConfig
+        settings =
+          (builtins.fromJSON (builtins.readFile ./settings/opencode.json))
+          // config.modules.agents.opencode.extraConfig;
+      in
+      {
+        # Install OpenCode package
+        home.packages = [ config.modules.agents.opencode.package ];
+
+        # Deploy configuration files
+        home.file = {
+          # Personality (note: AGENTS.md for OpenCode)
+          ".config/opencode/AGENTS.md".source = ./definitions/personality.md;
+
+          # Settings
+          ".config/opencode/opencode.json".text = builtins.toJSON settings;
+
+          # Skills (generated, with subdirectories, note singular "skill")
+          ".config/opencode/skill".source = allSkills;
+
+          # Commands (generated, note singular "command")
+        } // (mapAttrs' (name: file:
+          nameValuePair ".config/opencode/command/${name}.md" { source = file; }
+        ) commandFiles)
+
+        # Agents (generated, note singular "agent")
+        // (mapAttrs' (name: file:
+          nameValuePair ".config/opencode/agent/${name}.md" { source = file; }
+        ) agentFiles);
+      }
+    ))
+
     # Assertions
     {
       assertions = [

@@ -1,0 +1,6 @@
+{
+  "model": "sonnet",
+  "permission": {
+    "external_directory": "allow"
+  }
+}
