@@ -15,7 +15,7 @@ in
     disableModelInvocation = true;
     tools = [ "Bash(git status:*)" "Bash(git diff:*)" "Bash(git log:*)" "Bash(git symbolic-ref:*)" "Bash(git branch:*)" "Read" "Grep" "Glob" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/code:refactor.md;
+    content = readCommand (../source/commands + "/code:refactor.md");
   };
 
   "code:review" = mkCommand {
@@ -25,7 +25,7 @@ in
     disableModelInvocation = true;
     tools = [ "Bash(git status:*)" "Bash(git diff:*)" "Bash(git log:*)" "Bash(git symbolic-ref:*)" "Bash(git branch:*)" "Read" "Grep" "Glob" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/code:review.md;
+    content = readCommand (../source/commands + "/code:review.md");
   };
 
   "jira:create" = mkCommand {
@@ -35,7 +35,7 @@ in
     disableModelInvocation = true;
     tools = [ "Bash(jira:*)" "Bash(mkdir:*)" "Bash(mv:*)" "Bash(cat:*)" "Bash(grep:*)" "Bash(head:*)" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/jira:create.md;
+    content = readCommand (../source/commands + "/jira:create.md");
   };
 
   "jira:review" = mkCommand {
@@ -45,7 +45,7 @@ in
     disableModelInvocation = true;
     tools = [ "Bash(jira:*)" "Bash(grep:*)" "Bash(mkdir:*)" "Bash(cat:*)" "Bash(mv:*)" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/jira:review.md;
+    content = readCommand (../source/commands + "/jira:review.md");
   };
 
   "pr:create" = mkCommand {
@@ -55,7 +55,7 @@ in
     disableModelInvocation = true;
     tools = [ "Bash(git status:*)" "Bash(git diff:*)" "Bash(git log:*)" "Bash(git branch:*)" "Bash(git symbolic-ref:*)" "Bash(git push:*)" "Bash(gh pr create:*)" "Bash(gh repo view:*)" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/pr:create.md;
+    content = readCommand (../source/commands + "/pr:create.md");
   };
 
   "pr:review" = mkCommand {
@@ -65,7 +65,7 @@ in
     disableModelInvocation = true;
     tools = [ "Bash(gh pr view:*)" "Bash(gh pr diff:*)" "Bash(gh pr checks:*)" "Bash(gh pr status:*)" "Bash(gh repo view:*)" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/pr:review.md;
+    content = readCommand (../source/commands + "/pr:review.md");
   };
 
   "standup:daily" = mkCommand {
@@ -75,7 +75,7 @@ in
     disableModelInvocation = true;
     tools = [ "Bash(date:*)" "Bash(git status:*)" "Bash(git log:*)" "Bash(gh api:*)" "Bash(gh pr status:*)" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/standup:daily.md;
+    content = readCommand (../source/commands + "/standup:daily.md");
   };
 
   "worktree:new" = mkCommand {
@@ -85,6 +85,6 @@ in
     disableModelInvocation = false;  # Note: original doesn't have this flag
     tools = [ "Bash(git rev-parse:*)" "Bash(git show-ref:*)" "Bash(git worktree:*)" "Bash(realpath:*)" "Bash(mkdir:*)" "Bash(test:*)" "Bash(pwd:*)" ];
     agent = "build";  # For OpenCode
-    content = readCommand ../../tui/claude-code/commands/worktree:new.md;
+    content = readCommand (../source/commands + "/worktree:new.md");
   };
 }

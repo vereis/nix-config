@@ -54,24 +54,24 @@ with lib; {
       };
     };
 
-    # Shared definitions (read-only, computed from definitions/*.nix)
+    # Shared definitions (computed from definitions/*.nix)
     skills = mkOption {
       type = types.attrsOf types.attrs;
-      readOnly = true;
+      internal = true;
       default = {};
       description = "Structured skill definitions";
     };
 
     commands = mkOption {
       type = types.attrsOf types.attrs;
-      readOnly = true;
+      internal = true;
       default = {};
       description = "Structured command definitions";
     };
 
     agents = mkOption {
       type = types.attrsOf types.attrs;
-      readOnly = true;
+      internal = true;
       default = {};
       description = "Structured agent definitions";
     };

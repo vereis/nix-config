@@ -9,25 +9,32 @@
     ../../../modules/home/gui.nix
   ];
 
-  modules.tui = {
-    enable = true;
-    extraPackages = with pkgs; [
-      yt-dlp
-      tealdeer
-      bsd-finger
-      jira-cli-go
-    ];
-    extraSessionVariables = {
-      GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
-      JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
+  modules = {
+    tui = {
+      enable = true;
+      extraPackages = with pkgs; [
+        yt-dlp
+        tealdeer
+        bsd-finger
+        jira-cli-go
+      ];
+      extraSessionVariables = {
+        GOOGLE_CLOUD_PROJECT = secrets.gemini-cli.googleCloudProject;
+        JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
+      };
     };
-  };
 
-  modules.gui = {
-    enable = true;
-    extraPackages = with pkgs; [
-      slack
-      teams-for-linux
-    ];
+    gui = {
+      enable = true;
+      extraPackages = with pkgs; [
+        slack
+        teams-for-linux
+      ];
+    };
+
+    agents = {
+      enable = true;
+      claude-code.enable = true;
+    };
   };
 }
