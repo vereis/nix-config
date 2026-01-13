@@ -25,9 +25,11 @@ in
     };
 
     mediaPath = mkOption {
-      type = types.str;
+      type = types.addCheck types.str (p: lib.hasPrefix "/" p && p != "/" && p != "");
+      apply = p: lib.removeSuffix "/" p;
       default = "/storage/media";
-      description = "Path to media library";
+      example = "/storage/media";
+      description = "Absolute path to media library";
     };
 
     enableHardwareAcceleration = mkOption {
@@ -66,9 +68,11 @@ in
       };
 
       downloadPath = mkOption {
-        type = types.str;
+        type = types.addCheck types.str (p: lib.hasPrefix "/" p && p != "/" && p != "");
+        apply = p: lib.removeSuffix "/" p;
         default = "/storage/torrents";
-        description = "Path to qBittorrent downloads (must be on same filesystem as media for hardlinks)";
+        example = "/storage/torrents";
+        description = "Absolute path to qBittorrent downloads (must be on same filesystem as media for hardlinks)";
       };
 
       flaresolverr = mkOption {
@@ -288,7 +292,10 @@ in
     systemd.services.flaresolverr = mkIf arrCfg.flaresolverr {
       description = "FlareSolverr - Proxy server to bypass Cloudflare protection";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "docker.service" ];
+      after = [
+        "network-online.target"
+        "docker.service"
+      ];
       wants = [ "network-online.target" ];
       partOf = [ "docker.service" ];
 
