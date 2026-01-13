@@ -22,10 +22,6 @@ let
   arrServeSites = lib.mapAttrs (_name: port: {
     inherit port;
     ssl = false;
-    extraConfig = ''
-      allow 100.64.0.0/10;
-      deny all;
-    '';
   }) arrSites;
 in
 {
