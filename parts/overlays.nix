@@ -8,6 +8,7 @@ in
       default = lib.composeManyExtensions [
         inputs.claudeCode.overlays.default
         (import ../overlays/slack.nix inputs)
+        (import ../overlays/opencode.nix)
       ];
     };
   };
