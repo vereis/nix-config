@@ -16,6 +16,7 @@ let
     "subtitles.vereis.com" = 6767;
     "requests.vereis.com" = 5055;
     "torrents.vereis.com" = 8080;
+    "books.vereis.com" = 8787;
   };
 
   arrServeSites = lib.mapAttrs (_name: port: {
