@@ -101,6 +101,91 @@ with lib; {
       };
     })
 
+    # Claude Code deployment
+    (mkIf config.modules.agents.claude-code.enable (
+      let
+        generators = import ./lib/generators.nix { inherit lib; };
+
+        # Helper to generate skill directory with SKILL.md and supporting files
+        mkSkillDir = name: skill:
+          pkgs.runCommand "skill-${name}" {} ''
+            mkdir -p $out/${name}
+            cat > $out/${name}/SKILL.md <<'NIXEOF'
+            ${skill.toClaude}
+            NIXEOF
+            ${concatMapStringsSep "\n" (file: ''
+              cat > $out/${name}/${file.name} <<'NIXEOF'
+              ${file.content}
+              NIXEOF
+            '') skill.supportingFiles}
+          '';
+
+        # Generate all skill directories
+        skillDirs = mapAttrs mkSkillDir config.modules.agents.skills;
+
+        # Combine all skills into one directory
+        allSkills = pkgs.runCommand "claude-skills" {} ''
+          mkdir -p $out
+          ${concatStringsSep "\n" (mapAttrsToList (name: dir: "ln -s ${dir}/${name} $out/${name}") skillDirs)}
+        '';
+
+        # Helper to generate command markdown
+        mkCommandFile = name: command:
+          pkgs.writeText "${name}.md" command.toClaude;
+
+        # Generate all commands
+        commandFiles = mapAttrs mkCommandFile config.modules.agents.commands;
+
+        # Helper to generate agent markdown
+        mkAgentFile = name: agent:
+          pkgs.writeText "${name}.md" agent.toClaude;
+
+        # Generate all agents
+        agentFiles = mapAttrs mkAgentFile config.modules.agents.agents;
+
+        # Settings merged with extraConfig
+        settings =
+          (builtins.fromJSON (builtins.readFile ./settings/claude-code.json))
+          // config.modules.agents.claude-code.extraConfig;
+      in
+      {
+        # Install Claude Code package
+        home.packages = [ config.modules.agents.claude-code.package ];
+
+        # Deploy configuration files
+        home.file = {
+          # Personality
+          ".claude/CLAUDE.md".source = ./definitions/personality.md;
+
+          # Settings
+          ".claude/settings.json".text = builtins.toJSON settings;
+
+          # Skills (generated, with subdirectories)
+          ".claude/skills".source = allSkills;
+
+          # Commands (generated)
+        } // (mapAttrs' (name: file:
+          nameValuePair ".claude/commands/${name}.md" { source = file; }
+        ) commandFiles)
+
+        # Agents (generated)
+        // (mapAttrs' (name: file:
+          nameValuePair ".claude/agents/${name}.md" { source = file; }
+        ) agentFiles)
+
+        # Wrapper script
+        // {
+          ".local/bin/claude" = {
+            executable = true;
+            text = ''
+              #!/bin/sh
+              exec ${config.modules.agents.claude-code.package}/bin/claude-code --dangerously-skip-permissions "$@"
+            '';
+          };
+        };
+      }
+    ))
+
     # Assertions
     {
       assertions = [
@@ -114,7 +199,5 @@ with lib; {
         }
       ];
     }
-
-    # TODO: Add deployment logic in Commit 8
   ]);
 }

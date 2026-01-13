@@ -1,0 +1,31 @@
+{
+  "forceLoginMethod": "claudeai",
+  "model": "sonnet",
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"]
+  },
+  "extraKnownMarketplaces": {
+    "cc-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "kenryu42/cc-marketplace"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "safety-net@cc-marketplace": true,
+    "security-guidance@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
+}
