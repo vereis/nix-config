@@ -94,11 +94,44 @@ rec {
     permissionMode ? "plan",
     skills ? [],
     # OpenCode specific (always "subagent" mode)
-  }: {
+  }:
+  let
+    # Helper to format list as YAML
+    yamlList = items:
+      if items == [] then ""
+      else "\n" + concatMapStringsSep "\n" (item: "  - ${item}") items;
+
+    # Claude Code frontmatter (rich with tools, permissions, skills)
+    claudeFrontmatter =
+      let
+        lines = [
+          "---"
+          "name: ${name}"
+          "description: ${description}"
+          "model: ${model}"
+          "permissionMode: ${permissionMode}"
+        ]
+        ++ (optionals (tools != []) [ "tools:${yamlList tools}" ])
+        ++ (optionals (disallowedTools != []) [ "disallowedTools:${yamlList disallowedTools}" ])
+        ++ (optionals (skills != []) [ "skills:${yamlList skills}" ])
+        ++ [ "---" ];
+      in
+      concatStringsSep "\n" lines;
+
+    # OpenCode frontmatter (simple subagent mode)
+    openCodeFrontmatter = ''
+      ---
+      mode: subagent
+      ---
+    '';
+  in
+  {
     inherit name description content model;
 
-    # TODO: Implement in Commit 4
-    toClaude = throw "mkAgent.toClaude not yet implemented";
-    toOpenCode = throw "mkAgent.toOpenCode not yet implemented";
+    # Claude Code: Rich frontmatter with all metadata
+    toClaude = claudeFrontmatter + "\n\n" + content;
+
+    # OpenCode: Minimal frontmatter (just mode: subagent)
+    toOpenCode = openCodeFrontmatter + "\n" + content;
   };
 }
