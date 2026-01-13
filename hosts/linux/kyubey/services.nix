@@ -1,10 +1,31 @@
-{ pkgs, secrets, ... }:
+{
+  pkgs,
+  lib,
+  secrets,
+  ...
+}:
 
 let
-  tailscaleOnly = ''
-    allow 100.64.0.0/10;
-    deny all;
-  '';
+  arrSites = {
+    "shows.vereis.com" = 8989;
+    "anime.vereis.com" = 8990;
+    "movies.vereis.com" = 7878;
+    "anime-movies.vereis.com" = 7879;
+    "indexers.vereis.com" = 9696;
+    "music.vereis.com" = 8686;
+    "subtitles.vereis.com" = 6767;
+    "requests.vereis.com" = 5055;
+    "torrents.vereis.com" = 8080;
+  };
+
+  arrServeSites = lib.mapAttrs (_name: port: {
+    inherit port;
+    ssl = false;
+    extraConfig = ''
+      allow 100.64.0.0/10;
+      deny all;
+    '';
+  }) arrSites;
 in
 {
   imports = [
@@ -23,144 +44,94 @@ in
       openFirewall = true;
       acmeEmail = "serve@vereis.com";
 
-      sites = {
-        "minecraft.vereis.com" = {
-          port = 25565;
-          ssl = true;
-          ddns = {
-            enable = true;
-            protocol = "cloudflare";
-            login = "token";
-            password = secrets.cloudflare.ddclient;
-            zone = "vereis.com";
+      sites = (
+        {
+          "minecraft.vereis.com" = {
+            port = 25565;
+            ssl = true;
+            ddns = {
+              enable = true;
+              protocol = "cloudflare";
+              login = "token";
+              password = secrets.cloudflare.ddclient;
+              zone = "vereis.com";
+            };
           };
-        };
 
-        "files.vereis.com" = {
-          port = 3210;
-          ssl = true;
-          largeUploads = true;
-          maxUploadSize = "2G";
-          ddns = {
-            enable = true;
-            protocol = "cloudflare";
-            login = "token";
-            password = secrets.cloudflare.ddclient;
-            zone = "vereis.com";
+          "files.vereis.com" = {
+            port = 3210;
+            ssl = true;
+            largeUploads = true;
+            maxUploadSize = "2G";
+            ddns = {
+              enable = true;
+              protocol = "cloudflare";
+              login = "token";
+              password = secrets.cloudflare.ddclient;
+              zone = "vereis.com";
+            };
           };
-        };
 
-        "plex.vereis.com" = {
-          port = 32400;
-          ssl = true;
-          streaming = true;
-          realIpForwarding = true;
-          gzipCompression = true;
-          largeUploads = true;
-          websocketSupport = true;
-          sslOptimization = true;
-          ddns = {
-            enable = true;
-            protocol = "cloudflare";
-            login = "token";
-            password = secrets.cloudflare.ddclient;
-            zone = "vereis.com";
+          "plex.vereis.com" = {
+            port = 32400;
+            ssl = true;
+            streaming = true;
+            realIpForwarding = true;
+            gzipCompression = true;
+            largeUploads = true;
+            websocketSupport = true;
+            sslOptimization = true;
+            ddns = {
+              enable = true;
+              protocol = "cloudflare";
+              login = "token";
+              password = secrets.cloudflare.ddclient;
+              zone = "vereis.com";
+            };
+            headers = {
+              "X-Plex-Client-Identifier" = "$http_x_plex_client_identifier";
+              "X-Plex-Device" = "$http_x_plex_device";
+              "X-Plex-Device-Name" = "$http_x_plex_device_name";
+              "X-Plex-Platform" = "$http_x_plex_platform";
+              "X-Plex-Platform-Version" = "$http_x_plex_platform_version";
+              "X-Plex-Product" = "$http_x_plex_product";
+              "X-Plex-Token" = "$http_x_plex_token";
+              "X-Plex-Version" = "$http_x_plex_version";
+              "X-Plex-Nocache" = "$http_x_plex_nocache";
+              "X-Plex-Provides" = "$http_x_plex_provides";
+              "X-Plex-Device-Vendor" = "$http_x_plex_device_vendor";
+              "X-Plex-Model" = "$http_x_plex_model";
+              "X-Forwarded-For" = "$proxy_add_x_forwarded_for";
+              "X-Forwarded-Proto" = "$scheme";
+              "X-Forwarded-Host" = "$host";
+              "Host" = "127.0.0.1:32400";
+              "Referer" = "$scheme://127.0.0.1:32400";
+              "Origin" = "http://127.0.0.1:32400";
+            };
           };
-          headers = {
-            "X-Plex-Client-Identifier" = "$http_x_plex_client_identifier";
-            "X-Plex-Device" = "$http_x_plex_device";
-            "X-Plex-Device-Name" = "$http_x_plex_device_name";
-            "X-Plex-Platform" = "$http_x_plex_platform";
-            "X-Plex-Platform-Version" = "$http_x_plex_platform_version";
-            "X-Plex-Product" = "$http_x_plex_product";
-            "X-Plex-Token" = "$http_x_plex_token";
-            "X-Plex-Version" = "$http_x_plex_version";
-            "X-Plex-Nocache" = "$http_x_plex_nocache";
-            "X-Plex-Provides" = "$http_x_plex_provides";
-            "X-Plex-Device-Vendor" = "$http_x_plex_device_vendor";
-            "X-Plex-Model" = "$http_x_plex_model";
-            "X-Forwarded-For" = "$proxy_add_x_forwarded_for";
-            "X-Forwarded-Proto" = "$scheme";
-            "X-Forwarded-Host" = "$host";
-            "Host" = "127.0.0.1:32400";
-            "Referer" = "$scheme://127.0.0.1:32400";
-            "Origin" = "http://127.0.0.1:32400";
+
+          "jellyfin.vereis.com" = {
+            port = 8096;
+            ssl = true;
+            streaming = true;
+            realIpForwarding = true;
+            gzipCompression = true;
+            largeUploads = true;
+            websocketSupport = true;
+            sslOptimization = true;
+            ddns = {
+              enable = true;
+              protocol = "cloudflare";
+              login = "token";
+              password = secrets.cloudflare.ddclient;
+              zone = "vereis.com";
+            };
           };
-        };
 
-        "jellyfin.vereis.com" = {
-          port = 8096;
-          ssl = true;
-          streaming = true;
-          realIpForwarding = true;
-          gzipCompression = true;
-          largeUploads = true;
-          websocketSupport = true;
-          sslOptimization = true;
-          ddns = {
-            enable = true;
-            protocol = "cloudflare";
-            login = "token";
-            password = secrets.cloudflare.ddclient;
-            zone = "vereis.com";
-          };
-        };
-
-        # Tailscale-only *arr stack (HTTP only)
-        "shows.vereis.com" = {
-          port = 8989;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "anime.vereis.com" = {
-          port = 8990;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "movies.vereis.com" = {
-          port = 7878;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "anime-movies.vereis.com" = {
-          port = 7879;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "indexers.vereis.com" = {
-          port = 9696;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "music.vereis.com" = {
-          port = 8686;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "subtitles.vereis.com" = {
-          port = 6767;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "requests.vereis.com" = {
-          port = 5055;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-
-        "torrents.vereis.com" = {
-          port = 8080;
-          ssl = false;
-          extraConfig = tailscaleOnly;
-        };
-      };
+          # Tailscale-only *arr stack (HTTP only)
+        }
+        // arrServeSites
+      );
     };
 
     minecraft = {
