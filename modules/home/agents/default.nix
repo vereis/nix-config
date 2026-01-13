@@ -77,18 +77,32 @@ with lib; {
     };
   };
 
-  config = mkIf config.modules.agents.enable {
-    # TODO: Implement deployment logic in future commits
-    # For now, just a skeleton that does nothing
-    assertions = [
-      {
-        assertion = config.modules.agents.claude-code.enable -> config.modules.agents.claude-code.package != null;
-        message = "Claude Code package must be set when claude-code is enabled";
-      }
-      {
-        assertion = config.modules.agents.opencode.enable -> config.modules.agents.opencode.package != null;
-        message = "OpenCode package must be set when opencode is enabled";
-      }
-    ];
-  };
+  config = mkIf config.modules.agents.enable (mkMerge [
+    # Load generator functions
+    (let
+      generators = import ./lib/generators.nix { inherit lib; };
+    in {
+      # Expose skills definitions
+      modules.agents.skills = import ./definitions/skills.nix {
+        inherit lib;
+        inherit (generators) mkSkill;
+      };
+    })
+
+    # Assertions
+    {
+      assertions = [
+        {
+          assertion = config.modules.agents.claude-code.enable -> config.modules.agents.claude-code.package != null;
+          message = "Claude Code package must be set when claude-code is enabled";
+        }
+        {
+          assertion = config.modules.agents.opencode.enable -> config.modules.agents.opencode.package != null;
+          message = "OpenCode package must be set when opencode is enabled";
+        }
+      ];
+    }
+
+    # TODO: Add deployment logic in Commit 8
+  ]);
 }

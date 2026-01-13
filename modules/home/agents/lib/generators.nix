@@ -3,6 +3,26 @@
 with lib;
 
 rec {
+  # Helper: Strip YAML frontmatter from markdown content
+  # Removes everything between --- ... --- at the start of the file
+  stripFrontmatter = content:
+    let
+      lines = splitString "\n" content;
+      # Check if first line is ---
+      startsWithFrontmatter = head lines == "---";
+      # Find the closing --- (skip first line)
+      findClosing = lines:
+        let
+          indexed = lib.imap0 (i: line: { inherit i line; }) lines;
+          closing = lib.findFirst (x: x.line == "---" && x.i > 0) null indexed;
+        in
+        if closing == null then 0 else closing.i;
+      closingIndex = if startsWithFrontmatter then findClosing lines else 0;
+      # Drop lines up to and including the closing ---
+      contentLines = if closingIndex > 0 then drop (closingIndex + 1) lines else lines;
+    in
+    concatStringsSep "\n" contentLines;
+
   # Generate a skill markdown file from structured config
   mkSkill = {
     name,
