@@ -1,3 +1,6 @@
+-- Claude Code integration
+-- Configuration deployed via modules.agents.claude-code in modules/home/agents/
+-- Wrapper script at ~/.local/bin/claude points to claude-code with YOLO mode
 return {
   {
     'folke/snacks.nvim',
