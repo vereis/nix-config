@@ -261,6 +261,18 @@ in
     systemd.services.jellyseerr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "768M";
     systemd.services.jellyseerr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 8192;
 
+    # Resource limits for Plex and qBittorrent to prevent swap thrashing
+    systemd.services.plex.serviceConfig.TasksMax = mkIf cfg.plex.enable 256;
+    systemd.services.plex.serviceConfig.MemoryMax = mkIf cfg.plex.enable "4G";
+    systemd.services.plex.serviceConfig.MemoryHigh = mkIf cfg.plex.enable "3G";
+    systemd.services.plex.serviceConfig.LimitNOFILE = mkIf cfg.plex.enable 32768;
+
+    systemd.services.qbittorrent.serviceConfig.TasksMax = mkIf arrCfg.enable 2048;
+    systemd.services.qbittorrent.serviceConfig.MemoryMax = mkIf arrCfg.enable "4G";
+    systemd.services.qbittorrent.serviceConfig.MemoryHigh = mkIf arrCfg.enable "3G";
+    systemd.services.qbittorrent.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 32768;
+    systemd.services.qbittorrent.serviceConfig.CPUQuota = mkIf arrCfg.enable "200%";
+
     systemd.services.sonarr-anime = mkIf arrCfg.enable {
       description = "Sonarr (Anime)";
       wantedBy = [ "multi-user.target" ];
