@@ -1,3 +1,7 @@
 # Direnv
 .envrc
 .direnv/
+
+# NixOS build artifacts
+result
+result-*
