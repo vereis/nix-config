@@ -225,6 +225,42 @@ in
     systemd.services.prowlarr.serviceConfig.SupplementaryGroups = mkIf arrCfg.enable [ "media" ];
     systemd.services.jellyseerr.serviceConfig.SupplementaryGroups = mkIf arrCfg.enable [ "media" ];
 
+    # Resource limits to prevent thread leaks and runaway processes
+    systemd.services.sonarr.serviceConfig.TasksMax = mkIf arrCfg.enable 4096;
+    systemd.services.sonarr.serviceConfig.MemoryMax = mkIf arrCfg.enable "2G";
+    systemd.services.sonarr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "1536M";
+    systemd.services.sonarr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 16384;
+
+    systemd.services.radarr.serviceConfig.TasksMax = mkIf arrCfg.enable 4096;
+    systemd.services.radarr.serviceConfig.MemoryMax = mkIf arrCfg.enable "2G";
+    systemd.services.radarr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "1536M";
+    systemd.services.radarr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 16384;
+
+    systemd.services.prowlarr.serviceConfig.TasksMax = mkIf arrCfg.enable 2048;
+    systemd.services.prowlarr.serviceConfig.MemoryMax = mkIf arrCfg.enable "1G";
+    systemd.services.prowlarr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "768M";
+    systemd.services.prowlarr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 8192;
+
+    systemd.services.lidarr.serviceConfig.TasksMax = mkIf arrCfg.enable 4096;
+    systemd.services.lidarr.serviceConfig.MemoryMax = mkIf arrCfg.enable "2G";
+    systemd.services.lidarr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "1536M";
+    systemd.services.lidarr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 16384;
+
+    systemd.services.readarr.serviceConfig.TasksMax = mkIf arrCfg.enable 4096;
+    systemd.services.readarr.serviceConfig.MemoryMax = mkIf arrCfg.enable "2G";
+    systemd.services.readarr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "1536M";
+    systemd.services.readarr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 16384;
+
+    systemd.services.bazarr.serviceConfig.TasksMax = mkIf arrCfg.enable 2048;
+    systemd.services.bazarr.serviceConfig.MemoryMax = mkIf arrCfg.enable "1G";
+    systemd.services.bazarr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "768M";
+    systemd.services.bazarr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 8192;
+
+    systemd.services.jellyseerr.serviceConfig.TasksMax = mkIf arrCfg.enable 2048;
+    systemd.services.jellyseerr.serviceConfig.MemoryMax = mkIf arrCfg.enable "1G";
+    systemd.services.jellyseerr.serviceConfig.MemoryHigh = mkIf arrCfg.enable "768M";
+    systemd.services.jellyseerr.serviceConfig.LimitNOFILE = mkIf arrCfg.enable 8192;
+
     systemd.services.sonarr-anime = mkIf arrCfg.enable {
       description = "Sonarr (Anime)";
       wantedBy = [ "multi-user.target" ];
@@ -243,6 +279,11 @@ in
         StateDirectoryMode = "0750";
         Restart = "on-failure";
         ExecStart = "${pkgs.sonarr}/bin/Sonarr -nobrowser -data=/var/lib/sonarr-anime";
+        # Resource limits to prevent thread leaks
+        TasksMax = 4096;
+        MemoryMax = "2G";
+        MemoryHigh = "1536M";
+        LimitNOFILE = 16384;
       };
     };
 
@@ -264,6 +305,11 @@ in
         StateDirectoryMode = "0750";
         Restart = "on-failure";
         ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data=/var/lib/radarr-anime";
+        # Resource limits to prevent thread leaks
+        TasksMax = 4096;
+        MemoryMax = "2G";
+        MemoryHigh = "1536M";
+        LimitNOFILE = 16384;
       };
     };
 
