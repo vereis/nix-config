@@ -106,6 +106,11 @@ in
               disable-while-typing = true;
               speed = 0.3;
             };
+            "org/gnome/mutter" = {
+              edge-tiling = true;
+              dynamic-workspaces = true;
+              center-new-windows = true;
+            };
             "org/gnome/desktop/wm/preferences" = {
               button-layout = "appmenu:minimize,maximize,close";
               mouse-button-modifier =
