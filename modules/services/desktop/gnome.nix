@@ -125,6 +125,7 @@ in
               clock-show-weekday = true;
               enable-animations = true;
               show-battery-percentage = true;
+              scaling-factor = lib.gvariant.mkUint32 1; # 1x scaling (no scaling)
             };
             "org/gnome/desktop/interface/animations" = {
               speed = 1.5;
@@ -158,12 +159,10 @@ in
               enabled-extensions = [
                 "trayIconsReloaded@selfmade.pl"
                 "dash-to-dock@micxgx.gmail.com"
-                "Vitals@CoreCoding.com"
                 "blur-my-shell@aunetx"
                 "gsconnect@andyholmes.github.io"
                 "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
                 "hidetopbar@mathieu.bidon.ca"
-                "clipboard-indicator@tudmotu.com"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -222,12 +221,10 @@ in
           bibata-cursors
           gnomeExtensions.tray-icons-reloaded
           gnomeExtensions.dash-to-dock
-          gnomeExtensions.vitals
           gnomeExtensions.blur-my-shell
           gnomeExtensions.gsconnect
           gnomeExtensions.launch-new-instance
           gnomeExtensions.hide-top-bar
-          gnomeExtensions.clipboard-indicator
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
