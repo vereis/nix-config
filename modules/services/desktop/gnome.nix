@@ -119,6 +119,7 @@ in
                 "blur-my-shell@aunetx"
                 "gsconnect@andyholmes.github.io"
                 "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
+                "hidetopbar@mathieu.bidon.ca"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -190,6 +191,7 @@ in
           gnomeExtensions.blur-my-shell
           gnomeExtensions.gsconnect
           gnomeExtensions.launch-new-instance
+          gnomeExtensions.hide-top-bar
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
