@@ -143,6 +143,8 @@ in
               mouse-button-modifier =
                 if config.modules.services.desktop.gnome.altDrag then "<Alt>" else "disabled";
               resize-with-right-button = config.modules.services.desktop.gnome.altDrag;
+              focus-mode = "sloppy";
+              auto-raise = false;
             };
 
             # Custom keybindings for screenshots and screen recording
