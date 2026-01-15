@@ -124,6 +124,7 @@ in
                 "gsconnect@andyholmes.github.io"
                 "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
                 "hidetopbar@mathieu.bidon.ca"
+                "clipboard-indicator@tudmotu.com"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -195,6 +196,7 @@ in
           gnomeExtensions.gsconnect
           gnomeExtensions.launch-new-instance
           gnomeExtensions.hide-top-bar
+          gnomeExtensions.clipboard-indicator
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
