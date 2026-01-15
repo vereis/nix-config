@@ -118,6 +118,9 @@ in
                 "Vitals@CoreCoding.com"
               ];
             };
+            "org/gnome/shell/extensions/dash-to-dock" = {
+              show-trash = false;
+            };
             "org/gnome/desktop/wm/preferences" = {
               button-layout = "appmenu:minimize,maximize,close";
               mouse-button-modifier =
