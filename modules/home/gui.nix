@@ -281,23 +281,29 @@ in
       };
 
     # Hide terminal-only applications from the GUI application launcher
-    xdg.desktopEntries = {
-      btop = {
-        name = "btop";
-        noDisplay = true;
-      };
-      lf = {
-        name = "lf";
-        noDisplay = true;
-      };
-      xterm = {
-        name = "XTerm";
-        noDisplay = true;
-      };
-      nvim = {
-        name = "Neovim";
-        noDisplay = true;
-      };
-    };
+    # Add any terminal apps that shouldn't appear in the launcher to this list
+    xdg.desktopEntries = builtins.listToAttrs (
+      map (app: {
+        name = app;
+        value = {
+          name = app;
+          noDisplay = true;
+        };
+      }) [
+        "btop"
+        "htop"
+        "lf"
+        "nvim"
+        "vim"
+        "vi"
+        "xterm"
+        "tmux"
+        "zellij"
+        "ranger"
+        "mc" # midnight commander
+        "nano"
+        "emacs" # terminal version
+      ]
+    );
   };
 }
