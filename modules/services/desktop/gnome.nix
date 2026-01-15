@@ -113,7 +113,7 @@ in
             };
             "org/gnome/shell" = {
               enabled-extensions = [
-                "appindicatorsupport@rgcjonas.gmail.com"
+                "trayIconsReloaded@selfmade.pl"
                 "dash-to-dock@micxgx.gmail.com"
                 "Vitals@CoreCoding.com"
               ];
@@ -180,7 +180,7 @@ in
           gnome-system-monitor
           gnome-tweaks
           bibata-cursors
-          gnomeExtensions.appindicator
+          gnomeExtensions.tray-icons-reloaded
           gnomeExtensions.dash-to-dock
           gnomeExtensions.vitals
         ]
