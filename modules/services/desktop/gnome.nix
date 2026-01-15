@@ -115,6 +115,7 @@ in
               enabled-extensions = [
                 "appindicatorsupport@rgcjonas.gmail.com"
                 "dash-to-dock@micxgx.gmail.com"
+                "Vitals@CoreCoding.com"
               ];
             };
             "org/gnome/desktop/wm/preferences" = {
@@ -178,6 +179,7 @@ in
           bibata-cursors
           gnomeExtensions.appindicator
           gnomeExtensions.dash-to-dock
+          gnomeExtensions.vitals
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
