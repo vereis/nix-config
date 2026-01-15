@@ -182,8 +182,8 @@ in
             };
             "org/gnome/mutter/keybindings" = {
               # Disable window tiling keybindings that conflict with workspace switching
-              toggle-tiled-left = [ ];
-              toggle-tiled-right = [ ];
+              toggle-tiled-left = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              toggle-tiled-right = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
             };
             "org/gnome/desktop/wm/keybindings" = {
               switch-to-workspace-left = [ "<Super>Left" ];
