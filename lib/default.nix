@@ -7,7 +7,6 @@ let
     nixpkgs
     nixpkgs-stable
     home-manager
-    nix-darwin
     nixos-wsl
     ;
 
@@ -75,25 +74,6 @@ let
       }
     ];
 
-    darwin = hostname: [
-      ../hosts/darwin/configuration.nix
-      ../hosts/darwin/${hostname}
-      inputs.nix-homebrew.darwinModules.nix-homebrew
-      {
-        nix-homebrew = {
-          user = userConfig.username;
-          enable = true;
-          taps = {
-            "homebrew/homebrew-core" = inputs.homebrew-core;
-            "homebrew/homebrew-cask" = inputs.homebrew-cask;
-            "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-          };
-          mutableTaps = false;
-          autoMigrate = true;
-        };
-      }
-    ];
-
     wsl = hostname: [
       nixos-wsl.nixosModules.wsl
       ../hosts/wsl/configuration.nix
@@ -125,12 +105,6 @@ in
     systemBuilder = nixpkgs.lib.nixosSystem;
     homeManager = home-manager.nixosModules.home-manager;
     platform = "linux";
-  };
-
-  buildDarwinHosts = buildHost {
-    systemBuilder = nix-darwin.lib.darwinSystem;
-    homeManager = home-manager.darwinModules.home-manager;
-    platform = "darwin";
   };
 
   buildWSLHosts = buildHost {
