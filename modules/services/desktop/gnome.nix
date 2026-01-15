@@ -116,6 +116,7 @@ in
                 "trayIconsReloaded@selfmade.pl"
                 "dash-to-dock@micxgx.gmail.com"
                 "Vitals@CoreCoding.com"
+                "blur-my-shell@aunetx"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -184,6 +185,7 @@ in
           gnomeExtensions.tray-icons-reloaded
           gnomeExtensions.dash-to-dock
           gnomeExtensions.vitals
+          gnomeExtensions.blur-my-shell
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
