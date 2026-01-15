@@ -279,5 +279,25 @@ in
         associations.added = associations;
         defaultApplications = associations;
       };
+
+    # Hide terminal-only applications from the GUI application launcher
+    xdg.desktopEntries = {
+      btop = {
+        name = "btop";
+        noDisplay = true;
+      };
+      lf = {
+        name = "lf";
+        noDisplay = true;
+      };
+      xterm = {
+        name = "XTerm";
+        noDisplay = true;
+      };
+      nvim = {
+        name = "Neovim";
+        noDisplay = true;
+      };
+    };
   };
 }
