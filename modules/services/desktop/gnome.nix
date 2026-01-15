@@ -120,6 +120,7 @@ in
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
               show-trash = false;
+              dock-fixed = false;
             };
             "org/gnome/desktop/wm/preferences" = {
               button-layout = "appmenu:minimize,maximize,close";
