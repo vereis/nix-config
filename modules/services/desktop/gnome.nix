@@ -118,6 +118,7 @@ in
                 "Vitals@CoreCoding.com"
                 "blur-my-shell@aunetx"
                 "gsconnect@andyholmes.github.io"
+                "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -188,6 +189,7 @@ in
           gnomeExtensions.vitals
           gnomeExtensions.blur-my-shell
           gnomeExtensions.gsconnect
+          gnomeExtensions.launch-new-instance
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
