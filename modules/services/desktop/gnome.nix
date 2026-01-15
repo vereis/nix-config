@@ -183,7 +183,6 @@ in
           nautilus
           gnome-calculator
           gnome-system-monitor
-          gnome-tweaks
           bibata-cursors
           gnomeExtensions.tray-icons-reloaded
           gnomeExtensions.dash-to-dock
