@@ -111,6 +111,11 @@ in
               dynamic-workspaces = true;
               center-new-windows = true;
             };
+            "org/gnome/shell" = {
+              enabled-extensions = [
+                "appindicatorsupport@rgcjonas.gmail.com"
+              ];
+            };
             "org/gnome/desktop/wm/preferences" = {
               button-layout = "appmenu:minimize,maximize,close";
               mouse-button-modifier =
@@ -170,6 +175,7 @@ in
           gnome-system-monitor
           gnome-tweaks
           bibata-cursors
+          gnomeExtensions.appindicator
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
