@@ -52,6 +52,12 @@ in
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
+    # Enable unified media capture for screenshots and recordings
+    modules.services.desktop.capture = {
+      screenshots.enable = true;
+      recordings.enable = true;
+    };
+
     assertions = [
       {
         assertion =
@@ -150,21 +156,35 @@ in
             # Custom keybindings for screenshots and screen recording
             "org/gnome/settings-daemon/plugins/media-keys" = {
               custom-keybindings = [
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot/"
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kooha/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-full/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-region/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-toggle/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-region/"
               ];
             };
 
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot" = {
-              name = "Flameshot Screenshot";
-              command = "flameshot gui";
-              binding = "<Control><Alt>s";
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-full" = {
+              name = "Screenshot (Full)";
+              command = "/etc/capture/screenshot.sh";
+              binding = "<Super>s";
             };
 
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kooha" = {
-              name = "Kooha Screen Recording";
-              command = "kooha";
-              binding = "<Control><Alt>r";
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-region" = {
+              name = "Screenshot (Region)";
+              command = "/etc/capture/screenshot.sh region";
+              binding = "<Super><Shift>s";
+            };
+
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-toggle" = {
+              name = "Screen Recording (Toggle)";
+              command = "/etc/capture/record.sh";
+              binding = "<Super>v";
+            };
+
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-region" = {
+              name = "Screen Recording (Region)";
+              command = "/etc/capture/record.sh region";
+              binding = "<Super><Shift>v";
             };
           }
           // (
