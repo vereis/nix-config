@@ -41,28 +41,6 @@
       inputs.elephant.follows = "elephant";
     };
 
-    # Darwin Support
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    homebrew-bundle = {
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
-    };
-    homebrew-core = {
-      url = "github:homebrew/homebrew-core";
-      flake = false;
-    };
-    homebrew-cask = {
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
-    nix-homebrew = {
-      url = "github:zhaofengli-wip/nix-homebrew";
-      flake = true;
-    };
-
     # WSL Support
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
@@ -76,7 +54,6 @@
       systems = [
         "x86_64-linux"
         "aarch64-linux"
-        "aarch64-darwin"
       ];
 
       imports = [

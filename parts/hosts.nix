@@ -12,9 +12,5 @@ in
       // lib.buildWSLHosts {
         homura = "aarch64-linux";
       };
-
-    darwinConfigurations = lib.buildDarwinHosts {
-      iroha = "aarch64-darwin";
-    };
   };
 }

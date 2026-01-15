@@ -61,7 +61,7 @@ jobs:
 
   build:
     name: Check System Configurations
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     needs: [format, lint, check]
     strategy:
       fail-fast: false
@@ -69,21 +69,13 @@ jobs:
         include:
           # Linux x86_64 hosts
           - host: kyubey
-            os: ubuntu-latest
             system: x86_64-linux
           - host: madoka
-            os: ubuntu-latest
             system: x86_64-linux
 
           # Linux aarch64 hosts (cross-compile on x86_64)
           - host: homura
-            os: ubuntu-latest
             system: aarch64-linux
-
-          # Darwin aarch64 hosts
-          - host: iroha
-            os: macos-14
-            system: aarch64-darwin
 
     steps:
       - name: Checkout repository
@@ -91,11 +83,7 @@ jobs:
 
       - name: Install git-crypt
         run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get update && sudo apt-get install -y git-crypt
-          elif [ "$RUNNER_OS" == "macOS" ]; then
-            brew install git-crypt
-          fi
+          sudo apt-get update && sudo apt-get install -y git-crypt
 
       - name: Unlock git-crypt secrets
         run: |
@@ -112,14 +100,8 @@ jobs:
           use-flakehub: false
 
       - name: Check NixOS configuration for ${{ matrix.host }}
-        if: matrix.system != 'aarch64-darwin'
         run: |
           nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --dry-run --show-trace
-
-      - name: Check Darwin configuration for ${{ matrix.host }}
-        if: matrix.system == 'aarch64-darwin'
-        run: |
-          nix build .#darwinConfigurations.${{ matrix.host }}.system --dry-run --show-trace
 
   check:
     name: Flake Check
