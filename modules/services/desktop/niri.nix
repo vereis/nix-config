@@ -62,29 +62,6 @@ let
     relative-to = "workspace-view";
   };
 
-  screenshotScript = pkgs.writeShellScript "screenshot" (
-    builtins.readFile (
-      pkgs.replaceVars ./scripts/screenshot.sh {
-        grim = "${pkgs.grim}/bin/grim";
-        slurp = "${pkgs.slurp}/bin/slurp";
-        wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
-        notify-send = "${pkgs.libnotify}/bin/notify-send";
-      }
-    )
-  );
-
-  recordScript = pkgs.writeShellScript "record" (
-    builtins.readFile (
-      pkgs.replaceVars ./scripts/record.sh {
-        slurp = "${pkgs.slurp}/bin/slurp";
-        wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
-        wf-recorder = "${pkgs.wf-recorder}/bin/wf-recorder";
-        notify-send = "${pkgs.libnotify}/bin/notify-send";
-        makoctl = "${pkgs.mako}/bin/makoctl";
-      }
-    )
-  );
-
   walkerItemLayout = builtins.readFile ./niri/walker/item.xml;
 
   wallpaperScript = pkgs.writeShellScript "wallpaper" (
@@ -161,6 +138,12 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Enable unified media capture for screenshots and recordings
+    modules.services.desktop.capture = {
+      screenshots.enable = true;
+      recordings.enable = true;
+    };
+
     programs.niri.enable = true;
 
     services = {
@@ -184,13 +167,7 @@ in
         swayidle
         sway-audio-idle-inhibit
 
-        # Screen Recording
-        grim
-        slurp
-        wf-recorder
-
-        # Clipboard & Input
-        wl-clipboard
+        # Input
         wtype
 
         # Wallpaper
@@ -202,7 +179,6 @@ in
         bibata-cursors
         xwayland-satellite
         ghostty
-        libnotify
 
         # Audio & Brightness
         wireplumber
@@ -385,14 +361,14 @@ in
               "Mod+Shift+Page_Down".action.move-column-to-workspace-down = { };
               "Mod+Shift+Page_Up".action.move-column-to-workspace-up = { };
 
-              "Mod+S".action.spawn = [ "${screenshotScript}" ];
+              "Mod+S".action.spawn = [ "/etc/capture/screenshot.sh" ];
               "Mod+Shift+S".action.spawn = [
-                "${screenshotScript}"
+                "/etc/capture/screenshot.sh"
                 "region"
               ];
-              "Mod+V".action.spawn = [ "${recordScript}" ];
+              "Mod+V".action.spawn = [ "/etc/capture/record.sh" ];
               "Mod+Shift+V".action.spawn = [
-                "${recordScript}"
+                "/etc/capture/record.sh"
                 "region"
               ];
 
