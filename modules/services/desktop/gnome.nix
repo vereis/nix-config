@@ -124,9 +124,16 @@ in
               enable-hot-corners = false;
               clock-show-weekday = true;
               enable-animations = true;
+              show-battery-percentage = true;
             };
             "org/gnome/desktop/interface/animations" = {
               speed = 1.5;
+            };
+            "org/gnome/desktop/screensaver" = {
+              lock-delay = lib.gvariant.mkUint32 0; # Disable screen lock delay
+            };
+            "org/gnome/desktop/session" = {
+              idle-delay = lib.gvariant.mkUint32 900; # 15 minutes
             };
             "org/gnome/desktop/peripherals/touchpad" = {
               tap-to-click = true;
@@ -162,6 +169,9 @@ in
             "org/gnome/shell/extensions/dash-to-dock" = {
               show-trash = false;
               dock-fixed = false;
+            };
+            "org/gnome/shell/extensions/gsconnect" = {
+              name = config.networking.hostName;
             };
             "org/gnome/desktop/wm/preferences" = {
               button-layout = "appmenu:minimize,maximize,close";
