@@ -52,10 +52,12 @@ in
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
-    # Enable unified media capture for screenshots and recordings
+    # GNOME uses built-in screenshot and recording (wlroots tools don't work on Mutter)
+    # Screenshots: Super+S opens GNOME's screenshot UI
+    # Recording: Ctrl+Shift+Alt+R for built-in recorder, or install kooha for GUI
     modules.services.desktop.capture = {
-      screenshots.enable = true;
-      recordings.enable = true;
+      screenshots.enable = false; # Use GNOME built-in screenshot UI
+      recordings.enable = false; # Use GNOME built-in recorder or kooha
     };
 
     assertions = [
@@ -153,39 +155,15 @@ in
               auto-raise = false;
             };
 
-            # Custom keybindings for screenshots and screen recording
-            "org/gnome/settings-daemon/plugins/media-keys" = {
-              custom-keybindings = [
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-full/"
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-region/"
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-toggle/"
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-region/"
-              ];
+            # Use GNOME's built-in screenshot and recording functionality
+            # wlroots tools (grim/wf-recorder) don't work on GNOME's Mutter compositor
+            "org/gnome/shell/keybindings" = {
+              show-screenshot-ui = [ "<Super>s" ]; # Opens screenshot UI (region/window/screen)
+              screenshot = [ "<Super><Shift>s" ]; # Immediate full screenshot
             };
 
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-full" = {
-              name = "Screenshot (Full)";
-              command = "/etc/capture/screenshot.sh";
-              binding = "<Super>s";
-            };
-
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/screenshot-region" = {
-              name = "Screenshot (Region)";
-              command = "/etc/capture/screenshot.sh region";
-              binding = "<Super><Shift>s";
-            };
-
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-toggle" = {
-              name = "Screen Recording (Toggle)";
-              command = "/etc/capture/record.sh";
-              binding = "<Super>v";
-            };
-
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/recording-region" = {
-              name = "Screen Recording (Region)";
-              command = "/etc/capture/record.sh region";
-              binding = "<Super><Shift>v";
-            };
+            # Recording: Use Ctrl+Shift+Alt+R (GNOME's built-in recorder)
+            # Or optionally install kooha package for a GUI recorder
           }
           // (
             let
