@@ -180,6 +180,10 @@ in
               focus-mode = "sloppy";
               auto-raise = false;
             };
+            "org/gnome/desktop/wm/keybindings" = {
+              switch-to-workspace-left = [ "<Super>Left" ];
+              switch-to-workspace-right = [ "<Super>Right" ];
+            };
 
             # Use GNOME's built-in screenshot and recording functionality
             # wlroots tools (grim/wf-recorder) don't work on GNOME's Mutter compositor
