@@ -191,6 +191,30 @@ in
               show-screenshot-ui = [ "<Super>s" ]; # Opens screenshot UI (region/window/screen)
               show-screen-recording-ui = [ "<Super>v" ]; # Opens screen recording UI
             };
+
+            # Custom application launcher keybindings
+            "org/gnome/settings-daemon/plugins/media-keys" = {
+              custom-keybindings = [
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+              ];
+            };
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+              name = "Terminal";
+              command = "ghostty";
+              binding = "<Super>Return";
+            };
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+              name = "Files";
+              command = "nautilus";
+              binding = "<Super>e";
+            };
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+              name = "Browser";
+              command = "xdg-open https://"; # Opens default browser
+              binding = "<Super>b";
+            };
           }
           // (
             let
