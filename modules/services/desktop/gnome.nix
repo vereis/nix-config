@@ -98,6 +98,10 @@ in
               cursor-theme = "Bibata-Modern-Classic";
               enable-hot-corners = false;
               clock-show-weekday = true;
+              enable-animations = true;
+            };
+            "org/gnome/desktop/interface/animations" = {
+              speed = 1.5;
             };
             "org/gnome/desktop/peripherals/touchpad" = {
               tap-to-click = true;
