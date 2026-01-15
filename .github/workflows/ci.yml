@@ -72,6 +72,8 @@ jobs:
             system: x86_64-linux
           - host: madoka
             system: x86_64-linux
+          - host: iroha
+            system: x86_64-linux
 
           # Linux aarch64 hosts (cross-compile on x86_64)
           - host: homura
