@@ -183,6 +183,8 @@ in
             "org/gnome/desktop/wm/keybindings" = {
               switch-to-workspace-left = [ "<Super>Left" ];
               switch-to-workspace-right = [ "<Super>Right" ];
+              close = [ "<Super>q" ];
+              toggle-fullscreen = [ "<Super>f" ];
             };
 
             # Use GNOME's built-in screenshot and recording functionality
