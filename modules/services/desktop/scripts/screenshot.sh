@@ -25,32 +25,29 @@ if @pgrep@ -x mako >/dev/null 2>&1; then
     fi
   fi
 else
-  # GNOME with D-Bus API
+  # GNOME with flameshot
   if [ "${1:-}" = "region" ]; then
-    # SelectArea returns x, y, width, height as a tuple
-    if ! area=$(@gdbus@ call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Screenshot --method org.gnome.Shell.Screenshot.SelectArea 2>&1); then
+    # Interactive region selection with flameshot GUI
+    if ! @flameshot@ gui --path "$SCREENSHOT_DIR"; then
       exit 0
     fi
-    # Parse the returned tuple: (x, y, width, height)
-    # Remove parentheses and split by comma
-    area_clean=$(echo "$area" | tr -d '()' | tr ',' ' ')
-    read -r x y width height <<<"$area_clean"
-
-    # Take screenshot of selected area
-    result=$(@gdbus@ call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Screenshot --method org.gnome.Shell.Screenshot.ScreenshotArea "$x" "$y" "$width" "$height" false "$filename")
-    if [[ ! $result =~ "true" ]]; then
-      @notify-send@ -u critical "Screenshot failed" "Could not capture region"
-      exit 1
+    # flameshot gui saves with its own filename format, find the most recent screenshot
+    latest=$(find "$SCREENSHOT_DIR" -maxdepth 1 -name '*.png' -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+    if [ -n "$latest" ]; then
+      @wl-copy@ <"$latest"
+      @notify-send@ "Screenshot saved" "$latest"
     fi
   else
     # Full screenshot
-    result=$(@gdbus@ call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Screenshot --method org.gnome.Shell.Screenshot.Screenshot false false "$filename")
-    if [[ ! $result =~ "true" ]]; then
+    if ! @flameshot@ full --path "$SCREENSHOT_DIR"; then
       @notify-send@ -u critical "Screenshot failed" "Could not capture screen"
       exit 1
     fi
+    # Find the most recent screenshot
+    latest=$(find "$SCREENSHOT_DIR" -maxdepth 1 -name '*.png' -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+    if [ -n "$latest" ]; then
+      @wl-copy@ <"$latest"
+      @notify-send@ "Screenshot saved" "$latest"
+    fi
   fi
 fi
-
-@wl-copy@ <"$filename"
-@notify-send@ "Screenshot saved" "$filename"

@@ -19,9 +19,9 @@ let
       pkgs.replaceVars ./scripts/screenshot.sh {
         grim = "${pkgs.grim}/bin/grim";
         slurp = "${pkgs.slurp}/bin/slurp";
+        flameshot = "${pkgs.flameshot}/bin/flameshot";
         wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
         notify-send = "${pkgs.libnotify}/bin/notify-send";
-        gdbus = "${pkgs.glib}/bin/gdbus";
         pgrep = "${pkgs.procps}/bin/pgrep";
       }
     )
@@ -65,9 +65,9 @@ in
       environment.systemPackages = with pkgs; [
         grim # Screenshot tool for Wayland (niri)
         slurp # Region selection for Wayland (niri)
+        flameshot # Screenshot tool for GNOME
         wl-clipboard # Clipboard utilities
         libnotify # notify-send for notifications
-        glib # Provides gdbus for GNOME
         procps # Provides pgrep for desktop detection
       ];
 
