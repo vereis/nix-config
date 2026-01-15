@@ -114,6 +114,7 @@ in
             "org/gnome/shell" = {
               enabled-extensions = [
                 "appindicatorsupport@rgcjonas.gmail.com"
+                "dash-to-dock@micxgx.gmail.com"
               ];
             };
             "org/gnome/desktop/wm/preferences" = {
@@ -176,6 +177,7 @@ in
           gnome-tweaks
           bibata-cursors
           gnomeExtensions.appindicator
+          gnomeExtensions.dash-to-dock
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
