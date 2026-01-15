@@ -68,6 +68,23 @@ in
       }
     ];
 
+    # Configure GDM (login screen) scaling to match desktop
+    programs.dconf.profiles.gdm.databases = [
+      {
+        settings = {
+          # Set scaling to 1x (no scaling)
+          "org/gnome/desktop/interface" = {
+            scaling-factor = lib.gvariant.mkUint32 1;
+          };
+        };
+      }
+    ];
+
+    # Copy monitor configuration to GDM so it uses same resolution/refresh rate
+    systemd.tmpfiles.rules = [
+      "L+ /var/lib/gdm/.config/monitors.xml - - - - /home/${username}/.config/monitors.xml"
+    ];
+
     services = {
       xserver.enable = true;
 
