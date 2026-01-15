@@ -33,7 +33,10 @@
         };
       };
 
-      graphics.enable = true;
+      graphics = {
+        enable = true;
+        driver = "nvidia";
+      };
       steam.enable = true;
     };
   };
