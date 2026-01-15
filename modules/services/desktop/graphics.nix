@@ -68,6 +68,13 @@ in
 
       security.rtkit.enable = true;
 
+      boot = {
+        kernelModules = [ "snd_hda_intel" ];
+        extraModprobeConfig = ''
+          options snd-hda-intel model=auto
+        '';
+      };
+
       services.pipewire = {
         enable = true;
         alsa = {
@@ -97,13 +104,6 @@ in
       services.xserver = {
         enable = true;
         videoDrivers = [ "nvidia" ];
-      };
-
-      boot = {
-        kernelModules = [ "snd_hda_intel" ];
-        extraModprobeConfig = ''
-          options snd-hda-intel model=auto
-        '';
       };
 
       environment = {
