@@ -117,6 +117,7 @@ in
                 "dash-to-dock@micxgx.gmail.com"
                 "Vitals@CoreCoding.com"
                 "blur-my-shell@aunetx"
+                "gsconnect@andyholmes.github.io"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -186,6 +187,7 @@ in
           gnomeExtensions.dash-to-dock
           gnomeExtensions.vitals
           gnomeExtensions.blur-my-shell
+          gnomeExtensions.gsconnect
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
