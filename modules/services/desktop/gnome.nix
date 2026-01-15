@@ -159,7 +159,6 @@ in
             # wlroots tools (grim/wf-recorder) don't work on GNOME's Mutter compositor
             "org/gnome/shell/keybindings" = {
               show-screenshot-ui = [ "<Super>s" ]; # Opens screenshot UI (region/window/screen)
-              screenshot = [ "<Super><Shift>s" ]; # Immediate full screenshot
               show-screen-recording-ui = [ "<Super>v" ]; # Opens screen recording UI
             };
           }
