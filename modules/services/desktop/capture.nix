@@ -21,6 +21,8 @@ let
         slurp = "${pkgs.slurp}/bin/slurp";
         wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
         notify-send = "${pkgs.libnotify}/bin/notify-send";
+        gdbus = "${pkgs.glib}/bin/gdbus";
+        pgrep = "${pkgs.procps}/bin/pgrep";
       }
     )
   );
@@ -61,10 +63,12 @@ in
     # Screenshots configuration
     (mkIf cfg.screenshots.enable {
       environment.systemPackages = with pkgs; [
-        grim # Screenshot tool for Wayland
-        slurp # Region selection for Wayland
+        grim # Screenshot tool for Wayland (niri)
+        slurp # Region selection for Wayland (niri)
         wl-clipboard # Clipboard utilities
         libnotify # notify-send for notifications
+        glib # Provides gdbus for GNOME
+        procps # Provides pgrep for desktop detection
       ];
 
       environment.etc."capture/screenshot.sh" = {
