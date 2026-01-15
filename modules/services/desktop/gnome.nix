@@ -97,6 +97,13 @@ in
             "org/gnome/desktop/interface" = {
               cursor-theme = "Bibata-Modern-Classic";
             };
+            "org/gnome/desktop/peripherals/touchpad" = {
+              tap-to-click = true;
+              two-finger-scrolling-enabled = true;
+              natural-scroll = true;
+              disable-while-typing = true;
+              speed = 0.3;
+            };
             "org/gnome/desktop/wm/preferences" = {
               button-layout = "appmenu:minimize,maximize,close";
               mouse-button-modifier =
