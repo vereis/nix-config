@@ -168,6 +168,7 @@ in
           nautilus
           gnome-calculator
           gnome-system-monitor
+          gnome-tweaks
           bibata-cursors
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
