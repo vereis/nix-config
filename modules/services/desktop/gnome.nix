@@ -110,6 +110,13 @@ in
               disable-while-typing = true;
               speed = 0.3;
             };
+            "org/gtk/gtk4/settings/file-chooser" = {
+              sort-directories-first = true;
+            };
+            "org/gnome/nautilus/preferences" = {
+              default-folder-viewer = "list-view";
+              show-hidden-files = false;
+            };
             "org/gnome/mutter" = {
               edge-tiling = true;
               dynamic-workspaces = true;
