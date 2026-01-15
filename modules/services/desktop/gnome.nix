@@ -183,6 +183,8 @@ in
             "org/gnome/desktop/wm/keybindings" = {
               switch-to-workspace-left = [ "<Super>Left" ];
               switch-to-workspace-right = [ "<Super>Right" ];
+              move-to-workspace-left = [ "<Super><Shift>Left" ];
+              move-to-workspace-right = [ "<Super><Shift>Right" ];
               close = [ "<Super>q" ];
               toggle-fullscreen = [ "<Super>f" ];
             };
