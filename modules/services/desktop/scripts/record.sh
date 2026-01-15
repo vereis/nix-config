@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 # Screen recording script for Wayland - toggle recording with notification
-# Dependencies: wf-recorder, slurp, wl-copy, notify-send, makoctl
+# Dependencies: wf-recorder, slurp, wl-copy, notify-send, makoctl (niri) or gdbus (GNOME)
 # Usage: record.sh [region]
 
 set -euo pipefail
+
+# Detect desktop environment and set notification dismissal command
+if @pgrep@ -x mako >/dev/null 2>&1; then
+  # niri with mako notification daemon
+  DISMISS_CMD="@makoctl@ dismiss -n"
+else
+  # GNOME with native notifications
+  DISMISS_CMD="@gdbus@ call --session --dest org.freedesktop.Notifications --object-path /org/freedesktop/Notifications --method org.freedesktop.Notifications.CloseNotification"
+fi
 
 RECORDING_DIR="${RECORDING_DIR:-$HOME/Videos/Recordings}"
 
@@ -44,7 +53,7 @@ if pid=$(cat "$PIDFILE" 2>/dev/null) && [ -n "$pid" ] && kill -0 "$pid" 2>/dev/n
 
   # Dismiss the recording notification by ID (graceful failure)
   if [ -f "$NOTIFYIDFILE" ]; then
-    @makoctl@ dismiss -n "$(cat "$NOTIFYIDFILE")" 2>/dev/null || true
+    $DISMISS_CMD "$(cat "$NOTIFYIDFILE")" 2>/dev/null || true
   fi
 
   @notify-send@ -u low "Recording stopped" "${filename:-Recording}"
