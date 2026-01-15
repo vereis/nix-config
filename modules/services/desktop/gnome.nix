@@ -96,6 +96,8 @@ in
           settings = {
             "org/gnome/desktop/interface" = {
               cursor-theme = "Bibata-Modern-Classic";
+              enable-hot-corners = false;
+              clock-show-weekday = true;
             };
             "org/gnome/desktop/peripherals/touchpad" = {
               tap-to-click = true;
