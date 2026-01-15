@@ -160,10 +160,8 @@ in
             "org/gnome/shell/keybindings" = {
               show-screenshot-ui = [ "<Super>s" ]; # Opens screenshot UI (region/window/screen)
               screenshot = [ "<Super><Shift>s" ]; # Immediate full screenshot
+              show-screen-recording-ui = [ "<Super>v" ]; # Opens screen recording UI
             };
-
-            # Recording: Use Ctrl+Shift+Alt+R (GNOME's built-in recorder)
-            # Or optionally install kooha package for a GUI recorder
           }
           // (
             let
