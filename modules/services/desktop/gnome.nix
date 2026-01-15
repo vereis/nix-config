@@ -180,6 +180,11 @@ in
               focus-mode = "sloppy";
               auto-raise = false;
             };
+            "org/gnome/mutter/keybindings" = {
+              # Disable window tiling keybindings that conflict with workspace switching
+              toggle-tiled-left = [ ];
+              toggle-tiled-right = [ ];
+            };
             "org/gnome/desktop/wm/keybindings" = {
               switch-to-workspace-left = [ "<Super>Left" ];
               switch-to-workspace-right = [ "<Super>Right" ];
