@@ -8,6 +8,7 @@
 }:
 
 {
+  programs.fish.enable = lib.mkForce true;
   programs.zsh.enable = lib.mkForce true;
 
   users.users.${username} = {
@@ -19,7 +20,7 @@
       "docker"
       "media"
     ];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
 
   nixpkgs = {
