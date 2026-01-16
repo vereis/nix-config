@@ -82,6 +82,7 @@ in
 
         # Enable clickable links
         link-url = true;
+        mouse-shift-capture = false;
 
         # Enable image protocols (Kitty image protocol)
         image-storage-limit = 320000000;
