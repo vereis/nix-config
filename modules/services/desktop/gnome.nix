@@ -221,6 +221,7 @@ in
             "org/gnome/shell/keybindings" = {
               show-screenshot-ui = [ "<Super>s" ];
               show-screen-recording-ui = [ "<Super>v" ];
+              toggle-application-view = [ "<Super>space" ];
             };
 
             # Custom application launcher keybindings
