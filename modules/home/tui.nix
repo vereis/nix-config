@@ -223,6 +223,7 @@ with lib;
 
       fzf = {
         enable = true;
+        enableFishIntegration = true;
         enableZshIntegration = true;
         enableBashIntegration = true;
       };
@@ -242,7 +243,7 @@ with lib;
           # Set vi key bindings
           fish_vi_key_bindings
 
-          # Ctrl-A/E for line navigation (like your zsh config)
+          # Ctrl-A/E for line navigation
           bind -M insert \ca beginning-of-line
           bind -M insert \ce end-of-line
 
