@@ -55,6 +55,12 @@ in
       default = 900;
       description = "Idle timeout in seconds before screen blanks (default: 900 = 15 minutes, 0 = never)";
     };
+
+    remapCapsLockToCtrl = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Remap CapsLock key to act as Ctrl";
+    };
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
@@ -139,6 +145,13 @@ in
               natural-scroll = true;
               disable-while-typing = true;
               speed = 0.3;
+            };
+            "org/gnome/desktop/input-sources" = {
+              xkb-options =
+                if config.modules.services.desktop.gnome.remapCapsLockToCtrl then
+                  [ "ctrl:nocaps" ]
+                else
+                  lib.gvariant.mkEmptyArray lib.gvariant.type.string;
             };
             "org/gtk/gtk4/settings/file-chooser" = {
               sort-directories-first = true;
