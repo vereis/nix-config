@@ -21,17 +21,7 @@
     services.desktop = {
       autoLogin = true;
 
-      niri = {
-        enable = true;
-        outputs."DP-2" = {
-          mode = {
-            width = 3840;
-            height = 2160;
-            refresh = 143.982;
-          };
-          scale = 1.0;
-        };
-      };
+      gnome.enable = true;
 
       graphics = {
         enable = true;
