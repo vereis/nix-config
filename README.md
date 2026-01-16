@@ -1,8 +1,8 @@
 # Nix Configuration
 
-This is my personal Nix configuration for Windows (WSL), Linux (NixOS), and macOS (nix-darwin).
+This is my personal Nix configuration for Windows (WSL) and Linux (NixOS).
 
-It uses **flake-parts** to help with organization and modularity (especially for multi-platform support):
+It uses **flake-parts** to help with organization and modularity:
 
 ```
 ├── flake.nix
@@ -16,14 +16,12 @@ It uses **flake-parts** to help with organization and modularity (especially for
 ├── hosts/                       # Host-specific configurations
 │   ├── linux/                   ## NixOS machine configurations
 │   │   ├── configuration.nix
-│   │   └── kyubey/
-│   ├── darwin/                  ## MacOS machine configurations
-│   │   ├── configuration.nix
+│   │   ├── kyubey/
+│   │   ├── madoka/
 │   │   └── iroha/
 │   ├── wsl/                     ## WSL2 machine configurations
 │   │   ├── configuration.nix
 │   │   └── homura/
-│   │   └── madoka/
 │   └── home.nix
 ├── modules/                     # Reusable modules
 │   ├── hardware/                ## Hardware-specific modules
@@ -53,5 +51,4 @@ Each host configuration then gets configured via `hosts/<platform>/configuration
 1. Install:
    ```bash
    sudo nixos-rebuild switch --flake .#<machine-name>
-   darwin-rebuild switch --flake .#<machine-name>
    ```
