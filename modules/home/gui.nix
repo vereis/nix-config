@@ -55,8 +55,8 @@ in
       file = config.modules.gui.extraFiles;
 
       sessionVariables = {
-        BROWSER = "zen";
-        DEFAULT_BROWSER = "zen";
+        BROWSER = "zen-twilight";
+        DEFAULT_BROWSER = "zen-twilight";
       }
       // config.modules.gui.extraSessionVariables;
     };

@@ -244,7 +244,7 @@ in
             };
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
               name = "Browser";
-              command = "zen";
+              command = "zen-twilight";
               binding = "<Super>b";
             };
           }
