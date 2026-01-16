@@ -43,12 +43,6 @@ in
         }
       '';
     };
-
-    altDrag = mkOption {
-      type = types.bool;
-      default = config.modules.services.desktop.altDrag;
-      description = "Enable Alt+drag to move and resize windows (inherits from desktop.altDrag, can override).";
-    };
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
@@ -166,9 +160,8 @@ in
             };
             "org/gnome/desktop/wm/preferences" = {
               button-layout = "appmenu:minimize,maximize,close";
-              mouse-button-modifier =
-                if config.modules.services.desktop.gnome.altDrag then "<Alt>" else "disabled";
-              resize-with-right-button = config.modules.services.desktop.gnome.altDrag;
+              mouse-button-modifier = "<Super>";
+              resize-with-right-button = true;
               focus-mode = "sloppy";
               auto-raise = false;
             };
