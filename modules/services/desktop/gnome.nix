@@ -115,12 +115,13 @@ in
       };
     };
 
-    # Use dconf system databases instead of GSettings overrides
-    # This makes settings survive 'dconf reset' by providing system-level defaults
+    # Use dconf system databases with lockAll to enforce settings as source of truth
+    # User cannot override these settings via GUI or dconf commands
     programs.dconf = {
       enable = true;
       profiles.user.databases = [
         {
+          lockAll = true;
           settings = {
             "org/gnome/desktop/interface" = {
               cursor-theme = "Bibata-Modern-Classic";
