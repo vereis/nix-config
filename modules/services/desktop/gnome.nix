@@ -188,7 +188,10 @@ in
               move-to-workspace-right = [ "<Super><Shift>Right" ];
               move-to-monitor-left = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
               move-to-monitor-right = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
-              close = [ "<Super>q" ];
+              close = [
+                "<Super>q"
+                "<Alt>F4"
+              ];
               toggle-fullscreen = [ "<Super>f" ];
             };
 
