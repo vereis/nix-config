@@ -52,14 +52,6 @@ in
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
-    # GNOME uses built-in screenshot and recording (wlroots tools don't work on Mutter)
-    # Screenshots: Super+S opens GNOME's screenshot UI
-    # Recording: Ctrl+Shift+Alt+R for built-in recorder, or install kooha for GUI
-    modules.services.desktop.capture = {
-      screenshots.enable = false; # Use GNOME built-in screenshot UI
-      recordings.enable = false; # Use GNOME built-in recorder or kooha
-    };
-
     assertions = [
       {
         assertion =

@@ -29,7 +29,6 @@ in
   };
 
   imports = [
-    ./capture.nix
     ./gnome.nix
     ./graphics.nix
     ./steam.nix
