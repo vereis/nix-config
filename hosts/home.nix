@@ -24,7 +24,6 @@
         "$HOME/bin"
       ];
     }
-    (lib.mkIf pkgs.stdenv.isDarwin { homeDirectory = lib.mkForce "/Users/${username}"; })
     (lib.mkIf pkgs.stdenv.isLinux { homeDirectory = lib.mkForce "/home/${username}"; })
   ];
 }
