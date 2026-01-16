@@ -44,7 +44,6 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [
-    # Common config for all drivers
     {
       programs.nix-ld = {
         enable = true;
@@ -90,7 +89,6 @@ in
       ];
     }
 
-    # NVIDIA-specific config
     (mkIf (cfg.driver == "nvidia") {
       hardware.nvidia = {
         modesetting.enable = true;
@@ -120,7 +118,6 @@ in
       };
     })
 
-    # Intel-specific config
     (mkIf (cfg.driver == "intel") {
       hardware.graphics.extraPackages = with pkgs; [
         intel-media-driver
@@ -133,7 +130,6 @@ in
       };
     })
 
-    # AMD-specific config (placeholder for future use)
     (mkIf (cfg.driver == "amd") {
       services.xserver.videoDrivers = [ "amdgpu" ];
 
