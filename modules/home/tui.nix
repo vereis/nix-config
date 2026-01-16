@@ -127,6 +127,19 @@ with lib;
     };
 
     programs = {
+      atuin = {
+        enable = true;
+        enableFishIntegration = true;
+        settings = {
+          auto_sync = false; # Start with local-only
+          search_mode = "fuzzy";
+          filter_mode = "global";
+          style = "compact";
+          inline_height = 20;
+          show_preview = true;
+        };
+      };
+
       direnv = {
         enable = true;
         enableZshIntegration = true;
