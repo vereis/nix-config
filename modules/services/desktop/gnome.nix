@@ -43,6 +43,18 @@ in
         }
       '';
     };
+
+    scalingFactor = mkOption {
+      type = types.ints.positive;
+      default = 1;
+      description = "UI scaling factor (1 = 100%, 2 = 200%). Applied to both GDM and GNOME session.";
+    };
+
+    idleDelay = mkOption {
+      type = types.int;
+      default = 900;
+      description = "Idle timeout in seconds before screen blanks (default: 900 = 15 minutes, 0 = never)";
+    };
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
@@ -58,9 +70,8 @@ in
     programs.dconf.profiles.gdm.databases = [
       {
         settings = {
-          # Set scaling to 1x (no scaling)
           "org/gnome/desktop/interface" = {
-            scaling-factor = lib.gvariant.mkUint32 1;
+            scaling-factor = lib.gvariant.mkUint32 config.modules.services.desktop.gnome.scalingFactor;
           };
         };
       }
@@ -111,7 +122,7 @@ in
               clock-show-weekday = true;
               enable-animations = true;
               show-battery-percentage = true;
-              scaling-factor = lib.gvariant.mkUint32 1; # 1x scaling (no scaling)
+              scaling-factor = lib.gvariant.mkUint32 config.modules.services.desktop.gnome.scalingFactor;
             };
             "org/gnome/desktop/interface/animations" = {
               speed = 1.5;
@@ -120,7 +131,7 @@ in
               lock-delay = lib.gvariant.mkUint32 0; # Disable screen lock delay
             };
             "org/gnome/desktop/session" = {
-              idle-delay = lib.gvariant.mkUint32 900; # 15 minutes
+              idle-delay = lib.gvariant.mkUint32 config.modules.services.desktop.gnome.idleDelay;
             };
             "org/gnome/desktop/peripherals/touchpad" = {
               tap-to-click = true;
