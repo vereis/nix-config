@@ -235,6 +235,36 @@ with lib;
         ];
       };
 
+      fish = {
+        enable = true;
+
+        interactiveShellInit = ''
+          # Set vi key bindings
+          fish_vi_key_bindings
+
+          # Ctrl-A/E for line navigation (like your zsh config)
+          bind -M insert \ca beginning-of-line
+          bind -M insert \ce end-of-line
+
+          # Vi mode: 'v' to edit command in editor
+          bind -M default v edit_command_buffer
+
+          # No greeting
+          set fish_greeting
+        '';
+
+        shellAliases = {
+          vim = "nvim";
+        };
+
+        plugins = [
+          {
+            name = "tide";
+            inherit (pkgs.fishPlugins.tide) src;
+          }
+        ];
+      };
+
       neovim = {
         enable = true;
 
