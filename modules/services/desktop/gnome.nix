@@ -190,11 +190,9 @@ in
               toggle-fullscreen = [ "<Super>f" ];
             };
 
-            # Use GNOME's built-in screenshot and recording functionality
-            # wlroots tools (grim/wf-recorder) don't work on GNOME's Mutter compositor
             "org/gnome/shell/keybindings" = {
-              show-screenshot-ui = [ "<Super>s" ]; # Opens screenshot UI (region/window/screen)
-              show-screen-recording-ui = [ "<Super>v" ]; # Opens screen recording UI
+              show-screenshot-ui = [ "<Super>s" ];
+              show-screen-recording-ui = [ "<Super>v" ];
             };
 
             # Custom application launcher keybindings
@@ -217,7 +215,7 @@ in
             };
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
               name = "Browser";
-              command = "xdg-open https://"; # Opens default browser
+              command = "zen";
               binding = "<Super>b";
             };
           }
