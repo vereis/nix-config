@@ -227,6 +227,14 @@ with lib;
         enableBashIntegration = true;
       };
 
+      zoxide = {
+        enable = true;
+        enableFishIntegration = true;
+        options = [
+          "--cmd cd" # Use 'cd' instead of 'z'
+        ];
+      };
+
       neovim = {
         enable = true;
 
