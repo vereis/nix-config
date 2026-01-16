@@ -115,13 +115,22 @@ in
       };
     };
 
-    # Use dconf system databases with lockAll to enforce settings as source of truth
-    # User cannot override these settings via GUI or dconf commands
+    # Use dconf system databases with selective locking
+    # Locks critical settings (keybindings, CapsLock remap) while allowing user customization (wallpapers, themes)
     programs.dconf = {
       enable = true;
       profiles.user.databases = [
         {
-          lockAll = true;
+          locks = [
+            "/org/gnome/desktop/input-sources/xkb-options"
+            "/org/gnome/desktop/wm/keybindings/close"
+            "/org/gnome/desktop/wm/keybindings/move-to-workspace-left"
+            "/org/gnome/desktop/wm/keybindings/move-to-workspace-right"
+            "/org/gnome/desktop/wm/keybindings/move-to-monitor-left"
+            "/org/gnome/desktop/wm/keybindings/move-to-monitor-right"
+            "/org/gnome/desktop/wm/preferences/mouse-button-modifier"
+            "/org/gnome/desktop/wm/preferences/resize-with-right-button"
+          ];
           settings = {
             "org/gnome/desktop/interface" = {
               cursor-theme = "Bibata-Modern-Classic";
