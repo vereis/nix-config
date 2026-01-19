@@ -171,6 +171,12 @@ with lib;
           # No greeting
           set fish_greeting
 
+          # Always use blinking block cursor (in all vi modes)
+          set fish_cursor_default block blink
+          set fish_cursor_insert block blink
+          set fish_cursor_replace_one block blink
+          set fish_cursor_visual block blink
+
           # Tide prompt configuration
           set -g tide_aws_bg_color normal
           set -g tide_aws_color yellow
