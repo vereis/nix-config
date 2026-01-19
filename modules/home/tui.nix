@@ -110,6 +110,9 @@ with lib;
             executable = false;
             source = ./tui/git/.gitignore_global;
           };
+          ".local/share/atuin/key" = {
+            text = secrets.atuin.key;
+          };
         }
         config.modules.tui.extraFiles
       ];
@@ -127,7 +130,7 @@ with lib;
         enable = true;
         enableFishIntegration = true;
         settings = {
-          auto_sync = false; # Start with local-only
+          auto_sync = true;
           search_mode = "fuzzy";
           filter_mode = "global";
           style = "compact";
