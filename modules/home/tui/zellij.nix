@@ -24,6 +24,7 @@ with lib;
 
       file = {
         ".config/zellij/config.kdl".text = ''
+          default_shell "fish"
           default_layout "default";
           on_force_close "quit"
           copy_on_select true;
