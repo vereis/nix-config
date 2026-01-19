@@ -55,6 +55,7 @@ with lib;
           git
           httpie
           jq
+          kubectl
           killall
           lsof
           nerdfetch
