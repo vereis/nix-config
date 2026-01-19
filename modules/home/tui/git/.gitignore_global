@@ -1,3 +1,6 @@
 # OpenCode directories
 .opencode/plans/
 .opencode/tickets/
+
+# Claude Code local settings
+.claude/*.local.json
