@@ -67,7 +67,6 @@ with lib;
           unzip
           wget
           zip
-          zsh
           gnumake
           git-crypt
           lf
@@ -82,10 +81,6 @@ with lib;
 
       file = lib.mkMerge [
         {
-          ".p10k.zsh" = {
-            executable = true;
-            source = ./tui/zsh/.p10k.zsh;
-          };
           ".local/bin/git/ssh-migrate.sh" = {
             executable = true;
             source = ./tui/git/migrate-ssh.sh;
@@ -142,89 +137,12 @@ with lib;
 
       direnv = {
         enable = true;
-        enableZshIntegration = true;
         enableBashIntegration = true;
-      };
-
-      zsh = {
-        enable = true;
-
-        autocd = true;
-        enableCompletion = true;
-        autosuggestion.enable = true;
-
-        prezto = {
-          enable = true;
-          editor.keymap = "vi";
-          caseSensitive = false;
-          prompt.theme = "powerlevel10k";
-
-          utility.safeOps = true;
-
-          terminal = {
-            autoTitle = true;
-            multiplexerTitleFormat = "%s";
-            tabTitleFormat = "%s";
-            windowTitleFormat = "%s";
-          };
-
-          syntaxHighlighting.highlighters = [
-            "main"
-            "brackets"
-            "pattern"
-            "line"
-            "cursor"
-            "root"
-          ];
-        };
-
-        initContent =
-          let
-            contentBefore = lib.mkBefore ''
-              export TERM=xterm-256color
-              if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then . "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi
-            '';
-
-            contentAfter = lib.mkAfter ''
-              # Normal mode 'v' to edit command in vim
-              autoload -Uz edit-command-line
-              zle -N edit-command-line
-              bindkey -M vicmd v edit-command-line
-
-              # Vim mode doesn't let you use ctrl-a/e to go to the beginning/end of the line
-              bindkey "^A" vi-beginning-of-line
-              bindkey "^E" vi-end-of-line
-
-              source $HOME/.p10k.zsh
-
-              # If in WSL, when launching vim, set up `npiperelay` to forward stdin/stdout to Windows
-              vim() {
-                if [ -n "$WSL_DISTRO_NAME" ]; then
-                  if ! pidof socat > /dev/null 2>&1; then
-                      [ -e /tmp/discord-ipc-0 ] && rm -f /tmp/discord-ipc-0
-                      socat UNIX-LISTEN:/tmp/discord-ipc-0,fork \
-                          EXEC:"npiperelay.exe //./pipe/discord-ipc-0" 2>/dev/null &
-                  fi
-                fi
-
-                if [ $# -eq 0 ]; then
-                  command nvim
-                else
-                  command nvim "$@"
-                fi
-              }
-            '';
-          in
-          lib.mkMerge [
-            contentBefore
-            contentAfter
-          ];
       };
 
       fzf = {
         enable = true;
         enableFishIntegration = true;
-        enableZshIntegration = true;
         enableBashIntegration = true;
       };
 
