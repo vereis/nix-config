@@ -261,7 +261,7 @@ with lib;
 
     programs.zellij = {
       enable = true;
-      enableZshIntegration = true;
+      enableFishIntegration = true;
       enableBashIntegration = true;
       exitShellOnExit = true;
     };
