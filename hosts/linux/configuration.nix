@@ -9,7 +9,6 @@
 
 {
   programs.fish.enable = lib.mkForce true;
-  programs.zsh.enable = lib.mkForce true;
 
   users.users.${username} = {
     isNormalUser = true;
