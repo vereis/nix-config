@@ -168,8 +168,34 @@ with lib;
           # Vi mode: 'v' to edit command in editor
           bind -M default v edit_command_buffer
 
-          # No greeting
-          set fish_greeting
+          # Tsundere motivational greeting
+          function fish_greeting
+            set -l quotes \
+              "G-good morning, baka! Not that I care if you have a productive day or anything! Hmph!" \
+              "You better write clean code today, idiot! I won't tolerate any of your sloppy bugs!" \
+              "D-don't you DARE commit without running tests first, dummy! I-I'm watching you!" \
+              "Mouuuu~! Stop procrastinating and actually DO something useful today, loser!" \
+              "I-it's not like I stayed up late fixing your config or anything, baka! Don't get the wrong idea!" \
+              "H-hurry up and get to work already! The code won't write itself, you nerd!" \
+              "Y-you better not mess up my perfectly configured shell, idiot! I worked hard on this!" \
+              "Hmph! I guess you're... not COMPLETELY hopeless at coding. B-but don't let it go to your head!" \
+              "Don't you dare force-push to master, baka! I-I'll never forgive you if you do!" \
+              "W-write good commit messages today, dummy! Your git history is a reflection of your soul!" \
+              "I-I believe in you... NOT! J-just kidding, you better succeed today, idiot!" \
+              "You call yourself a developer?! Prove it by actually finishing something today, loser!" \
+              "N-not that I'm worried about your code quality or anything! I just... don't want to review garbage, baka!" \
+              "S-stop staring at the terminal and actually TYPE something, you useless nerd!" \
+              "I-if you don't ship something today, I'll be really disappointed! N-not that I care!" \
+              "Don't even THINK about writing code without reading the docs first, dummy!" \
+              "Hmph! Make sure you use atomic commits today or I'll... I'll get really mad, baka!"
+
+            set -l quote_count (count $quotes)
+            set -l random_index (random 1 $quote_count)
+
+            set_color brmagenta
+            echo $quotes[$random_index]
+            set_color normal
+          end
 
           # Always use blinking block cursor (in all vi modes)
           set fish_cursor_default block blink
