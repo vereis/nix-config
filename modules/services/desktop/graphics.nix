@@ -35,10 +35,29 @@ in
     };
 
     nvidia = {
+      # NVIDIA Power Management (disabled by default due to NixOS bugs)
+      #
+      # NVIDIA's power management features are experimental on NixOS and cause
+      # severe suspend/resume issues with GDM/GNOME (Issue #336723).
+      #
+      # Symptoms: After suspend, system requires multiple login attempts (3-10)
+      # before staying awake. Screen blanks or system re-suspends immediately.
+      #
+      # Alternative: hardware.nvidia.powerManagement.finegrained
+      # - Works on Turing (RTX 20-series) and newer GPUs
+      # - Still experimental, may cause laptops to power off during power state changes
+      # - Test thoroughly before relying on it
+      #
+      # To enable power management (at your own risk):
+      #   modules.services.desktop.graphics.nvidia.powerManagement = true;
+      #
+      # References:
+      # - https://github.com/NixOS/nixpkgs/issues/336723
+      # - https://github.com/NixOS/nixpkgs/issues/254614
       powerManagement = mkOption {
         type = types.bool;
-        default = true;
-        description = "Enable NVIDIA power management (helps with sleep/hibernation, may cause issues on some systems).";
+        default = false;
+        description = "Enable NVIDIA power management. Disabled by default due to NixOS suspend/resume bugs (Issue #336723). May cause issues on some systems.";
       };
     };
   };
