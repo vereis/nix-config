@@ -93,10 +93,38 @@ in
         # Mouse behavior
         mouse-hide-while-typing = true;
 
+        # GTK tabs (required for tab keybinds to work on Linux)
+        gtk-tabs-location = "top";
+
         # Clipboard settings
         clipboard-read = "ask";
         clipboard-write = "allow";
         clipboard-paste-protection = true;
+
+        # Keybindings - tmux-style muscle memory
+        keybind = [
+          # Tabs
+          "alt+t=new_tab"
+          "alt+q=close_surface"
+          "alt+r=prompt_surface_title"
+
+          # Splits
+          "alt+s=new_split:down"  # Horizontal split
+          "alt+shift+s=new_split:right"  # Vertical split
+          "alt+z=toggle_split_zoom"  # Toggle zoom
+
+          # Split navigation (vim keys)
+          "alt+h=goto_split:left"
+          "alt+j=goto_split:bottom"
+          "alt+k=goto_split:top"
+          "alt+l=goto_split:right"
+
+          # Split navigation (arrow keys)
+          "alt+left=goto_split:left"
+          "alt+down=goto_split:bottom"
+          "alt+up=goto_split:top"
+          "alt+right=goto_split:right"
+        ];
       };
     };
 
