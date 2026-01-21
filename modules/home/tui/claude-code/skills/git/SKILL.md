@@ -100,7 +100,7 @@ refactor(api): simplify authentication flow
 
 ## Breaking Changes
 
-Add `!` after type or `BREAKING CHANGE:` in footer:
+Add an exclamation mark (`!`) after type and use `BREAKING CHANGE:` in footer:
 
 ```
 feat(api)!: change authentication endpoint
