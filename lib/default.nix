@@ -29,7 +29,7 @@ let
         system
         secrets
         ;
-      inherit (inputs) zjstatus copyparty;
+      inherit (inputs) copyparty;
       nixpkgs-stable = import nixpkgs-stable {
         inherit system;
         config.allowUnfree = true;
@@ -48,7 +48,6 @@ let
         useUserPackages = true;
         extraSpecialArgs = userConfig // {
           inherit inputs secrets;
-          inherit (inputs) zjstatus;
           nixpkgs-stable = import nixpkgs-stable {
             inherit system;
             config.allowUnfree = true;

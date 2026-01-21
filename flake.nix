@@ -20,7 +20,6 @@
 
     # Extra Applications
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
-    zjstatus.url = "github:dj95/zjstatus";
     copyparty.url = "github:9001/copyparty";
 
     claudeCode = {

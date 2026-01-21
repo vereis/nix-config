@@ -11,7 +11,6 @@
 with lib;
 {
   imports = [
-    ./tui/zellij.nix
     ./tui/claude-code
   ];
 
