@@ -9,6 +9,10 @@
     # Modern flake framework
     flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,10 +48,8 @@
       ];
 
       imports = [
-        inputs.treefmt-nix.flakeModule
         ./parts/hosts.nix
-        ./parts/formatter.nix
-        ./parts/devshell.nix
+        ./parts/development.nix
         ./parts/overlays.nix
       ];
     };
