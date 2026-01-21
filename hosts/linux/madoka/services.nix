@@ -27,6 +27,9 @@
         enable = true;
         driver = "nvidia";
       };
+
+      suspend.enable = true;
+
       steam.enable = true;
     };
   };

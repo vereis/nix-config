@@ -26,5 +26,6 @@ in
     ./gnome.nix
     ./graphics.nix
     ./steam.nix
+    ./suspend.nix
   ];
 }
