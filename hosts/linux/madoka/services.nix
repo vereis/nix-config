@@ -28,7 +28,19 @@
         driver = "nvidia";
       };
 
-      suspend.enable = true;
+      suspend = {
+        enable = true;
+        usb.disable = [
+          {
+            vendor = "046d";
+            product = "c548";
+          } # Logitech USB Receiver
+          {
+            vendor = "046d";
+            product = "c52b";
+          } # Logitech USB Receiver
+        ];
+      };
 
       steam.enable = true;
     };

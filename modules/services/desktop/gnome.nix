@@ -61,6 +61,30 @@ in
       default = true;
       description = "Remap CapsLock key to act as Ctrl";
     };
+
+    autoSuspend = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable automatic suspend after idle timeout.
+          When enabled, system will suspend after specified timeout periods.
+          Settings are locked via dconf to prevent accidental GUI changes.
+        '';
+      };
+
+      minutesAC = mkOption {
+        type = types.int;
+        default = 15;
+        description = "Idle timeout in minutes before suspend on AC power (default: 15 minutes, 0 = never)";
+      };
+
+      minutesBattery = mkOption {
+        type = types.int;
+        default = 15;
+        description = "Idle timeout in minutes before suspend on battery (default: 15 minutes, 0 = never)";
+      };
+    };
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
@@ -130,6 +154,12 @@ in
             "/org/gnome/desktop/wm/keybindings/move-to-monitor-right"
             "/org/gnome/desktop/wm/preferences/mouse-button-modifier"
             "/org/gnome/desktop/wm/preferences/resize-with-right-button"
+          ]
+          ++ lib.optionals config.modules.services.desktop.gnome.autoSuspend.enable [
+            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-timeout"
+            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type"
+            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-timeout"
+            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-type"
           ];
           settings = {
             "org/gnome/desktop/interface" = {
@@ -149,6 +179,21 @@ in
             "org/gnome/desktop/session" = {
               idle-delay = lib.gvariant.mkUint32 config.modules.services.desktop.gnome.idleDelay;
             };
+          }
+          // (
+            let
+              cfg = config.modules.services.desktop.gnome;
+            in
+            lib.optionalAttrs cfg.autoSuspend.enable {
+              "org/gnome/settings-daemon/plugins/power" = {
+                sleep-inactive-ac-timeout = lib.gvariant.mkInt32 (cfg.autoSuspend.minutesAC * 60);
+                sleep-inactive-ac-type = "suspend";
+                sleep-inactive-battery-timeout = lib.gvariant.mkInt32 (cfg.autoSuspend.minutesBattery * 60);
+                sleep-inactive-battery-type = "suspend";
+              };
+            }
+          )
+          // {
             "org/gnome/desktop/peripherals/touchpad" = {
               tap-to-click = true;
               two-finger-scrolling-enabled = true;

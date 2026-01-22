@@ -94,6 +94,11 @@ in
           "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
           "nvidia.NVreg_TemporaryFilePath=/var/tmp"
         ];
+
+        # Force-enable NVIDIA power management when using suspend fixes
+        # PreserveVideoMemoryAllocations requires power management to be enabled
+        # This creates nvidia-suspend.service and nvidia-resume.service
+        modules.services.desktop.graphics.nvidia.powerManagement = true;
       }
 
       # Pause GNOME Shell during suspend to prevent NVIDIA driver interaction
