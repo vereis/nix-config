@@ -23,14 +23,16 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Enable suspend/resume fixes for common issues:
+        Enable suspend/resume fixes and custom auto-suspend:
         - Systemd user session freezing bug
         - NVIDIA + GNOME Shell interaction bugs
         - USB device wakeup control
         - Double suspend prevention
+        - Custom auto-suspend that bypasses GNOME's broken inhibitor system
 
         NVIDIA-specific fixes are automatically applied when NVIDIA driver is detected.
         GNOME-specific fixes are applied when GNOME (and NVIDIA) is enabled.
+        Auto-suspend ignores all app inhibitors.
       '';
     };
 
@@ -64,6 +66,24 @@ in
           product = "c52b";
         }
       ];
+    };
+
+    idleMinutesAC = mkOption {
+      type = types.ints.unsigned;
+      default = 15;
+      description = "Suspend after this many minutes idle on AC power (0 = never)";
+    };
+
+    idleMinutesBattery = mkOption {
+      type = types.ints.unsigned;
+      default = 15;
+      description = "Suspend after this many minutes idle on battery (0 = never)";
+    };
+
+    checkIntervalMinutes = mkOption {
+      type = types.ints.positive;
+      default = 1;
+      description = "How often to check idle time (minutes, minimum 1)";
     };
   };
 
@@ -159,6 +179,111 @@ in
         };
       }
     ]))
+
+    # Custom auto-suspend service
+    (mkIf cfg.enable {
+      systemd.user.services.auto-suspend-idle-check = {
+        description = "Check idle time and suspend if threshold exceeded";
+        after = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ImportEnvironment = "DBUS_SESSION_BUS_ADDRESS DISPLAY WAYLAND_DISPLAY";
+        };
+        path = with pkgs; [
+          libnotify
+          systemd
+          gawk
+          util-linux
+          coreutils
+        ];
+        script = ''
+          # Prevent overlapping executions
+          exec 200>/tmp/auto-suspend-idle-check.lock
+          flock -n 200 || exit 0
+
+          # Get current idle time in milliseconds
+          IDLE_MS=$(${pkgs.systemd}/bin/busctl --user call \
+            org.gnome.Mutter.IdleMonitor \
+            /org/gnome/Mutter/IdleMonitor/Core \
+            org.gnome.Mutter.IdleMonitor \
+            GetIdletime 2>/dev/null | awk '{print $2}')
+
+          # Abort if idle time unavailable
+          if [ -z "$IDLE_MS" ] || ! [[ "$IDLE_MS" =~ ^[0-9]+$ ]]; then
+            echo "Failed to get idle time from Mutter" | ${pkgs.systemd}/bin/systemd-cat -t auto-suspend -p warning
+            exit 0
+          fi
+
+          ON_BATTERY=$(${pkgs.systemd}/bin/busctl --system get-property \
+            org.freedesktop.UPower \
+            /org/freedesktop/UPower \
+            org.freedesktop.UPower \
+            OnBattery 2>/dev/null | awk '{print $2}')
+
+          # Default to AC if UPower unavailable
+          [ -z "$ON_BATTERY" ] && ON_BATTERY="false"
+
+          if [ "$ON_BATTERY" = "false" ]; then
+            THRESHOLD_MS=$((${toString cfg.idleMinutesAC} * 60 * 1000))
+          else
+            THRESHOLD_MS=$((${toString cfg.idleMinutesBattery} * 60 * 1000))
+          fi
+
+          # Skip if auto-suspend disabled
+          [ "$THRESHOLD_MS" -eq 0 ] && exit 0
+
+          echo "Idle check: idle=''${IDLE_MS}ms, threshold=''${THRESHOLD_MS}ms, battery=$ON_BATTERY" | \
+            ${pkgs.systemd}/bin/systemd-cat -t auto-suspend -p info
+
+          if [ "$IDLE_MS" -ge "$THRESHOLD_MS" ]; then
+            # Show notification
+            ${pkgs.libnotify}/bin/notify-send \
+              --urgency=critical \
+              "Auto-Suspend" \
+              "System will suspend in 30 seconds due to inactivity" 2>/dev/null || true
+
+            sleep 30
+
+            # Re-check idle time to avoid suspending if user became active
+            IDLE_MS_RECHECK=$(${pkgs.systemd}/bin/busctl --user call \
+              org.gnome.Mutter.IdleMonitor \
+              /org/gnome/Mutter/IdleMonitor/Core \
+              org.gnome.Mutter.IdleMonitor \
+              GetIdletime 2>/dev/null | awk '{print $2}')
+
+            # If still idle, force suspend
+            if [ -n "$IDLE_MS_RECHECK" ] && [[ "$IDLE_MS_RECHECK" =~ ^[0-9]+$ ]] && [ "$IDLE_MS_RECHECK" -ge "$THRESHOLD_MS" ]; then
+              echo "Suspending (idle: ''${IDLE_MS_RECHECK}ms >= threshold: ''${THRESHOLD_MS}ms)" | \
+                ${pkgs.systemd}/bin/systemd-cat -t auto-suspend -p info
+              ${pkgs.systemd}/bin/systemctl suspend -i 2>/dev/null || true
+            fi
+          fi
+        '';
+      };
+
+      systemd.user.timers.auto-suspend-idle-check = {
+        description = "Periodic idle time check for auto-suspend";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "${toString cfg.checkIntervalMinutes}min";
+          OnUnitActiveSec = "${toString cfg.checkIntervalMinutes}min";
+        };
+      };
+
+      # Allow user to suspend without authentication (required for auto-suspend to work)
+      security.polkit.extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.login1.suspend" ||
+              action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+              action.id == "org.freedesktop.login1.suspend-ignore-inhibit") {
+            if (subject.isInGroup("wheel")) {
+              return polkit.Result.YES;
+            }
+          }
+        });
+      '';
+    })
 
     # USB wakeup control
     # Some machines get woken up by USB devices unintentionally

@@ -30,6 +30,10 @@
 
       suspend = {
         enable = true;
+        idleMinutesAC = 15;
+        idleMinutesBattery = 15;
+        checkIntervalMinutes = 1;
+
         usb.disable = [
           {
             vendor = "046d";
