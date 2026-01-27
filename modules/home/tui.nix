@@ -71,6 +71,7 @@ with lib;
           git-crypt
           lf
           socat
+          tree-sitter
           # Dependencies for lf previewer
           poppler-utils # provides pdftotext
           highlight
