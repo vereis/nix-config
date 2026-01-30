@@ -54,6 +54,10 @@ in
         source = ./commands;
       };
 
+      "./.cc-safety-net/config.json" = {
+        source = ./safety-net-config.json;
+      };
+
       # Stable path for editor integrations.
       # We wrap the Nix-provided CLI so it always starts in YOLO mode.
       "./.local/bin/claude" = {
