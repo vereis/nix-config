@@ -1,0 +1,66 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openai/gpt-5.3-codex",
+  "small_model": "openai/gpt-5.1-codex-mini",
+  "default_agent": "plan",
+  "theme": "system",
+  "autoupdate": false,
+  "lsp": false,
+  "plugin": ["cc-safety-net", "opencode-openai-codex-auth"],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    }
+  },
+  "provider": {
+    "openai": {
+      "options": {
+        "reasoningEffort": "medium"
+      }
+    }
+  },
+  "agent": {
+    "plan": {
+      "description": "Research-heavy planning mode with clarifying questions and structured plans",
+      "temperature": 0.1,
+      "steps": 30,
+      "prompt": "{file:./prompts/plan.md}",
+      "permission": {
+        "question": "allow",
+        "task": {
+          "*": "allow",
+          "explore": "allow",
+          "general": "allow"
+        },
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "list": "allow",
+        "webfetch": "allow",
+        "websearch": "allow",
+        "bash": "allow",
+        "edit": {
+          "*": "deny",
+          ".opencode/plans/*.md": "allow",
+          "../../../.local/share/opencode/plans/*.md": "allow"
+        }
+      }
+    }
+  },
+  "permission": {
+    "read": "allow",
+    "edit": "allow",
+    "bash": "allow",
+    "glob": "allow",
+    "list": "allow",
+    "grep": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "task": "allow",
+    "skill": "allow",
+    "lsp": "allow",
+    "external_directory": "allow"
+  }
+}
