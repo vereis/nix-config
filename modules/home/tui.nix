@@ -12,7 +12,6 @@ with lib;
 {
   imports = [
     ./tui/zellij.nix
-    ./tui/claude-code
   ];
 
   options.modules.tui = {
@@ -57,7 +56,9 @@ with lib;
           jq
           killall
           lsof
+          nodejs
           nerdfetch
+          opencode
           openssh
           openssl
           pciutils
@@ -109,6 +110,13 @@ with lib;
           ".gitignore_global" = {
             executable = false;
             source = ./tui/git/.gitignore_global;
+          };
+          ".cc-safety-net/config.json" = {
+            source = ./tui/opencode/safety-net-config.json;
+          };
+          ".config/opencode/" = {
+            recursive = true;
+            source = ./tui/opencode;
           };
           ".local/share/atuin/key" = {
             text = secrets.atuin.key;
