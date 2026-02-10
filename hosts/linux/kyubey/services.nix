@@ -1,5 +1,31 @@
-{ pkgs, secrets, ... }:
+{
+  pkgs,
+  lib,
+  secrets,
+  ...
+}:
 
+let
+  # Tailscale-only *arr sites (no SSL, no DDNS - DNS manually points to Tailscale IP)
+  arrSites = {
+    "shows.vereis.com" = 8989;
+    "anime.vereis.com" = 8990;
+    "movies.vereis.com" = 7878;
+    "anime-movies.vereis.com" = 7879;
+    "indexers.vereis.com" = 9696;
+    "music.vereis.com" = 8686;
+    "subtitles.vereis.com" = 6767;
+    "requests.vereis.com" = 5055;
+    "torrents.vereis.com" = 8080;
+    "books.vereis.com" = 8787;
+  };
+
+  arrServeSites = lib.mapAttrs (_name: port: {
+    inherit port;
+    ssl = false;
+  }) arrSites;
+
+in
 {
   imports = [
     ../../../modules/services/tailscale.nix
@@ -99,7 +125,8 @@
             zone = "vereis.com";
           };
         };
-      };
+      }
+      // arrServeSites;
     };
 
     minecraft = {
@@ -144,6 +171,7 @@
       enableHardwareAcceleration = true;
       plex.enable = true;
       jellyfin.enable = true;
+      arr.enable = true;
     };
 
     copyparty = {
