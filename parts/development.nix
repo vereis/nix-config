@@ -53,7 +53,7 @@
           mdformat = {
             enable = true;
             includes = [ "*.md" ];
-            excludes = [ "**/claude-code/**" ];
+            excludes = [ "**/opencode/**" ];
             settings.wrap = "no";
           };
         };
