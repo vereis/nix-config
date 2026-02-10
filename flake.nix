@@ -23,10 +23,6 @@
     zjstatus.url = "github:dj95/zjstatus";
     copyparty.url = "github:9001/copyparty";
 
-    claudeCode = {
-      url = "github:sadjow/claude-code-nix?ref=latest";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
