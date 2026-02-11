@@ -202,5 +202,6 @@ in
 
   microvm.vms.mana = {
     flake = self;
+    restartIfChanged = true;
   };
 }
