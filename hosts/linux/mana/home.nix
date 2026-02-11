@@ -22,6 +22,7 @@
       channels.discord = {
         enabled = true;
         token = secrets.openclaw.discord.botToken;
+        blockStreaming = true;
         groupPolicy = "allowlist";
         dm = {
           enabled = true;
@@ -35,6 +36,17 @@
       commands.nativeSkills = "auto";
 
       agents.defaults = {
+        heartbeat = {
+          every = "30m";
+          target = "last";
+          activeHours = {
+            start = "07:00";
+            end = "02:00";
+          };
+        };
+
+        userTimezone = "Europe/London";
+
         model = {
           primary = "anthropic/claude-opus-4-6";
           fallbacks = [
