@@ -76,6 +76,14 @@
         };
       };
 
+      tools.web = {
+        fetch.enabled = true;
+        search = {
+          enabled = true;
+          inherit (secrets.openclaw.brave) apiKey;
+        };
+      };
+
       models.providers.opencode = {
         baseUrl = "https://opencode.ai/zen/v1";
         inherit (secrets.openclaw.opencode) apiKey;

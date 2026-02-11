@@ -55,6 +55,16 @@
 
   microvm = {
     hypervisor = "qemu";
+    storeOnDisk = false;
+
+    shares = [
+      {
+        tag = "ro-store";
+        source = "/nix/store";
+        mountPoint = "/nix/.ro-store";
+        readOnly = true;
+      }
+    ];
 
     writableStoreOverlay = "/nix/.rw-store";
     volumes = [
