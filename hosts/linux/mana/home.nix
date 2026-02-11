@@ -131,6 +131,8 @@
       iputils
       traceroute
       mtr
+      nmap
+      whois
       bat
       eza
       fzf
