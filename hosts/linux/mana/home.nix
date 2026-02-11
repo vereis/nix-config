@@ -106,9 +106,37 @@
     };
   };
 
-  home.sessionVariables.OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
+  home = {
+    packages = with pkgs; [
+      git
+      rsync
+      openssh
+      ripgrep
+      fd
+      jq
+      yq-go
+      sqlite
+      diffutils
+      patch
+      zip
+      unzip
+      gnutar
+      gzip
+      xz
+      bzip2
+      coreutils
+      util-linux
+      vim
+      dnsutils
+      iputils
+      traceroute
+      mtr
+    ];
 
-  home.file.".openclaw/openclaw.json".force = true;
+    sessionVariables.OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
+
+    file.".openclaw/openclaw.json".force = true;
+  };
 
   systemd.user.services.openclaw-gateway = {
     Install.WantedBy = [ "default.target" ];
