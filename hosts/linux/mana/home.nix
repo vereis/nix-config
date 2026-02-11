@@ -137,6 +137,13 @@
       zoxide
       delta
       btop
+      websocat
+      csvkit
+      xmlstarlet
+      pandoc
+      ffmpeg
+      imagemagick
+      sox
     ];
 
     sessionVariables.OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
