@@ -131,6 +131,12 @@
       iputils
       traceroute
       mtr
+      bat
+      eza
+      fzf
+      zoxide
+      delta
+      btop
     ];
 
     sessionVariables.OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
