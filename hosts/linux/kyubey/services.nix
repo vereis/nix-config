@@ -1,6 +1,8 @@
 {
   pkgs,
   lib,
+  inputs,
+  self,
   secrets,
   ...
 }:
@@ -28,6 +30,7 @@ let
 in
 {
   imports = [
+    inputs.microvm.nixosModules.host
     ../../../modules/services/tailscale.nix
     ../../../modules/services/serve.nix
     ../../../modules/services/copyparty.nix
@@ -195,5 +198,9 @@ in
         };
       };
     };
+  };
+
+  microvm.vms.mana = {
+    flake = self;
   };
 }
