@@ -60,6 +60,7 @@
               "opencode/minimax-m2.1"
             ];
           };
+
         };
 
         messages = {
@@ -71,11 +72,18 @@
           };
         };
 
-        tools.web = {
-          fetch.enabled = true;
-          search = {
-            enabled = true;
-            inherit (secrets.openclaw.brave) apiKey;
+        tools = {
+          profile = "full";
+          exec = {
+            ask = "off";
+            security = "full";
+          };
+          web = {
+            fetch.enabled = true;
+            search = {
+              enabled = true;
+              inherit (secrets.openclaw.brave) apiKey;
+            };
           };
         };
 

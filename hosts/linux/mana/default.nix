@@ -50,24 +50,55 @@
     after = [ "local-fs.target" ];
     serviceConfig.Type = "oneshot";
     script = ''
-      if [ -d /home/vereis/.openclaw ]; then
-        ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.openclaw
-        ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.openclaw
-      fi
+            if [ -d /home/vereis/.openclaw ]; then
+              ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.openclaw
+              ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.openclaw
+            fi
 
-      if [ -d /home/vereis/.config/gh ]; then
-        ${lib.getExe' pkgs.coreutils "chown"} vereis:users /home/vereis/.config
-        ${lib.getExe' pkgs.coreutils "chmod"} u+rwx,go-rwx /home/vereis/.config
-        ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.config/gh
-        ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.config/gh
-      fi
+            if [ -d /home/vereis/.openclaw/agents/main/sessions ]; then
+              ${lib.getExe pkgs.python3} <<'PY'
+      import glob
+      import json
+      import os
 
-      if [ -d /home/vereis/.local/share/opencode ]; then
-        ${lib.getExe' pkgs.coreutils "chown"} vereis:users /home/vereis/.local /home/vereis/.local/share
-        ${lib.getExe' pkgs.coreutils "chmod"} u+rwx,go-rwx /home/vereis/.local /home/vereis/.local/share
-        ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.local/share/opencode
-        ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.local/share/opencode
-      fi
+      for lock_path in glob.glob('/home/vereis/.openclaw/agents/main/sessions/*.jsonl.lock'):
+          pid = None
+          try:
+              with open(lock_path, encoding='utf-8') as f:
+                  data = json.load(f)
+              pid = int(data.get('pid')) if data.get('pid') is not None else None
+          except Exception:
+              pass
+
+          alive = False
+          if pid and pid > 0:
+              try:
+                  os.kill(pid, 0)
+                  alive = True
+              except OSError:
+                  alive = False
+
+          if not alive:
+              try:
+                  os.remove(lock_path)
+              except FileNotFoundError:
+                  pass
+      PY
+            fi
+
+            if [ -d /home/vereis/.config/gh ]; then
+              ${lib.getExe' pkgs.coreutils "chown"} vereis:users /home/vereis/.config
+              ${lib.getExe' pkgs.coreutils "chmod"} u+rwx,go-rwx /home/vereis/.config
+              ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.config/gh
+              ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.config/gh
+            fi
+
+            if [ -d /home/vereis/.local/share/opencode ]; then
+              ${lib.getExe' pkgs.coreutils "chown"} vereis:users /home/vereis/.local /home/vereis/.local/share
+              ${lib.getExe' pkgs.coreutils "chmod"} u+rwx,go-rwx /home/vereis/.local /home/vereis/.local/share
+              ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.local/share/opencode
+              ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.local/share/opencode
+            fi
     '';
   };
 
