@@ -50,20 +50,13 @@
 
         userTimezone = "Europe/London";
 
-        model = {
-          primary = "opencode/kimi-k2.5";
-          fallbacks = [
-            "opencode/kimi-k2.5-free"
-          ];
-        };
+        model.primary = "opencode/kimi-k2.5";
 
-        subagents = {
-          model = {
-            primary = "opencode/kimi-k2.5";
-            fallbacks = [
-              "opencode/kimi-k2.5-free"
-            ];
-          };
+        subagents.model = {
+          primary = "openai/gpt-5.3-codex";
+          fallbacks = [
+            "opencode/minimax-m2.1"
+          ];
         };
       };
 
@@ -99,6 +92,12 @@
             id = "kimi-k2.5-free";
             name = "Kimi K2.5 Free";
             contextWindow = 262144;
+            maxTokens = 8192;
+          }
+          {
+            id = "minimax-m2.1";
+            name = "MiniMax M2.1";
+            contextWindow = 1048576;
             maxTokens = 8192;
           }
         ];
