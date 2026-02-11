@@ -67,6 +67,15 @@
         };
       };
 
+      messages = {
+        inbound.debounceMs = 1500;
+        queue = {
+          mode = "collect";
+          debounceMs = 1800;
+          byChannel.discord = "collect";
+        };
+      };
+
       models.providers.opencode = {
         baseUrl = "https://opencode.ai/zen/v1";
         inherit (secrets.openclaw.opencode) apiKey;
