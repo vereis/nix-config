@@ -77,31 +77,11 @@
         };
       };
 
-      models.providers.opencode = {
-        baseUrl = "https://opencode.ai/zen/v1";
-        inherit (secrets.openclaw.opencode) apiKey;
-        api = "openai-completions";
-        models = [
-          {
-            id = "kimi-k2.5";
-            name = "Kimi K2.5";
-            contextWindow = 262144;
-            maxTokens = 8192;
-          }
-          {
-            id = "kimi-k2.5-free";
-            name = "Kimi K2.5 Free";
-            contextWindow = 262144;
-            maxTokens = 8192;
-          }
-          {
-            id = "minimax-m2.1";
-            name = "MiniMax M2.1";
-            contextWindow = 1048576;
-            maxTokens = 8192;
-          }
-        ];
+      env.vars = {
+        OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
+        OPENCODE_ZEN_API_KEY = secrets.openclaw.opencode.apiKey;
       };
+
     };
   };
 
