@@ -9,88 +9,97 @@
     nix-openclaw.homeManagerModules.openclaw
   ];
 
-  programs.openclaw = {
-    enable = true;
-    package = nix-openclaw.packages.${pkgs.system}.openclaw;
-    config = {
-      gateway = {
-        mode = "local";
-        bind = "loopback";
-        auth.token = secrets.openclaw.gateway.authToken;
-      };
+  programs = {
+    openclaw = {
+      enable = true;
+      package = nix-openclaw.packages.${pkgs.system}.openclaw;
+      config = {
+        gateway = {
+          mode = "local";
+          bind = "loopback";
+          auth.token = secrets.openclaw.gateway.authToken;
+        };
 
-      channels.discord = {
-        enabled = true;
-        token = secrets.openclaw.discord.botToken;
-        blockStreaming = true;
-        groupPolicy = "open";
-        dm = {
+        channels.discord = {
           enabled = true;
-          policy = "allowlist";
-          allowFrom = [ "382588737441497088" ];
-        };
-        guilds."1469757243430928521" = {
-          requireMention = false;
-        };
-      };
-
-      plugins.entries.discord.enabled = true;
-      commands.native = "auto";
-      commands.nativeSkills = "auto";
-
-      agents.defaults = {
-        heartbeat = {
-          every = "30m";
-          target = "last";
-          activeHours = {
-            start = "07:00";
-            end = "02:00";
+          token = secrets.openclaw.discord.botToken;
+          blockStreaming = true;
+          groupPolicy = "open";
+          dm = {
+            enabled = true;
+            policy = "allowlist";
+            allowFrom = [ "382588737441497088" ];
+          };
+          guilds."1469757243430928521" = {
+            requireMention = false;
           };
         };
 
-        userTimezone = "Europe/London";
+        plugins.entries.discord.enabled = true;
+        commands.native = "auto";
+        commands.nativeSkills = "auto";
 
-        model.primary = "opencode/kimi-k2.5";
+        agents.defaults = {
+          heartbeat = {
+            every = "30m";
+            target = "last";
+            activeHours = {
+              start = "07:00";
+              end = "02:00";
+            };
+          };
 
-        subagents.model = {
-          primary = "openai/gpt-5.3-codex";
-          fallbacks = [
-            "opencode/minimax-m2.1"
-          ];
+          userTimezone = "Europe/London";
+
+          model.primary = "opencode/kimi-k2.5";
+
+          subagents.model = {
+            primary = "openai/gpt-5.3-codex";
+            fallbacks = [
+              "opencode/minimax-m2.1"
+            ];
+          };
+        };
+
+        messages = {
+          inbound.debounceMs = 1500;
+          queue = {
+            mode = "collect";
+            debounceMs = 1800;
+            byChannel.discord = "collect";
+          };
+        };
+
+        tools.web = {
+          fetch.enabled = true;
+          search = {
+            enabled = true;
+            inherit (secrets.openclaw.brave) apiKey;
+          };
+        };
+
+        env.vars = {
+          OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
+          OPENCODE_ZEN_API_KEY = secrets.openclaw.opencode.apiKey;
         };
       };
-
-      messages = {
-        inbound.debounceMs = 1500;
-        queue = {
-          mode = "collect";
-          debounceMs = 1800;
-          byChannel.discord = "collect";
-        };
-      };
-
-      tools.web = {
-        fetch.enabled = true;
-        search = {
-          enabled = true;
-          inherit (secrets.openclaw.brave) apiKey;
-        };
-      };
-
-      env.vars = {
-        OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
-        OPENCODE_ZEN_API_KEY = secrets.openclaw.opencode.apiKey;
-      };
-
     };
-  };
 
-  programs.gh = {
-    enable = true;
-    settings = {
-      git_protocol = "ssh";
-      aliases = {
-        co = "pr checkout";
+    gh = {
+      enable = true;
+      settings = {
+        git_protocol = "ssh";
+        aliases = {
+          co = "pr checkout";
+        };
+      };
+    };
+
+    git = {
+      enable = true;
+      settings.user = {
+        name = "mana";
+        email = "me@vereis.com";
       };
     };
   };

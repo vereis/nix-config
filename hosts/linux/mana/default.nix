@@ -10,6 +10,10 @@
     inputs.microvm.nixosModules.microvm
   ];
 
+  nixpkgs.overlays = [
+    inputs.nix-openclaw.overlays.default
+  ];
+
   networking.hostName = "mana";
 
   services.openssh = {
