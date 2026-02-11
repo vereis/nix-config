@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   ...
 }:
 
@@ -24,11 +25,25 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMG37Ow3/XMK/R4TLn6eJkuv6GlVUPoKHb7niULgtKxV"
   ];
 
+  nix = {
+    optimise.automatic = lib.mkForce false;
+    settings.auto-optimise-store = lib.mkForce false;
+  };
+
   microvm = {
     hypervisor = "qemu";
 
-    vcpu = 1;
-    mem = 1024;
+    writableStoreOverlay = "/nix/.rw-store";
+    volumes = [
+      {
+        image = "rw-store.img";
+        mountPoint = "/nix/.rw-store";
+        size = 2048;
+      }
+    ];
+
+    vcpu = 2;
+    mem = 3072;
 
     interfaces = [
       {
