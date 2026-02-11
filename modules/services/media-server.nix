@@ -66,6 +66,12 @@ in
         description = "Enable *arr stack (Sonarr/Radarr/Prowlarr/Lidarr/Bazarr/Jellyseerr/qBittorrent)";
       };
 
+      torrents.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable torrent client services (currently qBittorrent) alongside the *arr stack";
+      };
+
       downloadPath = mkOption {
         type = types.addCheck types.str (p: lib.hasPrefix "/" p && p != "/" && p != "");
         apply = p: lib.removeSuffix "/" p;
@@ -175,7 +181,7 @@ in
         port = 5055;
       };
 
-      qbittorrent = mkIf arrCfg.enable {
+      qbittorrent = mkIf (arrCfg.enable && arrCfg.torrents.enable) {
         enable = true;
         openFirewall = false;
         profileDir = "/var/lib/qbittorrent";
@@ -199,53 +205,59 @@ in
       };
     };
 
-    systemd.services = mkIf arrCfg.enable {
-      prowlarr.serviceConfig.SupplementaryGroups = [ "media" ];
-      jellyseerr.serviceConfig.SupplementaryGroups = [ "media" ];
-      qbittorrent.serviceConfig.SupplementaryGroups = [ "media" ];
+    systemd.services = mkIf arrCfg.enable (
+      {
+        prowlarr.serviceConfig.SupplementaryGroups = [ "media" ];
+        jellyseerr.serviceConfig.SupplementaryGroups = [ "media" ];
+      }
+      // optionalAttrs arrCfg.torrents.enable {
+        qbittorrent.serviceConfig.SupplementaryGroups = [ "media" ];
+      }
+      // {
 
-      sonarr-anime = {
-        description = "Sonarr (Anime)";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
+        sonarr-anime = {
+          description = "Sonarr (Anime)";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
 
-        environment = {
-          SONARR__SERVER__PORT = "8990";
-          SONARR__SERVER__BINDADDRESS = "0.0.0.0";
+          environment = {
+            SONARR__SERVER__PORT = "8990";
+            SONARR__SERVER__BINDADDRESS = "0.0.0.0";
+          };
+
+          serviceConfig = {
+            User = "sonarr-anime";
+            Group = "media";
+            StateDirectory = "sonarr-anime";
+            StateDirectoryMode = "0750";
+            Restart = "on-failure";
+            ExecStart = "${pkgs.sonarr}/bin/Sonarr -nobrowser -data=/var/lib/sonarr-anime";
+          };
         };
 
-        serviceConfig = {
-          User = "sonarr-anime";
-          Group = "media";
-          StateDirectory = "sonarr-anime";
-          StateDirectoryMode = "0750";
-          Restart = "on-failure";
-          ExecStart = "${pkgs.sonarr}/bin/Sonarr -nobrowser -data=/var/lib/sonarr-anime";
-        };
-      };
+        radarr-anime = {
+          description = "Radarr (Anime)";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
 
-      radarr-anime = {
-        description = "Radarr (Anime)";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
+          environment = {
+            RADARR__SERVER__PORT = "7879";
+            RADARR__SERVER__BINDADDRESS = "0.0.0.0";
+          };
 
-        environment = {
-          RADARR__SERVER__PORT = "7879";
-          RADARR__SERVER__BINDADDRESS = "0.0.0.0";
+          serviceConfig = {
+            User = "radarr-anime";
+            Group = "media";
+            StateDirectory = "radarr-anime";
+            StateDirectoryMode = "0750";
+            Restart = "on-failure";
+            ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data=/var/lib/radarr-anime";
+          };
         };
-
-        serviceConfig = {
-          User = "radarr-anime";
-          Group = "media";
-          StateDirectory = "radarr-anime";
-          StateDirectoryMode = "0750";
-          Restart = "on-failure";
-          ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data=/var/lib/radarr-anime";
-        };
-      };
-    };
+      }
+    );
 
     hardware.graphics = mkIf cfg.enableHardwareAcceleration {
       enable = true;

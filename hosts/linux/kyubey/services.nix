@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   inputs,
   self,
@@ -132,40 +131,43 @@ in
       // arrServeSites;
     };
 
-    minecraft = {
-      enable = true;
-      openFirewall = true;
+    # Keep the old minecraft config around for quick restore, but keep runtime off for now.
+    # minecraft = {
+    #   enable = true;
+    #   openFirewall = true;
+    #
+    #   servers.minnacraft = {
+    #     enable = true;
+    #     autoStart = true;
+    #     package = pkgs.minecraftServers.paper-1_21_8;
+    #     jvmOpts = "-Xms6144M -Xmx8192M";
+    #
+    #     serverProperties = {
+    #       difficulty = 3;
+    #       gamemode = 1;
+    #       max-players = 999;
+    #       view-distance = 32;
+    #       simulation-distance = 10;
+    #       enable-command-block = true;
+    #       motd = "minna, asobou yo~!!";
+    #
+    #       enable-rcon = true;
+    #       "rcon.password" = secrets.minecraft.minnacraft.rcon.password;
+    #       "rcon.port" = secrets.minecraft.minnacraft.rcon.port;
+    #
+    #       online-mode = true;
+    #       spawn-protection = 16;
+    #       player-idle-timeout = 30;
+    #       network-compression-threshold = 256;
+    #
+    #       spawn-animals = true;
+    #       spawn-monsters = true;
+    #       generate-structures = true;
+    #     };
+    #   };
+    # };
 
-      servers.minnacraft = {
-        enable = true;
-        autoStart = true;
-        package = pkgs.minecraftServers.paper-1_21_8;
-        jvmOpts = "-Xms6144M -Xmx8192M";
-
-        serverProperties = {
-          difficulty = 3;
-          gamemode = 1;
-          max-players = 999;
-          view-distance = 32;
-          simulation-distance = 10;
-          enable-command-block = true;
-          motd = "minna, asobou yo~!!";
-
-          enable-rcon = true;
-          "rcon.password" = secrets.minecraft.minnacraft.rcon.password;
-          "rcon.port" = secrets.minecraft.minnacraft.rcon.port;
-
-          online-mode = true;
-          spawn-protection = 16;
-          player-idle-timeout = 30;
-          network-compression-threshold = 256;
-
-          spawn-animals = true;
-          spawn-monsters = true;
-          generate-structures = true;
-        };
-      };
-    };
+    minecraft.enable = false;
 
     media-server = {
       enable = true;
@@ -175,6 +177,7 @@ in
       plex.enable = true;
       jellyfin.enable = true;
       arr.enable = true;
+      arr.torrents.enable = false;
     };
 
     copyparty = {

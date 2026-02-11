@@ -1,5 +1,8 @@
-{ pkgs, secrets, ... }:
-
+{
+  pkgs,
+  secrets,
+  ...
+}:
 {
   imports = [
     ../../../modules/home/tui.nix
@@ -15,4 +18,5 @@
       JIRA_API_TOKEN = secrets.vetspire.jiraApiKey;
     };
   };
+
 }
