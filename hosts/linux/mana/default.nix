@@ -33,6 +33,11 @@
     "d /home/vereis/.openclaw 0700 vereis users - -"
     "d /home/vereis/.openclaw/workspace 0700 vereis users - -"
     "d /home/vereis/.openclaw/workspace/memory 0700 vereis users - -"
+    "d /home/vereis/.config 0700 vereis users - -"
+    "d /home/vereis/.config/gh 0700 vereis users - -"
+    "d /home/vereis/.local 0700 vereis users - -"
+    "d /home/vereis/.local/share 0700 vereis users - -"
+    "d /home/vereis/.local/share/opencode 0700 vereis users - -"
   ];
 
   systemd.services.openclaw-state-permissions = {
@@ -44,6 +49,20 @@
       if [ -d /home/vereis/.openclaw ]; then
         ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.openclaw
         ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.openclaw
+      fi
+
+      if [ -d /home/vereis/.config/gh ]; then
+        ${lib.getExe' pkgs.coreutils "chown"} vereis:users /home/vereis/.config
+        ${lib.getExe' pkgs.coreutils "chmod"} u+rwx,go-rwx /home/vereis/.config
+        ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.config/gh
+        ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.config/gh
+      fi
+
+      if [ -d /home/vereis/.local/share/opencode ]; then
+        ${lib.getExe' pkgs.coreutils "chown"} vereis:users /home/vereis/.local /home/vereis/.local/share
+        ${lib.getExe' pkgs.coreutils "chmod"} u+rwx,go-rwx /home/vereis/.local /home/vereis/.local/share
+        ${lib.getExe' pkgs.coreutils "chown"} -R vereis:users /home/vereis/.local/share/opencode
+        ${lib.getExe' pkgs.coreutils "chmod"} -R u+rwX,go-rwx /home/vereis/.local/share/opencode
       fi
     '';
   };
@@ -77,6 +96,16 @@
         image = "openclaw-state.img";
         mountPoint = "/home/vereis/.openclaw";
         size = 4096;
+      }
+      {
+        image = "gh-config.img";
+        mountPoint = "/home/vereis/.config/gh";
+        size = 256;
+      }
+      {
+        image = "opencode-auth.img";
+        mountPoint = "/home/vereis/.local/share/opencode";
+        size = 512;
       }
     ];
 
