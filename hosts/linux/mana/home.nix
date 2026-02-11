@@ -106,6 +106,16 @@
     };
   };
 
+  programs.gh = {
+    enable = true;
+    settings = {
+      git_protocol = "ssh";
+      aliases = {
+        co = "pr checkout";
+      };
+    };
+  };
+
   home = {
     packages = with pkgs; [
       git
@@ -114,6 +124,8 @@
       ripgrep
       fd
       jq
+      opencode
+      which
       yq-go
       sqlite
       diffutils
@@ -150,10 +162,20 @@
 
     sessionVariables.OPENCODE_API_KEY = secrets.openclaw.opencode.apiKey;
 
-    file.".openclaw/openclaw.json".force = true;
+    file = {
+      ".openclaw/openclaw.json".force = true;
+      ".cc-safety-net/config.json".source = ../../../modules/home/tui/opencode/safety-net-config.json;
+      ".config/opencode/" = {
+        recursive = true;
+        source = ../../../modules/home/tui/opencode;
+      };
+    };
   };
 
   systemd.user.services.openclaw-gateway = {
+    Service.Environment = [
+      "PATH=/etc/profiles/per-user/vereis/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin"
+    ];
     Install.WantedBy = [ "default.target" ];
   };
 }
