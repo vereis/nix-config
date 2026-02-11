@@ -23,12 +23,15 @@
         enabled = true;
         token = secrets.openclaw.discord.botToken;
         blockStreaming = true;
-        groupPolicy = "allowlist";
+        groupPolicy = "open";
         dm = {
           enabled = true;
-          policy = "pairing";
+          policy = "allowlist";
+          allowFrom = [ "382588737441497088" ];
         };
-        guilds."1469757243430928521".requireMention = false;
+        guilds."1469757243430928521" = {
+          requireMention = false;
+        };
       };
 
       plugins.entries.discord.enabled = true;
@@ -48,22 +51,40 @@
         userTimezone = "Europe/London";
 
         model = {
-          primary = "anthropic/claude-opus-4-6";
+          primary = "opencode/kimi-k2.5";
           fallbacks = [
-            "openai-codex/gpt-5.3-codex"
-            "opencode/kimi-k2.5"
+            "opencode/kimi-k2.5-free"
           ];
         };
 
         subagents = {
           model = {
-            primary = "openai-codex/gpt-5.3-codex";
+            primary = "opencode/kimi-k2.5";
             fallbacks = [
-              "anthropic/claude-opus-4-6"
-              "opencode/kimi-k2.5"
+              "opencode/kimi-k2.5-free"
             ];
           };
         };
+      };
+
+      models.providers.opencode = {
+        baseUrl = "https://opencode.ai/zen/v1";
+        inherit (secrets.openclaw.opencode) apiKey;
+        api = "openai-completions";
+        models = [
+          {
+            id = "kimi-k2.5";
+            name = "Kimi K2.5";
+            contextWindow = 262144;
+            maxTokens = 8192;
+          }
+          {
+            id = "kimi-k2.5-free";
+            name = "Kimi K2.5 Free";
+            contextWindow = 262144;
+            maxTokens = 8192;
+          }
+        ];
       };
     };
   };
