@@ -47,6 +47,7 @@
               start = "07:00";
               end = "02:00";
             };
+            model = "opencode/kimi-k2.5";
           };
 
           userTimezone = "Europe/London";
