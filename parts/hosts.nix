@@ -7,6 +7,7 @@ in
     nixosConfigurations =
       lib.buildLinuxHosts {
         kyubey = "x86_64-linux";
+        mana = "x86_64-linux";
         madoka = "x86_64-linux";
         iroha = "x86_64-linux";
       }

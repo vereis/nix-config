@@ -1,7 +1,35 @@
-{ pkgs, secrets, ... }:
+{
+  lib,
+  inputs,
+  self,
+  secrets,
+  ...
+}:
 
+let
+  # Tailscale-only *arr sites (no SSL, no DDNS - DNS manually points to Tailscale IP)
+  arrSites = {
+    "shows.vereis.com" = 8989;
+    "anime.vereis.com" = 8990;
+    "movies.vereis.com" = 7878;
+    "anime-movies.vereis.com" = 7879;
+    "indexers.vereis.com" = 9696;
+    "music.vereis.com" = 8686;
+    "subtitles.vereis.com" = 6767;
+    "requests.vereis.com" = 5055;
+    "torrents.vereis.com" = 8080;
+    "books.vereis.com" = 8787;
+  };
+
+  arrServeSites = lib.mapAttrs (_name: port: {
+    inherit port;
+    ssl = false;
+  }) arrSites;
+
+in
 {
   imports = [
+    inputs.microvm.nixosModules.host
     ../../../modules/services/tailscale.nix
     ../../../modules/services/serve.nix
     ../../../modules/services/copyparty.nix
@@ -99,43 +127,47 @@
             zone = "vereis.com";
           };
         };
-      };
+      }
+      // arrServeSites;
     };
 
-    minecraft = {
-      enable = true;
-      openFirewall = true;
+    # Keep the old minecraft config around for quick restore, but keep runtime off for now.
+    # minecraft = {
+    #   enable = true;
+    #   openFirewall = true;
+    #
+    #   servers.minnacraft = {
+    #     enable = true;
+    #     autoStart = true;
+    #     package = pkgs.minecraftServers.paper-1_21_8;
+    #     jvmOpts = "-Xms6144M -Xmx8192M";
+    #
+    #     serverProperties = {
+    #       difficulty = 3;
+    #       gamemode = 1;
+    #       max-players = 999;
+    #       view-distance = 32;
+    #       simulation-distance = 10;
+    #       enable-command-block = true;
+    #       motd = "minna, asobou yo~!!";
+    #
+    #       enable-rcon = true;
+    #       "rcon.password" = secrets.minecraft.minnacraft.rcon.password;
+    #       "rcon.port" = secrets.minecraft.minnacraft.rcon.port;
+    #
+    #       online-mode = true;
+    #       spawn-protection = 16;
+    #       player-idle-timeout = 30;
+    #       network-compression-threshold = 256;
+    #
+    #       spawn-animals = true;
+    #       spawn-monsters = true;
+    #       generate-structures = true;
+    #     };
+    #   };
+    # };
 
-      servers.minnacraft = {
-        enable = true;
-        autoStart = true;
-        package = pkgs.minecraftServers.paper-1_21_8;
-        jvmOpts = "-Xms6144M -Xmx8192M";
-
-        serverProperties = {
-          difficulty = 3;
-          gamemode = 1;
-          max-players = 999;
-          view-distance = 32;
-          simulation-distance = 10;
-          enable-command-block = true;
-          motd = "minna, asobou yo~!!";
-
-          enable-rcon = true;
-          "rcon.password" = secrets.minecraft.minnacraft.rcon.password;
-          "rcon.port" = secrets.minecraft.minnacraft.rcon.port;
-
-          online-mode = true;
-          spawn-protection = 16;
-          player-idle-timeout = 30;
-          network-compression-threshold = 256;
-
-          spawn-animals = true;
-          spawn-monsters = true;
-          generate-structures = true;
-        };
-      };
-    };
+    minecraft.enable = false;
 
     media-server = {
       enable = true;
@@ -144,6 +176,8 @@
       enableHardwareAcceleration = true;
       plex.enable = true;
       jellyfin.enable = true;
+      arr.enable = true;
+      arr.torrents.enable = false;
     };
 
     copyparty = {
@@ -167,5 +201,10 @@
         };
       };
     };
+  };
+
+  microvm.vms.mana = {
+    flake = self;
+    restartIfChanged = true;
   };
 }

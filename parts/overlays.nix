@@ -6,7 +6,8 @@ in
   flake = {
     overlays = {
       default = lib.composeManyExtensions [
-        (import ../overlays/opencode.nix inputs)
+        (import ../overlays/bun.nix inputs)
+        inputs.opencode.overlays.default
         (import ../overlays/slack.nix inputs)
       ];
     };

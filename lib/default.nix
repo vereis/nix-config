@@ -48,6 +48,7 @@ let
         useUserPackages = true;
         extraSpecialArgs = userConfig // {
           inherit inputs secrets;
+          inherit (inputs) nix-openclaw;
           inherit (inputs) zjstatus;
           nixpkgs-stable = import nixpkgs-stable {
             inherit system;
