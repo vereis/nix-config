@@ -37,8 +37,21 @@
   };
 
   programs.ssh.askPassword = "";
-  security.polkit.enable = true;
-  security.rtkit.enable = true;
+  security = {
+    polkit.enable = true;
+    sudo.extraRules = [
+      {
+        users = [ username ];
+        commands = [
+          {
+            command = "/run/current-system/sw/bin/nixos-rebuild *";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
+    rtkit.enable = true;
+  };
   time.timeZone = "Europe/London";
   i18n = {
     defaultLocale = "en_US.UTF-8";
