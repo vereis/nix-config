@@ -5,7 +5,8 @@
   "default_agent": "plan",
   "theme": "system",
   "autoupdate": false,
-  "lsp": false,
+  "lsp": {},
+  "formatter": false,
   "plugin": ["cc-safety-net", "opencode-openai-codex-auth"],
   "mcp": {
     "context7": {
