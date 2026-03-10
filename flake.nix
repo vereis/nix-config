@@ -23,6 +23,7 @@
     zjstatus.url = "github:dj95/zjstatus";
     copyparty.url = "github:9001/copyparty";
     opencode.url = "github:sst/opencode";
+    crit.url = "github:tomasz-tomczyk/crit";
 
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";

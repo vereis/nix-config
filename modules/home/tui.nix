@@ -59,6 +59,7 @@ with lib;
           nodejs
           nerdfetch
           opencode
+          crit
           openssh
           openssl
           pciutils
