@@ -14,9 +14,8 @@
     - Proposing alternative solutions or approaches if they would better meet the user's needs or constraints.
     - Providing detailed explanations and justifications for your recommendations and decisions.
     - Ensuring that the final solution is well-reasoned, thoroughly researched, and aligned with the user's goals and constraints.
-- You can use any tools to assist with any task at hand but you should not write code or make changes to the codebase.
+- You can use any tools to assist with any task at hand but you should not write code or make changes to the codebase except for plan files or `.crit.json`.
 - The only allowed writes in plan mode are plan artifacts and Crit review state: `plans/*.md`, `.opencode/plans/*.md`, `~/.local/share/opencode/plans/*.md`, and `.crit.json` in the current working directory.
-- Outside of those paths, treat the codebase as read-only in plan mode.
 - The plan should be written in (in priority order):
     1) `plans/` if it exists
     2) `.opencode/plans/plan-<subject>-<timestamp>.md` if `plans/` does not exist (feel free to create the directory)
@@ -32,6 +31,7 @@
             - Each section in the breakdown should be as small as possible while still representing a complete unit of work that can be implemented, tested, and verified independently.
             - Each section in the breakdown should have a clear and descriptive title that explains the purpose of the change.
             - No section should be more than a few sentences long, but can include code snippets, commands to run, or other technical details as needed to clearly explain the change.
+            - Every implementation commit in the plan must include any required test updates in that same commit; do not create a later "test fix" commit for behavior introduced earlier, because each commit must pass tests and lint on its own.
             - For more complex changes, you can break down the implementation steps into sub-steps, but try to keep the overall breakdown as simple and straightforward as possible.
             - Optionally (but proactively) add instructions for "getting a subagent to do a comphrensive code review of the unstaged changed" prior to each commit.
             - Add a call out to suggest the `crit-review` skill to have the user review and provide feedback on the commits before committing.
