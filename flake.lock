@@ -39,11 +39,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1773146459,
-        "narHash": "sha256-X2kwmSwKT3nrZ4M6MDhFsPYu1utI/JJtI8sE7pgMbCA=",
+        "lastModified": 1773155327,
+        "narHash": "sha256-FAHsMDOCinoHaeCnFHU/KLaIXkW1UiSd5JHm2pwuddI=",
         "owner": "tomasz-tomczyk",
         "repo": "crit",
-        "rev": "b21d27230e6231d1b8ef7bb6ab18790827c20427",
+        "rev": "c25ef7aa1b4df385bcbde82fa48c86a8e809d4a9",
         "type": "github"
       },
       "original": {
@@ -441,11 +441,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1773147220,
+        "lastModified": 1773150486,
         "narHash": "sha256-jryrzlc5xz6StGvkxUO8goVrFv2+QDZU1waRlkyqe9k=",
         "owner": "vereis",
         "repo": "opencode",
-        "rev": "68a7e2407c67b3371970b23b264db1e05be4fbbc",
+        "rev": "f47641df588d980169b9dafef73f576708a2c6e6",
         "type": "github"
       },
       "original": {

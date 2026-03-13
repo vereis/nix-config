@@ -42,10 +42,15 @@
         "webfetch": "allow",
         "websearch": "allow",
         "bash": "allow",
+        "skill": {
+          "crit-review": "allow"
+        },
         "edit": {
           "*": "deny",
+          ".crit.json": "allow",
+          "plans/*.md": "allow",
           ".opencode/plans/*.md": "allow",
-          "../../../.local/share/opencode/plans/*.md": "allow"
+          "~/.local/share/opencode/plans/*.md": "allow"
         }
       }
     }
