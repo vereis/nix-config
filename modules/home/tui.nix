@@ -200,6 +200,20 @@ with lib;
           set fish_cursor_insert block blink
           set fish_cursor_replace_one block blink
           set fish_cursor_visual block blink
+
+          if status is-interactive
+              if not set -q ZELLIJ
+                  # `zellij delete-all-sessions` requires a TTY confirmation prompt, so prune exited sessions one by one.
+                  zellij list-sessions --no-formatting 2>/dev/null | while read -l line
+                      if string match -q '*EXITED*' -- $line
+                          set -l session_name (string split ' ' -- $line)[1]
+                          zellij delete-session $session_name >/dev/null 2>/dev/null
+                      end
+                  end
+                  zellij
+                  kill $fish_pid
+              end
+          end
         '';
 
         shellAliases = {
