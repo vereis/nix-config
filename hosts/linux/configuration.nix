@@ -18,6 +18,8 @@
       "wheel"
       "docker"
       "media"
+      "audio"
+      "video"
     ];
     shell = pkgs.fish;
   };
