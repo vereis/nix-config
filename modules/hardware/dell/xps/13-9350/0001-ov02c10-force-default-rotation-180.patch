@@ -1,0 +1,24 @@
+--- a/drivers/media/i2c/ov02c10.c
++++ b/drivers/media/i2c/ov02c10.c
+@@ -461,17 +461,15 @@
+ 		break;
+ 
+ 	case V4L2_CID_HFLIP:
+-		cci_write(ov02c10->regmap, OV02C10_ISP_X_WIN_CONTROL,
+-			  ctrl->val ? 2 : 1, &ret);
++		cci_write(ov02c10->regmap, OV02C10_ISP_X_WIN_CONTROL, 2, &ret);
+ 		cci_update_bits(ov02c10->regmap, OV02C10_ROTATE_CONTROL,
+-				BIT(3), ctrl->val ? 0 : BIT(3), &ret);
++				BIT(3), 0, &ret);
+ 		break;
+ 
+ 	case V4L2_CID_VFLIP:
+-		cci_write(ov02c10->regmap, OV02C10_ISP_Y_WIN_CONTROL,
+-			  ctrl->val ? 2 : 1, &ret);
++		cci_write(ov02c10->regmap, OV02C10_ISP_Y_WIN_CONTROL, 2, &ret);
+ 		cci_update_bits(ov02c10->regmap, OV02C10_ROTATE_CONTROL,
+-				BIT(4), ov02c10->vflip->val << 4, &ret);
++				BIT(4), BIT(4), &ret);
+ 		break;
+ 
+ 	default:

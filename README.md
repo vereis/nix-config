@@ -25,6 +25,7 @@ It uses **flake-parts** to help with organization and modularity:
 │   └── home.nix
 ├── modules/                     # Reusable modules
 │   ├── hardware/                ## Hardware-specific modules
+│   │   └── dell/xps/13-9350/    ## XPS 13 9350 hardware fixes
 │   ├── home/                    ## User-specific modules, applications
 │   │   ├── gui/
 │   │   ├── tui/
@@ -32,6 +33,8 @@ It uses **flake-parts** to help with organization and modularity:
 │   │   └── tui.nix              ## TUI applications
 │   └── services/                ## Background service modules
 ├── overlays/                    # Overlays
+├── packages/                    # Local package derivations
+│   └── linux/                   ## Out-of-tree kernel module packages
 ├── secrets/                     # Encrypted secrets
 └── bin/                         # Custom scripts, utilities
 ```

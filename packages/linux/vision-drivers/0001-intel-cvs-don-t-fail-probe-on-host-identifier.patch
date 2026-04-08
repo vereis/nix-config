@@ -1,0 +1,32 @@
+From e9676f0127a37d40d715fdecc31fbbadf4ffd9a0 Mon Sep 17 00:00:00 2001
+From: vereis <me@vereis.com>
+Date: Tue, 7 Apr 2026 12:35:00 +0100
+Subject: [PATCH] intel-cvs: don't fail probe on host identifier
+
+On some Lunar Lake systems, SET_HOST_IDENTIFIER returns -EIO even though
+camera sensor acquisition can still proceed. Downgrade this to a warning
+to allow probe to continue.
+---
+ drivers/misc/icvs/intel_cvs.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/misc/icvs/intel_cvs.c b/drivers/misc/icvs/intel_cvs.c
+index cf5cb4e..b2ec40f 100644
+--- a/drivers/misc/icvs/intel_cvs.c
++++ b/drivers/misc/icvs/intel_cvs.c
+@@ -167,10 +167,9 @@ static int cvs_common_probe(struct device *dev, bool is_i2c)
+ 			}
+ 
+ 			ret = cvs_write_i2c(SET_HOST_IDENTIFIER, NULL, 0);
+-			if (ret) {
+-				dev_err(cvs->dev, "%s:set_host_identifier cmd failed", __func__);
+-				goto exit;
+-			}
++			if (ret)
++				dev_warn(cvs->dev, "%s:set_host_identifier cmd failed (non-fatal)",
++					 __func__);
+ 		}
+ 	}
+ 
+-- 
+2.51.2
