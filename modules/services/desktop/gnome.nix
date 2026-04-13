@@ -291,6 +291,7 @@ in
         [
           adwaita-icon-theme
           nautilus
+          snapshot
           gnome-calculator
           gnome-system-monitor
           bibata-cursors
