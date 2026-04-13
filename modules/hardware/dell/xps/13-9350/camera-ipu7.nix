@@ -1,42 +1,55 @@
 {
+  lib,
   pkgs,
   config,
   ...
 }:
 
+let
+  isPre70Kernel = lib.versionOlder config.boot.kernelPackages.kernel.version "7.0";
+
+  ov02c10Backports = lib.optionals isPre70Kernel [
+    {
+      # Fixes wrong webcam colors after upstream OV02C10 flip changes.
+      name = "ov02c10-fix-bayer-pattern-after-default-vflip";
+      patch = pkgs.fetchurl {
+        url = "https://github.com/torvalds/linux/commit/905120d7470e5ed79d59b61ef6aa13344ffca229.patch";
+        hash = "sha256-Tir4Z6yP/t1mlpj6+fWLoWFa9tZ/8aEVEDWj7Wk4ajc=";
+      };
+    }
+    {
+      # Keeps colors stable when apps toggle camera flip controls.
+      name = "ov02c10-preserve-bayer-pattern-on-flip-changes";
+      patch = pkgs.fetchurl {
+        url = "https://github.com/torvalds/linux/commit/d0bb6f1f2b79d96953bf81a3839ac2aa946ba2fa.patch";
+        hash = "sha256-Fad0aRdKTkCALz5oFB1mJ7KJQ8XIXyvIK/ArAWUYhrw=";
+      };
+    }
+    {
+      # Fixes mirrored image behavior from the sensor hflip control.
+      name = "ov02c10-fix-horizontal-flip-control";
+      patch = pkgs.fetchurl {
+        url = "https://github.com/torvalds/linux/commit/1d2e3b4443a85374fdd6fb8fd2c015e3e3e16100.patch";
+        hash = "sha256-4qEYNDWYoxI2/UGTAGv+uEa38jx9eCNjEkYZk+zlEDA=";
+      };
+    }
+  ];
+
+  ov02c10ForcePatch =
+    if isPre70Kernel then
+      ./0001-ov02c10-force-default-rotation-180.patch
+    else
+      ./0001-ov02c10-force-default-rotation-180-v7.patch;
+in
 {
   boot = {
     kernelPackages = pkgs.linuxPackages_testing;
 
-    kernelPatches = [
-      {
-        # Fixes wrong webcam colors after upstream OV02C10 flip changes.
-        name = "ov02c10-fix-bayer-pattern-after-default-vflip";
-        patch = pkgs.fetchurl {
-          url = "https://github.com/torvalds/linux/commit/905120d7470e5ed79d59b61ef6aa13344ffca229.patch";
-          hash = "sha256-Tir4Z6yP/t1mlpj6+fWLoWFa9tZ/8aEVEDWj7Wk4ajc=";
-        };
-      }
-      {
-        # Keeps colors stable when apps toggle camera flip controls.
-        name = "ov02c10-preserve-bayer-pattern-on-flip-changes";
-        patch = pkgs.fetchurl {
-          url = "https://github.com/torvalds/linux/commit/d0bb6f1f2b79d96953bf81a3839ac2aa946ba2fa.patch";
-          hash = "sha256-Fad0aRdKTkCALz5oFB1mJ7KJQ8XIXyvIK/ArAWUYhrw=";
-        };
-      }
-      {
-        # Fixes mirrored image behavior from the sensor hflip control.
-        name = "ov02c10-fix-horizontal-flip-control";
-        patch = pkgs.fetchurl {
-          url = "https://github.com/torvalds/linux/commit/1d2e3b4443a85374fdd6fb8fd2c015e3e3e16100.patch";
-          hash = "sha256-4qEYNDWYoxI2/UGTAGv+uEa38jx9eCNjEkYZk+zlEDA=";
-        };
-      }
+    kernelPatches = ov02c10Backports ++ [
       {
         # Prevents userspace from flipping this webcam upside down.
         name = "ov02c10-force-default-rotation-180";
-        patch = ./0001-ov02c10-force-default-rotation-180.patch;
+        patch = ov02c10ForcePatch;
       }
     ];
 
