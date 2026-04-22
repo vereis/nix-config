@@ -49,6 +49,7 @@ in
           maple-mono.NF
           onlyoffice-desktopeditors
           discord
+          gnome-tweaks
         ]
         ++ config.modules.gui.extraPackages;
 
