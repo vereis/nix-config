@@ -198,6 +198,7 @@ in
                 "gsconnect@andyholmes.github.io"
                 "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
                 "hidetopbar@mathieu.bidon.ca"
+                "just-perfection-desktop@just-perfection"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -300,6 +301,7 @@ in
           gnomeExtensions.gsconnect
           gnomeExtensions.launch-new-instance
           gnomeExtensions.hide-top-bar
+          gnomeExtensions.just-perfection
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
