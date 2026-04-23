@@ -298,6 +298,7 @@ in
           gnomeExtensions.hide-top-bar
           gnomeExtensions.just-perfection
           gnomeExtensions.rounded-window-corners-reborn
+          wl-clipboard
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
