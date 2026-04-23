@@ -69,13 +69,13 @@ in
         libraries = with pkgs; [
           libGL
           libGLU
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXi
-          xorg.libXext
-          xorg.libXrender
-          xorg.libXfixes
+          libx11
+          libxcursor
+          libxrandr
+          libxi
+          libxext
+          libxrender
+          libxfixes
         ];
       };
 
