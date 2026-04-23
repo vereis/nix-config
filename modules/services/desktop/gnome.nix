@@ -199,6 +199,7 @@ in
                 "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
                 "hidetopbar@mathieu.bidon.ca"
                 "just-perfection-desktop@just-perfection"
+                "rounded-window-corners@fxgn"
               ];
             };
             "org/gnome/shell/extensions/dash-to-dock" = {
@@ -302,6 +303,7 @@ in
           gnomeExtensions.launch-new-instance
           gnomeExtensions.hide-top-bar
           gnomeExtensions.just-perfection
+          gnomeExtensions.rounded-window-corners-reborn
         ]
         ++ config.modules.services.desktop.gnome.extraPackages;
 
