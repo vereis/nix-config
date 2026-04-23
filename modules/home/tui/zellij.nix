@@ -46,14 +46,19 @@ with lib;
             normal {
               unbind "Ctrl o"
               unbind "Ctrl n"
+              unbind "Alt n"
               unbind "Ctrl g"
               unbind "Ctrl p"
               unbind "Ctrl t"
               bind "Ctrl b" { SwitchToMode "Tmux"; }
-              bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
+              bind "Alt h" "Alt Left" { MoveFocus "Left"; }
               bind "Alt j" "Alt Down" { MoveFocus "Down"; }
               bind "Alt k" "Alt Up" { MoveFocus "Up"; }
-              bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
+              bind "Alt l" "Alt Right" { MoveFocus "Right"; }
+              bind "Alt H" "Alt Shift Left" { NewPane "Right"; MovePane "Left"; }
+              bind "Alt J" "Alt Shift Down" { NewPane "Down"; }
+              bind "Alt K" "Alt Shift Up" { NewPane "Down"; MovePane "Up"; }
+              bind "Alt L" "Alt Shift Right" { NewPane "Right"; }
               bind "Alt t" { NewTab; }
               bind "Alt 1" { GoToTab 1; }
               bind "Alt 2" { GoToTab 2; }
