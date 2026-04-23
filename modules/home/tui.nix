@@ -457,6 +457,7 @@ with lib;
 
         withNodeJs = true;
         withPython3 = true;
+        withRuby = false;
 
         extraConfig = ''
           lua require('config')
