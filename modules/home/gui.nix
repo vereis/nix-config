@@ -69,6 +69,9 @@ in
       settings = {
         background = "060606";
         foreground = "e0def4";
+        window-theme = "ghostty";
+        window-titlebar-background = "060606";
+        window-titlebar-foreground = "e0def4";
         cursor-color = "524f67";
         selection-background = "2a283e";
         selection-foreground = "e0def4";
