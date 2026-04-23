@@ -193,7 +193,6 @@ in
             "org/gnome/shell" = {
               enabled-extensions = [
                 "trayIconsReloaded@selfmade.pl"
-                "dash-to-dock@micxgx.gmail.com"
                 "blur-my-shell@aunetx"
                 "gsconnect@andyholmes.github.io"
                 "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
@@ -201,10 +200,6 @@ in
                 "just-perfection-desktop@just-perfection"
                 "rounded-window-corners@fxgn"
               ];
-            };
-            "org/gnome/shell/extensions/dash-to-dock" = {
-              show-trash = false;
-              dock-fixed = false;
             };
             "org/gnome/shell/extensions/gsconnect" = {
               name = config.networking.hostName;
@@ -297,7 +292,6 @@ in
           gnome-system-monitor
           bibata-cursors
           gnomeExtensions.tray-icons-reloaded
-          gnomeExtensions.dash-to-dock
           gnomeExtensions.blur-my-shell
           gnomeExtensions.gsconnect
           gnomeExtensions.launch-new-instance
