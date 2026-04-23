@@ -74,8 +74,8 @@ in
         selection-foreground = "e0def4";
         font-family = "Maple Mono NF";
         font-size = 12;
-        window-padding-x = 32;
-        window-padding-y = 32;
+        window-padding-x = 24;
+        window-padding-y = 24;
         window-padding-balance = true;
         cursor-style = "block";
         cursor-style-blink = true;
