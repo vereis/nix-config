@@ -58,6 +58,7 @@ in
         with pkgs;
         [
           aria2
+          bat
           btop
           cacert
           cargo
@@ -81,6 +82,7 @@ in
           pciutils
           ripgrep
           rsync
+          television
           tree
           unzip
           wget
