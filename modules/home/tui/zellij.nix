@@ -162,6 +162,33 @@ with lib;
               cyan "#ebbcba"
               black "#26233a"
               white "#e0def4"
+
+              frame_unselected {
+                base 33 32 46
+                background 25 23 36
+                emphasis_0 33 32 46
+                emphasis_1 33 32 46
+                emphasis_2 33 32 46
+                emphasis_3 33 32 46
+              }
+
+              frame_selected {
+                base 33 32 46
+                background 25 23 36
+                emphasis_0 33 32 46
+                emphasis_1 33 32 46
+                emphasis_2 33 32 46
+                emphasis_3 33 32 46
+              }
+
+              frame_highlight {
+                base 33 32 46
+                background 25 23 36
+                emphasis_0 33 32 46
+                emphasis_1 33 32 46
+                emphasis_2 33 32 46
+                emphasis_3 33 32 46
+              }
             }
           }
         '';
