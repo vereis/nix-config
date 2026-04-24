@@ -9,20 +9,12 @@
   ui = true
 
 [core]
-  pager = delta
+  pager = git-split-diffs --color | less -RFX
   excludesfile = ~/.gitignore_global
 
-[interactive]
-  diffFilter = delta --color-only
-
-[delta]
-  features = side-by-side line-numbers decorations
-  whitespace-error-style = 22 reverse
-
-[delta "decorations"]
-  commit-decoration-style = bold yellow box ul
-  file-style = bold yellow ul
-  file-decoration-style = none
+[split-diffs]
+  theme-directory = HOME_PLACEHOLDER/.config/git-split-diffs/themes
+  theme-name = vereis-dark
 
 [alias]
   # GH Core aliases
