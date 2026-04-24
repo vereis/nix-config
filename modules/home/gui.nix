@@ -84,7 +84,6 @@ in
     programs.ghostty = {
       enable = true;
       enableBashIntegration = true;
-      enableFishIntegration = true;
       settings = {
         background = "060606";
         foreground = "e0def4";
