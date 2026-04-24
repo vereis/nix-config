@@ -3,12 +3,11 @@
   pkgs,
   inputs,
   system,
-  lib,
   ...
 }:
 
 {
-  programs.fish.enable = lib.mkForce true;
+  environment.shells = with pkgs; [ nushell ];
 
   users.users.${username} = {
     isNormalUser = true;
@@ -19,7 +18,7 @@
       "docker"
       "media"
     ];
-    shell = pkgs.fish;
+    shell = pkgs.nushell;
   };
 
   nixpkgs = {

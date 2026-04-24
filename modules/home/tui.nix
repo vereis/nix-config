@@ -122,17 +122,6 @@ with lib;
           ".local/share/atuin/key" = {
             text = secrets.atuin.key;
           };
-          ".config/fish/conf.d/starship_transient.fish" = {
-            text = ''
-              # Enable transient prompt after Starship is loaded
-              function __enable_transience_on_prompt --on-event fish_prompt
-                if type -q enable_transience
-                  enable_transience
-                  functions --erase __enable_transience_on_prompt
-                end
-              end
-            '';
-          };
         }
         config.modules.tui.extraFiles
       ];
@@ -148,7 +137,7 @@ with lib;
     programs = {
       atuin = {
         enable = true;
-        enableFishIntegration = true;
+        enableNushellIntegration = true;
         settings = {
           auto_sync = true;
           search_mode = "fuzzy";
@@ -162,74 +151,62 @@ with lib;
       direnv = {
         enable = true;
         enableBashIntegration = true;
+        enableNushellIntegration = true;
       };
 
       fzf = {
         enable = true;
-        enableFishIntegration = true;
         enableBashIntegration = true;
       };
 
       zoxide = {
         enable = true;
-        enableFishIntegration = true;
+        enableNushellIntegration = true;
         options = [
           "--cmd cd" # Use 'cd' instead of 'z'
         ];
       };
 
-      fish = {
+      nushell = {
         enable = true;
+        settings = {
+          show_banner = false;
+          edit_mode = "vi";
+          buffer_editor = "nvim";
+        };
+        extraConfig = ''
+          $env.config.keybindings ++= [{
+            name: edit_command_buffer
+            modifier: none
+            keycode: char_v
+            mode: vi_normal
+            event: { send: OpenEditor }
+          }]
 
-        interactiveShellInit = ''
-          # Set vi key bindings
-          fish_vi_key_bindings
+          if $nu.is-interactive and ($env.ZELLIJ? | is-empty) {
+            try {
+              zellij list-sessions --no-formatting
+              | lines
+              | where {|line| $line | str contains 'EXITED' }
+              | each {|line|
+                  let session_name = ($line | split row ' ' | first)
+                  zellij delete-session $session_name
+                }
+            } catch {
+            }
 
-          # Ctrl-A/E for line navigation
-          bind -M insert \ca beginning-of-line
-          bind -M insert \ce end-of-line
-
-          # Vi mode: 'v' to edit command in editor
-          bind -M default v edit_command_buffer
-
-          # No greeting
-          set fish_greeting
-
-          # Always use blinking block cursor (in all vi modes)
-          set fish_cursor_default block blink
-          set fish_cursor_insert block blink
-          set fish_cursor_replace_one block blink
-          set fish_cursor_visual block blink
-
-          if status is-interactive
-              if not set -q ZELLIJ
-                  # `zellij delete-all-sessions` requires a TTY confirmation prompt, so prune exited sessions one by one.
-                  zellij list-sessions --no-formatting 2>/dev/null | while read -l line
-                      if string match -q '*EXITED*' -- $line
-                          set -l session_name (string split ' ' -- $line)[1]
-                          zellij delete-session $session_name >/dev/null 2>/dev/null
-                      end
-                  end
-                  zellij
-                  kill $fish_pid
-              end
-          end
+            zellij
+            exit
+          }
         '';
-
         shellAliases = {
           vim = "nvim";
-        };
-
-        plugins = [ ];
-
-        functions = {
-          starship_transient_prompt_func = "starship module character";
         };
       };
 
       starship = {
         enable = true;
-        enableFishIntegration = true;
+        enableNushellIntegration = true;
         settings = {
           "$schema" = "https://starship.rs/config-schema.json";
           add_newline = false;

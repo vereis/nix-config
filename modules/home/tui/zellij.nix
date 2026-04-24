@@ -24,7 +24,7 @@ with lib;
 
       file = {
         ".config/zellij/config.kdl".text = ''
-          default_shell "fish"
+          default_shell "nu"
           default_layout "default";
           on_force_close "quit"
           copy_on_select true;
@@ -333,7 +333,6 @@ with lib;
 
     programs.zellij = {
       enable = true;
-      enableFishIntegration = false;
       enableBashIntegration = true;
       exitShellOnExit = true;
     };
