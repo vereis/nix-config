@@ -53,7 +53,26 @@ in
         ]
         ++ config.modules.gui.extraPackages;
 
-      file = config.modules.gui.extraFiles;
+      file = config.modules.gui.extraFiles // {
+        ".config/ghostty/user.css".text = ''
+          window headerbar splitbutton,
+          window headerbar splitbutton *,
+          window headerbar box.end > box,
+          window headerbar box.end > box *,
+          window headerbar windowtitle,
+          window headerbar windowtitle * {
+            min-width: 0;
+            min-height: 0;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            opacity: 0;
+            font-size: 0;
+            -gtk-icon-size: 0;
+          }
+
+        '';
+      };
 
       sessionVariables = {
         BROWSER = "zen-twilight";
@@ -69,6 +88,9 @@ in
       settings = {
         background = "060606";
         foreground = "e0def4";
+        gtk-custom-css = "${config.home.homeDirectory}/.config/ghostty/user.css";
+        gtk-titlebar-style = "native";
+        window-show-tab-bar = "never";
         window-theme = "ghostty";
         window-titlebar-background = "060606";
         window-titlebar-foreground = "e0def4";
@@ -77,9 +99,9 @@ in
         selection-foreground = "e0def4";
         font-family = "Maple Mono NF";
         font-size = 12;
-        window-padding-x = 24;
-        window-padding-y = 24;
-        window-padding-balance = true;
+        window-padding-x = 32;
+        window-padding-y = "0,22";
+        window-padding-balance = false;
         cursor-style = "block";
         cursor-style-blink = true;
         shell-integration-features = "no-cursor";
