@@ -9,6 +9,22 @@
 }:
 
 with lib;
+let
+  gitSplitDiffs = pkgs.buildNpmPackage rec {
+    pname = "git-split-diffs";
+    version = "2.3.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "banga";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-3kprATuDvtXSocoVx/Fvd00z0d4nhZZZ3UqBEFmctYE=";
+    };
+
+    npmDepsHash = "sha256-mQ+JhWnBNMvHBL9T1nzIhsmMpQOTzoce5g3n3C1SrJE=";
+    npmBuildScript = "build:publish";
+  };
+in
 {
   imports = [
     ./tui/zellij.nix
@@ -45,13 +61,13 @@ with lib;
           btop
           cacert
           cargo
-          delta
           fd
           git-absorb
           ffmpeg
           gcc
           gh
           git
+          gitSplitDiffs
           httpie
           jq
           killall
@@ -96,11 +112,17 @@ with lib;
             recursive = true;
             source = ./tui/neovim/lua;
           };
+          ".config/git-split-diffs/themes/vereis-dark.json" = {
+            executable = false;
+            source = ./tui/git/vereis-dark.json;
+          };
           ".gitconfig" = {
             executable = false;
-            text = builtins.replaceStrings [ "EMAIL_PLACEHOLDER" "USER_PLACEHOLDER" ] [ email user ] (
-              builtins.readFile ./tui/git/.gitconfig
-            );
+            text =
+              builtins.replaceStrings
+                [ "EMAIL_PLACEHOLDER" "USER_PLACEHOLDER" "HOME_PLACEHOLDER" ]
+                [ email user "/home/${user}" ]
+                (builtins.readFile ./tui/git/.gitconfig);
           };
           ".gitconfig-vetspire" = {
             executable = false;
