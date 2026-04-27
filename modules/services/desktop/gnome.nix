@@ -254,6 +254,15 @@ in
               show-screenshot-ui = [ "<Super>s" ];
               show-screen-recording-ui = [ "<Super>v" ];
               toggle-application-view = [ "<Super>space" ];
+              switch-to-application-1 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-2 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-3 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-4 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-5 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-6 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-7 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-8 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+              switch-to-application-9 = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
             };
 
             # Custom application launcher keybindings
