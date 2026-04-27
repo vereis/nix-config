@@ -232,7 +232,7 @@ with lib;
                   zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
                 }/bin/zjstatus.wasm" {
                   format_left  "{tabs}"
-                  format_right "{datetime} {mode}"
+                  format_right "{datetime} #[bg=#ebbcba,fg=#191724,bold] {session} {mode}"
                   format_space ""
 
                   border_enabled  "false"
@@ -242,7 +242,7 @@ with lib;
 
                   tab_normal         "#[bg=#9090aa,fg=#191724] {name} #[fg=#403d52] "
                   tab_active         "#[bg=#dedef4,fg=#191724,italic] {name} #[fg=#403d52] "
-                  mode_normal        "#[bg=#ebbcba,fg=#191724,bold] Normal "
+                  mode_normal        ""
                   mode_locked        "#[bg=#ebbcba,fg=#191724,bold] Locked "
                   mode_resize        "#[bg=#ebbcba,fg=#191724,bold] Resize "
                   mode_pane          "#[bg=#ebbcba,fg=#191724,bold] Pane "
