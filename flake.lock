@@ -423,16 +423,15 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1773150486,
-        "narHash": "sha256-jryrzlc5xz6StGvkxUO8goVrFv2+QDZU1waRlkyqe9k=",
-        "owner": "vereis",
+        "lastModified": 1777280547,
+        "narHash": "sha256-D53S1bqrt1JoUDK0vU2+yxJdlCigBQrkaj2SeOcsw1U=",
+        "owner": "anomalyco",
         "repo": "opencode",
-        "rev": "f47641df588d980169b9dafef73f576708a2c6e6",
+        "rev": "61eabfc60c1005d1b2b11849d70696a3dcef293e",
         "type": "github"
       },
       "original": {
-        "owner": "vereis",
-        "ref": "fix/json-migration-marker",
+        "owner": "anomalyco",
         "repo": "opencode",
         "type": "github"
       }
