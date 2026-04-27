@@ -1,0 +1,40 @@
+[metadata]
+name = "sessions"
+description = "Browse and switch Zellij sessions"
+requirements = ["zellij"]
+
+[source]
+command = "$HOME/.local/bin/zellij-session-switcher list"
+no_sort = true
+frecency = false
+shell = "bash"
+
+[preview]
+command = "$HOME/.local/bin/zellij-session-switcher preview '{}'"
+shell = "bash"
+
+[ui]
+orientation = "portrait"
+
+[ui.preview_panel]
+size = 45
+header = "details"
+scrollbar = false
+
+[keybindings]
+ctrl-r = "reload_source"
+ctrl-x = ["actions:delete", "reload_source"]
+ctrl-y = "copy_entry_to_clipboard"
+ctrl-n = "actions:new"
+
+[actions.delete]
+description = "Delete the selected Zellij session"
+command = "$HOME/.local/bin/zellij-session-switcher delete '{}'"
+shell = "bash"
+mode = "fork"
+
+[actions.new]
+description = "Create and switch to a fresh Zellij session"
+command = "$HOME/.local/bin/zellij-session-switcher new"
+shell = "bash"
+mode = "execute"
