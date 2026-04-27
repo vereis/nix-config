@@ -23,6 +23,13 @@ with lib;
       ];
 
       file = {
+        ".config/television/cable/sessions.toml".source = ./zellij/session-switcher/sessions.toml;
+
+        ".local/bin/zellij-session-switcher" = {
+          executable = true;
+          source = ./zellij/session-switcher/actions.sh;
+        };
+
         ".config/zellij/config.kdl".text = ''
           default_shell "nu"
           default_layout "default";
@@ -74,6 +81,17 @@ with lib;
               bind "Alt f" { ToggleFloatingPanes; }
               bind "Alt F" { TogglePaneEmbedOrFloating; }
               bind "Alt z" { ToggleFocusFullscreen; }
+              bind "Alt s" "Alt S" {
+                Run "${config.home.homeDirectory}/.local/bin/zellij-session-switcher" "pick" {
+                  floating true
+                  borderless true
+                  close_on_exit true
+                  x "20%"
+                  y "12%"
+                  width "60%"
+                  height "76%"
+                }
+              }
               bind "Alt [" { MoveTab "Left"; }
               bind "Alt ]" { MoveTab "Right"; }
               bind "Alt ;" { NextSwapLayout; }

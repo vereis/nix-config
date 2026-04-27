@@ -39,11 +39,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1777042942,
-        "narHash": "sha256-4Zo90piLDtsyTFdUh6Pjelg5M17bNU23nJKJpI3CQ/8=",
+        "lastModified": 1777047464,
+        "narHash": "sha256-URgAdEsEmz/lCa7xXeMGmcGSng5fsDdKKCDMj5cOCeE=",
         "owner": "tomasz-tomczyk",
         "repo": "crit",
-        "rev": "f2685fd230bdf8c7e8553932f371e0e36416d5f0",
+        "rev": "d2bec6115f99db094aacf050d56fe23c77096c7b",
         "type": "github"
       },
       "original": {

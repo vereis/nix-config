@@ -102,6 +102,14 @@ in
 
       file = lib.mkMerge [
         {
+          ".local/bin/tv" = {
+            executable = true;
+            text = ''
+              #!/usr/bin/env bash
+              export SHELL="${pkgs.bash}/bin/bash"
+              exec ${pkgs.television}/bin/tv "$@"
+            '';
+          };
           ".local/bin/git/ssh-migrate.sh" = {
             executable = true;
             source = ./tui/git/migrate-ssh.sh;
@@ -154,6 +162,7 @@ in
         FZF_DEFAULT_COMMAND = "rg --files";
         EDITOR = "nvim";
         VISUAL = "nvim";
+        SHELL = lib.getExe config.programs.nushell.package;
       }
       // config.modules.tui.extraSessionVariables;
     };
