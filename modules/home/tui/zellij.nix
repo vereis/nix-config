@@ -7,6 +7,12 @@
 }:
 
 with lib;
+let
+  vimZellijNavigator = pkgs.fetchurl {
+    url = "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm";
+    hash = "sha256-d+Wi9i98GmmMryV0ST1ddVh+D9h3z7o0xIyvcxwkxY0=";
+  };
+in
 {
   options.modules.zellij = {
     enable = mkOption {
@@ -48,6 +54,34 @@ with lib;
           keybinds {
             shared_except "tmux" "locked" {
               unbind "Ctrl b"
+              bind "Alt h" "Alt Left" {
+                MessagePlugin "file:${vimZellijNavigator}" {
+                  name "move_focus"
+                  payload "left"
+                  move_mod "alt"
+                }
+              }
+              bind "Alt j" "Alt Down" {
+                MessagePlugin "file:${vimZellijNavigator}" {
+                  name "move_focus"
+                  payload "down"
+                  move_mod "alt"
+                }
+              }
+              bind "Alt k" "Alt Up" {
+                MessagePlugin "file:${vimZellijNavigator}" {
+                  name "move_focus"
+                  payload "up"
+                  move_mod "alt"
+                }
+              }
+              bind "Alt l" "Alt Right" {
+                MessagePlugin "file:${vimZellijNavigator}" {
+                  name "move_focus"
+                  payload "right"
+                  move_mod "alt"
+                }
+              }
             }
 
             normal {
@@ -58,10 +92,6 @@ with lib;
               unbind "Ctrl p"
               unbind "Ctrl t"
               bind "Ctrl b" { SwitchToMode "Tmux"; }
-              bind "Alt h" "Alt Left" { MoveFocus "Left"; }
-              bind "Alt j" "Alt Down" { MoveFocus "Down"; }
-              bind "Alt k" "Alt Up" { MoveFocus "Up"; }
-              bind "Alt l" "Alt Right" { MoveFocus "Right"; }
               bind "Alt H" "Alt Shift Left" { NewPane "Right"; MovePane "Left"; }
               bind "Alt J" "Alt Shift Down" { NewPane "Down"; }
               bind "Alt K" "Alt Shift Up" { NewPane "Down"; MovePane "Up"; }
