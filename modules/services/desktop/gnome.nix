@@ -266,7 +266,7 @@ in
             };
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
               name = "Terminal";
-              command = "ghostty";
+              command = "ghostty --window-width=140 --window-height=40";
               binding = "<Super>Return";
             };
             "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
