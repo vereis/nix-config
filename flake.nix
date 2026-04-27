@@ -22,7 +22,7 @@
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     zjstatus.url = "github:dj95/zjstatus";
     copyparty.url = "github:9001/copyparty";
-    opencode.url = "github:vereis/opencode/fix/json-migration-marker";
+    opencode.url = "github:anomalyco/opencode";
     crit.url = "github:tomasz-tomczyk/crit";
 
     zen-browser = {
