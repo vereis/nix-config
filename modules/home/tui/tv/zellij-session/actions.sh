@@ -48,7 +48,7 @@ preview_session() {
       | select(.is_plugin | not)
       | select(.exited | not)
       | select(.is_selectable == true)
-      | select(((.pane_command // "") | contains("zellij-session-picker")) | not)
+      | select(((.pane_command // "") | contains("zellij-session-switcher")) | not)
     ]
     | sort_by([
         (if .is_focused then 0 else 1 end),

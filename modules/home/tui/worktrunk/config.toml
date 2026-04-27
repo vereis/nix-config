@@ -1,1 +1,4 @@
 worktree-path = "{{ repo_path }}/../{{ branch | sanitize }}"
+
+[post-switch]
+direnv = "test ! -f .envrc || direnv allow ."
