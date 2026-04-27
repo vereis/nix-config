@@ -103,7 +103,10 @@ in
         window-padding-balance = false;
         cursor-style = "block";
         cursor-style-blink = true;
+        command = lib.getExe config.programs.nushell.package;
         shell-integration-features = "no-cursor";
+        window-width = 140;
+        window-height = 40;
 
         # Enable clickable links
         link-url = true;
