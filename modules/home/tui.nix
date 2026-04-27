@@ -67,6 +67,7 @@ in
           ffmpeg
           gcc
           gh
+          gh-dash
           git
           gitSplitDiffs
           httpie
@@ -125,6 +126,11 @@ in
           ".config/git-split-diffs/themes/vereis-dark.json" = {
             executable = false;
             source = ./tui/git/vereis-dark.json;
+          };
+          ".config/gh-dash/config.yml" = {
+            executable = false;
+            force = true;
+            source = ./tui/gh-dash/config.yml;
           };
           ".gitconfig" = {
             executable = false;
