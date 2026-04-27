@@ -7,12 +7,6 @@
 }:
 
 with lib;
-let
-  vimZellijNavigator = pkgs.fetchurl {
-    url = "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm";
-    hash = "sha256-d+Wi9i98GmmMryV0ST1ddVh+D9h3z7o0xIyvcxwkxY0=";
-  };
-in
 {
   options.modules.zellij = {
     enable = mkOption {
@@ -29,11 +23,11 @@ in
       ];
 
       file = {
-        ".config/television/cable/sessions.toml".source = ./zellij/session-switcher/sessions.toml;
+        ".config/television/cable/sessions.toml".source = ./tv/zellij-session/remote.toml;
 
         ".local/bin/zellij-session-switcher" = {
           executable = true;
-          source = ./zellij/session-switcher/actions.sh;
+          source = ./tv/zellij-session/actions.sh;
         };
 
         ".config/zellij/config.kdl".text = ''
@@ -54,34 +48,10 @@ in
           keybinds {
             shared_except "tmux" "locked" {
               unbind "Ctrl b"
-              bind "Alt h" "Alt Left" {
-                MessagePlugin "file:${vimZellijNavigator}" {
-                  name "move_focus"
-                  payload "left"
-                  move_mod "alt"
-                }
-              }
-              bind "Alt j" "Alt Down" {
-                MessagePlugin "file:${vimZellijNavigator}" {
-                  name "move_focus"
-                  payload "down"
-                  move_mod "alt"
-                }
-              }
-              bind "Alt k" "Alt Up" {
-                MessagePlugin "file:${vimZellijNavigator}" {
-                  name "move_focus"
-                  payload "up"
-                  move_mod "alt"
-                }
-              }
-              bind "Alt l" "Alt Right" {
-                MessagePlugin "file:${vimZellijNavigator}" {
-                  name "move_focus"
-                  payload "right"
-                  move_mod "alt"
-                }
-              }
+              bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
+              bind "Alt j" "Alt Down" { MoveFocusOrTab "Down"; }
+              bind "Alt k" "Alt Up" { MoveFocusOrTab "Up"; }
+              bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
             }
 
             normal {
@@ -112,10 +82,10 @@ in
               bind "Alt F" { TogglePaneEmbedOrFloating; }
               bind "Alt z" { ToggleFocusFullscreen; }
               bind "Alt g" "Alt G" {
-                Run "${pkgs.gh-dash}/bin/gh-dash" {
-                  name "GitHub"
+                Run "${config.home.homeDirectory}/.local/bin/git-branch-switcher" "pick" {
+                  name "Branches"
                   floating true
-                  borderless false
+                  borderless true
                   close_on_exit true
                   x "10%"
                   y "8%"

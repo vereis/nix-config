@@ -67,7 +67,6 @@ in
           ffmpeg
           gcc
           gh
-          gh-dash
           git
           gitSplitDiffs
           httpie
@@ -120,6 +119,10 @@ in
             executable = true;
             source = ./tui/git/wt.sh;
           };
+          ".local/bin/git-branch-switcher" = {
+            executable = true;
+            source = ./tui/tv/git-branch/actions.sh;
+          };
           ".local/bin/npiperelay.exe" = {
             executable = true;
             source = ../../bin/npiperelay.exe;
@@ -132,11 +135,7 @@ in
             executable = false;
             source = ./tui/git/vereis-dark.json;
           };
-          ".config/gh-dash/config.yml" = {
-            executable = false;
-            force = true;
-            source = ./tui/gh-dash/config.yml;
-          };
+          ".config/television/cable/branches.toml".source = ./tui/tv/git-branch/remote.toml;
           ".config/nushell/vendor/autoload/wt.nu" = {
             executable = false;
             source = pkgs.runCommand "worktrunk-nushell-integration.nu" { } ''
@@ -254,7 +253,8 @@ in
                 })
 
                 if ($cd_file | path exists) and (open $cd_file --raw | str trim | is-not-empty) {
-                  cd (open $cd_file --raw | str trim)
+                  let worktree_path = (open $cd_file --raw | str trim)
+                  cd $worktree_path
                 }
 
                 if ($exec_file | path exists) and (open $exec_file --raw | str trim | is-not-empty) {

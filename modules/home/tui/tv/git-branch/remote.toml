@@ -1,0 +1,27 @@
+[metadata]
+name = "branches"
+description = "Browse and switch Git worktrees"
+requirements = ["git", "wt"]
+
+[source]
+command = "$HOME/.local/bin/git-branch-switcher list"
+no_sort = true
+frecency = false
+shell = "bash"
+display = "{split:@@@:1}"
+output = "{split:@@@:0}"
+
+[preview]
+command = "$HOME/.local/bin/git-branch-switcher preview '{}'"
+shell = "bash"
+
+[ui]
+orientation = "portrait"
+
+[ui.preview_panel]
+size = 60
+header = "branch"
+scrollbar = true
+
+[keybindings]
+ctrl-r = "reload_source"
