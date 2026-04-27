@@ -87,6 +87,7 @@ in
           tree
           unzip
           wget
+          worktrunk
           zip
           gnumake
           git-crypt
@@ -115,6 +116,10 @@ in
             executable = true;
             source = ./tui/git/migrate-ssh.sh;
           };
+          ".local/bin/git/wt.sh" = {
+            executable = true;
+            source = ./tui/git/wt.sh;
+          };
           ".local/bin/npiperelay.exe" = {
             executable = true;
             source = ../../bin/npiperelay.exe;
@@ -131,6 +136,16 @@ in
             executable = false;
             force = true;
             source = ./tui/gh-dash/config.yml;
+          };
+          ".config/nushell/vendor/autoload/wt.nu" = {
+            executable = false;
+            source = pkgs.runCommand "worktrunk-nushell-integration.nu" { } ''
+              ${pkgs.worktrunk}/bin/wt config shell init nu > $out
+            '';
+          };
+          ".config/worktrunk/config.toml" = {
+            executable = false;
+            source = ./tui/worktrunk/config.toml;
           };
           ".gitconfig" = {
             executable = false;
@@ -214,6 +229,49 @@ in
           buffer_editor = "nvim";
         };
         extraConfig = ''
+          def --env --wrapped git [...args] {
+            if (($args | length) > 0) and (($args | first) == "wt") {
+              let wt_args = ($args | skip 1)
+
+              if (($wt_args | length) > 0) and (($wt_args | first) == "clone") {
+                ^${config.home.homeDirectory}/.local/bin/git/wt.sh ...$wt_args
+              } else {
+                let cd_file = (mktemp --tmpdir)
+                let exec_file = (mktemp --tmpdir)
+                let wt_args = if (".bare" | path exists) {
+                  ["-C", ".bare"] ++ $wt_args
+                } else {
+                  $wt_args
+                }
+
+                let exit_code = (try {
+                  with-env { WORKTRUNK_DIRECTIVE_CD_FILE: $cd_file, WORKTRUNK_DIRECTIVE_EXEC_FILE: $exec_file } {
+                    ^wt ...$wt_args
+                  }
+                  0
+                } catch {
+                  $env.LAST_EXIT_CODE
+                })
+
+                if ($cd_file | path exists) and (open $cd_file --raw | str trim | is-not-empty) {
+                  cd (open $cd_file --raw | str trim)
+                }
+
+                if ($exec_file | path exists) and (open $exec_file --raw | str trim | is-not-empty) {
+                  ^sh -c (open $exec_file --raw)
+                }
+
+                rm -f $cd_file $exec_file
+
+                if $exit_code != 0 {
+                  ^sh -c $"exit ($exit_code)"
+                }
+              }
+            } else {
+              ^git ...$args
+            }
+          }
+
           $env.config.keybindings ++= [{
             name: edit_command_buffer
             modifier: none
