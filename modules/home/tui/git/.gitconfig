@@ -39,3 +39,4 @@
   gloat       = "!f() { git shortlog -sn; \n }; f"
   root        = "!f() { git rev-parse --path-format=absolute --show-toplevel; \n }; f"
   ssh-migrate = "!f() { $HOME/.local/bin/git/ssh-migrate.sh \n }; f"
+  wt          = "!f() { $HOME/.local/bin/git/wt.sh $@; \n }; f"
