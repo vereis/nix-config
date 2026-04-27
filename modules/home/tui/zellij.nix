@@ -81,6 +81,18 @@ with lib;
               bind "Alt f" { ToggleFloatingPanes; }
               bind "Alt F" { TogglePaneEmbedOrFloating; }
               bind "Alt z" { ToggleFocusFullscreen; }
+              bind "Alt g" "Alt G" {
+                Run "${pkgs.gh-dash}/bin/gh-dash" {
+                  name "GitHub"
+                  floating true
+                  borderless false
+                  close_on_exit true
+                  x "10%"
+                  y "8%"
+                  width "80%"
+                  height "84%"
+                }
+              }
               bind "Alt s" "Alt S" {
                 Run "${config.home.homeDirectory}/.local/bin/zellij-session-switcher" "pick" {
                   floating true
