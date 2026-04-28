@@ -7,6 +7,22 @@
 }:
 
 with lib;
+let
+  vetspireFrontend = pkgs.writeShellScriptBin "frontend" ''
+    direnv allow .. >/dev/null 2>&1 || true
+    exec direnv exec .. bash -c 'yarn && yarn gql && yarn start'
+  '';
+
+  vetspireApi = pkgs.writeShellScriptBin "api" ''
+    direnv allow .. >/dev/null 2>&1 || true
+    exec direnv exec .. bash -c '
+      if ! docker ps --format "{{.Names}}" | grep -qx vetspire-postgres; then
+        docker-compose up -d db
+      fi
+      mix deps.get && mix do ecto.create, ecto.migrate, vetspire.seed && iex -S mix phx.server
+    '
+  '';
+in
 {
   options.modules.zellij = {
     enable = mkOption {
@@ -20,6 +36,8 @@ with lib;
       packages = with pkgs; [
         zellij
         zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
+        vetspireFrontend
+        vetspireApi
       ];
 
       file = {
@@ -204,12 +222,12 @@ with lib;
               }
 
               frame_selected {
-                base 33 32 46
+                base 64 61 82
                 background 25 23 36
-                emphasis_0 33 32 46
-                emphasis_1 33 32 46
-                emphasis_2 33 32 46
-                emphasis_3 33 32 46
+                emphasis_0 64 61 82
+                emphasis_1 64 61 82
+                emphasis_2 64 61 82
+                emphasis_3 64 61 82
               }
 
               frame_highlight {
@@ -433,19 +451,17 @@ with lib;
             }
 
             floating_panes {
-              pane command="bash" name="web" cwd="web" start_suspended=true {
+              pane command="frontend" name="web" cwd="web" start_suspended=true {
                 x "56%"
                 y "35%"
                 width "42%"
                 height "30%"
-                args "-lc" "direnv allow .. >/dev/null 2>&1 || true; exec direnv exec .. bash -lc 'yarn && yarn gql && yarn start'"
               }
-              pane command="bash" name="api" cwd="api" start_suspended=true {
+              pane command="api" name="api" cwd="api" start_suspended=true {
                 x "56%"
                 y "65%"
                 width "42%"
                 height "35%"
-                args "-lc" "direnv allow .. >/dev/null 2>&1 || true; exec direnv exec .. bash -lc 'mix deps.get && mix do ecto.create, ecto.migrate, vetspire.seed && iex -S mix phx.server'"
               }
             }
 
