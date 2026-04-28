@@ -23,5 +23,8 @@ size = 60
 header = "branch"
 scrollbar = true
 
+[ui.status_bar]
+hidden = true
+
 [keybindings]
 ctrl-r = "reload_source"

@@ -21,6 +21,9 @@ size = 45
 header = "details"
 scrollbar = false
 
+[ui.status_bar]
+hidden = true
+
 [keybindings]
 ctrl-r = "reload_source"
 ctrl-x = ["actions:delete", "reload_source"]
