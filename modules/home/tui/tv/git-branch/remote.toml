@@ -9,7 +9,7 @@ no_sort = true
 frecency = false
 shell = "bash"
 display = "{split:@@@:1}"
-output = "{split:@@@:0}"
+output = "{}"
 
 [preview]
 command = "$HOME/.local/bin/git-branch-switcher preview '{}'"
@@ -28,3 +28,17 @@ hidden = true
 
 [keybindings]
 ctrl-r = "reload_source"
+ctrl-o = "actions:open"
+ctrl-x = ["actions:remove", "reload_source"]
+
+[actions.open]
+description = "Open selected PR or branch in the browser"
+command = "$HOME/.local/bin/git-branch-switcher open '{}'"
+shell = "bash"
+mode = "fork"
+
+[actions.remove]
+description = "Remove selected worktree"
+command = "$HOME/.local/bin/git-branch-switcher remove '{}'"
+shell = "bash"
+mode = "fork"

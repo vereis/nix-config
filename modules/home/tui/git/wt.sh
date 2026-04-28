@@ -5,6 +5,7 @@ usage() {
   cat <<'EOF'
 usage:
   git wt clone <source> [destination]
+  git wt dev [branch]
   git wt <worktrunk args...>
 
 git wt clone creates this layout:
@@ -112,6 +113,10 @@ case "${1:-}" in
 clone)
   shift
   clone_worktrunk_repo "$@"
+  ;;
+dev)
+  shift
+  exec "$HOME/.local/bin/git-branch-switcher" dev "$@"
   ;;
 *)
   delegate_worktrunk "$@"
