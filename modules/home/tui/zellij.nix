@@ -112,6 +112,18 @@ in
                   height "84%"
                 }
               }
+              bind "Alt c" "Alt C" {
+                Run "${config.home.homeDirectory}/.local/bin/zoxide-picker" "pick" {
+                  name "Directories"
+                  floating true
+                  borderless true
+                  close_on_exit true
+                  x "16%"
+                  y "10%"
+                  width "68%"
+                  height "80%"
+                }
+              }
               bind "Alt s" "Alt S" {
                 Run "${config.home.homeDirectory}/.local/bin/zellij-session-switcher" "pick" {
                   floating true

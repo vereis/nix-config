@@ -1,0 +1,25 @@
+[metadata]
+name = "zoxide"
+description = "Jump to zoxide directories"
+requirements = ["zoxide", "zellij"]
+
+[source]
+command = "$HOME/.local/bin/zoxide-picker list"
+no_sort = true
+frecency = false
+shell = "bash"
+
+[preview]
+command = "$HOME/.local/bin/zoxide-picker preview '{}'"
+shell = "bash"
+
+[ui]
+orientation = "portrait"
+
+[ui.preview_panel]
+size = 45
+header = "directory"
+scrollbar = true
+
+[ui.status_bar]
+hidden = true
