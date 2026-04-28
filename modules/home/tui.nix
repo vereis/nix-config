@@ -123,6 +123,10 @@ in
             executable = true;
             source = ./tui/tv/git-branch/actions.sh;
           };
+          ".local/bin/zoxide-picker" = {
+            executable = true;
+            source = ./tui/tv/zoxide/actions.sh;
+          };
           ".local/bin/npiperelay.exe" = {
             executable = true;
             source = ../../bin/npiperelay.exe;
@@ -136,6 +140,7 @@ in
             source = ./tui/git/vereis-dark.json;
           };
           ".config/television/cable/branches.toml".source = ./tui/tv/git-branch/remote.toml;
+          ".config/television/cable/zoxide.toml".source = ./tui/tv/zoxide/remote.toml;
           ".config/nushell/vendor/autoload/wt.nu" = {
             executable = false;
             source = pkgs.runCommand "worktrunk-nushell-integration.nu" { } ''
@@ -228,6 +233,9 @@ in
           buffer_editor = "nvim";
         };
         extraConfig = ''
+          alias z = cd
+          alias zi = cdi
+
           def --env --wrapped git [...args] {
             if (($args | length) > 0) and (($args | first) == "wt") {
               let wt_args = ($args | skip 1)
