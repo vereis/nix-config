@@ -49,15 +49,15 @@ with lib;
             shared_except "tmux" "locked" {
               unbind "Ctrl b"
               bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
-              bind "Alt j" "Alt Down" { MoveFocusOrTab "Down"; }
-              bind "Alt k" "Alt Up" { MoveFocusOrTab "Up"; }
+              bind "Alt j" "Alt Down" { MoveFocus "Down"; }
+              bind "Alt k" "Alt Up" { MoveFocus "Up"; }
               bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
+              bind "Alt n" { NewPane; }
             }
 
             normal {
               unbind "Ctrl o"
               unbind "Ctrl n"
-              unbind "Alt n"
               unbind "Ctrl g"
               unbind "Ctrl p"
               unbind "Ctrl t"
@@ -66,6 +66,7 @@ with lib;
               bind "Alt J" "Alt Shift Down" { NewPane "Down"; }
               bind "Alt K" "Alt Shift Up" { NewPane "Down"; MovePane "Up"; }
               bind "Alt L" "Alt Shift Right" { NewPane "Right"; }
+              bind "Alt n" { NewPane; }
               bind "Alt t" { NewTab; }
               bind "Alt 1" { GoToTab 1; }
               bind "Alt 2" { GoToTab 2; }
@@ -354,6 +355,133 @@ with lib;
                 pane focus=true { x "50%"; y "55%"; width "45%"; height "45%"; }
                 pane { x "1%"; y "1%"; width "45%"; height "45%"; }
                 pane { x "50%"; y "1%"; width "45%"; height "45%"; }
+              }
+            }
+          }
+        '';
+
+        ".config/zellij/layouts/workspace.kdl".text = ''
+          layout borderless=true {
+            pane split_direction="vertical" {
+              pane command="bash" size="50%" {
+                focus true
+                args "-lc" "direnv allow . >/dev/null 2>&1 || true; direnv exec . nvim; exec direnv exec . nu"
+              }
+              pane split_direction="horizontal" {
+                pane command="bash" {
+                  args "-lc" "direnv allow . >/dev/null 2>&1 || true; direnv exec . opencode; exec direnv exec . nu"
+                }
+                pane command="bash" size="28%" {
+                  args "-lc" "direnv allow . >/dev/null 2>&1 || true; exec direnv exec . nu"
+                }
+              }
+            }
+
+            pane size=1 borderless=true {
+              plugin location="file:${
+                zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
+              }/bin/zjstatus.wasm" {
+                format_left  "{tabs}"
+                format_right "{datetime} #[bg=#ebbcba,fg=#191724,bold] {session} {mode}"
+                format_space ""
+
+                border_enabled  "false"
+                border_char     "─"
+                border_format   "#[fg=#6C7086]{char}"
+                border_position "top"
+
+                tab_normal         "#[bg=#9090aa,fg=#191724] {name} #[fg=#403d52] "
+                tab_active         "#[bg=#dedef4,fg=#191724,italic] {name} #[fg=#403d52] "
+                mode_normal        ""
+                mode_locked        "#[bg=#ebbcba,fg=#191724,bold] Locked "
+                mode_resize        "#[bg=#ebbcba,fg=#191724,bold] Resize "
+                mode_pane          "#[bg=#ebbcba,fg=#191724,bold] Pane "
+                mode_tab           "#[bg=#ebbcba,fg=#191724,bold] Tab "
+                mode_scroll        "#[bg=#ebbcba,fg=#191724,bold] Scroll "
+                mode_enter_search  "#[bg=#ebbcba,fg=#191724,bold] Enter Search "
+                mode_search        "#[bg=#ebbcba,fg=#191724,bold] Search "
+                mode_rename_tab    "#[bg=#ebbcba,fg=#191724,bold] Rename Tab "
+                mode_rename_pane   "#[bg=#ebbcba,fg=#191724,bold] Rename Pane "
+                mode_session       "#[bg=#ebbcba,fg=#191724,bold] Session "
+                mode_move          "#[bg=#ebbcba,fg=#191724,bold] Move "
+                mode_prompt        "#[bg=#ebbcba,fg=#191724,bold] Prompt "
+                mode_tmux          "#[bg=#ebbcba,fg=#191724,bold] Tmux "
+
+                datetime        "#[fg=#6C7086] {format} "
+                datetime_format "%b %d %Y %l:%M %p"
+                datetime_timezone "Europe/London"
+              }
+            }
+          }
+        '';
+
+        ".config/zellij/layouts/vetspire.kdl".text = ''
+          layout borderless=true {
+            pane split_direction="vertical" {
+              pane command="bash" size="50%" {
+                focus true
+                args "-lc" "direnv allow . >/dev/null 2>&1 || true; direnv exec . nvim; exec direnv exec . nu"
+              }
+              pane split_direction="horizontal" {
+                pane command="bash" {
+                  args "-lc" "direnv allow . >/dev/null 2>&1 || true; direnv exec . opencode; exec direnv exec . nu"
+                }
+                pane command="bash" size="28%" {
+                  args "-lc" "direnv allow . >/dev/null 2>&1 || true; exec direnv exec . nu"
+                }
+              }
+            }
+
+            floating_panes {
+              pane command="bash" name="web" cwd="web" start_suspended=true {
+                x "56%"
+                y "35%"
+                width "42%"
+                height "30%"
+                args "-lc" "direnv allow .. >/dev/null 2>&1 || true; exec direnv exec .. bash -lc 'yarn && yarn gql && yarn start'"
+              }
+              pane command="bash" name="api" cwd="api" start_suspended=true {
+                x "56%"
+                y "65%"
+                width "42%"
+                height "35%"
+                args "-lc" "direnv allow .. >/dev/null 2>&1 || true; exec direnv exec .. bash -lc 'mix deps.get && mix do ecto.create, ecto.migrate, vetspire.seed && iex -S mix phx.server'"
+              }
+            }
+
+            pane size=1 borderless=true {
+              plugin location="file:${
+                zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
+              }/bin/zjstatus.wasm" {
+                format_left  "{tabs}"
+                format_right "{datetime} #[bg=#ebbcba,fg=#191724,bold] {session} {mode}"
+                format_space ""
+
+                border_enabled  "false"
+                border_char     "─"
+                border_format   "#[fg=#6C7086]{char}"
+                border_position "top"
+
+                tab_normal         "#[bg=#9090aa,fg=#191724] {name} #[fg=#403d52] "
+                tab_active         "#[bg=#dedef4,fg=#191724,italic] {name} #[fg=#403d52] "
+                mode_normal        ""
+                mode_locked        "#[bg=#ebbcba,fg=#191724,bold] Locked "
+                mode_resize        "#[bg=#ebbcba,fg=#191724,bold] Resize "
+                mode_pane          "#[bg=#ebbcba,fg=#191724,bold] Pane "
+                mode_tab           "#[bg=#ebbcba,fg=#191724,bold] Tab "
+                mode_scroll        "#[bg=#ebbcba,fg=#191724,bold] Scroll "
+                mode_enter_search  "#[bg=#ebbcba,fg=#191724,bold] Enter Search "
+                mode_search        "#[bg=#ebbcba,fg=#191724,bold] Search "
+                mode_rename_tab    "#[bg=#ebbcba,fg=#191724,bold] Rename Tab "
+                mode_rename_pane   "#[bg=#ebbcba,fg=#191724,bold] Rename Pane "
+                mode_session       "#[bg=#ebbcba,fg=#191724,bold] Session "
+                mode_move          "#[bg=#ebbcba,fg=#191724,bold] Move "
+                mode_prompt        "#[bg=#ebbcba,fg=#191724,bold] Prompt "
+                mode_tmux          "#[bg=#ebbcba,fg=#191724,bold] Tmux "
+
+                datetime        "#[fg=#6C7086] {format} "
+                datetime_format "%b %d %Y %l:%M %p"
+                datetime_timezone "Europe/London"
               }
             }
           }
