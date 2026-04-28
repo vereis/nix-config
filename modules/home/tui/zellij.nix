@@ -8,12 +8,12 @@
 
 with lib;
 let
-  vetspireFrontend = pkgs.writeShellScriptBin "frontend" ''
+  vetspireFrontend = pkgs.writeShellScriptBin "vetspire-frontend" ''
     direnv allow .. >/dev/null 2>&1 || true
     exec direnv exec .. bash -c 'yarn && yarn gql && yarn start'
   '';
 
-  vetspireApi = pkgs.writeShellScriptBin "api" ''
+  vetspireBackend = pkgs.writeShellScriptBin "vetspire-backend" ''
     direnv allow .. >/dev/null 2>&1 || true
     exec direnv exec .. bash -c '
       if ! docker ps --format "{{.Names}}" | grep -qx vetspire-postgres; then
@@ -21,6 +21,16 @@ let
       fi
       mix deps.get && mix do ecto.create, ecto.migrate, vetspire.seed && iex -S mix phx.server
     '
+  '';
+
+  vereisComFrontend = pkgs.writeShellScriptBin "vereis.com-frontend" ''
+    direnv allow .. >/dev/null 2>&1 || true
+    exec direnv exec .. bash -c 'npm install && npm run dev'
+  '';
+
+  vereisComBackend = pkgs.writeShellScriptBin "vereis.com-backend" ''
+    direnv allow .. >/dev/null 2>&1 || true
+    exec direnv exec .. bash -c 'mix deps.get && mix do ecto.drop, ecto.create, ecto.migrate && iex -S mix phx.server'
   '';
 in
 {
@@ -37,7 +47,9 @@ in
         zellij
         zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
         vetspireFrontend
-        vetspireApi
+        vetspireBackend
+        vereisComFrontend
+        vereisComBackend
       ];
 
       file = {
@@ -445,6 +457,76 @@ in
           }
         '';
 
+        ".config/zellij/layouts/vereis.com.kdl".text = ''
+          layout borderless=true {
+            pane split_direction="vertical" {
+              pane command="bash" size="50%" {
+                focus true
+                args "-lc" "direnv allow . >/dev/null 2>&1 || true; direnv exec . nvim; exec direnv exec . nu"
+              }
+              pane split_direction="horizontal" {
+                pane command="bash" {
+                  args "-lc" "direnv allow . >/dev/null 2>&1 || true; direnv exec . opencode; exec direnv exec . nu"
+                }
+                pane command="bash" size="28%" {
+                  args "-lc" "direnv allow . >/dev/null 2>&1 || true; exec direnv exec . nu"
+                }
+              }
+            }
+
+            floating_panes {
+              pane command="vereis.com-frontend" name="frontend" cwd="web" start_suspended=true {
+                x "56%"
+                y "35%"
+                width "42%"
+                height "30%"
+              }
+              pane command="vereis.com-backend" name="backend" cwd="api" start_suspended=true {
+                x "56%"
+                y "65%"
+                width "42%"
+                height "35%"
+              }
+            }
+
+            pane size=1 borderless=true {
+              plugin location="file:${
+                zjstatus.packages.${pkgs.stdenv.hostPlatform.system}.default
+              }/bin/zjstatus.wasm" {
+                format_left  "{tabs}"
+                format_right "{datetime} #[bg=#ebbcba,fg=#191724,bold] {session} {mode}"
+                format_space ""
+
+                border_enabled  "false"
+                border_char     "─"
+                border_format   "#[fg=#6C7086]{char}"
+                border_position "top"
+
+                tab_normal         "#[bg=#9090aa,fg=#191724] {name} #[fg=#403d52] "
+                tab_active         "#[bg=#dedef4,fg=#191724,italic] {name} #[fg=#403d52] "
+                mode_normal        ""
+                mode_locked        "#[bg=#ebbcba,fg=#191724,bold] Locked "
+                mode_resize        "#[bg=#ebbcba,fg=#191724,bold] Resize "
+                mode_pane          "#[bg=#ebbcba,fg=#191724,bold] Pane "
+                mode_tab           "#[bg=#ebbcba,fg=#191724,bold] Tab "
+                mode_scroll        "#[bg=#ebbcba,fg=#191724,bold] Scroll "
+                mode_enter_search  "#[bg=#ebbcba,fg=#191724,bold] Enter Search "
+                mode_search        "#[bg=#ebbcba,fg=#191724,bold] Search "
+                mode_rename_tab    "#[bg=#ebbcba,fg=#191724,bold] Rename Tab "
+                mode_rename_pane   "#[bg=#ebbcba,fg=#191724,bold] Rename Pane "
+                mode_session       "#[bg=#ebbcba,fg=#191724,bold] Session "
+                mode_move          "#[bg=#ebbcba,fg=#191724,bold] Move "
+                mode_prompt        "#[bg=#ebbcba,fg=#191724,bold] Prompt "
+                mode_tmux          "#[bg=#ebbcba,fg=#191724,bold] Tmux "
+
+                datetime        "#[fg=#6C7086] {format} "
+                datetime_format "%b %d %Y %l:%M %p"
+                datetime_timezone "Europe/London"
+              }
+            }
+          }
+        '';
+
         ".config/zellij/layouts/vetspire.kdl".text = ''
           layout borderless=true {
             pane split_direction="vertical" {
@@ -463,13 +545,13 @@ in
             }
 
             floating_panes {
-              pane command="frontend" name="web" cwd="web" start_suspended=true {
+              pane command="vetspire-frontend" name="web" cwd="web" start_suspended=true {
                 x "56%"
                 y "35%"
                 width "42%"
                 height "30%"
               }
-              pane command="api" name="api" cwd="api" start_suspended=true {
+              pane command="vetspire-backend" name="api" cwd="api" start_suspended=true {
                 x "56%"
                 y "65%"
                 width "42%"
