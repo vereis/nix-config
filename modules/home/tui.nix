@@ -232,7 +232,7 @@ in
             if (($args | length) > 0) and (($args | first) == "wt") {
               let wt_args = ($args | skip 1)
 
-              if (($wt_args | length) > 0) and (($wt_args | first) == "clone") {
+              if (($wt_args | length) > 0) and ((($wt_args | first) == "clone") or (($wt_args | first) == "dev")) {
                 ^${config.home.homeDirectory}/.local/bin/git/wt.sh ...$wt_args
               } else {
                 let cd_file = (mktemp --tmpdir)
