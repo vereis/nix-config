@@ -227,6 +227,13 @@ in
 
       nushell = {
         enable = true;
+        environmentVariables = {
+          EDITOR = "nvim";
+          FZF_DEFAULT_COMMAND = "rg --files";
+          SHELL = lib.getExe config.programs.nushell.package;
+          VISUAL = "nvim";
+        }
+        // config.modules.tui.extraSessionVariables;
         settings = {
           show_banner = false;
           edit_mode = "vi";
