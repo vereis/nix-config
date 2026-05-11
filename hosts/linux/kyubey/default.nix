@@ -73,12 +73,12 @@
       hybrid-sleep.enable = false;
     };
     services.systemd-suspend.enable = false;
-    sleep.extraConfig = ''
-      AllowSuspend=no
-      AllowHibernation=no
-      AllowHybridSleep=no
-      AllowSuspendThenHibernate=no
-    '';
+    sleep.settings.Sleep = {
+      AllowSuspend = "no";
+      AllowHibernation = "no";
+      AllowHybridSleep = "no";
+      AllowSuspendThenHibernate = "no";
+    };
   };
 
   hardware.nvidia.open = false;
