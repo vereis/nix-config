@@ -18,8 +18,16 @@ on:
 
 jobs:
   check:
-    name: Nix Flake Check
-    runs-on: ubuntu-latest
+    name: Nix Flake Check (${{ matrix.system }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: x86_64-linux
+            runner: ubuntu-latest
+          - system: aarch64-linux
+            runner: ubuntu-24.04-arm
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,11 +50,11 @@ jobs:
           use-flakehub: false
 
       - name: Run flake check
-        run: nix flake check --all-systems
+        run: nix flake check
 
   build:
     name: Check System Configurations
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     needs: [check]
     strategy:
       fail-fast: false
@@ -55,15 +63,18 @@ jobs:
           # Linux x86_64 hosts
           - host: kyubey
             system: x86_64-linux
+            runner: ubuntu-latest
           - host: madoka
             system: x86_64-linux
+            runner: ubuntu-latest
           - host: iroha
             system: x86_64-linux
+            runner: ubuntu-latest
 
-          # Linux aarch64 hosts (cross-compile on x86_64)
+          # Linux aarch64 hosts
           - host: homura
             system: aarch64-linux
-
+            runner: ubuntu-24.04-arm
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -89,4 +100,3 @@ jobs:
       - name: Check NixOS configuration for ${{ matrix.host }}
         run: |
           nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --dry-run --show-trace
-
