@@ -130,10 +130,6 @@ in
             "/org/gnome/desktop/wm/keybindings/move-to-monitor-right"
             "/org/gnome/desktop/wm/preferences/mouse-button-modifier"
             "/org/gnome/desktop/wm/preferences/resize-with-right-button"
-            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-timeout"
-            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type"
-            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-timeout"
-            "/org/gnome/settings-daemon/plugins/power/sleep-inactive-battery-type"
           ];
           settings = {
             "org/gnome/desktop/interface" = {
@@ -152,15 +148,6 @@ in
             };
             "org/gnome/desktop/session" = {
               idle-delay = lib.gvariant.mkUint32 config.modules.services.desktop.gnome.idleDelay;
-            };
-          }
-          // {
-            # Force disable GNOME's auto-suspend, use `suspend.enable = true;` instead
-            "org/gnome/settings-daemon/plugins/power" = {
-              sleep-inactive-ac-timeout = lib.gvariant.mkInt32 0; # Never suspend on AC
-              sleep-inactive-ac-type = "nothing";
-              sleep-inactive-battery-timeout = lib.gvariant.mkInt32 0; # Never suspend on battery
-              sleep-inactive-battery-type = "nothing";
             };
           }
           // {
