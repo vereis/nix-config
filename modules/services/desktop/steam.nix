@@ -13,7 +13,7 @@ let
     optionals
     ;
   cfg = config.modules.services.desktop.steam;
-  isWayland = config.services.displayManager.gdm.wayland or false;
+  isWayland = config.modules.services.desktop.gnome.enable;
 in
 {
   options.modules.services.desktop.steam = {

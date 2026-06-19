@@ -64,14 +64,6 @@ in
   };
 
   config = mkIf config.modules.services.desktop.gnome.enable {
-    assertions = [
-      {
-        assertion =
-          config.services.desktopManager.gnome.enable -> config.services.displayManager.gdm.wayland;
-        message = "GNOME 49+ only supports Wayland. GDM Wayland must be enabled.";
-      }
-    ];
-
     # Configure GDM (login screen) scaling to match desktop
     programs.dconf.profiles.gdm.databases = [
       {
@@ -94,7 +86,6 @@ in
       displayManager = {
         gdm = {
           enable = true;
-          wayland = true;
         };
         autoLogin = mkIf config.modules.services.desktop.autoLogin {
           enable = true;
