@@ -26,6 +26,7 @@
   modules.gui = {
     enable = true;
     extraPackages = with pkgs; [
+      gimp
       slack
       teams-for-linux
     ];
