@@ -11,6 +11,7 @@
 
 with lib;
 let
+  llmAgents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
   gitSplitDiffs = pkgs.buildNpmPackage rec {
     pname = "git-split-diffs";
     version = "2.3.0";
@@ -76,8 +77,10 @@ in
           lsof
           nodejs
           nerdfetch
-          opencode
-          inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.t3code
+          llmAgents.claude-code
+          llmAgents.codex
+          llmAgents.opencode
+          llmAgents.t3code
           crit
           openssh
           openssl
