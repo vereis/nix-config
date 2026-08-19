@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   user,
   email,
   secrets,
@@ -76,6 +77,7 @@ in
           nodejs
           nerdfetch
           opencode
+          inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.t3code
           crit
           openssh
           openssl

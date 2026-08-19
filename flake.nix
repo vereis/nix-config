@@ -24,6 +24,14 @@
     copyparty.url = "github:9001/copyparty";
     opencode.url = "github:anomalyco/opencode";
     crit.url = "github:tomasz-tomczyk/crit";
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        treefmt-nix.follows = "treefmt-nix";
+      };
+    };
 
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
